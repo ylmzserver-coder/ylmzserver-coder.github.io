@@ -2739,76 +2739,7 @@
     }
 
     /* BULUT VERİLERİNİ BAŞLATMA (90 KESME HATASI TEMİZLENDİ - ASLA KİLİT EKRANINA ATMAZ) */
-    function bulutVerileriniBaslat() {
-      if (!aktifLisansKodu) { document.getElementById('licenseSetupModal').classList.remove('hidden'); return; }
-
-      if (unsubscribeLisans) unsubscribeLisans();
-      if (unsubscribeMusteriler) unsubscribeMusteriler();
-      if (unsubscribeGecmis) unsubscribeGecmis();
-      if (unsubscribeRandevular) unsubscribeRandevular();
-      if (unsubscribeAyarlar) unsubscribeAyarlar();
-
-      ayarlariUygula();
-      ajandaTarihSeridiOlustur();
-      ajandaSaatleriniCiz();
-
-      unsubscribeAyarlar = db.collection('ustalar').doc(aktifLisansKodu).collection('ayarlar').doc('profil').onSnapshot(doc => {
-          if (doc.exists) {
-            salonAyarlari = { ...salonAyarlari, ...doc.data() };
-            localStorage.setItem('hair_kisisel_ayarlar_' + aktifLisansKodu, JSON.stringify(salonAyarlari));
-            ayarlariUygula();
-          }
-        });
-
-      unsubscribeLisans = db.collection('sistem').doc('lisanslar').collection('aktifler').doc(aktifLisansKodu).onSnapshot((doc) => {
-          if (doc.exists) {
-            const v = doc.data();
-            let simdiMs = Date.now();
-            let bitisMs = v.bitisMs || (simdiMs + 864000000);
-            let kalanGun = Math.ceil((bitisMs - simdiMs) / 86400000);
-            lisansAktifMi = (v.durum === 'AKTIF') && (simdiMs <= bitisMs);
-            ustaLisansUyariKontrol(kalanGun);
-            if (!lisansAktifMi) { document.getElementById('licenseLockScreen').classList.remove('hidden'); if (v.mesaj) document.getElementById('lockMessageText').innerText = v.mesaj; } 
-            else { document.getElementById('licenseLockScreen').classList.add('hidden'); }
-          } else { 
-            // Lisans geçici olarak okunamadıysa hemen kilit ekranına atmaması için tolerans
-            console.warn("Lisans belgesi okunamadı");
-          }
-        });
-
-      // TEHLİKELİ KOD KALDIRILDI: Numaranın başındaki 90 asla silinmez, usta sistemden atılmaz!
-      unsubscribeMusteriler = db.collection('ustalar').doc(aktifLisansKodu).collection('musteriler').onSnapshot((snapshot) => {
-          musteriler = [];
-          snapshot.forEach(d => musteriler.push({ id: d.id, ...d.data() }));
-          if (aktifMusteri) { let guncel = musteriler.find(m => m.id === aktifMusteri.id); if (guncel) aktifMusteri = guncel; }
-          canliBildirimMerkeziniGuncelle();
-          musteriRehberiSayaciGuncelle();
-        });
-
-      unsubscribeGecmis = db.collection('ustalar').doc(aktifLisansKodu).collection('gecmis').orderBy('zaman', 'desc').onSnapshot((snapshot) => {
-          gecmisIslemler = [];
-          snapshot.forEach(d => gecmisIslemler.push({ id: d.id, ...d.data() }));
-          if (aktifMusteri) gecmisListesiniGuncelle();
-          gunlukCiroGuncelle();
-          canliBildirimMerkeziniGuncelle(); 
-        }, (err) => {
-          db.collection('ustalar').doc(aktifLisansKodu).collection('gecmis').onSnapshot(snap => {
-            gecmisIslemler = [];
-            snap.forEach(d => gecmisIslemler.push({ id: d.id, ...d.data() }));
-            if (aktifMusteri) gecmisListesiniGuncelle();
-            gunlukCiroGuncelle();
-            canliBildirimMerkeziniGuncelle();
-          });
-        });
-
-      unsubscribeRandevular = db.collection('ustalar').doc(aktifLisansKodu).collection('randevular').onSnapshot((snapshot) => {
-          randevular = [];
-          snapshot.forEach(d => randevular.push({ id: d.id, ...d.data() }));
-          ajandaSaatleriniCiz();
-          gunlukCiroGuncelle();
-        });
-    }
-
+   function bulutVerileriniBaslat()
     function patronPaneliAc() {
       let kayitliPin = localStorage.getItem('hair_patron_pin') || "SEEOFSİ";
       let girilen = prompt("Yönetici Güvenlik PIN Kodunu Giriniz:");
