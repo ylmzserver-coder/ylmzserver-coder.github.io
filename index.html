@@ -34,8 +34,8 @@
           colors: {
             slate: {
               800: '#1e2638',
-              900: '#121826', /* Lüks Koyu Kart */
-              950: '#090d16', /* Derin Premium Grafit */
+              900: '#121826',
+              950: '#090d16',
             },
             brand: { dark: '#090d16', card: '#121826', gold: '#eab308', green: '#10b981', blue: '#3b82f6', red: '#ef4444' }
           }
@@ -57,7 +57,7 @@
     .safe-pb { padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px) !important; }
     .scroll-touch { -webkit-overflow-scrolling: touch; }
 
-    /* FERAHLIK VE KURUMSAL LÜKS: APPLE / FRESHA AÇIK (LIGHT) MODU */
+    /* FERAHLIK VE KURUMSAL LÜKS: APPLE / FRESHA AÇIK MODU */
     body.theme-light { 
       background-color: #f8fafc !important; 
       color: #0f172a !important; 
@@ -287,7 +287,7 @@
         </button>
       </div>
 
-      <!-- MÜŞTERİ BİLGİSİ KARTI (ROZET VE ZİYARET ENTELİ) -->
+      <!-- MÜŞTERİ BİLGİSİ KARTI -->
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3">
         <div class="flex justify-between items-center pb-1">
           <span class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center" id="lblCustCardTitle">
@@ -368,7 +368,7 @@
         </div>
       </div>
 
-      <!-- HİZMET VE FORMÜL MASASI (METNE GÖRE BÜYÜYEN AKILLI ALAN) -->
+      <!-- HİZMET VE FORMÜL MASASI -->
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3">
         <div class="flex justify-between items-center">
           <span class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center" id="lblServiceCardTitle">
@@ -708,7 +708,7 @@
         <span id="kasaSeciliGunToplam" class="text-sm font-black text-amber-400">0,00 TL</span>
       </div>
 
-      <!-- FİŞLER LİSTESİ (FERAH, GENİŞ, ASLA EZİLMEZ) -->
+      <!-- FİŞLER LİSTESİ -->
       <div id="kasaGunlukIslemlerListesi" class="flex-1 overflow-y-auto space-y-2 pr-1 scroll-touch min-h-[180px] max-h-[46vh]"></div>
     </div>
   </div>
@@ -1153,6 +1153,7 @@
         daysLeft: "Gün Kaldı", today: "Bugün!", tomorrow: "Yarın!", clients: "Kişi",
         rowTitle: "İŞLEM SATIRI", remove: "✕ Kaldır", s1: "1. HİZMET", s2: "2. FORMÜL / DETAY", s3: "3. NOTLAR", s4: "4. ÜCRET",
         sFormulaPh: "Gramaj, boya veya ürün formülü...", sNotesPh: "Özel notlar...", curr: "TL",
+        zoomBtn: "Büyüt", zoomModalTitle: "Detaylı Formül / Not Görüntüleyici",
         licenseKeyTitle: "LİSANS KODUNUZ", deptTitle: "UZMANLIK ALANINIZ / BÖLÜMÜNÜZ",
         pwdChangeTitle: "🔒 GİRİŞ ŞİFRENİZİ DEĞİŞTİRİN", pwdOld: "ESKİ ŞİFRE:", pwdNew: "YENİ ŞİFRE (6 HANE):", pwdBtn: "Şifremi Güncelle",
         lostDaysTitle: "⏰ KAYIP MÜŞTERİ UYARI SÜRESİ (Kaç gün gelmeyince listelensin?)", lostDaysUnit: "Gün",
@@ -1217,6 +1218,7 @@
         daysLeft: "Days Left", today: "Today!", tomorrow: "Tomorrow!", clients: "Clients",
         rowTitle: "SERVICE ROW", remove: "✕ Remove", s1: "1. SERVICE", s2: "2. FORMULA / DETAIL", s3: "3. NOTES", s4: "4. PRICE",
         sFormulaPh: "Weight, color or product formula...", sNotesPh: "Special notes...", curr: "$",
+        zoomBtn: "Expand", zoomModalTitle: "Detailed Formula / Notes Viewer",
         licenseKeyTitle: "YOUR LICENSE KEY", deptTitle: "YOUR SPECIALTY / DEPARTMENT",
         pwdChangeTitle: "🔒 CHANGE LOGIN PASSWORD", pwdOld: "OLD PASSWORD:", pwdNew: "NEW PASSWORD (6 DIGITS):", pwdBtn: "Update Password",
         lostDaysTitle: "⏰ DORMANT CLIENT ALARM (Alert after how many inactive days?)", lostDaysUnit: "Days",
@@ -1281,6 +1283,7 @@
         daysLeft: "Tage verbleibend", today: "Heute!", tomorrow: "Morgen!", clients: "Kunden",
         rowTitle: "BEHANDLUNGSZEILE", remove: "✕ Entfernen", s1: "1. SERVICE", s2: "2. FORMEL / DETAIL", s3: "3. NOTIZEN", s4: "4. PREIS",
         sFormulaPh: "Grammatur, Farbe oder Produkt...", sNotesPh: "Notizen...", curr: "€",
+        zoomBtn: "Vergrößern", zoomModalTitle: "Formel / Notizen Detailansicht",
         licenseKeyTitle: "IHR LIZENZSCHLÜSSEL", deptTitle: "IHR FACHGEBIET / ABTEILUNG",
         pwdChangeTitle: "🔒 PASSWORT ÄNDERN", pwdOld: "ALTES PASSWORT:", pwdNew: "NEUES PASSWORT (6 ZAHLEN):", pwdBtn: "Passwort Aktualisieren",
         lostDaysTitle: "⏰ INAKTIVE KUNDEN WARNUNG (Nach wie vielen Tagen?)", lostDaysUnit: "Tage",
@@ -1345,6 +1348,7 @@
         daysLeft: "дн. осталось", today: "Сегодня!", tomorrow: "Завтра!", clients: "Клиентов",
         rowTitle: "СТРОКА УСЛУГИ", remove: "✕ Удалить", s1: "1. УСЛУGA", s2: "2. ФОРМУЛА / ДЕТАЛИ", s3: "3. ЗАМЕТКИ", s4: "4. ЦЕНА",
         sFormulaPh: "Граммовка, краска или продукт...", sNotesPh: "Заметки...", curr: "₽",
+        zoomBtn: "Увеличить", zoomModalTitle: "Просмотр формулы / заметок",
         licenseKeyTitle: "ВАШ ЛИЦЕНЗИОННЫЙ КЛЮЧ", deptTitle: "ВАША СПЕЦИАЛИЗАЦИЯ / ОТДЕЛ",
         pwdChangeTitle: "🔒 ИЗМЕНИТЬ ПАРОЛЬ ВХОДА", pwdOld: "СТАРЫЙ ПАРОЛЬ:", pwdNew: "НОВЫЙ ПАРОЛЬ (6 ЦИФР):", pwdBtn: "Обновить пароль",
         lostDaysTitle: "⏰ НАПОМИНАНИЕ О «ПОТЕРЯННЫХ» КЛИЕНТАХ (Через сколько дней?)", lostDaysUnit: "Дней",
@@ -1389,7 +1393,7 @@
         }
       }
     };
-/* GLOBAL DEĞİŞKENLER VE GÜVENLİK DİZİLERİ (GİZLİ HATALAR TEMİZLENDİ) */
+/* GLOBAL DEĞİŞKENLER VE GÜVENLİK DİZİLERİ */
     let aktifDil = localStorage.getItem('hair_aktif_dil') || "tr";
     let aktifTema = localStorage.getItem('hair_aktif_tema') || "dark";
     let aktifLisansKodu = localStorage.getItem('hair_lisans_kodu') || "";
@@ -2171,7 +2175,7 @@
           <div class="flex justify-between items-center mb-0.5">
             <label class="text-[10px] text-slate-400 block font-semibold lbl-s2">${d.s2}</label>
             <button type="button" onclick="notGenisletAc(this, '${d.s2}')" class="text-[10px] text-amber-400 hover:text-white font-bold flex items-center" title="Büyük Ekranda Gör / Düzenle">
-              <i class="fa-solid fa-maximize mr-1"></i> Büyüt
+              <i class="fa-solid fa-maximize mr-1"></i> <span class="lbl-zoom-btn">${d.zoomBtn || 'Büyüt'}</span>
             </button>
           </div>
           <textarea oninput="autoExpandArea(this)" placeholder="${d.sFormulaPh}" class="service-formula auto-expand-area w-full bg-slate-900 text-slate-200 text-xs p-2 rounded-lg border border-slate-700 focus:outline-none leading-relaxed">${formulVal}</textarea>
@@ -2223,6 +2227,9 @@
 
         const nInp = row.querySelector('.service-notes');
         if (nInp) nInp.placeholder = d.sNotesPh;
+
+        const zoomBtn = row.querySelector('.lbl-zoom-btn');
+        if (zoomBtn) zoomBtn.innerText = d.zoomBtn || 'Büyüt';
       });
       toplamHesapla();
     }
@@ -2738,8 +2745,97 @@
       anindaWhatsAppAc("905354049392", "Merhaba, LUMIO uygulamasını kullanmak için lisans satın almak / yenilemek istiyorum.");
     }
 
-    /* BULUT VERİLERİNİ BAŞLATMA (90 KESME HATASI TEMİZLENDİ - ASLA KİLİT EKRANINA ATMAZ) */
-   function bulutVerileriniBaslat()
+    /* ULUSLARARASI AKILLI KÖPRÜ (Eski Müşterileri Kurtarır + Lisansı Asla Düşürmez) */
+    function bulutVerileriniBaslat() {
+      if (!aktifLisansKodu) { document.getElementById('licenseSetupModal').classList.remove('hidden'); return; }
+
+      if (unsubscribeLisans) unsubscribeLisans();
+      if (unsubscribeMusteriler) unsubscribeMusteriler();
+      if (unsubscribeGecmis) unsubscribeGecmis();
+      if (unsubscribeRandevular) unsubscribeRandevular();
+      if (unsubscribeAyarlar) unsubscribeAyarlar();
+
+      ayarlariUygula();
+      ajandaTarihSeridiOlustur();
+      ajandaSaatleriniCiz();
+
+      // ULUSLARARASI LİSANS SORGULAYICI: Lisansı daima ülke koduyla (90... veya 49... veya 7...) arar. Asla düşürmez!
+      let lisansSorguNo = aktifLisansKodu;
+      if (aktifLisansKodu.length === 10 && !aktifLisansKodu.startsWith('90')) {
+        lisansSorguNo = '90' + aktifLisansKodu;
+      }
+
+      unsubscribeLisans = db.collection('sistem').doc('lisanslar').collection('aktifler').doc(lisansSorguNo).onSnapshot((doc) => {
+        if (doc.exists) {
+          const v = doc.data();
+          let simdiMs = Date.now();
+          let bitisMs = v.bitisMs || (simdiMs + 864000000);
+          let kalanGun = Math.ceil((bitisMs - simdiMs) / 86400000);
+          lisansAktifMi = (v.durum === 'AKTIF') && (simdiMs <= bitisMs);
+          ustaLisansUyariKontrol(kalanGun);
+          if (!lisansAktifMi) { 
+            document.getElementById('licenseLockScreen').classList.remove('hidden'); 
+            if (v.mesaj) document.getElementById('lockMessageText').innerText = v.mesaj; 
+          } else { 
+            document.getElementById('licenseLockScreen').classList.add('hidden'); 
+          }
+        }
+      });
+
+      // ESKİ MÜŞTERİLERİ KURTARMA KÖPRÜSÜ
+      unsubscribeMusteriler = db.collection('ustalar').doc(aktifLisansKodu).collection('musteriler').onSnapshot((snapshot) => {
+        // Eğer 90'lı klasör boşsa ve eski 10 haneli klasörde müşteri varsa oraya bağlan!
+        if (snapshot.empty && aktifLisansKodu.startsWith('90')) {
+          const altKod = aktifLisansKodu.substring(2);
+          db.collection('ustalar').doc(altKod).collection('musteriler').limit(1).get().then(altSnap => {
+            if (!altSnap.empty) {
+              aktifLisansKodu = altKod;
+              localStorage.setItem('hair_lisans_kodu', altKod);
+              bulutVerileriniBaslat();
+              return;
+            }
+          });
+        }
+
+        musteriler = [];
+        snapshot.forEach(d => musteriler.push({ id: d.id, ...d.data() }));
+        if (aktifMusteri) { let guncel = musteriler.find(m => m.id === aktifMusteri.id); if (guncel) aktifMusteri = guncel; }
+        canliBildirimMerkeziniGuncelle();
+        musteriRehberiSayaciGuncelle();
+      });
+
+      unsubscribeAyarlar = db.collection('ustalar').doc(aktifLisansKodu).collection('ayarlar').doc('profil').onSnapshot(doc => {
+        if (doc.exists) {
+          salonAyarlari = { ...salonAyarlari, ...doc.data() };
+          localStorage.setItem('hair_kisisel_ayarlar_' + aktifLisansKodu, JSON.stringify(salonAyarlari));
+          ayarlariUygula();
+        }
+      });
+
+      unsubscribeGecmis = db.collection('ustalar').doc(aktifLisansKodu).collection('gecmis').orderBy('zaman', 'desc').onSnapshot((snapshot) => {
+        gecmisIslemler = [];
+        snapshot.forEach(d => gecmisIslemler.push({ id: d.id, ...d.data() }));
+        if (aktifMusteri) gecmisListesiniGuncelle();
+        gunlukCiroGuncelle();
+        canliBildirimMerkeziniGuncelle(); 
+      }, (err) => {
+        db.collection('ustalar').doc(aktifLisansKodu).collection('gecmis').onSnapshot(snap => {
+          gecmisIslemler = [];
+          snap.forEach(d => gecmisIslemler.push({ id: d.id, ...d.data() }));
+          if (aktifMusteri) gecmisListesiniGuncelle();
+          gunlukCiroGuncelle();
+          canliBildirimMerkeziniGuncelle();
+        });
+      });
+
+      unsubscribeRandevular = db.collection('ustalar').doc(aktifLisansKodu).collection('randevular').onSnapshot((snapshot) => {
+        randevular = [];
+        snapshot.forEach(d => randevular.push({ id: d.id, ...d.data() }));
+        ajandaSaatleriniCiz();
+        gunlukCiroGuncelle();
+      });
+    }
+
     function patronPaneliAc() {
       let kayitliPin = localStorage.getItem('hair_patron_pin') || "SEEOFSİ";
       let girilen = prompt("Yönetici Güvenlik PIN Kodunu Giriniz:");
