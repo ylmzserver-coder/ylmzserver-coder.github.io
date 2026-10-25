@@ -4219,7 +4219,6 @@ function musteriSec(id) {
 
     function lumioAiIstisareBasKonusToggle() {
       const micBtn = document.getElementById('btnAiIstisareMic');
-      const micIcon = document.getElementById('iconIstisareMic');
       const input = document.getElementById('aiAskInput');
       const dAyari = AI_DIL_AYARLARI[aktifDil] || AI_DIL_AYARLARI.tr;
 
@@ -4251,7 +4250,7 @@ function musteriSec(id) {
         aiRecognition.onresult = function(e) {
           const transcript = e.results[0][0].transcript;
           input.value = transcript;
-          lumioAiSoruSor(); // Ses bittiği an doğrudan Gemini'ye sor!
+          lumioAiSoruSor();
         };
 
         aiRecognition.onerror = function() {
@@ -4386,14 +4385,13 @@ function musteriSec(id) {
         for (let [k, s] of Object.entries(saatMap)) { if (raw.includes(k)) { saatStr = s; break; } }
       }
 
-      // AKILLI STOPWORD FİLTRESİ: "Hanım, Bey, Abla" gibi ekler asla müşteri ismi yapılamaz!
+      // STOPWORD FİLTRESİ: "Hanım, Bey, Abla" kelimeleri asla müşteri ismi yapılamaz!
       const yasakliKelimeler = ["hanım", "hanim", "bey", "abla", "abi", "teyze", "kanka", "usta", "hocam", "госпожа", "господин", "mrs", "mr", "konuşabilir", "gelecek", "gel", "randevu"];
       let temizKelimeler = raw.split(/[\s,.'"]+/).filter(w => w.length > 2 && !yasakliKelimeler.includes(w) && !w.includes(':') && isNaN(w));
 
       let bulunanMusteri = "";
       let bulunanTel = "";
 
-      // 1. Rehberde gerçek isim ara
       for (let m of musteriler) {
         let mKelimeler = m.ad.toLocaleLowerCase('tr-TR').split(/\s+/).filter(w => !yasakliKelimeler.includes(w));
         for (let adKelime of mKelimeler) {
@@ -4406,7 +4404,6 @@ function musteriSec(id) {
         if (bulunanMusteri) break;
       }
 
-      // 2. Rehberde yoksa doğrudan ustanın söylediği gerçek adı (Örn: Hamide) al
       if (!bulunanMusteri && temizKelimeler.length > 0) {
         bulunanMusteri = turkceHitapIsimDuzenle(temizKelimeler[0]);
       }
@@ -4473,7 +4470,7 @@ function musteriSec(id) {
 
       if (!geminiApiKey) {
         adviceCard.classList.remove('hidden');
-        adviceText.innerHTML = `⚠️ <b>Ustam, yapay zeka beynimi çalıştırmak için Patron Paneli'nden Gemini API anahtarınızı girmeniz gerekiyor.</b>`;
+        adviceText.innerHTML = `⚠️ <b>Ustam, yapay zeka beynimi çalıştırmak için Patron Paneli'ndeki [🔑 Gemini Şifresi] butonundan anahtarınızı kaydetmeniz gerekiyor.</b>`;
         return;
       }
 
@@ -4500,7 +4497,6 @@ Mevcut Ürünler: ${urunlerMetni}
 DİL KURALI: Ustanın kullandığı dilde (${aktifDil.toUpperCase()}) ve o dilin salon samimiyetiyle yanıt ver.`;
 
       try {
-        // x-goog-api-key BAŞLIĞI İLE GÜVENLİ GOOGLE GEMINI ÇAĞRISI
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`, {
           method: 'POST',
           headers: { 
@@ -4566,7 +4562,7 @@ DİL KURALI: Ustanın kullandığı dilde (${aktifDil.toUpperCase()}) ve o dilin
       const btn = document.getElementById('btnStartVisionScan');
 
       if (!geminiApiKey) {
-        alert("Lütfen önce Patron Paneli'nden Gemini API anahtarınızı giriniz.");
+        alert("Lütfen önce Patron Paneli'ndeki [🔑 Gemini Şifresi] butonundan anahtarınızı giriniz.");
         return;
       }
 
@@ -4671,37 +4667,32 @@ ${i+1}. ${u.ad}
       anindaWhatsAppAc(tel, msg);
     }
 
-    /* 5. PATRON PANELİ: GİZLİ GEMINI API KEY & ÇOKLU PAZARYERİ YÖNETİMİ */
+    /* 5. PATRON PANELİ: GİZLİ GEMINI ŞİFRE BUTONU VE ÜRÜN YÖNETİMİ */
     function patronUrunListesiniCiz() {
       let alan = document.getElementById('patronUrunYonetimAlani');
-      if (!alan) {
-        const patronModalKutu = document.querySelector('#patronModal .space-y-3\\.5');
-        if (!patronModalKutu) return;
-        alan = document.createElement('div');
-        alan.id = 'patronUrunYonetimAlani';
-        alan.className = "bg-slate-950 p-3 rounded-xl border border-amber-500/40 space-y-2.5 text-xs";
-        alan.innerHTML = `
-          <!-- GİZLİ GEMINI API KEY YÖNETİMİ (SIFIR İFŞA KORUMASI) -->
-          <div class="border-b border-slate-800 pb-2 space-y-1.5">
-            <span class="text-amber-400 font-bold block text-[11px]"><i class="fa-solid fa-key mr-1"></i> 🔑 GOOGLE GEMINI API ANAHTARI</span>
-            <div class="flex space-x-1.5">
-              <input type="password" id="patronGeminiKeyInput" placeholder="AQ... veya AIzaSy..." value="${geminiApiKey}" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-white font-mono text-xs focus:outline-none focus:border-amber-400">
-              <button onclick="patronGeminiKeyKaydet()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-3 py-1.5 rounded-lg text-[10px] shadow active:scale-95 transition">Kaydet</button>
-            </div>
-            <p class="text-[9px] text-slate-400">GitHub ve Google botlarının şifrenizi iptal etmemesi için anahtar burada saklanır.</p>
-          </div>
+      if (alan) alan.remove(); // Her zaman en güncel haliyle çiz!
 
-          <!-- PAZARYERİ ÜRÜN YÖNETİMİ -->
-          <div class="flex justify-between items-center border-b border-slate-800 pb-1.5 pt-1">
-            <span class="text-amber-400 font-bold flex items-center text-xs">
-              <i class="fa-solid fa-boxes-stacked mr-1.5"></i> 🛍️ ÜRÜN & PAZARYERİ LİNKLERİ
-            </span>
+      const patronModalKutu = document.querySelector('#patronModal .space-y-3\\.5');
+      if (!patronModalKutu) return;
+
+      alan = document.createElement('div');
+      alan.id = 'patronUrunYonetimAlani';
+      alan.className = "bg-slate-950 p-3 rounded-xl border border-amber-500/40 space-y-2.5 text-xs";
+      alan.innerHTML = `
+        <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
+          <span class="text-amber-400 font-bold flex items-center text-xs">
+            <i class="fa-solid fa-boxes-stacked mr-1.5"></i> 🛍️ ÜRÜN & PAZARYERİ LİNKLERİ
+          </span>
+          <div class="flex items-center space-x-1.5">
+            <button onclick="patronGeminiSifresiAyarla()" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold px-2 py-0.5 rounded border border-slate-700 shadow flex items-center gap-1">
+              <i class="fa-solid fa-key"></i> <span>🔑 Gemini Şifresi</span>
+            </button>
             <button onclick="patronYeniUrunEklePrompt()" class="text-[10px] bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded shadow">+ Ürün Ekle</button>
           </div>
-          <div id="patronUrunlerContainer" class="space-y-1.5 max-h-40 overflow-y-auto scroll-touch"></div>
-        `;
-        patronModalKutu.appendChild(alan);
-      }
+        </div>
+        <div id="patronUrunlerContainer" class="space-y-1.5 max-h-40 overflow-y-auto scroll-touch"></div>
+      `;
+      patronModalKutu.appendChild(alan);
 
       const container = document.getElementById('patronUrunlerContainer');
       if (!container) return;
@@ -4717,12 +4708,18 @@ ${i+1}. ${u.ad}
       `).join('');
     }
 
-    function patronGeminiKeyKaydet() {
-      const val = document.getElementById('patronGeminiKeyInput').value.trim();
-      if (!val) { alert("Lütfen geçerli bir API anahtarı giriniz."); return; }
-      geminiApiKey = val;
-      localStorage.setItem('lumio_gemini_api_key', val);
-      alert("🎉 Google Gemini API anahtarı başarıyla kaydedildi! Canlı yapay zeka beyni artık aktif.");
+    /* TELEFONDA TEK DOKUNUŞLA GEMINI ŞİFRESİNİ YAPACAK PENCERE */
+    function patronGeminiSifresiAyarla() {
+      let girilen = prompt("Google AI Studio'dan aldığınız yeni Gemini API anahtarınızı (AQ... veya AIzaSy...) buraya yapıştırınız:", geminiApiKey);
+      if (girilen === null) return;
+      girilen = girilen.trim();
+      if (!girilen) {
+        alert("Boş bırakılamaz!");
+        return;
+      }
+      geminiApiKey = girilen;
+      localStorage.setItem('lumio_gemini_api_key', girilen);
+      alert("🎉 Google Gemini Yapay Zeka Anahtarınız telefona kaydedildi! Canlı yapay zeka beyni artık aktif.");
     }
 
     function patronYeniUrunEklePrompt() {
