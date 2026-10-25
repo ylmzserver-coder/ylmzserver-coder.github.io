@@ -4057,8 +4057,8 @@ function musteriSec(id) {
       anindaWhatsAppAc("905354049392", "Merhaba LUMIO Destek, usta giriş şifremi unuttum. Yardımcı olabilir misiniz?");
     }
 /* ==========================================================================
-       BÖLÜM 5: GÜVENLİ VE CANLI GOOGLE GEMINI MASTER AI MOTORU (TAMİR EDİLMİŞ)
-       (inlineData camelCase Düzeltmesi, Doğrudan ?key= Bağlantısı, Gerçek Vision)
+       BÖLÜM 5: CANLI GOOGLE GEMINI MASTER AI MOTORU (ÇOKLU MODEL YEDEKLİ)
+       (gemini-flash-latest, Otomatik Fallback, inlineData & Vision Destekli)
        ========================================================================== */
 
     let aiRecognition = null;
@@ -4134,6 +4134,48 @@ function musteriSec(id) {
         voiceBtnText: "Vorlesen"
       }
     };
+
+    /* GOOGLE GEMINI İÇİN KURŞUN GEÇİRMEZ ÇOKLU MODEL ÇAĞIRICI */
+    async function geminiApiCagir(payload) {
+      if (!geminiApiKey) {
+        throw new Error("Lütfen Patron Paneli'ndeki [🔑 Gemini Şifresi] butonundan API anahtarınızı giriniz.");
+      }
+
+      // Google'ın en güncel ve resmi modelleri sırayla denenir
+      const modeller = ['gemini-flash-latest', 'gemini-2.0-flash', 'gemini-2.5-flash'];
+      let sonHata = "";
+
+      for (const model of modeller) {
+        try {
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiApiKey}`;
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          const data = await res.json();
+
+          if (res.ok && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
+            return data.candidates[0].content.parts[0].text;
+          }
+
+          if (data.error) {
+            sonHata = data.error.message;
+            // Eğer model adı bulunamadıysa hemen sonraki güncel modele geç!
+            if (data.error.code === 404 || data.error.message.includes('not found')) {
+              continue;
+            } else {
+              throw new Error(data.error.message);
+            }
+          }
+        } catch (e) {
+          sonHata = e.message;
+        }
+      }
+
+      throw new Error(sonHata || "Yapay zeka modellerine ulaşılamadı.");
+    }
 
     function lumioAiModaliAc() {
       document.getElementById('modalLumioAi').classList.remove('hidden');
@@ -4447,7 +4489,7 @@ function musteriSec(id) {
       lumioAiArayuzuDileGoreGuncelle();
     }
 
-    /* 2. CANLI GEMINI 1.5 FLASH: KESİNTİSİZ İSTİŞARE VE FORMÜL MOTORU */
+    /* 2. CANLI GOOGLE GEMINI İSTİŞARE VE DİJİTAL KALFA */
     async function lumioAiSoruSor() {
       const input = document.getElementById('aiAskInput');
       const soru = input.value.trim();
@@ -4456,12 +4498,6 @@ function musteriSec(id) {
       const riskCard = document.getElementById('aiRiskAlertCard');
       const adviceCard = document.getElementById('aiAdviceCard');
       const adviceText = document.getElementById('aiAdviceText');
-
-      if (!geminiApiKey) {
-        adviceCard.classList.remove('hidden');
-        adviceText.innerHTML = `⚠️ <b>Ustam, yapay zeka beynimi çalıştırmak için Patron Paneli'ndeki [🔑 Gemini Şifresi] butonundan API anahtarınızı girmeniz gerekiyor.</b>`;
-        return;
-      }
 
       riskCard.classList.add('hidden');
       adviceCard.classList.remove('hidden');
@@ -4486,38 +4522,20 @@ Mevcut Ürünler: ${urunlerMetni}
 DİL KURALI: Ustanın kullandığı dilde (${aktifDil.toUpperCase()}) ve o dilin salon samimiyetiyle yanıt ver.`;
 
       try {
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [
-              { parts: [{ text: `${systemPrompt}\n\nUstanın Sorusu / Sözü: "${soru}"` }] }
-            ]
-          })
+        const cevap = await geminiApiCagir({
+          contents: [
+            { parts: [{ text: `${systemPrompt}\n\nUstanın Sorusu / Sözü: "${soru}"` }] }
+          ]
         });
 
-        const data = await response.json();
-
-        if (data.error) {
-          adviceText.innerHTML = `⚠️ <b>Google API Hatası:</b> ${data.error.message}`;
-          return;
+        if (cevap.toLowerCase().includes("dur") || cevap.toLowerCase().includes("yak") || cevap.toLowerCase().includes("lastik") || cevap.toLowerCase().includes("осторожно")) {
+          riskCard.classList.remove('hidden');
+          document.getElementById('aiRiskTitle').innerText = "⚠️ KİMYASAL HASAR UYARISI!";
+          document.getElementById('aiRiskBody').innerText = cevap;
         }
-
-        if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
-          let cevap = data.candidates[0].content.parts[0].text;
-          
-          if (cevap.toLowerCase().includes("dur") || cevap.toLowerCase().includes("yak") || cevap.toLowerCase().includes("lastik") || cevap.toLowerCase().includes("осторожно")) {
-            riskCard.classList.remove('hidden');
-            document.getElementById('aiRiskTitle').innerText = "⚠️ KİMYASAL HASAR UYARISI!";
-            document.getElementById('aiRiskBody').innerText = cevap;
-          }
-          adviceText.innerText = cevap;
-        } else {
-          adviceText.innerText = "Cevap üretilemedi ustam, tekrar sorar mısın?";
-        }
+        adviceText.innerText = cevap;
       } catch (err) {
-        adviceText.innerText = "Bağlantı hatası oluştu: " + err.message;
+        adviceText.innerHTML = `⚠️ <b>Google API Hatası:</b> ${err.message}`;
       }
 
       input.value = "";
@@ -4533,7 +4551,7 @@ DİL KURALI: Ustanın kullandığı dilde (${aktifDil.toUpperCase()}) ve o dilin
       window.speechSynthesis.speak(utter);
     }
 
-    /* 3. GERÇEK GEMINI VISION: FOTOĞRAFTAN PİKSEL DÜZEYİNDE TRİKOLOJİ (TAMİR EDİLDİ) */
+    /* 3. GERÇEK GEMINI VISION: FOTOĞRAFTAN PİKSEL DÜZEYİNDE TRİKOLOJİ */
     function lumioAiFotoYuklendi(input) {
       if (!input.files || !input.files[0]) return;
       const file = input.files[0];
@@ -4552,12 +4570,6 @@ DİL KURALI: Ustanın kullandığı dilde (${aktifDil.toUpperCase()}) ve o dilin
       if (!aiSeciliFotoDataUrl) return;
 
       const btn = document.getElementById('btnStartVisionScan');
-
-      if (!geminiApiKey) {
-        alert("Lütfen önce Patron Paneli'ndeki [🔑 Gemini Şifresi] butonundan anahtarınızı giriniz.");
-        return;
-      }
-
       btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Google Gemini Saçı İnceliyor...</span>`;
       btn.disabled = true;
 
@@ -4582,35 +4594,17 @@ Yanıtını YALNIZCA şu JSON formatında ver, başka hiçbir yazı yazma:
 }`;
 
       try {
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [
-              {
-                parts: [
-                  { inlineData: { mimeType: mimeType, data: base64Data } },
-                  { text: visionPrompt }
-                ]
-              }
-            ]
-          })
+        let rawText = await geminiApiCagir({
+          contents: [
+            {
+              parts: [
+                { inlineData: { mimeType: mimeType, data: base64Data } },
+                { text: visionPrompt }
+              ]
+            }
+          ]
         });
 
-        const data = await response.json();
-
-        if (data.error) {
-          alert("Google Görsel API Hatası: " + data.error.message);
-          return;
-        }
-
-        if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
-          alert("Google görseli analiz edemedi. Lütfen tekrar deneyin.");
-          return;
-        }
-
-        let rawText = data.candidates[0].content.parts[0].text;
         rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
         const parsed = JSON.parse(rawText);
 
@@ -4640,7 +4634,7 @@ Yanıtını YALNIZCA şu JSON formatında ver, başka hiçbir yazı yazma:
 
         document.getElementById('aiVisionResultCard').classList.remove('hidden');
       } catch (err) {
-        alert("Görsel analiz yapılamadı: " + err.message);
+        alert("Görsel analiz hatası: " + err.message);
       } finally {
         btn.innerHTML = `<i class="fa-solid fa-microchip"></i> <span>BİLİMSEL HASAR ANALİZİ YAP</span>`;
         btn.disabled = false;
@@ -4710,7 +4704,7 @@ ${i+1}. ${u.ad}
     }
 
     function patronGeminiSifresiAyarla() {
-      let girilen = prompt("Google AI Studio'dan aldığınız yeni Gemini API anahtarınızı (AQ... veya AIzaSy...) buraya yapıştırınız:", geminiApiKey);
+      let girilen = prompt("Google AI Studio'dan aldığınız yeni Gemini API anahtarınızı buraya yapıştırınız:", geminiApiKey);
       if (girilen === null) return;
       girilen = girilen.trim();
       if (!girilen) {
