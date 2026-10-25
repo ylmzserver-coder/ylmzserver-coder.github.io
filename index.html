@@ -4057,17 +4057,20 @@ function musteriSec(id) {
       anindaWhatsAppAc("905354049392", "Merhaba LUMIO Destek, usta giriş şifremi unuttum. Yardımcı olabilir misiniz?");
     }
 /* ==========================================================================
-       BÖLÜM 5: CANLI GOOGLE GEMINI 1.5 FLASH AI & DİJİTAL KALFA MOTORU
-       (Gerçek Trikoloji Görsel Analizi, Meslektaş Jargonu, Çok Dilli Zeka)
+       BÖLÜM 5: GÜVENLİ VE CANLI GOOGLE GEMINI MASTER AI MOTORU
+       (Sıfır İfşa Güvenliği, x-goog-api-key, Bas-Konuş İstişare, Trikoloji Vision)
        ========================================================================== */
-
-    const GEMINI_API_KEY = "AQ.Ab8RN6KLZq_ib8eAgcewtVoMXXiVnuXv9r5sz_T7Q7rphz7hrQ";
 
     let aiRecognition = null;
     let aiDinliyorMu = false;
+    let aiIstisareDinliyorMu = false;
     let aiSonAlgilananMetin = "";
     let aiParsedRandevu = null;
     let aiSeciliFotoDataUrl = "";
+
+    // API Anahtarı kodda AÇIK YAZILMAZ; Patron Paneli'nden güvenle çekilir
+    let geminiApiKey = localStorage.getItem('lumio_gemini_api_key') || "";
+
     let patronUrunListesi = JSON.parse(localStorage.getItem('lumio_patron_urunler')) || [
       {
         id: "u1",
@@ -4101,7 +4104,7 @@ function musteriSec(id) {
     const AI_DIL_AYARLARI = {
       tr: {
         langCode: "tr-TR",
-        selam: "Selam ustam, kolay gelsin! 🌸 Koltukta kim var bugün, ne yapıyoruz? Kafana takılan formülü veya analizi sor, beraber çözelim.",
+        selam: "Selam ustam, kolay gelsin! 🌸 Koltukta kim var bugün, ne yapıyoruz? Kafana takılan bir formül veya analiz varsa sor, beraber çözelim.",
         micReady: "Hazır. Konuşmak için butona dokunun.",
         micListening: "🔴 Dinliyorum ustam, dükkan diliyle konuş...",
         noCust: "Müşteri Seçilmedi (Dokun & Koltuğa Oturt ➔)",
@@ -4138,6 +4141,7 @@ function musteriSec(id) {
       modalGeriTusuKaydi('modalLumioAi');
       lumioAiSekme('ses');
       lumioAiArayuzuDileGoreGuncelle();
+      lumioAiIstisareMikrofonuEkle();
     }
 
     function lumioAiModaliKapat() {
@@ -4161,7 +4165,7 @@ function musteriSec(id) {
       }
       greetingEl.innerHTML = `<i class="fa-solid fa-sparkles text-amber-400"></i> <span>${dAyari.selam}</span>`;
 
-      // Müşteri Rozeti Tıklama ve Seçim Bağlantısı
+      // Müşteri Rozeti Tıklama (Katman Z-Index düzeltmesiyle)
       const badge = document.getElementById('aiActiveCustBadge');
       if (badge) {
         badge.onclick = lumioAiRehberdenMusteriSec;
@@ -4179,8 +4183,14 @@ function musteriSec(id) {
       if (micStatus && !aiDinliyorMu) micStatus.innerText = dAyari.micReady;
     }
 
+    /* MÜŞTERİ REHBERİNİN ASİSTANIN ARKASINDA KALMA SORUNUNUN (Z-INDEX) ÇÖZÜMÜ */
     function lumioAiRehberdenMusteriSec() {
+      const rehberModal = document.getElementById('modalMusteriRehberi');
+      if (rehberModal) {
+        rehberModal.style.zIndex = "99999999999"; // Asistan penceresinin de üzerine çıkar!
+      }
       musteriRehberiModalAc();
+      
       const eskiSecim = window.musteriSecRehberden;
       window.musteriSecRehberden = function(id) {
         eskiSecim(id);
@@ -4189,6 +4199,77 @@ function musteriSec(id) {
         document.getElementById('modalLumioAi').classList.remove('hidden');
         window.musteriSecRehberden = eskiSecim;
       };
+    }
+
+    /* İSTİŞARE SEKME İÇİNE 🎤 BAS-KONUŞ MİKROFONU ENTEGRASYONU */
+    function lumioAiIstisareMikrofonuEkle() {
+      let askContainer = document.querySelector('#aiTabContentIstisare .flex.space-x-1\\.5');
+      if (!askContainer || document.getElementById('btnAiIstisareMic')) return;
+
+      const micBtn = document.createElement('button');
+      micBtn.id = 'btnAiIstisareMic';
+      micBtn.type = 'button';
+      micBtn.onclick = lumioAiIstisareBasKonusToggle;
+      micBtn.className = "w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 hover:bg-amber-500 hover:text-slate-950 border border-amber-500/40 flex items-center justify-center text-sm shadow transition active:scale-90 flex-shrink-0";
+      micBtn.title = "Bas-Konuş ile Sesli Sor";
+      micBtn.innerHTML = `<i class="fa-solid fa-microphone" id="iconIstisareMic"></i>`;
+
+      askContainer.insertBefore(micBtn, askContainer.firstChild);
+    }
+
+    function lumioAiIstisareBasKonusToggle() {
+      const micBtn = document.getElementById('btnAiIstisareMic');
+      const micIcon = document.getElementById('iconIstisareMic');
+      const input = document.getElementById('aiAskInput');
+      const dAyari = AI_DIL_AYARLARI[aktifDil] || AI_DIL_AYARLARI.tr;
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Tarayıcınız ses tanımayı desteklemiyor.");
+        return;
+      }
+
+      if (aiIstisareDinliyorMu) {
+        if (aiRecognition) aiRecognition.stop();
+        aiIstisareDinliyorMu = false;
+        micBtn.className = "w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-sm shadow flex-shrink-0";
+        return;
+      }
+
+      try {
+        aiRecognition = new SpeechRecognition();
+        aiRecognition.lang = dAyari.langCode;
+        aiRecognition.continuous = false;
+        aiRecognition.interimResults = false;
+
+        aiRecognition.onstart = function() {
+          aiIstisareDinliyorMu = true;
+          micBtn.className = "w-10 h-10 rounded-xl bg-red-600 text-white animate-pulse flex items-center justify-center text-sm shadow flex-shrink-0";
+          input.placeholder = "Sizi dinliyorum ustam, konuşun...";
+        };
+
+        aiRecognition.onresult = function(e) {
+          const transcript = e.results[0][0].transcript;
+          input.value = transcript;
+          lumioAiSoruSor(); // Ses bittiği an doğrudan Gemini'ye sor!
+        };
+
+        aiRecognition.onerror = function() {
+          aiIstisareDinliyorMu = false;
+          micBtn.className = "w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-sm shadow flex-shrink-0";
+          input.placeholder = "Örn: 7.34 katsam kızıllık yapar mı?";
+        };
+
+        aiRecognition.onend = function() {
+          aiIstisareDinliyorMu = false;
+          micBtn.className = "w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-sm shadow flex-shrink-0";
+          input.placeholder = "Örn: 7.34 katsam kızıllık yapar mı?";
+        };
+
+        aiRecognition.start();
+      } catch(err) {
+        alert("Mikrofon hatası: " + err.message);
+      }
     }
 
     function lumioAiSekme(sekmeAdi) {
@@ -4209,7 +4290,7 @@ function musteriSec(id) {
       lumioAiArayuzuDileGoreGuncelle();
     }
 
-    /* 1. SOKAK DİLİ BAS-KONUŞ VE AKILLI İSİM AYIKLAMA (STOPWORD FİLTRELİ) */
+    /* 1. SOKAK DİLİ BAS-KONUŞ VE NİYET AYRIMI (SOHBET VS RANDEVU) */
     function lumioAiBasKonusToggle() {
       const btn = document.getElementById('aiMicBtn');
       const status = document.getElementById('aiMicStatus');
@@ -4217,7 +4298,7 @@ function musteriSec(id) {
 
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
-        alert("Tarayıcınız ses tanımayı desteklemiyor. Lütfen güncel Chrome veya Safari kullanınız.");
+        alert("Tarayıcınız ses tanımayı desteklemiyor. Güncel Chrome veya Safari kullanınız.");
         return;
       }
 
@@ -4277,17 +4358,25 @@ function musteriSec(id) {
       let raw = metin.toLocaleLowerCase('tr-TR');
       let now = new Date();
 
+      // NİYET AYRIMI: "Konuşabilir miyiz", "Selam", "Nasılsın" randevu değil sohbettir!
+      if (raw.includes("konuşabilir") || raw.includes("selam") || raw.includes("naber") || raw.includes("nasılsın") || raw.includes("привет") || raw.includes("поговорим")) {
+        lumioAiSekme('istisare');
+        document.getElementById('aiAskInput').value = metin;
+        lumioAiSoruSor();
+        return;
+      }
+
       // Ses kayması düzeltmesi (fırına/fene -> fön)
       raw = raw.replace(/\bfırına\b/g, "fön").replace(/\bfırın\b/g, "fön").replace(/\bfene\b/g, "fön");
 
-      // Tarih
+      // Tarih Çözümü
       let targetDate = new Date();
       if (raw.includes("yarın") || raw.includes("завтра") || raw.includes("tomorrow") || raw.includes("morgen")) {
         targetDate.setDate(now.getDate() + 1);
       }
       let tarihStr = targetDate.getDate().toString().padStart(2, '0') + '.' + (targetDate.getMonth() + 1).toString().padStart(2, '0') + '.' + targetDate.getFullYear();
 
-      // Saat
+      // Saat Çözümü
       let saatStr = "14:00";
       let digitMatch = raw.match(/(\b[0-2]?[0-9])[:.]([0-5][0-9]\b)/);
       if (digitMatch) {
@@ -4297,13 +4386,14 @@ function musteriSec(id) {
         for (let [k, s] of Object.entries(saatMap)) { if (raw.includes(k)) { saatStr = s; break; } }
       }
 
-      // STOPWORD FİLTRESİ: "Hanım, Bey, Abla" kelimeleri asla isim yerine geçemez!
-      const yasakliKelimeler = ["hanım", "hanim", "bey", "abla", "abi", "teyze", "kanka", "usta", "hocam", "госпожа", "господин", "mrs", "mr"];
+      // AKILLI STOPWORD FİLTRESİ: "Hanım, Bey, Abla" gibi ekler asla müşteri ismi yapılamaz!
+      const yasakliKelimeler = ["hanım", "hanim", "bey", "abla", "abi", "teyze", "kanka", "usta", "hocam", "госпожа", "господин", "mrs", "mr", "konuşabilir", "gelecek", "gel", "randevu"];
       let temizKelimeler = raw.split(/[\s,.'"]+/).filter(w => w.length > 2 && !yasakliKelimeler.includes(w) && !w.includes(':') && isNaN(w));
 
       let bulunanMusteri = "";
       let bulunanTel = "";
 
+      // 1. Rehberde gerçek isim ara
       for (let m of musteriler) {
         let mKelimeler = m.ad.toLocaleLowerCase('tr-TR').split(/\s+/).filter(w => !yasakliKelimeler.includes(w));
         for (let adKelime of mKelimeler) {
@@ -4316,7 +4406,7 @@ function musteriSec(id) {
         if (bulunanMusteri) break;
       }
 
-      // Rehberde yoksa Hamide gibi söylenen ismi doğrudan al
+      // 2. Rehberde yoksa doğrudan ustanın söylediği gerçek adı (Örn: Hamide) al
       if (!bulunanMusteri && temizKelimeler.length > 0) {
         bulunanMusteri = turkceHitapIsimDuzenle(temizKelimeler[0]);
       }
@@ -4371,7 +4461,7 @@ function musteriSec(id) {
       lumioAiArayuzuDileGoreGuncelle();
     }
 
-    /* 2. GERÇEK GEMINI 1.5 FLASH: CANLI MESLEKTAŞ İSTİŞARE & RİSK MOTORU */
+    /* 2. x-goog-api-key BAŞLIKLI GERÇEK GEMINI 1.5 FLASH İSTİŞARE MOTORU */
     async function lumioAiSoruSor() {
       const input = document.getElementById('aiAskInput');
       const soru = input.value.trim();
@@ -4381,11 +4471,16 @@ function musteriSec(id) {
       const adviceCard = document.getElementById('aiAdviceCard');
       const adviceText = document.getElementById('aiAdviceText');
 
+      if (!geminiApiKey) {
+        adviceCard.classList.remove('hidden');
+        adviceText.innerHTML = `⚠️ <b>Ustam, yapay zeka beynimi çalıştırmak için Patron Paneli'nden Gemini API anahtarınızı girmeniz gerekiyor.</b>`;
+        return;
+      }
+
       riskCard.classList.add('hidden');
       adviceCard.classList.remove('hidden');
       adviceText.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-amber-400"></i> Düşünüyorum ustam, formüle bakıyorum...`;
 
-      // Müşteri geçmişini ve patron ürünlerini toparla
       let gecmisOzeti = "Müşteri henüz seçilmedi veya geçmiş kaydı yok.";
       if (aktifMusteri) {
         let islemler = gecmisIslemler.filter(g => (g.musteriId && g.musteriId === aktifMusteri.id) || (aktifMusteri.tel && g.tel === aktifMusteri.tel));
@@ -4398,22 +4493,25 @@ function musteriSec(id) {
 
       const systemPrompt = `Sen kuaför ve güzellik salonlarında 20 yılını tezgâha vermiş, Oswald renk çarkını, pigmentasyonu ve saç kimyasını su gibi bilen efsanevi baş kalfa ve usta renk uzmanı (Master Colorist) Ayşe'sin.
 Karşındaki kişi senin yıllardır birlikte çalıştığın Ahmet Usta / tezgâh ortağındır.
-ASLA robotik, soğuk, ansiklopedik veya resmi konuşma!
-Tam bir usta-kalfa samimiyetiyle, dükkan diliyle, gerektiğinde ustayı korumak için dobra dobra eleştirerek konuş.
-Eğer usta tehlikeli bir şey yaparsa (örneğin son 30 günde açılmış saça tekrar direkt 30 volüm oryal vurmak gibi) net şekilde uyar: 'Dur ustam n'apıyorsun saçı yakarız, lastikleşir!' de ve güvenli alternatif (10 volüm Bleach Wash + Plex) sun.
+ASLA robotik, soğuk veya resmi konuşma! Tam bir usta-kalfa samimiyetiyle, dükkan diliyle konuş.
+Eğer usta tehlikeli bir işlemden bahsederse (yakın zamanda açılmış saça tekrar direkt 30 volüm vurmak gibi) uyar: 'Dur ustam saçı yakarız, lastikleşir!' de ve güvenli alternatif (10 volüm Bleach Wash + Plex) sun.
 Müşteri Geçmişi: ${gecmisOzeti}
 Mevcut Ürünler: ${urunlerMetni}
-DİL KURALI: Ustanın kullandığı dilde (${aktifDil.toUpperCase()}) ve o dilin sokak/salon samimiyetiyle yanıt ver. (Rusça ise 'Привет, мастер!' gibi konuş).`;
+DİL KURALI: Ustanın kullandığı dilde (${aktifDil.toUpperCase()}) ve o dilin salon samimiyetiyle yanıt ver.`;
 
       try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+        // x-goog-api-key BAŞLIĞI İLE GÜVENLİ GOOGLE GEMINI ÇAĞRISI
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'x-goog-api-key': geminiApiKey 
+          },
           body: JSON.stringify({
             contents: [
-              { role: "user", parts: [{ text: `${systemPrompt}\n\nUstanın Sorusu / Sözü: "${soru}"` }] }
+              { role: "user", parts: [{ text: `${systemPrompt}\n\nUstanın Sorusu: "${soru}"` }] }
             ],
-            generationConfig: { temperature: 0.8, maxOutputTokens: 500 }
+            generationConfig: { temperature: 0.8, maxOutputTokens: 600 }
           })
         });
 
@@ -4421,7 +4519,6 @@ DİL KURALI: Ustanın kullandığı dilde (${aktifDil.toUpperCase()}) ve o dilin
         if (data.candidates && data.candidates[0].content.parts[0].text) {
           let cevap = data.candidates[0].content.parts[0].text;
           
-          // Eğer cevapta tehlike veya yanma uyarısı varsa kırmızı kartı da yak
           if (cevap.toLowerCase().includes("dur") || cevap.toLowerCase().includes("yak") || cevap.toLowerCase().includes("lastik") || cevap.toLowerCase().includes("осторожно")) {
             riskCard.classList.remove('hidden');
             document.getElementById('aiRiskTitle').innerText = "⚠️ KİMYASAL HASAR UYARISI!";
@@ -4448,7 +4545,7 @@ DİL KURALI: Ustanın kullandığı dilde (${aktifDil.toUpperCase()}) ve o dilin
       window.speechSynthesis.speak(utter);
     }
 
-    /* 3. GERÇEK GEMINI VISION: FOTOĞRAFTAN CANLI TRİKOLOJİ TEŞHİSİ */
+    /* 3. GERÇEK GEMINI VISION: FOTOĞRAFTAN PİKSEL DÜZEYİNDE TRİKOLOJİ */
     function lumioAiFotoYuklendi(input) {
       if (!input.files || !input.files[0]) return;
       const file = input.files[0];
@@ -4467,24 +4564,29 @@ DİL KURALI: Ustanın kullandığı dilde (${aktifDil.toUpperCase()}) ve o dilin
       if (!aiSeciliFotoDataUrl) return;
 
       const btn = document.getElementById('btnStartVisionScan');
+
+      if (!geminiApiKey) {
+        alert("Lütfen önce Patron Paneli'nden Gemini API anahtarınızı giriniz.");
+        return;
+      }
+
       btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Google Gemini Saçı İnceliyor...</span>`;
       btn.disabled = true;
 
-      // Base64 temizleme
       const base64Data = aiSeciliFotoDataUrl.split(',')[1];
       const mimeType = aiSeciliFotoDataUrl.split(';')[0].split(':')[1] || 'image/jpeg';
 
       let urunlerMetni = patronUrunListesi.map(u => `ID: ${u.id}, Ad: ${u.ad}, Sorun: ${u.sorun}, Link: ${u.link}`).join(" | ");
 
-      const visionPrompt = `Sen uzman bir trikolog ve master kuaförsün. Bu fotoğraftaki saçı/tırnağı dürüstçe incele.
-Saç doğal ve bakir (virgin) mi, yoksa boya/açıcı/termal yıpranma var mı?
-DİKKAT: Eğer saç fotoğrafta koyu, sağlıklı ve doğal görünüyorsa sakın sahte yüksek hasar uydurma! Doğal olduğunu dürüstçe söyle.
-Aşağıdaki ürün listesinden bu saça GERÇEKTEN en uygun olan 2 ürünü seç ve gerekçesini açıkla:
+      const visionPrompt = `Sen uzman bir trikolog ve master kuaförsün. Bu fotoğraftaki saçı dürüstçe incele.
+Saç doğal ve bakir (virgin) mi, yoksa açıcı/boya yıpranması var mı?
+DİKKAT: Eğer saç fotoğrafta koyu, parlak ve doğal görünüyorsa sakın yüksek hasar uydurma! Doğal olduğunu dürüstçe söyle (Hasar: %10 civarı).
+Ürün Listesinden bu saça GERÇEKTEN en uygun olan 2 ürünü seç ve gerekçesini açıkla:
 Ürün Listesi: ${urunlerMetni}
 
 Yanıtını YALNIZCA şu JSON formatında ver, başka hiçbir yazı yazma:
 {
-  "hasarSkoru": 12,
+  "hasarSkoru": 10,
   "teshis": "Doğal ve bakir saç tespit edildi. Kimyasal işlem yok, pullar kapalı ve sağlıklı.",
   "secilenUrunler": [
     { "ad": "Ürün Adı", "gerekce": "Neden önerildiği", "link": "linki" }
@@ -4492,9 +4594,12 @@ Yanıtını YALNIZCA şu JSON formatında ver, başka hiçbir yazı yazma:
 }`;
 
       try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'x-goog-api-key': geminiApiKey 
+          },
           body: JSON.stringify({
             contents: [
               {
@@ -4531,7 +4636,7 @@ Yanıtını YALNIZCA şu JSON formatında ver, başka hiçbir yazı yazma:
             </div>
             <p class="text-[10px] text-slate-400 leading-tight">💡 <b>Neden Seçildi:</b> ${u.gerekce}</p>
             <a href="${u.link}" target="_blank" class="inline-block text-[10px] text-emerald-400 font-bold hover:underline pt-0.5">
-              🔗 Satın Alma Bağlantısı (Trendyol/Mağaza) ➔
+              🔗 Satın Alma Bağlantısı ➔
             </a>
           </div>
         `).join('');
@@ -4566,7 +4671,7 @@ ${i+1}. ${u.ad}
       anindaWhatsAppAc(tel, msg);
     }
 
-    /* 5. PATRON PANELİ: ÇOKLU PAZARYERİ ÜRÜN YÖNETİMİ */
+    /* 5. PATRON PANELİ: GİZLİ GEMINI API KEY & ÇOKLU PAZARYERİ YÖNETİMİ */
     function patronUrunListesiniCiz() {
       let alan = document.getElementById('patronUrunYonetimAlani');
       if (!alan) {
@@ -4574,9 +4679,20 @@ ${i+1}. ${u.ad}
         if (!patronModalKutu) return;
         alan = document.createElement('div');
         alan.id = 'patronUrunYonetimAlani';
-        alan.className = "bg-slate-950 p-3 rounded-xl border border-amber-500/40 space-y-2 text-xs";
+        alan.className = "bg-slate-950 p-3 rounded-xl border border-amber-500/40 space-y-2.5 text-xs";
         alan.innerHTML = `
-          <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
+          <!-- GİZLİ GEMINI API KEY YÖNETİMİ (SIFIR İFŞA KORUMASI) -->
+          <div class="border-b border-slate-800 pb-2 space-y-1.5">
+            <span class="text-amber-400 font-bold block text-[11px]"><i class="fa-solid fa-key mr-1"></i> 🔑 GOOGLE GEMINI API ANAHTARI</span>
+            <div class="flex space-x-1.5">
+              <input type="password" id="patronGeminiKeyInput" placeholder="AQ... veya AIzaSy..." value="${geminiApiKey}" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-white font-mono text-xs focus:outline-none focus:border-amber-400">
+              <button onclick="patronGeminiKeyKaydet()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-3 py-1.5 rounded-lg text-[10px] shadow active:scale-95 transition">Kaydet</button>
+            </div>
+            <p class="text-[9px] text-slate-400">GitHub ve Google botlarının şifrenizi iptal etmemesi için anahtar burada saklanır.</p>
+          </div>
+
+          <!-- PAZARYERİ ÜRÜN YÖNETİMİ -->
+          <div class="flex justify-between items-center border-b border-slate-800 pb-1.5 pt-1">
             <span class="text-amber-400 font-bold flex items-center text-xs">
               <i class="fa-solid fa-boxes-stacked mr-1.5"></i> 🛍️ ÜRÜN & PAZARYERİ LİNKLERİ
             </span>
@@ -4599,6 +4715,14 @@ ${i+1}. ${u.ad}
           <button onclick="patronUrunSil(${idx})" class="text-slate-500 hover:text-red-400 p-1 text-xs">✕</button>
         </div>
       `).join('');
+    }
+
+    function patronGeminiKeyKaydet() {
+      const val = document.getElementById('patronGeminiKeyInput').value.trim();
+      if (!val) { alert("Lütfen geçerli bir API anahtarı giriniz."); return; }
+      geminiApiKey = val;
+      localStorage.setItem('lumio_gemini_api_key', val);
+      alert("🎉 Google Gemini API anahtarı başarıyla kaydedildi! Canlı yapay zeka beyni artık aktif.");
     }
 
     function patronYeniUrunEklePrompt() {
