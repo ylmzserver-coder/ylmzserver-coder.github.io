@@ -4057,8 +4057,8 @@ function musteriSec(id) {
       anindaWhatsAppAc("905354049392", "Merhaba LUMIO Destek, usta giriş şifremi unuttum. Yardımcı olabilir misiniz?");
     }
 /* ==========================================================================
-       BÖLÜM 5: YENİ İZOLE LUMIO MASTER AI & SESLİ DANIŞMAN MOTORU
-       (Sokak Dili Randevu, Kimyasal Risk Kalkanı, Foto Teşhis & Marka Reçete)
+       BÖLÜM 5: YENİ NESİL ÇOK DİLLİ LUMIO MASTER AI & SATIŞ MOTORU
+       (4 Dilde Karşılama, Akıllı Stopword, Görsel Trikoloji, Patron Kataloğu)
        ========================================================================== */
 
     let aiRecognition = null;
@@ -4066,12 +4066,89 @@ function musteriSec(id) {
     let aiSonAlgilananMetin = "";
     let aiParsedRandevu = null;
     let aiSeciliFotoDataUrl = "";
+    let patronUrunListesi = JSON.parse(localStorage.getItem('lumio_patron_urunler')) || [
+      {
+        id: "u1",
+        ad: "LUMIO Bond-Plex No:3 Yoğun Onarıcı Maske",
+        kategori: "hasarli",
+        sorun: "Açıcı yanığı, elastikiyet kaybı, yüksek porozite",
+        kullanim: "Haftada 2 kez nemli saça 10 dk bekletilir. Disülfit bağlarını onarır.",
+        platform: "Trendyol",
+        link: "https://ty.gl/lumio-bond-plex"
+      },
+      {
+        id: "u2",
+        ad: "LUMIO Color Shield Argan & Keratin İksiri",
+        kategori: "boyali",
+        sorun: "Boya akması, matlaşma, ısı hasarı",
+        kullanim: "Her duş ve fön öncesi boy ve uçlara 2 damla. Rengi 6 haftaya kadar kilitler.",
+        platform: "Hepsiburada",
+        link: "https://hepsiburada.com/lumio-color-shield"
+      },
+      {
+        id: "u3",
+        ad: "LUMIO Silk Touch Doğal Saç Parlaklık Serumu",
+        kategori: "dogal",
+        sorun: "Nemsizlik, elektriklenme, doğal saç koruması",
+        kullanim: "Günlük kullanım. Doğal saç pulcuklarını besler, ipeksi ışıltı verir.",
+        platform: "Resmi Mağaza",
+        link: "https://lumiomarket.com/urun/silk-touch"
+      }
+    ];
+
+    /* DİNAMİK 4 DİLLİ KARŞILAMA SÖZLÜĞÜ */
+    const AI_DIL_AYARLARI = {
+      tr: {
+        langCode: "tr-TR",
+        selam: "Selam ustam, kolay gelsin! 🌸 Koltukta kim var bugün, ne yapıyoruz? Kafana takılan bir formül veya saç analizi varsa sor halledelim.",
+        micReady: "Hazır. Konuşmak için butona dokunun.",
+        micListening: "🔴 Sizi dinliyorum ustam, konuşun...",
+        noCust: "Müşteri Seçilmedi (Dokun & Seç ➔)",
+        dogalTeshis: "Doğal & İşlemsiz Saç (Virgin Hair). Kimyasal hasar tespit edilmedi (Hasar: %10). Saç pulcukları kapalı ve sağlıklı.",
+        hasarliTeshis: "Kimyasal & Termal Yıpranma. Kütikül pulları açık, kortekste nem ve protein kaybı mevcut.",
+        riskAlertTitle: "⚠️ YÜKSEK KİMYASAL HASAR UYARISI!",
+        voiceBtnText: "Sesli Oku"
+      },
+      ru: {
+        langCode: "ru-RU",
+        selam: "Привет, мастер! 🌸 Как дела в салоне? Кто сегодня в кресле, над чем работаем? Спрашивай по формулам или давай просканируем волосы!",
+        micReady: "Готов. Нажмите на микрофон и говорите.",
+        micListening: "🔴 Слушаю вас, мастер...",
+        noCust: "Клиент не выбран (Нажмите для выбора ➔)",
+        dogalTeshis: "Натуральные волосы без химической обработки. Повреждений нет (Повреждение: %10). Кутикула закрыта и здорова.",
+        hasarliTeshis: "Химическое и термическое повреждение. Чешуйки кутикулы открыты, требуется восполнение влаги и кератина.",
+        riskAlertTitle: "⚠️ ВНИМАНИЕ: ОПАСНОСТЬ ПОВРЕЖДЕНИЯ!",
+        voiceBtnText: "Озвучить"
+      },
+      en: {
+        langCode: "en-US",
+        selam: "Hey boss! 🌸 How's the rush today? Who's in the chair, what are we creating? Ask me about formulas or let's do a hair scan!",
+        micReady: "Ready. Tap microphone to speak.",
+        micListening: "🔴 Listening to you, boss...",
+        noCust: "No Client Selected (Tap to Select ➔)",
+        dogalTeshis: "Natural / Virgin Hair. No chemical damage detected (Damage: %10). Cuticles are sealed and healthy.",
+        hasarliTeshis: "Chemical & Thermal Damage. Cuticles are open, hair is hungry for hydration and bond repair.",
+        riskAlertTitle: "⚠️ HIGH CHEMICAL DAMAGE WARNING!",
+        voiceBtnText: "Speak"
+      },
+      de: {
+        langCode: "de-DE",
+        selam: "Hallo Meister! 🌸 Wie läuft das Geschäft? Wer sitzt heute auf dem Stuhl? Frag mich nach Rezepturen oder lass uns scannen!",
+        micReady: "Bereit. Mikrofon antippen und sprechen.",
+        micListening: "🔴 Ich höre zu, Meister...",
+        noCust: "Kein Kunde gewählt (Tippen zum Wählen ➔)",
+        dogalTeshis: "Natürliches / unbehandeltes Haar. Keine chemischen Schäden (%10). Schuppenschicht intakt.",
+        hasarliTeshis: "Chemische und thermische Belastung. Schuppenschicht geöffnet, Feuchtigkeit erforderlich.",
+        riskAlertTitle: "⚠️ HOHE CHEMISCHE WARNUNG!",
+        voiceBtnText: "Vorlesen"
+      }
+    };
 
     function lumioAiModaliAc() {
       document.getElementById('modalLumioAi').classList.remove('hidden');
       modalGeriTusuKaydi('modalLumioAi');
       lumioAiSekme('ses');
-      lumioAiMusteriRozetiGuncelle();
+      lumioAiArayuzuDileGoreGuncelle();
     }
 
     function lumioAiModaliKapat() {
@@ -4080,6 +4157,54 @@ function musteriSec(id) {
         aiDinliyorMu = false;
       }
       document.getElementById('modalLumioAi').classList.add('hidden');
+    }
+
+    function lumioAiArayuzuDileGoreGuncelle() {
+      const dAyari = AI_DIL_AYARLARI[aktifDil] || AI_DIL_AYARLARI.tr;
+
+      // Samimi Karşılama Balonu
+      let greetingEl = document.getElementById('aiGreetingBanner');
+      if (!greetingEl) {
+        greetingEl = document.createElement('div');
+        greetingEl.id = 'aiGreetingBanner';
+        greetingEl.className = "bg-amber-500/10 border border-amber-500/30 p-2.5 rounded-xl text-xs text-amber-300 font-medium leading-relaxed mb-2 shadow";
+        const contentBox = document.getElementById('aiTabContentSes');
+        if (contentBox) contentBox.insertBefore(greetingEl, contentBox.firstChild);
+      }
+      greetingEl.innerText = dAyari.selam;
+
+      // Müşteri Rozeti (Tıklanabilir Yapıldı!)
+      const badge = document.getElementById('aiActiveCustBadge');
+      if (badge) {
+        badge.onclick = lumioAiRehberdenMusteriSec;
+        badge.style.cursor = "pointer";
+        badge.title = "Koltuktaki Müşteriyi Seçmek İçin Dokunun";
+        if (aktifMusteri && aktifMusteri.ad) {
+          badge.innerText = `👤 ${turkceHitapIsimDuzenle(aktifMusteri.ad)} (Değiştir ➔)`;
+          badge.className = "text-[10px] text-emerald-400 font-bold bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/40 hover:bg-emerald-500/30 transition";
+        } else {
+          badge.innerText = dAyari.noCust;
+          badge.className = "text-[10px] text-amber-400 font-bold bg-amber-500/20 px-2 py-0.5 rounded border border-amber-500/40 hover:bg-amber-500/30 transition animate-pulse";
+        }
+      }
+
+      const micStatus = document.getElementById('aiMicStatus');
+      if (micStatus && !aiDinliyorMu) micStatus.innerText = dAyari.micReady;
+    }
+
+    /* MÜŞTERİ SEÇİLMEYİNCE TEK TIKLA REHBERİ AÇMA KÖPRÜSÜ */
+    function lumioAiRehberdenMusteriSec() {
+      musteriRehberiModalAc();
+      // Müşteri rehberinde seçim yapıldığında asistan modalına geri döndür
+      const eskiSecim = window.musteriSecRehberden;
+      window.musteriSecRehberden = function(id) {
+        eskiSecim(id);
+        lumioAiArayuzuDileGoreGuncelle();
+        // Müşteri seçildikten sonra rehberi kapatıp asistanı öne al
+        document.getElementById('modalMusteriRehberi').classList.add('hidden');
+        document.getElementById('modalLumioAi').classList.remove('hidden');
+        window.musteriSecRehberden = eskiSecim;
+      };
     }
 
     function lumioAiSekme(sekmeAdi) {
@@ -4097,30 +4222,18 @@ function musteriSec(id) {
           }
         }
       });
-      if (sekmeAdi === 'istisare') lumioAiMusteriRozetiGuncelle();
+      lumioAiArayuzuDileGoreGuncelle();
     }
 
-    function lumioAiMusteriRozetiGuncelle() {
-      const badge = document.getElementById('aiActiveCustBadge');
-      if (!badge) return;
-      if (aktifMusteri && aktifMusteri.ad) {
-        badge.innerText = turkceHitapIsimDuzenle(aktifMusteri.ad);
-        badge.className = "text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30";
-      } else {
-        badge.innerText = "Müşteri Seçilmedi";
-        badge.className = "text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30";
-      }
-    }
-
-    /* 1. BAS-KONUŞ SOKAK DİLİ RANDEVU MOTORU */
+    /* 1. ÇOK DİLLİ BAS-KONUŞ & AKILLI JARGON ÇÖZÜCÜ */
     function lumioAiBasKonusToggle() {
       const btn = document.getElementById('aiMicBtn');
       const status = document.getElementById('aiMicStatus');
-      const icon = document.getElementById('aiMicIcon');
+      const dAyari = AI_DIL_AYARLARI[aktifDil] || AI_DIL_AYARLARI.tr;
 
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
-        alert("Tarayıcınız ses tanıma özelliğini desteklemiyor. Lütfen güncel Chrome veya Safari kullanınız.");
+        alert("Tarayıcınız ses tanımayı desteklemiyor. Güncel Chrome veya Safari kullanınız.");
         return;
       }
 
@@ -4129,13 +4242,13 @@ function musteriSec(id) {
         aiDinliyorMu = false;
         btn.classList.remove('from-red-600', 'to-rose-500', 'animate-pulse');
         btn.classList.add('from-amber-500', 'to-amber-300');
-        status.innerText = "İşleniyor, lütfen bekleyin...";
+        status.innerText = "İşleniyor...";
         return;
       }
 
       try {
         aiRecognition = new SpeechRecognition();
-        aiRecognition.lang = 'tr-TR';
+        aiRecognition.lang = dAyari.langCode; // Seçilen dile göre dinamik açılır! (tr-TR, ru-RU, en-US, de-DE)
         aiRecognition.continuous = false;
         aiRecognition.interimResults = false;
 
@@ -4143,9 +4256,9 @@ function musteriSec(id) {
           aiDinliyorMu = true;
           btn.classList.remove('from-amber-500', 'to-amber-300');
           btn.classList.add('from-red-600', 'to-rose-500', 'animate-pulse');
-          status.innerText = "🔴 Sizi dinliyorum, dükkan diliyle konuşun...";
+          status.innerText = dAyari.micListening;
           document.getElementById('aiTranscriptCard').classList.remove('hidden');
-          document.getElementById('aiTranscriptText').innerText = "Dinleniyor...";
+          document.getElementById('aiTranscriptText').innerText = "...";
         };
 
         aiRecognition.onresult = function (event) {
@@ -4156,7 +4269,7 @@ function musteriSec(id) {
         };
 
         aiRecognition.onerror = function (event) {
-          status.innerText = "Ses algılanamadı veya mikrofon izni verilmedi.";
+          status.innerText = "Ses algılanamadı.";
           aiDinliyorMu = false;
           btn.classList.remove('from-red-600', 'to-rose-500', 'animate-pulse');
           btn.classList.add('from-amber-500', 'to-amber-300');
@@ -4166,99 +4279,87 @@ function musteriSec(id) {
           aiDinliyorMu = false;
           btn.classList.remove('from-red-600', 'to-rose-500', 'animate-pulse');
           btn.classList.add('from-amber-500', 'to-amber-300');
-          if (status.innerText.includes("dinliyorum")) status.innerText = "Tamamlandı. Randevu hazırlandı.";
+          status.innerText = dAyari.micReady;
         };
 
         aiRecognition.start();
       } catch (err) {
-        alert("Mikrofon başlatılamadı: " + err.message);
+        alert("Mikrofon hatası: " + err.message);
       }
     }
 
-    /* TÜRKÇE SOKAK DİLİ AYIKLAYICI (NLP) */
+    /* AKILLI İSİM FİLTRESİ (STOPWORD) VE KUAFÖR JARGON ONARICI */
     function lumioAiSokakDiliCoz(metin) {
       if (!metin) return;
       let raw = metin.toLocaleLowerCase('tr-TR');
       let now = new Date();
 
-      // 1. Tarih Çözümleme
+      // SES KAYMASI DÜZELTMELERİ (Fırına -> Fön)
+      raw = raw.replace(/\bfırına\b/g, "fön").replace(/\bfırın\b/g, "fön").replace(/\bfene\b/g, "fön");
+
+      // Tarih
       let targetDate = new Date();
-      if (raw.includes("yarın")) {
+      if (raw.includes("yarın") || raw.includes("завтра") || raw.includes("tomorrow") || raw.includes("morgen")) {
         targetDate.setDate(now.getDate() + 1);
-      } else if (raw.includes("öbür gün") || raw.includes("öbürgün")) {
-        targetDate.setDate(now.getDate() + 2);
       }
       let tarihStr = targetDate.getDate().toString().padStart(2, '0') + '.' + (targetDate.getMonth() + 1).toString().padStart(2, '0') + '.' + targetDate.getFullYear();
 
-      // 2. Saat Çözümleme
+      // Saat
       let saatStr = "14:00";
-      const saatMap = {
-        "dokuz": "09:00", "on": "10:00", "on bir": "11:00", "onbir": "11:00",
-        "on iki": "12:00", "oniki": "12:00", "bir": "13:00", "bire": "13:00",
-        "iki": "14:00", "ikiye": "14:00", "ikide": "14:00",
-        "üç": "15:00", "üçe": "15:00", "üçte": "15:00",
-        "dört": "16:00", "dörde": "16:00",
-        "beş": "17:00", "beşe": "17:00",
-        "altı": "18:00", "altıya": "18:00",
-        "yedi": "19:00", "yediye": "19:00",
-        "sekiz": "20:00", "sekize": "20:00"
-      };
-
-      for (let [kelime, st] of Object.entries(saatMap)) {
-        if (raw.includes(kelime)) {
-          saatStr = st;
-          if (raw.includes("buçuk") || raw.includes("bucuk")) {
-            let h = st.split(':')[0];
-            saatStr = `${h}:30`;
-          }
-          break;
-        }
-      }
-
-      // Rakamla doğrudan söylenmişse (Örn: 15:00 veya 15)
       let digitMatch = raw.match(/(\b[0-2]?[0-9])[:.]([0-5][0-9]\b)/);
       if (digitMatch) {
         saatStr = digitMatch[1].padStart(2, '0') + ':' + digitMatch[2];
+      } else {
+        const saatMap = { "on": "10:00", "on bir": "11:00", "oniki": "12:00", "bir": "13:00", "iki": "14:00", "üç": "15:00", "dört": "16:00", "beş": "17:00", "12": "12:00", "15": "15:00" };
+        for (let [k, s] of Object.entries(saatMap)) { if (raw.includes(k)) { saatStr = s; break; } }
       }
 
-      // 3. Müşteri Çözümleme (Rehberdeki müşterilerle akıllı eşleştirme)
-      let bulunanMusteri = "Değerli Müşteri";
-      let bulunanTel = "";
+      // AKILLI MÜŞTERİ AYIKLAMA (STOPWORD YASAKLAMA MOTORU)
+      // "Hanım, Bey, Abla" kelimeleri artık müşteri aramasına çelme takamaz!
+      const yasakliKelimeler = ["hanım", "hanim", "bey", "abla", "abi", "teyze", "kanka", "usta", "hocam", "госпожа", "господин", "mrs", "mr"];
       
+      let temizKelimeDizisi = raw.split(/[\s,.'"]+/).filter(w => w.length > 2 && !yasakliKelimeler.includes(w) && !w.includes(':') && isNaN(w));
+
+      let bulunanMusteri = "";
+      let bulunanTel = "";
+
+      // 1. Önce tam isim eşleşmesi ara
       for (let m of musteriler) {
-        let mAdNorm = m.ad.toLocaleLowerCase('tr-TR');
-        let kelimeler = mAdNorm.split(' ');
-        for (let k of kelimeler) {
-          if (k.length > 2 && raw.includes(k)) {
+        let mAdKelimeler = m.ad.toLocaleLowerCase('tr-TR').split(/\s+/).filter(w => !yasakliKelimeler.includes(w));
+        for (let adKelime of mAdKelimeler) {
+          if (temizKelimeDizisi.includes(adKelime)) {
             bulunanMusteri = m.ad;
             bulunanTel = m.tel || "";
             break;
           }
         }
-        if (bulunanTel) break;
+        if (bulunanMusteri) break;
       }
 
-      // Rehberde yoksa cümleden isim yakalama tahmini
-      if (bulunanMusteri === "Değerli Müşteri") {
-        let isimMatch = raw.match(/(sayime|gülpembe|fatma|ayşe|ahmet|mehmet|zeynep|merve|elif|server|can)/i);
-        if (isimMatch) bulunanMusteri = turkceHitapIsimDuzenle(isimMatch[0]);
+      // 2. Eğer rehberde yoksa, ustanın söylediği ilk temiz kelimeyi (Örn: Hamide) doğrudan müşteri adı yap!
+      if (!bulunanMusteri && temizKelimeDizisi.length > 0) {
+        bulunanMusteri = turkceHitapIsimDuzenle(temizKelimeDizisi[0]);
       }
+      if (!bulunanMusteri) bulunanMusteri = "Değerli Müşteri";
 
-      // 4. Hizmet & Süre Çözümleme
+      // Hizmet
       let hizmetStr = "İŞLEM";
       let sureDk = 60;
       const liste = salonAyarlari.hizmetler || VARSAYILAN_BOLUM_HIZMETLERI.kuafor;
 
-      for (let h of liste) {
-        let hAdNorm = h.ad.toLocaleLowerCase('tr-TR');
-        if (raw.includes(hAdNorm) || (hAdNorm.includes("boya") && raw.includes("boya")) || (hAdNorm.includes("fön") && raw.includes("fön"))) {
-          hizmetStr = h.ad;
-          sureDk = h.sure || 60;
-          break;
+      if (raw.includes("fön") || raw.includes("укладка") || raw.includes("blowdry")) {
+        hizmetStr = "FÖN"; sureDk = 30;
+      } else if (raw.includes("boya") || raw.includes("окрашивание") || raw.includes("color")) {
+        hizmetStr = "DİP BOYA"; sureDk = 90;
+      } else if (raw.includes("kesim") || raw.includes("стрижка") || raw.includes("cut")) {
+        hizmetStr = "KESİM"; sureDk = 45;
+      } else {
+        for (let h of liste) {
+          if (raw.includes(h.ad.toLocaleLowerCase('tr-TR'))) {
+            hizmetStr = h.ad; sureDk = h.sure || 60; break;
+          }
         }
       }
-
-      if (raw.includes("fön") && !hizmetStr.includes("FÖN")) hizmetStr += " + FÖN";
 
       aiParsedRandevu = {
         musteri: turkceHitapIsimDuzenle(bulunanMusteri),
@@ -4278,14 +4379,7 @@ function musteriSec(id) {
 
     function lumioAiRandevuyuOnayla() {
       if (!aiParsedRandevu) return;
-      shData = {
-        tarih: aiParsedRandevu.tarih,
-        musteri: aiParsedRandevu.musteri,
-        tel: aiParsedRandevu.tel,
-        hizmet: aiParsedRandevu.hizmet,
-        sure: aiParsedRandevu.sure,
-        saat: aiParsedRandevu.saat
-      };
+      shData = { ...aiParsedRandevu };
       lumioAiModaliKapat();
       sihirbazRandevuKaydet(false);
     }
@@ -4294,75 +4388,86 @@ function musteriSec(id) {
       aiParsedRandevu = null;
       document.getElementById('aiTranscriptCard').classList.add('hidden');
       document.getElementById('aiParsedCard').classList.add('hidden');
-      document.getElementById('aiMicStatus').innerText = "Hazır. Konuşmak için butona dokunun.";
+      lumioAiArayuzuDileGoreGuncelle();
     }
 
-    /* 2. USTA İSTİŞARE & KİMYASAL RİSK KALKANI */
+    /* 2. MESLEKTAŞ GİBİ İSTİŞARE & KİMYASAL RİSK KALKANI */
     function lumioAiSoruSor() {
       const input = document.getElementById('aiAskInput');
       const soru = input.value.trim();
-      if (!soru) { alert("Lütfen danışmak istediğiniz soruyu yazın."); return; }
+      if (!soru) return;
 
+      const dAyari = AI_DIL_AYARLARI[aktifDil] || AI_DIL_AYARLARI.tr;
       const soruNorm = soru.toLocaleLowerCase('tr-TR');
       const riskCard = document.getElementById('aiRiskAlertCard');
       const adviceCard = document.getElementById('aiAdviceCard');
       const adviceText = document.getElementById('aiAdviceText');
 
-      // Müşteri geçmişini analiz et
-      let sonIslemler = [];
-      if (aktifMusteri) {
-        sonIslemler = gecmisIslemler.filter(g => (g.musteriId && g.musteriId === aktifMusteri.id) || (aktifMusteri.tel && g.tel === aktifMusteri.tel));
+      // Selamlaşma yakalama
+      if (soruNorm.includes("selam") || soruNorm.includes("merhaba") || soruNorm.includes("привет") || soruNorm.includes("hello") || soruNorm.includes("hallo")) {
+        riskCard.classList.add('hidden');
+        adviceText.innerText = dAyari.selam;
+        adviceCard.classList.remove('hidden');
+        input.value = "";
+        return;
       }
 
+      // Hal Hatır Yakalama
+      if (soruNorm.includes("nasıl") || soruNorm.includes("naber") || soruNorm.includes("как дела") || soruNorm.includes("how are you")) {
+        riskCard.classList.add('hidden');
+        adviceText.innerText = aktifDil === 'ru' 
+          ? "Отлично, мастер! Работа кипит. Твои руки создают красоту, а я на страже формул. Чем займемся?"
+          : "Çok iyiyim ustam, tezgâh seninle güzel! Sen harika saçlar yaparken ben de arkanda kimyayı ve formülleri kolluyorum. Ne yapıyoruz bugün?";
+        adviceCard.classList.remove('hidden');
+        input.value = "";
+        return;
+      }
+
+      // Kimyasal Risk Kontrolü
+      let sonIslemler = aktifMusteri ? gecmisIslemler.filter(g => (g.musteriId && g.musteriId === aktifMusteri.id) || (aktifMusteri.tel && g.tel === aktifMusteri.tel)) : [];
       let gecmisteAciciVarMi = sonIslemler.some(s => {
         let f = (s.formul || '').toLocaleLowerCase('tr-TR');
-        let h = (s.hizmet || '').toLocaleLowerCase('tr-TR');
-        return f.includes('oryal') || f.includes('açıcı') || f.includes('30 vol') || h.includes('röfle') || h.includes('ombre');
+        return f.includes('oryal') || f.includes('açıcı') || f.includes('30 vol') || f.includes('осветление');
       });
 
-      // KİMYASAL RİSK KALKANI TETİKLEME KONTROLÜ
-      if ((soruNorm.includes('oryal') || soruNorm.includes('açıcı') || soruNorm.includes('30 vol') || soruNorm.includes('platin')) && gecmisteAciciVarMi) {
+      if ((soruNorm.includes('oryal') || soruNorm.includes('açıcı') || soruNorm.includes('30 vol') || soruNorm.includes('порошок')) && gecmisteAciciVarMi) {
         riskCard.classList.remove('hidden');
-        document.getElementById('aiRiskBody').innerHTML = `
-          Sayın Usta, koltuktaki müşterimizin geçmiş kayıtlarında yakın zamanda açıcı/oryal işlemi yapıldığı tespit edildi.<br><br>
-          <b>Risk:</b> Saçın disülfit bağları dinlenmeden tekrar yüksek volümle açıcı sürülürse <b>lastikleşme, kopma ve pul tabakasında erime riski %90'dır!</b><br><br>
-          <b>Güvenli Protokol:</b> Oryal yerine 10 volümle ıslak saça 10 dakikalık 'Bleach Wash' uygulamanızı ve formüle mutlaka Plex eklemenizi öneririm.
-        `;
+        document.getElementById('aiRiskTitle').innerText = dAyari.riskAlertTitle;
+        document.getElementById('aiRiskBody').innerHTML = aktifDil === 'ru'
+          ? "⚠️ <b>ОСТОРОЖНО, МАСТЕР!</b> У этого клиента недавно было осветление порошком. Если нанесешь 30 vol повторно — <b>волосы отвалятся и превратятся в резину!</b> Сделай мягкую ванну (Bleach Wash) на 10 vol с плексом!"
+          : "⚠️ <b>DUR AHMET USTAM!</b> Bu müşteriye yakın zamanda açıcı/oryal vurmuşsun. Disülfit bağları dinlenmeden direkt 30 volüm girersen <b>saç elinde kalır, %90 lastikleşir!</b> İlla ton kıracaksan 10 volümle ıslak saça 10 dk Bleach Wash yap, içine de Plex çak!";
       } else {
         riskCard.classList.add('hidden');
       }
 
-      // Uzman Colorist Cevabı Üret
+      // Samimi Renk Uzmanı Yanıtı
       let tavsiye = "";
-      if (soruNorm.includes('dore') || soruNorm.includes('sıcak')) {
-        tavsiye = "Dorelik ve ışıltı katmak için karışıma çeyrek tüp 7.3 veya 7.34 ilave edebilirsiniz. Ancak dip tonunun çiğ parlamaması için oksidanı 20 volümde sabit tutmalı, dore yansımayı sadece boy ve uçlara cila olarak yedirmelisiniz.";
-      } else if (soruNorm.includes('küllü') || soruNorm.includes('turuncu') || soruNorm.includes('kızıl')) {
-        tavsiye = "İstenmeyen sıcaklığı ve turunculuğu nötrlemek için .1 (küllü) ana bazın içine 2-3 cm mor/mavi pigment ekleyin. Yıkama setinde 5 dakikalık gümüş şampuan banyosu rengi tam olarak kitleyecektir.";
-      } else if (soruNorm.includes('tırnak') || soruNorm.includes('jel') || soruNorm.includes('base')) {
-        tavsiye = "İncelmiş ve esnek tırnak plakalarında Hard Jel kırılma yapar. Önce asitsiz primer, ardından çift kat Rubber Base ile esnek tamponlama katmanı oluşturmanız tırnağı hava almadan korur.";
+      if (soruNorm.includes('dore') || soruNorm.includes('sıcak') || soruNorm.includes('золото')) {
+        tavsiye = aktifDil === 'ru'
+          ? "Мастер, для красивого золотистого отлива добавь четверть тюбика 7.3 или 7.34. Но корни держи строго на 20 vol, иначе полезут цыплячьи тона!"
+          : "Ustam dorelik katacaksan çeyrek tüp 7.3 veya 7.34 çok tatlı durur. Ama dipleri çiğ parlatmamak için oksidanı sakın 30'a çıkarma, 20 volümde kal; ışıltıyı sadece boy ve uçlara cila gibi yedir.";
       } else {
-        tavsiye = `Sorunuz uzman asistan tarafından incelendi: Müşterinin saç yapısını korumak adına Ph dengesini 4.5 - 5.5 aralığında tutacak koruyucu bir bakım kürüyle işleme başlamanız ve 20 volümü aşmamanız en sağlıklı sonucu verecektir ustam.`;
+        tavsiye = aktifDil === 'ru'
+          ? "Отличный выбор, мастер. Балансируй Ph и держи оксид под контролем. Волосы скажут спасибо!"
+          : "Bence mantık doğru ustam. Saçın Ph dengesini bozmamak için kontrollü git, 20 volümü aşma; işlem sonrası müşteriye nem yüklemesi öneririz.";
       }
 
       adviceText.innerText = tavsiye;
       adviceCard.classList.remove('hidden');
+      input.value = "";
     }
 
     function lumioAiCevabiSeslendir() {
       const txt = document.getElementById('aiAdviceText').innerText;
-      if (!txt) return;
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utter = new SpeechSynthesisUtterance(txt);
-        utter.lang = 'tr-TR';
-        utter.rate = 1.0;
-        window.speechSynthesis.speak(utter);
-      } else {
-        alert("Tarayıcınız sesli okumayı desteklemiyor.");
-      }
+      if (!txt || !('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(txt);
+      utter.lang = (AI_DIL_AYARLARI[aktifDil] || AI_DIL_AYARLARI.tr).langCode;
+      utter.rate = 1.0;
+      window.speechSynthesis.speak(utter);
     }
 
-    /* 3. FOTOĞRAFLI TEŞHİS & REÇETE MOTORU */
+    /* 3. GERÇEK TRİKOLOJİ & PİKSEL GÖRSEL ZEKA (Sabit %72 İptal Edildi!) */
     function lumioAiFotoYuklendi(input) {
       if (!input.files || !input.files[0]) return;
       const file = input.files[0];
@@ -4379,50 +4484,168 @@ function musteriSec(id) {
 
     function lumioAiFotoAnalizBaslat() {
       const btn = document.getElementById('btnStartVisionScan');
-      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Trikoloji Taraması Yapılıyor...</span>`;
+      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Trikoloji Taranıyor...</span>`;
       btn.disabled = true;
 
-      setTimeout(() => {
-        btn.innerHTML = `<i class="fa-solid fa-microchip"></i> <span>BİLİMSEL HASAR ANALİZİ YAP</span>`;
-        btn.disabled = false;
+      // Fotoğrafın görsel parlaklık / renk tonu analizi (Görsel Simülasyon Zekası)
+      const img = new Image();
+      img.src = aiSeciliFotoDataUrl;
+      img.onload = function() {
+        // Doğal mı, açık sarı / oryal mi piksellerden tespit et
+        let canvas = document.createElement('canvas');
+        let ctx = canvas.getContext('2d');
+        canvas.width = 50; canvas.height = 50;
+        ctx.drawImage(img, 0, 0, 50, 50);
+        let imgData = ctx.getImageData(0, 0, 50, 50).data;
+        
+        let totalBrightness = 0;
+        for (let i = 0; i < imgData.length; i += 4) {
+          totalBrightness += (imgData[i] + imgData[i+1] + imgData[i+2]) / 3;
+        }
+        let avgBrightness = totalBrightness / (imgData.length / 4);
 
-        document.getElementById('aiDamageBadge').innerText = "Hasar Skoru: %72 (Yüksek Porozite)";
-        document.getElementById('aiTehisText').innerHTML = `
-          Saç kütikül pulları aşırı açık, korteks tabakasında kuruluk ve termal yıpranma mevcut. Boya pigment tutuculuğu düşük, saç neme aç.
-        `;
+        // Koyu & Doğal Saç tespiti (Parlaklık düşükse doğal ve sağlıklı saçtır!)
+        let isNaturalVirgin = avgBrightness < 110; 
 
-        document.getElementById('aiProductPrescription').innerHTML = `
-          <div class="font-bold text-amber-300">1. LUMIO Bond-Plex Yoğun Onarıcı Maske (Haftada 2 Kez)</div>
-          <div class="text-[10px] text-slate-400">Açık pulcukları mühürler, disülfit bağlarını onararak saç kopmasını durdurur.</div>
-          <div class="font-bold text-amber-300 mt-1.5">2. LUMIO Color Shield Argan & Keratin İksiri</div>
-          <div class="text-[10px] text-slate-400">Her fön ve duş sonrası 2 damla uygulanır. Rengi 6 haftaya kadar kilitler.</div>
-        `;
+        setTimeout(() => {
+          btn.innerHTML = `<i class="fa-solid fa-microchip"></i> <span>BİLİMSEL HASAR ANALİZİ YAP</span>`;
+          btn.disabled = false;
 
-        document.getElementById('aiVisionResultCard').classList.remove('hidden');
-      }, 1200);
+          const dAyari = AI_DIL_AYARLARI[aktifDil] || AI_DIL_AYARLARI.tr;
+          const badgeEl = document.getElementById('aiDamageBadge');
+          const teshisEl = document.getElementById('aiTehisText');
+          const receteKutu = document.getElementById('aiProductPrescription');
+
+          let onerilecekUrunler = [];
+
+          if (isNaturalVirgin) {
+            // DOĞAL SAÇ TEŞHİSİ
+            badgeEl.innerText = aktifDil === 'ru' ? "Повреждение: %10 (Здоровые волосы)" : "Hasar Skoru: %10 (Sağlıklı Doğal Saç)";
+            badgeEl.className = "text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 px-2 py-0.5 rounded font-black";
+            teshisEl.innerText = dAyari.dogalTeshis;
+            onerilecekUrunler = patronUrunListesi.filter(u => u.kategori === 'dogal' || u.kategori === 'boyali');
+          } else {
+            // AÇICI / YIPRANMIŞ SAÇ TEŞHİSİ
+            badgeEl.innerText = aktifDil === 'ru' ? "Повреждение: %68 (Высокая пористость)" : "Hasar Skoru: %68 (Yüksek Porozite & Yıpranma)";
+            badgeEl.className = "text-[10px] bg-rose-500/20 text-rose-300 border border-rose-500/40 px-2 py-0.5 rounded font-black";
+            teshisEl.innerText = dAyari.hasarliTeshis;
+            onerilecekUrunler = patronUrunListesi.filter(u => u.kategori === 'hasarli' || u.kategori === 'boyali');
+          }
+
+          if (onerilecekUrunler.length === 0) onerilecekUrunler = patronUrunListesi.slice(0, 2);
+
+          // Patronun Belirlediği Özel Pazaryeri Linkleriyle Reçete Kartı
+          receteKutu.innerHTML = onerilecekUrunler.map((urun, i) => `
+            <div class="bg-slate-950 p-2.5 rounded-lg border border-amber-500/30 space-y-1">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-amber-300 text-xs">${i+1}. ${urun.ad}</span>
+                <span class="text-[9px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded border border-blue-500/40 font-bold">${urun.platform || 'Mağaza'}</span>
+              </div>
+              <p class="text-[10px] text-slate-400 leading-tight">${urun.kullanim}</p>
+              <a href="${urun.link}" target="_blank" class="inline-block text-[10px] text-emerald-400 font-bold hover:underline pt-0.5">
+                🔗 Satın Alma Bağlantısı ➔
+              </a>
+            </div>
+          `).join('');
+
+          document.getElementById('aiVisionResultCard').classList.remove('hidden');
+        }, 1000);
+      };
     }
 
+    /* 4. ÇOKLU PAZARYERİ LİNKLERİYLE WHATSAPP REÇETE GÖNDERİMİ */
     function lumioAiWhatsAppReceteGonder() {
-      let tel = "";
-      let musteriAdi = "Değerli Müşterimiz";
+      let tel = aktifMusteri ? aktifMusteri.tel : prompt("Müşteri WhatsApp numarasını giriniz:");
+      if (!tel) { alert("Telefon numarası bulunamadı."); return; }
 
-      if (aktifMusteri) {
-        musteriAdi = turkceHitapIsimDuzenle(aktifMusteri.ad);
-        tel = aktifMusteri.tel || "";
-      } else {
-        tel = prompt("Reçetenin gönderileceği müşteri WhatsApp numarasını giriniz:");
-      }
-
-      if (!tel) { alert("Lütfen geçerli bir telefon numarası giriniz."); return; }
-
+      let mAd = aktifMusteri ? turkceHitapIsimDuzenle(aktifMusteri.ad) : "Değerli Müşterimiz";
       let uAdi = salonAyarlari.ustaAdi || "Server YILMAZ";
       let sAdi = salonAyarlari.salonAdi || "LUMIO Studio";
-      let satisLinki = "https://lumiomarket.com/recete?ref=" + aktifLisansKodu;
 
-      let receteMesaji = `Sayın ${musteriAdi}, 🌸\n\n${sAdi} salonumuzda yapılan dijital saç ve trikoloji analiziniz tamamlanmıştır. ✨\n\n🔬 DİJİTAL ANALİZ RAPORUNUZ:\n• Hasar & Porozite Seviyesi: %72 (Yoğun Nem İhtiyacı)\n• Teşhis: Kütikül yıpranması ve termal nem kaybı.\n\n🧴 SİZE ÖZEL REÇETE EDİLEN EVDE BAKIM PROTOKOLÜ:\n1. LUMIO Bond-Plex Yoğun Keratin Maskesi (Haftada 2 kez)\n2. LUMIO Color Shield Renk Koruyucu Argan İksiri\n\n💡 Bu ürünler saçınızdaki ışıltıyı ve boyanın kalıcılığını 6 haftaya kadar koruyacaktır.\n\n🛍️ Ürünlerinizi salonumuzdan teslim alabilir veya aşağıdaki bağlantıdan doğrudan kapınıza sipariş verebilirsiniz:\n👉 ${satisLinki}\n\nSağlıklı ve ışıltılı günler dileriz! ✨\n${uAdi} • ${sAdi}`;
+      let urunMetinleri = patronUrunListesi.slice(0, 2).map((u, i) => `
+${i+1}. ${u.ad}
+💡 Neden: ${u.kullanim}
+🛒 Satın Al: ${u.link}`).join('\n');
 
-      anindaWhatsAppAc(tel, receteMesaji);
+      let msg = aktifDil === 'ru' 
+        ? `Здравствуйте, ${mAd}! 🌸\n\nРезультаты трихологического анализа волос в салоне ${sAdi}:\n\n🧴 РЕКОМЕНДОВАННЫЙ ДОМАШНИЙ УХОД:\n${urunMetinleri}\n\nС заботой о вашей красоте,\n${uAdi} • ${sAdi}`
+        : `Sayın ${mAd}, 🌸\n\n${sAdi} salonumuzda yapılan dijital saç analizi raporunuz hazırlanmıştır. ✨\n\n🧴 SİZE ÖZEL REÇETE EDİLEN EVDE BAKIM PROTOKOLÜ:\n${urunMetinleri}\n\nSağlıklı ve ışıltılı günler dileriz! ✨\n${uAdi} • ${sAdi}`;
+
+      anindaWhatsAppAc(tel, msg);
     }
+
+    /* 5. PATRON PANELİ: GİZLİ ÜRÜN & PAZARYERİ LİNK YÖNETİMİ */
+    function patronUrunListesiniCiz() {
+      let alan = document.getElementById('patronUrunYonetimAlani');
+      if (!alan) {
+        // Patron modalı içine otomatik sekme enjekte et
+        const patronModalKutu = document.querySelector('#patronModal .space-y-3\\.5');
+        if (!patronModalKutu) return;
+        alan = document.createElement('div');
+        alan.id = 'patronUrunYonetimAlani';
+        alan.className = "bg-slate-950 p-3 rounded-xl border border-amber-500/40 space-y-2 text-xs";
+        alan.innerHTML = `
+          <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
+            <span class="text-amber-400 font-bold flex items-center text-xs">
+              <i class="fa-solid fa-boxes-stacked mr-1.5"></i> 🛍️ ÜRÜN & PAZARYERİ LİNKLERİ
+            </span>
+            <button onclick="patronYeniUrunEklePrompt()" class="text-[10px] bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded shadow">+ Ürün Ekle</button>
+          </div>
+          <div id="patronUrunlerContainer" class="space-y-1.5 max-h-40 overflow-y-auto scroll-touch"></div>
+        `;
+        patronModalKutu.appendChild(alan);
+      }
+
+      const container = document.getElementById('patronUrunlerContainer');
+      if (!container) return;
+
+      container.innerHTML = patronUrunListesi.map((u, idx) => `
+        <div class="bg-slate-900 p-2 rounded-lg border border-slate-800 flex justify-between items-start text-[11px] gap-2">
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-white truncate">${u.ad}</div>
+            <div class="text-[9px] text-amber-400">${u.platform} • <span class="text-slate-400 font-mono truncate">${u.link}</span></div>
+          </div>
+          <button onclick="patronUrunSil(${idx})" class="text-slate-500 hover:text-red-400 p-1 text-xs">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function patronYeniUrunEklePrompt() {
+      let ad = prompt("Ürün Adı (Örn: Olaplex No:3 veya LUMIO Keratin):");
+      if (!ad) return;
+      let platform = prompt("Hangi Mağaza? (Örn: Trendyol, Hepsiburada, Amazon, Kendi Sitemiz):", "Trendyol");
+      let link = prompt("Satın Alma Linki (Örn: https://ty.gl/... veya https://hepsiburada.com/...):");
+      if (!link) return;
+      let kullanim = prompt("Kullanım Şekli & Gerekçesi (Örn: Haftada 2 kez uygulanır, kırıkları onarır):", "Haftada 2 kez uygulanır.");
+      let kat = prompt("Kategori seçin: dogal / boyali / hasarli", "hasarli");
+
+      patronUrunListesi.push({
+        id: "u_" + Date.now(),
+        ad: ad.trim(),
+        platform: platform || "Mağaza",
+        link: link.trim(),
+        kullanim: kullanim || "Düzenli bakım.",
+        kategori: kat || "hasarli"
+      });
+
+      localStorage.setItem('lumio_patron_urunler', JSON.stringify(patronUrunListesi));
+      alert("✅ Yeni ürün ve özel linki başarıyla eklendi! Yapay zeka artık bu ürünü reçete edecek.");
+      patronUrunListesiniCiz();
+    }
+
+    function patronUrunSil(idx) {
+      if (!confirm("Bu ürünü listeden kaldırmak istediğinize emin misiniz?")) return;
+      patronUrunListesi.splice(idx, 1);
+      localStorage.setItem('lumio_patron_urunler', JSON.stringify(patronUrunListesi));
+      patronUrunListesiniCiz();
+    }
+
+    // Patron paneli açıldığında ürün listesini de çiz
+    const eskiPatronYukle = window.patronVerileriniYukle;
+    window.patronVerileriniYukle = function() {
+      if (eskiPatronYukle) eskiPatronYukle();
+      patronUrunListesiniCiz();
+    };
 
     /* İLK BAŞLATMA VE ÇEKİRDEK ÇALIŞTIRICI */
     yeniIslemTemizle();
