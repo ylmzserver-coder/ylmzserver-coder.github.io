@@ -4165,17 +4165,50 @@ function musteriSilOnayli() {
     };
 
     /* RESMİ 'x-goog-api-key' HEADER VE ÇOKLU MODEL YEDEKLİ ÇAĞIRICI */
+    let aktifGeminiModel = localStorage.getItem('lumio_cached_model') || "";
+
+    /* GOOGLE MODEL KEŞFEDİCİ (HESABINDA ÇALIŞAN GÜNCEL MODELİ BULUR) */
+    async function calisanGeminiModeliniBul() {
+      if (aktifGeminiModel) return aktifGeminiModel;
+      try {
+        const listUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${geminiApiKey}`;
+        const res = await fetch(listUrl, {
+          headers: { 'x-goog-api-key': geminiApiKey }
+        });
+        const data = await res.json();
+        if (data.models && data.models.length > 0) {
+          const flashModel = data.models.find(m => 
+            m.supportedGenerationMethods && 
+            m.supportedGenerationMethods.includes('generateContent') && 
+            (m.name.includes('flash') || m.name.includes('pro'))
+          );
+          if (flashModel) {
+            aktifGeminiModel = flashModel.name.replace(/^models\//, '');
+            localStorage.setItem('lumio_cached_model', aktifGeminiModel);
+            return aktifGeminiModel;
+          }
+        }
+      } catch(e) {
+        console.warn("Otomatik model keşfi yapılamadı, alternatif deneniyor:", e);
+      }
+      return 'gemini-flash-latest';
+    }
+
+    /* RESMİ 'x-goog-api-key' HEADER VE OTOMATİK MODEL SEÇİCİ */
     async function geminiApiCagir(payload) {
       if (!geminiApiKey) {
         throw new Error("Lütfen Patron Paneli'nden [🔑 Google Gemini Yapay Zeka] butonuna basarak API anahtarınızı giriniz.");
       }
 
-      const modeller = ['gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-1.5-pro'];
+      let dinamikModel = await calisanGeminiModeliniBul();
+      const modeller = [dinamikModel, 'gemini-flash-latest', 'gemini-2.5-flash', 'gemini-2.0-flash'];
+      const denenekModeller = [...new Set(modeller)];
+
       let sonHata = "";
 
-      for (const model of modeller) {
+      for (const model of denenekModeller) {
         try {
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiApiKey}`;
           const res = await fetch(url, {
             method: 'POST',
             headers: {
@@ -4188,12 +4221,14 @@ function musteriSilOnayli() {
           const data = await res.json();
 
           if (res.ok && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
+            aktifGeminiModel = model;
+            localStorage.setItem('lumio_cached_model', model);
             return data.candidates[0].content.parts[0].text;
           }
 
           if (data.error) {
             sonHata = data.error.message;
-            if (data.error.code === 404 || data.error.message.includes('not found')) {
+            if (data.error.code === 404 || data.error.message.includes('not found') || data.error.message.includes('not supported')) {
               continue;
             } else {
               throw new Error(data.error.message);
