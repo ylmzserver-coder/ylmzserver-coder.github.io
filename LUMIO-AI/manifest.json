@@ -1,0 +1,22 @@
+{
+  "name": "LUMIO AI Terminal",
+  "short_name": "LUMIO",
+  "description": "Profesyonel Salon Yönetim ve AI Teşhis Terminali",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#090d16",
+  "theme_color": "#090d16",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
