@@ -4057,8 +4057,8 @@ function musteriSec(id) {
       anindaWhatsAppAc("905354049392", "Merhaba LUMIO Destek, usta giriş şifremi unuttum. Yardımcı olabilir misiniz?");
     }
 /* ==========================================================================
-       BÖLÜM 5: GÜVENLİ VE CANLI GOOGLE GEMINI MASTER AI MOTORU
-       (Sıfır İfşa Güvenliği, x-goog-api-key, Bas-Konuş İstişare, Trikoloji Vision)
+       BÖLÜM 5: GÜVENLİ VE CANLI GOOGLE GEMINI MASTER AI MOTORU (TAMİR EDİLMİŞ)
+       (inlineData camelCase Düzeltmesi, Doğrudan ?key= Bağlantısı, Gerçek Vision)
        ========================================================================== */
 
     let aiRecognition = null;
@@ -4068,7 +4068,6 @@ function musteriSec(id) {
     let aiParsedRandevu = null;
     let aiSeciliFotoDataUrl = "";
 
-    // API Anahtarı kodda AÇIK YAZILMAZ; Patron Paneli'nden güvenle çekilir
     let geminiApiKey = localStorage.getItem('lumio_gemini_api_key') || "";
 
     let patronUrunListesi = JSON.parse(localStorage.getItem('lumio_patron_urunler')) || [
@@ -4165,7 +4164,6 @@ function musteriSec(id) {
       }
       greetingEl.innerHTML = `<i class="fa-solid fa-sparkles text-amber-400"></i> <span>${dAyari.selam}</span>`;
 
-      // Müşteri Rozeti Tıklama (Katman Z-Index düzeltmesiyle)
       const badge = document.getElementById('aiActiveCustBadge');
       if (badge) {
         badge.onclick = lumioAiRehberdenMusteriSec;
@@ -4183,11 +4181,10 @@ function musteriSec(id) {
       if (micStatus && !aiDinliyorMu) micStatus.innerText = dAyari.micReady;
     }
 
-    /* MÜŞTERİ REHBERİNİN ASİSTANIN ARKASINDA KALMA SORUNUNUN (Z-INDEX) ÇÖZÜMÜ */
     function lumioAiRehberdenMusteriSec() {
       const rehberModal = document.getElementById('modalMusteriRehberi');
       if (rehberModal) {
-        rehberModal.style.zIndex = "99999999999"; // Asistan penceresinin de üzerine çıkar!
+        rehberModal.style.zIndex = "99999999999";
       }
       musteriRehberiModalAc();
       
@@ -4201,7 +4198,6 @@ function musteriSec(id) {
       };
     }
 
-    /* İSTİŞARE SEKME İÇİNE 🎤 BAS-KONUŞ MİKROFONU ENTEGRASYONU */
     function lumioAiIstisareMikrofonuEkle() {
       let askContainer = document.querySelector('#aiTabContentIstisare .flex.space-x-1\\.5');
       if (!askContainer || document.getElementById('btnAiIstisareMic')) return;
@@ -4289,7 +4285,6 @@ function musteriSec(id) {
       lumioAiArayuzuDileGoreGuncelle();
     }
 
-    /* 1. SOKAK DİLİ BAS-KONUŞ VE NİYET AYRIMI (SOHBET VS RANDEVU) */
     function lumioAiBasKonusToggle() {
       const btn = document.getElementById('aiMicBtn');
       const status = document.getElementById('aiMicStatus');
@@ -4297,7 +4292,7 @@ function musteriSec(id) {
 
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
-        alert("Tarayıcınız ses tanımayı desteklemiyor. Güncel Chrome veya Safari kullanınız.");
+        alert("Tarayıcınız ses tanımayı desteklemiyor.");
         return;
       }
 
@@ -4357,7 +4352,6 @@ function musteriSec(id) {
       let raw = metin.toLocaleLowerCase('tr-TR');
       let now = new Date();
 
-      // NİYET AYRIMI: "Konuşabilir miyiz", "Selam", "Nasılsın" randevu değil sohbettir!
       if (raw.includes("konuşabilir") || raw.includes("selam") || raw.includes("naber") || raw.includes("nasılsın") || raw.includes("привет") || raw.includes("поговорим")) {
         lumioAiSekme('istisare');
         document.getElementById('aiAskInput').value = metin;
@@ -4365,17 +4359,14 @@ function musteriSec(id) {
         return;
       }
 
-      // Ses kayması düzeltmesi (fırına/fene -> fön)
       raw = raw.replace(/\bfırına\b/g, "fön").replace(/\bfırın\b/g, "fön").replace(/\bfene\b/g, "fön");
 
-      // Tarih Çözümü
       let targetDate = new Date();
       if (raw.includes("yarın") || raw.includes("завтра") || raw.includes("tomorrow") || raw.includes("morgen")) {
         targetDate.setDate(now.getDate() + 1);
       }
       let tarihStr = targetDate.getDate().toString().padStart(2, '0') + '.' + (targetDate.getMonth() + 1).toString().padStart(2, '0') + '.' + targetDate.getFullYear();
 
-      // Saat Çözümü
       let saatStr = "14:00";
       let digitMatch = raw.match(/(\b[0-2]?[0-9])[:.]([0-5][0-9]\b)/);
       if (digitMatch) {
@@ -4385,7 +4376,6 @@ function musteriSec(id) {
         for (let [k, s] of Object.entries(saatMap)) { if (raw.includes(k)) { saatStr = s; break; } }
       }
 
-      // STOPWORD FİLTRESİ: "Hanım, Bey, Abla" kelimeleri asla müşteri ismi yapılamaz!
       const yasakliKelimeler = ["hanım", "hanim", "bey", "abla", "abi", "teyze", "kanka", "usta", "hocam", "госпожа", "господин", "mrs", "mr", "konuşabilir", "gelecek", "gel", "randevu"];
       let temizKelimeler = raw.split(/[\s,.'"]+/).filter(w => w.length > 2 && !yasakliKelimeler.includes(w) && !w.includes(':') && isNaN(w));
 
@@ -4409,7 +4399,6 @@ function musteriSec(id) {
       }
       if (!bulunanMusteri) bulunanMusteri = "Değerli Müşteri";
 
-      // Hizmet & Süre
       let hizmetStr = "İŞLEM";
       let sureDk = 60;
       const liste = salonAyarlari.hizmetler || VARSAYILAN_BOLUM_HIZMETLERI.kuafor;
@@ -4458,7 +4447,7 @@ function musteriSec(id) {
       lumioAiArayuzuDileGoreGuncelle();
     }
 
-    /* 2. x-goog-api-key BAŞLIKLI GERÇEK GEMINI 1.5 FLASH İSTİŞARE MOTORU */
+    /* 2. CANLI GEMINI 1.5 FLASH: KESİNTİSİZ İSTİŞARE VE FORMÜL MOTORU */
     async function lumioAiSoruSor() {
       const input = document.getElementById('aiAskInput');
       const soru = input.value.trim();
@@ -4470,7 +4459,7 @@ function musteriSec(id) {
 
       if (!geminiApiKey) {
         adviceCard.classList.remove('hidden');
-        adviceText.innerHTML = `⚠️ <b>Ustam, yapay zeka beynimi çalıştırmak için Patron Paneli'ndeki [🔑 Gemini Şifresi] butonundan anahtarınızı kaydetmeniz gerekiyor.</b>`;
+        adviceText.innerHTML = `⚠️ <b>Ustam, yapay zeka beynimi çalıştırmak için Patron Paneli'ndeki [🔑 Gemini Şifresi] butonundan API anahtarınızı girmeniz gerekiyor.</b>`;
         return;
       }
 
@@ -4497,22 +4486,25 @@ Mevcut Ürünler: ${urunlerMetni}
 DİL KURALI: Ustanın kullandığı dilde (${aktifDil.toUpperCase()}) ve o dilin salon samimiyetiyle yanıt ver.`;
 
       try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`, {
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
+        const response = await fetch(apiUrl, {
           method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'x-goog-api-key': geminiApiKey 
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             contents: [
-              { role: "user", parts: [{ text: `${systemPrompt}\n\nUstanın Sorusu: "${soru}"` }] }
-            ],
-            generationConfig: { temperature: 0.8, maxOutputTokens: 600 }
+              { parts: [{ text: `${systemPrompt}\n\nUstanın Sorusu / Sözü: "${soru}"` }] }
+            ]
           })
         });
 
         const data = await response.json();
-        if (data.candidates && data.candidates[0].content.parts[0].text) {
+
+        if (data.error) {
+          adviceText.innerHTML = `⚠️ <b>Google API Hatası:</b> ${data.error.message}`;
+          return;
+        }
+
+        if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
           let cevap = data.candidates[0].content.parts[0].text;
           
           if (cevap.toLowerCase().includes("dur") || cevap.toLowerCase().includes("yak") || cevap.toLowerCase().includes("lastik") || cevap.toLowerCase().includes("осторожно")) {
@@ -4522,10 +4514,10 @@ DİL KURALI: Ustanın kullandığı dilde (${aktifDil.toUpperCase()}) ve o dilin
           }
           adviceText.innerText = cevap;
         } else {
-          adviceText.innerText = "Bağlantı kuruldu ama cevap alınamadı ustam, tekrar sorar mısın?";
+          adviceText.innerText = "Cevap üretilemedi ustam, tekrar sorar mısın?";
         }
       } catch (err) {
-        adviceText.innerText = "Yapay zeka motoruna bağlanırken hata oluştu: " + err.message;
+        adviceText.innerText = "Bağlantı hatası oluştu: " + err.message;
       }
 
       input.value = "";
@@ -4541,7 +4533,7 @@ DİL KURALI: Ustanın kullandığı dilde (${aktifDil.toUpperCase()}) ve o dilin
       window.speechSynthesis.speak(utter);
     }
 
-    /* 3. GERÇEK GEMINI VISION: FOTOĞRAFTAN PİKSEL DÜZEYİNDE TRİKOLOJİ */
+    /* 3. GERÇEK GEMINI VISION: FOTOĞRAFTAN PİKSEL DÜZEYİNDE TRİKOLOJİ (TAMİR EDİLDİ) */
     function lumioAiFotoYuklendi(input) {
       if (!input.files || !input.files[0]) return;
       const file = input.files[0];
@@ -4590,17 +4582,15 @@ Yanıtını YALNIZCA şu JSON formatında ver, başka hiçbir yazı yazma:
 }`;
 
       try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`, {
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
+        const response = await fetch(apiUrl, {
           method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'x-goog-api-key': geminiApiKey 
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             contents: [
               {
                 parts: [
-                  { inline_data: { mime_type: mimeType, data: base64Data } },
+                  { inlineData: { mimeType: mimeType, data: base64Data } },
                   { text: visionPrompt }
                 ]
               }
@@ -4609,6 +4599,17 @@ Yanıtını YALNIZCA şu JSON formatında ver, başka hiçbir yazı yazma:
         });
 
         const data = await response.json();
+
+        if (data.error) {
+          alert("Google Görsel API Hatası: " + data.error.message);
+          return;
+        }
+
+        if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
+          alert("Google görseli analiz edemedi. Lütfen tekrar deneyin.");
+          return;
+        }
+
         let rawText = data.candidates[0].content.parts[0].text;
         rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
         const parsed = JSON.parse(rawText);
@@ -4670,7 +4671,7 @@ ${i+1}. ${u.ad}
     /* 5. PATRON PANELİ: GİZLİ GEMINI ŞİFRE BUTONU VE ÜRÜN YÖNETİMİ */
     function patronUrunListesiniCiz() {
       let alan = document.getElementById('patronUrunYonetimAlani');
-      if (alan) alan.remove(); // Her zaman en güncel haliyle çiz!
+      if (alan) alan.remove();
 
       const patronModalKutu = document.querySelector('#patronModal .space-y-3\\.5');
       if (!patronModalKutu) return;
@@ -4708,7 +4709,6 @@ ${i+1}. ${u.ad}
       `).join('');
     }
 
-    /* TELEFONDA TEK DOKUNUŞLA GEMINI ŞİFRESİNİ YAPACAK PENCERE */
     function patronGeminiSifresiAyarla() {
       let girilen = prompt("Google AI Studio'dan aldığınız yeni Gemini API anahtarınızı (AQ... veya AIzaSy...) buraya yapıştırınız:", geminiApiKey);
       if (girilen === null) return;
