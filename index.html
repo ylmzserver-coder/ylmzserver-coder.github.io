@@ -64,11 +64,15 @@
     }
     body.theme-light header, 
     body.theme-light nav, 
-    body.theme-light .bg-slate-900,
-    body.theme-light .bg-slate-950 {
+    body.theme-light .bg-slate-900 {
       background-color: #ffffff !important;
       border-color: #e2e8f0 !important;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+      color: #0f172a !important;
+    }
+    body.theme-light .bg-slate-950:not(.modal-overlay-bg) {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
       color: #0f172a !important;
     }
     body.theme-light input, 
@@ -131,6 +135,50 @@
     @keyframes pulseWave {
       to { box-shadow: 0 0 0 14px rgba(234, 179, 8, 0); }
     }
+
+    /* ==========================================================================
+       LUMIO MASTER AI - GÜNDÜZ/GECE TEMA VE Z-INDEX KALKANI
+       ========================================================================== */
+    .modal-overlay-bg {
+      background-color: rgba(9, 13, 22, 0.88) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+    }
+    body.theme-light #cardMasterAiBanner {
+      background: linear-gradient(135deg, #fffbeb 0%, #ffffff 50%, #fef3c7 100%) !important;
+      border-color: #fde68a !important;
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.08) !important;
+    }
+    body.theme-light #cardMasterAiBanner h3 { color: #b45309 !important; }
+    body.theme-light #cardMasterAiBanner p { color: #475569 !important; }
+
+    body.theme-light #modalLumioAi .ai-modal-box {
+      background-color: #ffffff !important;
+      border-color: #fde047 !important;
+      color: #0f172a !important;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+    }
+    body.theme-light #modalLumioAi .ai-sub-card {
+      background-color: #f8fafc !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    body.theme-light #modalLumioAi .ai-sub-card p,
+    body.theme-light #modalLumioAi .ai-sub-card span { color: #334155 !important; }
+    body.theme-light #modalLumioAi .ai-nav-tab {
+      background-color: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #475569 !important;
+    }
+    body.theme-light #modalLumioAi .ai-nav-tab.active-tab {
+      background-color: #eab308 !important;
+      color: #090d16 !important;
+    }
+
+    /* Z-Index Hiyerarşisi */
+    #modalLumioAi { z-index: 9999990 !important; }
+    #modalMusteriRehberi { z-index: 9999999 !important; }
+    #modalUstaRehberi { z-index: 9999999 !important; }
   </style>
 </head>
 <body id="appBody" class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans select-none safe-pb">
@@ -155,7 +203,7 @@
     </button>
   </div>
 
-  <div id="licenseSetupModal" class="hidden fixed inset-0 bg-slate-950/98 z-[9999999999] flex flex-col items-center justify-center p-6 text-center">
+  <div id="licenseSetupModal" class="hidden fixed inset-0 modal-overlay-bg z-[9999999999] flex flex-col items-center justify-center p-6 text-center">
     <div class="w-20 h-20 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center p-2 mb-4 shadow-xl">
       <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow">
         <circle cx="50" cy="50" r="46" fill="none" stroke="#f59e0b" stroke-width="3"/>
@@ -194,7 +242,7 @@
     </div>
   </div>
 
-  <div id="licenseLockScreen" class="hidden fixed inset-0 bg-slate-950 z-[99999998] flex flex-col items-center justify-center p-6 text-center">
+  <div id="licenseLockScreen" class="hidden fixed inset-0 modal-overlay-bg z-[99999998] flex flex-col items-center justify-center p-6 text-center">
     <div onclick="patronPaneliAc()" class="w-20 h-20 bg-red-500/20 text-red-500 border border-red-500/40 rounded-full flex items-center justify-center text-3xl mb-4 animate-pulse cursor-pointer" title="Patron Girişi İçin Dokunun">
       <i class="fa-solid fa-lock"></i>
     </div>
@@ -263,7 +311,7 @@
   </nav>
 
   <main class="flex-1 p-3 max-w-lg mx-auto w-full space-y-3.5">
-    <!-- SEKME 1: TERMİNAL -->
+<!-- SEKME 1: TERMİNAL -->
     <section id="tab-terminal" class="space-y-3.5">
       <!-- BUGÜNKÜ DURUM KARTI -->
       <div id="gunlukCiroKarti" onclick="kasamModaliAc()" class="bg-slate-900 border border-amber-500/30 rounded-2xl p-3 flex items-center justify-between shadow cursor-pointer active:scale-95 transition">
@@ -281,8 +329,8 @@
         </button>
       </div>
 
-      <!-- YENİ DEVRİMSEL: LUMIO MASTER AI & SESLİ ASİSTAN KARTI -->
-      <div class="bg-gradient-to-r from-amber-500/15 via-slate-900 to-amber-500/10 border border-amber-500/50 rounded-2xl p-3.5 shadow-xl flex items-center justify-between">
+      <!-- ÇİFT TEMA UYUMLU: LUMIO MASTER AI & SESLİ ASİSTAN KARTI -->
+      <div id="cardMasterAiBanner" class="bg-gradient-to-r from-amber-500/15 via-slate-900 to-amber-500/10 border border-amber-500/50 rounded-2xl p-3.5 shadow-xl flex items-center justify-between transition">
         <div class="flex items-center space-x-3">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 text-slate-950 flex items-center justify-center text-lg shadow-lg pulse-ring">
             <i class="fa-solid fa-wand-magic-sparkles"></i>
@@ -680,7 +728,7 @@
     </section>
   </main>
 <!-- MODAL: KASAM & CANLI CİRO (GENİŞLETİLMİŞ & KESİNTİSİZ LİSTE) -->
-  <div id="modalKasam" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[99999999] flex items-center justify-center p-3">
+  <div id="modalKasam" class="hidden fixed inset-0 modal-overlay-bg z-[99999999] flex items-center justify-center p-3">
     <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col max-h-[92vh]">
       <div class="flex justify-between items-center pb-2 border-b border-slate-800">
         <div class="flex items-center space-x-2">
@@ -690,7 +738,7 @@
         <button onclick="kasaModalKapat()" class="text-slate-400 hover:text-white text-base p-1">✕</button>
       </div>
 
-      <!-- 3'LÜ CANLI CİRO SAYAÇLARI (TIKLANABİLİR FİLTRE BUTONLARI) -->
+      <!-- 3'LÜ CANLI CİRO SAYAÇLARI -->
       <div class="grid grid-cols-3 gap-1.5 text-center">
         <button onclick="kasaPeriyotFiltrele('bugun')" id="btnKasaBugun" class="bg-slate-950 hover:bg-slate-800 p-2.5 rounded-xl border border-amber-500/50 transition active:scale-95 shadow">
           <span class="text-[9px] text-slate-400 block font-bold uppercase" id="lblKasaToday">Bugün</span>
@@ -743,7 +791,7 @@
   </div>
 
   <!-- MODAL: UZUN FORMÜL VE NOTLARI BÜYÜTÜP OKUMA PENCERESİ -->
-  <div id="modalNotGenislet" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[999999999] flex items-center justify-center p-4">
+  <div id="modalNotGenislet" class="hidden fixed inset-0 modal-overlay-bg z-[999999999] flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col">
       <div class="flex justify-between items-center pb-2 border-b border-slate-800">
         <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center" id="lblZoomModalTitle">
@@ -760,7 +808,8 @@
     </div>
   </div>
 
-  <div id="modalMusteriRehberi" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[9999999] flex items-center justify-center p-3">
+  <!-- MODAL: MÜŞTERİ REHBERİ (Z-INDEX ZIRHLI - HER ŞEYİN ÜSTÜNDE AÇILIR) -->
+  <div id="modalMusteriRehberi" class="hidden fixed inset-0 modal-overlay-bg flex items-center justify-center p-3">
     <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col max-h-[88vh]">
       <div class="flex justify-between items-center pb-2 border-b border-slate-800">
         <div class="flex items-center space-x-2">
@@ -780,7 +829,8 @@
     </div>
   </div>
 
-  <div id="modalUstaRehberi" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[9999999999] flex items-center justify-center p-3">
+  <!-- MODAL: USTA REHBERİ -->
+  <div id="modalUstaRehberi" class="hidden fixed inset-0 modal-overlay-bg flex items-center justify-center p-3">
     <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col max-h-[88vh]">
       <div class="flex justify-between items-center pb-2 border-b border-slate-800">
         <div class="flex items-center space-x-2">
@@ -801,7 +851,7 @@
   </div>
 
   <!-- MODAL: AKILLI RANDEVU SİHİRBAZI -->
-  <div id="modalRandevuOlustur" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[9999999] flex items-center justify-center p-4">
+  <div id="modalRandevuOlustur" class="hidden fixed inset-0 modal-overlay-bg z-[9999999] flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2.5">
         <div class="flex items-center space-x-2">
@@ -906,11 +956,10 @@
   </div>
 
   <!-- ==========================================================================
-       YENİ DEVRİMSEL MODAL: LUMIO MASTER AI & SESLİ İSTİŞARE MERKEZİ
-       (Bas-Konuş Randevu, Kimyasal Risk Kalkanı, Fotoğraflı Teşhis & Satış Reçetesi)
+       MODAL: LUMIO MASTER AI & SESLİ İSTİŞARE MERKEZİ (ÇİFT TEMA & MİKROFONLU)
        ========================================================================== -->
-  <div id="modalLumioAi" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[999999999] flex items-center justify-center p-3">
-    <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col max-h-[92vh]">
+  <div id="modalLumioAi" class="hidden fixed inset-0 modal-overlay-bg flex items-center justify-center p-3">
+    <div class="ai-modal-box bg-slate-900 border border-amber-500/50 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col max-h-[92vh]">
       
       <!-- Üst Başlık & Kapat -->
       <div class="flex justify-between items-center pb-2 border-b border-slate-800">
@@ -931,23 +980,23 @@
 
       <!-- 3 Modlu Navigasyon Sekmesi -->
       <div class="grid grid-cols-3 gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-[10px] font-bold text-center">
-        <button id="aiTabBtnSes" onclick="lumioAiSekme('ses')" class="py-2 rounded-lg bg-amber-500 text-slate-950 shadow transition font-black">
+        <button id="aiTabBtnSes" onclick="lumioAiSekme('ses')" class="ai-nav-tab active-tab py-2 rounded-lg bg-amber-500 text-slate-950 shadow transition font-black">
           <i class="fa-solid fa-microphone mr-1"></i> Sesli Randevu
         </button>
-        <button id="aiTabBtnIstisare" onclick="lumioAiSekme('istisare')" class="py-2 rounded-lg text-slate-400 hover:text-white transition">
+        <button id="aiTabBtnIstisare" onclick="lumioAiSekme('istisare')" class="ai-nav-tab py-2 rounded-lg text-slate-400 hover:text-white transition">
           <i class="fa-solid fa-brain mr-1"></i> İstişare & Risk
         </button>
-        <button id="aiTabBtnKamera" onclick="lumioAiSekme('kamera')" class="py-2 rounded-lg text-slate-400 hover:text-white transition">
+        <button id="aiTabBtnKamera" onclick="lumioAiSekme('kamera')" class="ai-nav-tab py-2 rounded-lg text-slate-400 hover:text-white transition">
           <i class="fa-solid fa-camera mr-1"></i> Foto Analiz
         </button>
       </div>
 
       <!-- İÇERİK 1: BAS-KONUŞ SOKAK DİLİ RANDEVU -->
       <div id="aiTabContentSes" class="space-y-3 flex-1 overflow-y-auto pr-1 scroll-touch">
-        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center space-y-3">
+        <div class="ai-sub-card bg-slate-950 p-4 rounded-xl border border-slate-800 text-center space-y-3">
           <p class="text-[11px] text-slate-300 leading-relaxed">
-            Mikrofona basılı tutun ve sokak diliyle konuşun:<br>
-            <span class="text-amber-400 italic font-semibold">"Yarın öğleden sonra üçe Sayime Hanım'a dip boya fön çak"</span>
+            Mikrofona dokunun ve dükkan diliyle konuşun:<br>
+            <span class="text-amber-400 italic font-semibold">"Yarın öğleden sonra 3'te Hamide ablaya dip boya fön çak"</span>
           </p>
 
           <div class="flex justify-center py-2">
@@ -958,13 +1007,13 @@
           <span id="aiMicStatus" class="text-[10px] font-bold text-slate-400 block font-mono">Hazır. Konuşmak için butona dokunun.</span>
         </div>
 
-        <div id="aiTranscriptCard" class="hidden bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1.5 text-xs">
+        <div id="aiTranscriptCard" class="hidden ai-sub-card bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1.5 text-xs">
           <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">🎤 Algılanan Ses:</span>
           <p id="aiTranscriptText" class="text-white italic font-medium leading-relaxed"></p>
         </div>
 
         <!-- Yapay Zekanın Çözümlediği Teyit Kartı -->
-        <div id="aiParsedCard" class="hidden bg-gradient-to-b from-slate-950 to-slate-900 p-3.5 rounded-xl border border-amber-500/50 space-y-2 text-xs shadow-xl">
+        <div id="aiParsedCard" class="hidden ai-sub-card bg-slate-950 p-3.5 rounded-xl border border-amber-500/50 space-y-2 text-xs shadow-xl">
           <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
             <span class="text-amber-400 font-bold text-[11px] flex items-center">
               <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Çözümlenen Randevu
@@ -988,17 +1037,17 @@
         </div>
       </div>
 
-      <!-- İÇERİK 2: İSTİŞARE & KİMYASAL RİSK KALKANI -->
+      <!-- İÇERİK 2: İSTİŞARE & KİMYASAL RİSK KALKANI (CANLI BAS-KONUŞ MİKROFONLU) -->
       <div id="aiTabContentIstisare" class="hidden space-y-3 flex-1 overflow-y-auto pr-1 scroll-touch">
-        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1.5 text-xs">
+        <div class="ai-sub-card bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1.5 text-xs">
           <div class="flex justify-between items-center">
             <span class="text-[10px] text-slate-400 font-bold uppercase">Koltuktaki Müşteri:</span>
-            <span id="aiActiveCustBadge" class="text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">Müşteri Seçilmedi</span>
+            <span id="aiActiveCustBadge" onclick="lumioAiRehberdenMusteriSec()" class="text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30 cursor-pointer hover:bg-amber-500/20 transition">Müşteri Seçilmedi (Seç ➔)</span>
           </div>
-          <p class="text-[10px] text-slate-400 leading-tight">Yapay zeka, müşterinin geçmiş boya gramajlarını ve alerji notlarını inceleyerek cevap verir.</p>
+          <p class="text-[10px] text-slate-400 leading-tight">Yapay zeka, koltuktaki müşterinin geçmiş boya gramajlarını ve alerji notlarını inceleyerek cevap verir.</p>
         </div>
 
-        <!-- Tehlike Uyarısı Kalkanı (Risk Çıkarsa Kırmızı Yanar) -->
+        <!-- Tehlike Uyarısı Kalkanı -->
         <div id="aiRiskAlertCard" class="hidden bg-red-950/70 border-2 border-red-500 p-3 rounded-xl space-y-1.5 text-xs animate-pulse">
           <div class="flex items-center space-x-2 text-red-400 font-black text-xs">
             <i class="fa-solid fa-triangle-exclamation text-base"></i>
@@ -1007,10 +1056,14 @@
           <p id="aiRiskBody" class="text-white text-[11px] leading-relaxed font-medium"></p>
         </div>
 
+        <!-- Soru Sorma Kutusu & İstişare Bas-Konuş Mikrofonu -->
         <div class="space-y-1.5">
           <label class="text-[10px] text-slate-400 font-bold block">USTA SORUSU / DANIŞILAN KONU:</label>
-          <div class="flex space-x-1.5">
-            <input type="text" id="aiAskInput" placeholder="Örn: 7.34 katsam kızıllık yapar mı? / Oryalle tekrar gireyim mi?" class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-semibold focus:outline-none focus:border-amber-400">
+          <div class="flex space-x-1.5 items-center">
+            <button id="btnAiIstisareMic" type="button" onclick="lumioAiIstisareBasKonusToggle()" class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 hover:bg-amber-500 hover:text-slate-950 border border-amber-500/40 flex items-center justify-center text-sm shadow transition active:scale-90 flex-shrink-0" title="Sesli Sor (Bas-Konuş)">
+              <i class="fa-solid fa-microphone"></i>
+            </button>
+            <input type="text" id="aiAskInput" placeholder="Örn: 7.34 katsam kızıllık yapar mı?" class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-semibold focus:outline-none focus:border-amber-400">
             <button onclick="lumioAiSoruSor()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-3.5 py-2 rounded-xl text-xs shadow active:scale-95 transition">
               Sor
             </button>
@@ -1018,13 +1071,13 @@
         </div>
 
         <!-- Cevap Alanı -->
-        <div id="aiAdviceCard" class="hidden bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2 text-xs">
+        <div id="aiAdviceCard" class="hidden ai-sub-card bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2 text-xs">
           <div class="flex justify-between items-center border-b border-slate-800 pb-1">
             <span class="text-amber-400 font-bold flex items-center">
               <i class="fa-solid fa-user-graduate mr-1.5"></i> Colorist Uzman Tavsiyesi:
             </span>
             <button onclick="lumioAiCevabiSeslendir()" class="text-[10px] text-amber-300 hover:text-white bg-slate-800 px-2 py-0.5 rounded border border-slate-700 flex items-center space-x-1">
-              <i class="fa-solid fa-volume-high"></i> <span>Sesli Oku</span>
+              <i class="fa-solid fa-volume-high"></i> <span id="lblVoiceBtnTxt">Sesli Oku</span>
             </button>
           </div>
           <p id="aiAdviceText" class="text-slate-200 text-xs leading-relaxed"></p>
@@ -1033,11 +1086,10 @@
 
       <!-- İÇERİK 3: KAMERAYLA FOTOĞRAF TEŞHİS & REÇETE -->
       <div id="aiTabContentKamera" class="hidden space-y-3 flex-1 overflow-y-auto pr-1 scroll-touch">
-        <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-center space-y-2.5">
+        <div class="ai-sub-card bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-center space-y-2.5">
           <span class="text-xs font-bold text-white block">📸 Saç / Tırnak Trikoloji Analizi</span>
-          <p class="text-[10px] text-slate-400 leading-relaxed">Telefonunuzun kamerasıyla saç uçlarının veya tırnak plağının fotoğrafını çekin; hasar skorunu ve reçeteyi saniyeler içinde çıkarın.</p>
+          <p class="text-[10px] text-slate-400 leading-relaxed">Telefonunuzun kamerasıyla saç uçlarının veya tırnak plağının fotoğrafını çekin; hasar skorunu ve reçeteyi piksellerden çıkarın.</p>
           
-          <!-- Gizli Kamera Inputu -->
           <input type="file" id="aiCameraInput" accept="image/*" capture="environment" onchange="lumioAiFotoYuklendi(this)" class="hidden">
           
           <button onclick="document.getElementById('aiCameraInput').click()" class="w-full bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 font-black py-2.5 rounded-xl text-xs shadow active:scale-95 transition flex items-center justify-center space-x-2">
@@ -1045,16 +1097,14 @@
           </button>
         </div>
 
-        <!-- Fotoğraf Önizleme -->
-        <div id="aiPhotoPreviewBox" class="hidden bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-2">
+        <div id="aiPhotoPreviewBox" class="hidden ai-sub-card bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-2">
           <img id="aiPreviewImg" src="" alt="Saç Analizi" class="w-full h-44 object-cover rounded-lg border border-slate-800">
           <button onclick="lumioAiFotoAnalizBaslat()" id="btnStartVisionScan" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 rounded-xl text-xs shadow active:scale-95 transition flex items-center justify-center space-x-1.5">
             <i class="fa-solid fa-microchip"></i> <span>BİLİMSEL HASAR ANALİZİ YAP</span>
           </button>
         </div>
 
-        <!-- Teşhis ve Marka Ürün Reçetesi Kartı -->
-        <div id="aiVisionResultCard" class="hidden bg-slate-950 p-3.5 rounded-xl border border-amber-500/40 space-y-2.5 text-xs shadow-xl">
+        <div id="aiVisionResultCard" class="hidden ai-sub-card bg-slate-950 p-3.5 rounded-xl border border-amber-500/40 space-y-2.5 text-xs shadow-xl">
           <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
             <span class="text-amber-400 font-bold text-xs flex items-center">
               <i class="fa-solid fa-square-poll-vertical mr-1"></i> Trikoloji Teşhis Raporu
@@ -1079,7 +1129,8 @@
       </div>
     </div>
   </div>
-<div id="cakismaModal" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[99999999] flex items-center justify-center p-4">
+
+  <div id="cakismaModal" class="hidden fixed inset-0 modal-overlay-bg z-[99999999] flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl text-center">
       <div class="w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl mx-auto"><i class="fa-solid fa-triangle-exclamation"></i></div>
       <h3 class="text-sm font-bold text-amber-400" id="lblConflictTitle">Saat Çakışması Uyarısı</h3>
@@ -1092,7 +1143,7 @@
     </div>
   </div>
 
-  <div id="bildirimAksiyonModal" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[99999999] flex items-center justify-center p-4">
+  <div id="bildirimAksiyonModal" class="hidden fixed inset-0 modal-overlay-bg z-[99999999] flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-emerald-500/50 rounded-2xl max-w-sm w-full p-5 space-y-3.5 shadow-2xl text-center">
       <div class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl mx-auto"><i class="fa-solid fa-circle-check"></i></div>
       <h3 class="text-sm font-bold text-emerald-400" id="lblBookingSuccessTitle">Randevu Başarıyla Kaydedildi!</h3>
@@ -1112,7 +1163,7 @@
     </div>
   </div>
 
-  <div id="modalRandevuAlarmi" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[9999999999] flex items-center justify-center p-4">
+  <div id="modalRandevuAlarmi" class="hidden fixed inset-0 modal-overlay-bg z-[9999999999] flex items-center justify-center p-4">
     <div class="bg-slate-900 border-2 border-amber-500 rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl animate-bounce">
       <div class="w-16 h-16 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-3xl mx-auto border border-amber-500/50">
         <i class="fa-solid fa-bell"></i>
@@ -1127,7 +1178,8 @@
     </div>
   </div>
 
-  <div id="patronModal" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[9999999999] flex items-center justify-center p-3">
+  <!-- PATRON MODAL (GİZLİ GEMINI ŞİFRE AYARI DAHİL) -->
+  <div id="patronModal" class="hidden fixed inset-0 modal-overlay-bg z-[9999999999] flex items-center justify-center p-3">
     <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-sm w-full p-4 space-y-3.5 shadow-2xl max-h-[90vh] overflow-y-auto scroll-touch">
       <div class="flex justify-between items-center pb-2 border-b border-slate-800">
         <div class="flex items-center space-x-2">
@@ -1135,6 +1187,17 @@
           <h3 class="text-sm font-black text-amber-400">Patron Yönetim Merkezi (CRM)</h3>
         </div>
         <button onclick="patronPaneliKapat()" class="text-slate-400 hover:text-white text-base">✕</button>
+      </div>
+
+      <!-- SIFIR İFŞA: GOOGLE GEMINI API ANAHTARI AYAR BUTONU -->
+      <div class="bg-slate-950 p-2.5 rounded-xl border border-amber-500/40 flex justify-between items-center text-xs">
+        <div>
+          <span class="text-amber-400 font-bold block">🔑 Google Gemini Yapay Zeka</span>
+          <span class="text-[9px] text-slate-400">Güvenli API anahtarı ayarı</span>
+        </div>
+        <button onclick="patronGeminiSifresiAyarla()" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-lg text-[10px] shadow active:scale-95 transition">
+          Anahtarı Gir
+        </button>
       </div>
 
       <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2 text-xs">
@@ -1192,7 +1255,7 @@
     </div>
   </div>
 
-  <div id="whatsappModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-3">
+  <div id="whatsappModal" class="hidden fixed inset-0 modal-overlay-bg z-50 flex items-end sm:items-center justify-center p-3">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-4 space-y-3 shadow-2xl">
       <div class="flex justify-between items-center pb-2 border-b border-slate-800">
         <h3 class="text-sm font-bold text-green-400" id="lblWhatsAppModalTitle">WhatsApp Mesajı Gönder</h3>
@@ -1210,7 +1273,7 @@
   </div>
 
   <script>
-    function internetDurumunuGuncelle() {
+function internetDurumunuGuncelle() {
       const badge = document.getElementById('cloudStatusBadge');
       if (!badge) return;
       if (navigator.onLine) {
@@ -1230,7 +1293,7 @@
       Notification.requestPermission();
     }
 
-    /* TELEFONUN GERİ TUŞU KORUMASI (SPA HISTORY API - LUMIO AI DAHİL) */
+    /* TELEFONUN GERİ TUŞU KORUMASI (SPA HISTORY API) */
     window.addEventListener('popstate', function (event) {
       const modallar = ['modalKasam', 'modalNotGenislet', 'modalMusteriRehberi', 'modalUstaRehberi', 'modalRandevuOlustur', 'modalLumioAi', 'cakismaModal', 'bildirimAksiyonModal', 'modalRandevuAlarmi', 'patronModal', 'whatsappModal'];
       let modalKapandi = false;
@@ -1537,9 +1600,9 @@
         remindersMainTitle: "Все Напоминания", bdayBannerTitle: "🎂 ИМЕНИННИКИ СЕГОДНЯ", remindBannerTitle: "⏰ ПРИБЛИЖАЮЩИЕСЯ ЗАПИСИ (ПРАВИЛО 3 ДНЕЙ)",
         remindBannerSub: "Отправьте напоминание клиентам, которым пора планировать визит:",
         lostBannerTitle: "💌 МЫ СОСКУЧИЛИСЬ", lostBannerSub: "Отправьте приглашение клиентам, которые давно не приходили:",
-        wizardCardTitle: "Умный помощник записей", wizardCardSub: "Дата, клиент, услуga, длительность и время", startWizard: "Новая запись",
+        wizardCardTitle: "Умный помощник записей", wizardCardSub: "Дата, клиент, услуга, длительность и время", startWizard: "Новая запись",
         custCardTitle: "Информация о клиенте", clearCust: "Очистить", searchPlaceholder: "Введите имя (напр. Сервер)...",
-        phone: "ТЕЛЕFОН КЛИЕНТА", birth: "ДАТА РОЖДЕНИЯ", newCustStatus: "Новый клиент (Готов)", registered: "Постоянный клиент", visits: "Визитов",
+        phone: "ТЕЛЕФОН КЛИЕНТА", birth: "ДАТА РОЖДЕНИЯ", newCustStatus: "Новый клиент (Готов)", registered: "Постоянный клиент", visits: "Визитов",
         timeCardTitle: "Детали записи и времени", visitDate: "ДАТА ВИЗИТА", visitTime: "ВРЕМЯ ЗАПИСИ", nextVisit: "ДАТА СЛЕДУЮЩЕГО НАПОМИНАНИЯ",
         q15: "+15 Д", q21: "+21 Д", qMonth: "+1 М", datePh: "ДД.ММ.ГГГГ", birthPh: "ДД.ММ",
         serviceCardTitle: "Услуги и Формулы", addServiceRow: "Добавить строку", totalAmount: "Итого:", saveVisit: "СОХРАНИТЬ",
@@ -1547,19 +1610,19 @@
         historyTitle: "История формул клиента", lastFormula: "Взять последнюю формулу",
         settingsHeading: "Профиль, Услуги и Сообщения", saveSettings: "Сохранить все настройки",
         step1: "1. На какой день запись?", step2: "2. Имя и телефон клиента?",
-        step3: "3. Какая услуga?", step4: "4. Сколько времени потребуется?", step5: "5. Во сколько начало?",
+        step3: "3. Какая услуга?", step4: "4. Сколько времени потребуется?", step5: "5. Во сколько начало?",
         celebrate: "Поздравить", remind: "Напомнить", edit: "Изменить", book: "Записать", noPhone: "Без номера", availableSlot: "Свободное время", cont: "↳ Прод.",
         daysLeft: "дн. осталось", today: "Сегодня!", tomorrow: "Завтра!", clients: "Клиентов",
-        rowTitle: "СТРОКА УСЛУГИ", remove: "✕ Удалить", s1: "1. УСЛУGA", s2: "2. ФОРМУЛА / ДЕТАЛИ", s3: "3. ЗАМЕТКИ", s4: "4. ЦЕНА",
+        rowTitle: "СТРОКА УСЛУГИ", remove: "✕ Удалить", s1: "1. УСЛУГА", s2: "2. ФОРМУЛА / ДЕТАЛИ", s3: "3. ЗАМЕТКИ", s4: "4. ЦЕНА",
         sFormulaPh: "Граммовка, краска или продукт...", sNotesPh: "Заметки...", curr: "₽",
         zoomBtn: "Увеличить", zoomModalTitle: "Просмотр формулы / заметок",
         licenseKeyTitle: "ВАШ ЛИЦЕНЗИОННЫЙ КЛЮЧ", deptTitle: "ВАША СПЕЦИАЛИЗАЦИЯ / ОТДЕЛ",
         pwdChangeTitle: "🔒 ИЗМЕНИТЬ ПАРОЛЬ ВХОДА", pwdOld: "СТАРЫЙ ПАРОЛЬ:", pwdNew: "НОВЫЙ ПАРОЛЬ (6 ЦИФР):", pwdBtn: "Обновить пароль",
         lostDaysTitle: "⏰ НАПОМИНАНИЕ О «ПОТЕРЯННЫХ» КЛИЕНТАХ (Через сколько дней?)", lostDaysUnit: "Дней",
-        serviceListTitle: "СПИСОК ВАШИХ УСЛУГ (Кнопки записи)", addNewService: "+ Новая услуga",
+        serviceListTitle: "СПИСОК ВАШИХ УСЛУГ (Кнопки записи)", addNewService: "+ Новая услуга",
         alarmTitle: "НАПОМИНАНИЕ МАСТЕРУ (За сколько предупреждать)", backupTitle: "Резервная копия контактов",
         backupSub: "Скачивает список всех клиентов в файл на телефон.", downloadBackup: "Скачать",
-        masterNameTitle: "ИМЯ И ФАМИЛИЯ МАСТЕРА ({USTA_ADI})", masterTitleTag: "ВАША ПРОFЕССИЯ / ЗВАНИЕ ({UNVAN})",
+        masterNameTitle: "ИМЯ И ФАМИЛИЯ МАСТЕРА ({USTA_ADI})", masterTitleTag: "ВАША ПРОФЕССИЯ / ЗВАНИЕ ({UNVAN})",
         salonNameTitle: "НАЗВАНИЕ САЛОНА / БРЕНДА ({SALON_ADI})", masterPhoneTitle: "ВАШ WHATSAPP ДЛЯ УВЕДОМЛЕНИЙ",
         tplHeader: "ШАБЛОНЫ WHATSAPP ДЛЯ КЛИЕНТОВ (7 ШТ)", tplSub: "Переменные: {MUSTERI_ADI}, {TARIH}, {SAAT}, {HIZMET}, {USTA_ADI}, {UNVAN}, {SALON_ADI}, {GOOGLE_LINK}, {INSTAGRAM_LINK}",
         tpl1Title: "1. Напоминание о записи (Правило 3 дней)",
@@ -1598,7 +1661,7 @@
       }
     };
 
-    /* GLOBAL DEĞİŞKENLER VE GÜVENLİK DİZİLERİ */
+    /* GLOBAL DEĞİŞKENLER */
     let aktifDil = localStorage.getItem('hair_aktif_dil') || "tr";
     let aktifTema = localStorage.getItem('hair_aktif_tema') || "dark";
     let aktifLisansKodu = localStorage.getItem('hair_lisans_kodu') || "";
@@ -1610,7 +1673,6 @@
     let shOnerilenSaat = "15:30";
     let patronKayitliUstalar = [];
     
-    // Sonsuz alarm döngüsü önlemi
     let uyarilanRandevular = []; 
     let aktifZoomHedefArea = null;
 
@@ -1805,6 +1867,7 @@
       if (typeof gunlukCiroGuncelle === 'function') gunlukCiroGuncelle();
       if (typeof tabloyuYenidenCiz === 'function') tabloyuYenidenCiz();
       if (typeof musteriRehberiSayaciGuncelle === 'function') musteriRehberiSayaciGuncelle();
+      if (typeof lumioAiArayuzuDileGoreGuncelle === 'function') lumioAiArayuzuDileGoreGuncelle();
     }
 
     function bolumSecenekleriniDoldur() {
@@ -2072,7 +2135,7 @@
       if (kHafta) kHafta.innerText = `${haftaCiro.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ${d.curr}`;
       if (kAy) kAy.innerText = `${ayCiro.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ${d.curr}`;
     }
-/* KASAM AKILLI FİLTRELEME & FERAH LİSTE (EZİLMEYEN YEŞİL FİYAT KORUMASI) */
+
     function kasaPeriyotFiltrele(periyot) {
       aktifKasaFiltresi = periyot;
       ['bugun', 'hafta', 'ay'].forEach(p => {
@@ -2128,7 +2191,6 @@
         return false;
       });
 
-      // Yeniden eskiye sıralama algoritması
       filtrelenen.sort((a, b) => {
         let tA = (a.zaman && a.zaman.toMillis) ? a.zaman.toMillis() : (tarihStringToDate(a.tarih) ? tarihStringToDate(a.tarih).getTime() : 0);
         let tB = (b.zaman && b.zaman.toMillis) ? b.zaman.toMillis() : (tarihStringToDate(b.tarih) ? tarihStringToDate(b.tarih).getTime() : 0);
@@ -2224,7 +2286,6 @@
       });
     }
 
-    /* TELEFON TAKVİMİNE EKLEME (SAF ICS ALARMI - ANDROID 30 DK ÇÖZÜMÜ) */
     function telefonTakvimineKaydet() {
       if (!bekleyenRandevuData) return;
       let hitap = turkceHitapIsimDuzenle(bekleyenRandevuData.musteriAdi);
@@ -2259,7 +2320,6 @@
       document.body.removeChild(link);
     }
 
-    /* USTA RANDEVU ALARM KONTROL (SONSUZ DÖNGÜ ÖNLENDİ) */
     function ustaRandevuAlarmKontrol() {
       const alarmDk = parseInt(salonAyarlari.alarmSuresi) || 0;
       if (alarmDk === 0) return;
@@ -2300,7 +2360,6 @@
     }
     setInterval(ustaRandevuAlarmKontrol, 25000);
 
-    /* OTOMATİK UZAYAN TEXTAREA VE FORMÜL BÜYÜTEÇ FONKSİYONLARI */
     function autoExpandArea(el) {
       if (!el) return;
       el.style.height = 'auto';
@@ -2333,7 +2392,6 @@
       notGenisletKapat();
     }
 
-    /* HİZMET SEÇİLİNCE FİYATIN OTOMATİK DOLMASI VE KASAYA YANSIMASI */
     function satirHizmetDegisti(selectEl) {
       const row = selectEl.closest('.service-row');
       if (!row) return;
@@ -2347,7 +2405,6 @@
       }
     }
 
-    /* HİZMET & FORMÜL MASASI SATIR EKLEME (METNE GÖRE UZAYAN TEXTAREA VE OTOMATİK FİYAT DESTEKLİ) */
     function tabloyaSatirEkle(hizmetVal = "", formulVal = "", notVal = "", ucretVal = "") {
       const container = document.getElementById('serviceRowsContainer');
       const div = document.createElement('div');
@@ -2358,7 +2415,6 @@
       
       if (!hizmetVal && liste.length > 0) hizmetVal = liste[0].ad;
 
-      // Eğer ücret boş geldiyse tarifedeki fiyatı otomatik çek!
       if (ucretVal === "" || ucretVal === undefined) {
         const bul = liste.find(h => h.ad === hizmetVal);
         if (bul) ucretVal = bul.ucret || 0;
@@ -2403,7 +2459,6 @@
       toplamHesapla();
     }
 
-    /* %100 DİL UYUMU: TABLODAKİ SATIRLARI DİLE GÖRE YENİDEN ÇEVİRME */
     function tabloyuYenidenCiz() {
       const d = SOZLUK[aktifDil] || SOZLUK.tr;
       document.querySelectorAll('.service-row').forEach(row => {
@@ -2447,7 +2502,6 @@
       document.getElementById('totalAmountText').innerText = total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' ' + d.curr;
     }
 
-    /* ZİYARETİ BULUTA KAYDETME (ÇOK SATIRLI FORMÜL VE ÜCRET GÜVENCELİ) */
     function ziyaretiKaydet() {
       let hamAd = document.getElementById('custSearch').value.trim();
       const tamTel = tamTelefonAl('custCountryCode', 'custPhone');
@@ -2501,7 +2555,6 @@
       }
     }
 
-    /* MÜŞTERİ GEÇMİŞİ LİSTESİ */
     function gecmisListesiniGuncelle() {
       const container = document.getElementById('historyListContainer');
       const title = document.getElementById('historyCustName');
@@ -2585,7 +2638,6 @@
       sekmeDegistir('terminal');
     }
 
-    /* BİLDİRİM MERKEZİ (HATIRLATMALAR) */
     function canliBildirimMerkeziniGuncelle() {
       const d = SOZLUK[aktifDil] || SOZLUK.tr;
       const bugun = new Date();
@@ -2594,7 +2646,6 @@
       const gunAy = gun + '.' + ay;
       const bugunMs = new Date(bugun.getFullYear(), bugun.getMonth(), bugun.getDate()).getTime();
 
-      // 1. Doğum Günü Olanlar
       const doganlar = musteriler.filter(m => m.dogum && m.dogum.startsWith(gunAy));
       const bdayBanner = document.getElementById('bannerDoğumGünü');
       const bdayList = document.getElementById('bannerBdayList');
@@ -2625,7 +2676,6 @@
         if (bdayBanner) bdayBanner.classList.add('hidden');
       }
 
-      // 2. Randevu Vakti Gelenler (3 Gün Kuralı)
       const remindBanner = document.getElementById('bannerHatırlatma');
       const remindList = document.getElementById('bannerRemindList');
       const hatirlatilacaklar = [];
@@ -2672,7 +2722,6 @@
         if (remindBanner) remindBanner.classList.add('hidden');
       }
 
-      // 3. Sizi Özleyenler (Kayıp Müşteri Alarmı)
       const lostBanner = document.getElementById('bannerKayipMusteri');
       const lostList = document.getElementById('bannerLostList');
       const esikGun = parseInt(salonAyarlari.kayipGun) || 60;
@@ -2724,7 +2773,6 @@
         if (lostBanner) lostBanner.classList.add('hidden');
       }
 
-      // GENEL TOPLAM BİLDİRİM SAYISI
       const totalReminders = doganlar.length + hatirlatilacaklar.length + kayipMusteriler.length;
       const badgeTotal = document.getElementById('badgeTotalReminders');
       const emptyMsg = document.getElementById('emptyRemindersMsg');
@@ -2811,7 +2859,8 @@
         resContainer.classList.remove('hidden');
       }
     }
-function musteriSec(id) {
+
+    function musteriSec(id) {
       aktifMusteri = musteriler.find(m => m.id == id);
       aramaKutusunuKapat();
       if (!aktifMusteri) return;
@@ -2881,8 +2930,7 @@ function musteriSec(id) {
       toplamHesapla();
       gecmisListesiniGuncelle();
     }
-
-    function musteriSilOnayli() {
+function musteriSilOnayli() {
       if (!aktifMusteri) { alert("Önce müşteri seçin."); return; }
       if (confirm(`'${aktifMusteri.ad}' isimli müşteriyi silmek istediğinize emin misiniz?\n\n(Not: Müşteri rehberden silinecektir, geçmiş kasa cironuz güvende kalır.)`)) {
         db.collection('ustalar').doc(aktifLisansKodu).collection('musteriler').doc(aktifMusteri.id).delete().then(() => {
@@ -2962,7 +3010,6 @@ function musteriSec(id) {
       ajandaTarihSeridiOlustur();
       ajandaSaatleriniCiz();
 
-      // ULUSLARARASI LİSANS SORGULAYICI: Lisansı daima ülke koduyla (90... veya 49... veya 7...) arar. Asla düşürmez!
       let lisansSorguNo = aktifLisansKodu;
       if (aktifLisansKodu.length === 10 && !aktifLisansKodu.startsWith('90')) {
         lisansSorguNo = '90' + aktifLisansKodu;
@@ -2987,7 +3034,6 @@ function musteriSec(id) {
 
       // ESKİ MÜŞTERİLERİ KURTARMA KÖPRÜSÜ
       unsubscribeMusteriler = db.collection('ustalar').doc(aktifLisansKodu).collection('musteriler').onSnapshot((snapshot) => {
-        // Eğer 90'lı klasör boşsa ve eski 10 haneli klasörde müşteri varsa oraya bağlan!
         if (snapshot.empty && aktifLisansKodu.startsWith('90')) {
           const altKod = aktifLisansKodu.substring(2);
           db.collection('ustalar').doc(altKod).collection('musteriler').limit(1).get().then(altSnap => {
@@ -3160,6 +3206,8 @@ function musteriSec(id) {
         } else {
           if (expArea) expArea.classList.add('hidden');
         }
+
+        if (typeof patronUrunListesiniCiz === 'function') patronUrunListesiniCiz();
       });
     }
 
@@ -3172,11 +3220,10 @@ function musteriSec(id) {
       }).catch(err => { alert("Hata oluştu: " + err.message); });
     }
 
-    /* GELİŞTİRİLMİŞ ONBOARDING MESAJI (CANLI DOMAIN DİNAMİK DESTEKLİ) */
     function patronKurulumMesajiGonder(tel, ad, pin, paketGun) {
       let sureMetni = paketGun >= 9999 ? "Süresiz (Ömür Boyu)" : `${paketGun} Gün`;
       let guncelDomain = window.location.origin || "https://ylmzserver-coder.github.io";
-      let msg = `LUMIO Ailesine Hoş Geldiniz! ✨\n\nSayın ${ad},\nİşletmenizi kolayca yönetmenizi sağlayacak LUMIO lisansınız aktif edilmiştir. 🌟\n\n📲 GİRİŞ BİLGİLERİNİZ:\n🌐 Terminal Adresi: ${guncelDomain}\n📞 Kullanıcı Numaranız: ${tel}\n🔑 Giriş Şifreniz: ${pin}\n📅 Lisans Süreniz: ${sureMetni}\n\n🔒 GÜVENLİK NOTU:\nLütfen usta giriş şifrenizi kimseyle paylaşmayınız.\n\n🍎 iPHONE (iOS) 1 DAKİKADA KURULUM:\n1. Safari tarayıcısını açıp ${guncelDomain} adresine girin.\n(WhatsApp içinden açtıysanız sağ alttaki pusula/Safari simgesine basıp tarayıcıda açın).\n2. Ekranın en altındaki "Paylaş" (kare içinden yukarı ok çıkan) simgesine dokunun.\n3. Menüyü kaydırıp "Ana Ekrana Ekle"yi seçin ve sağ üstteki "Ekle"ye basın.\n\n🤖 ANDROID 1 DAKİKADA KURULUM:\n1. Chrome tarayıcısında ${guncelDomain} adresine girin.\n2. Sağ üstteki üç nokta (⋮) simgesine dokunun.\n3. "Uygulamayı Yükle" veya "Ana Ekrana Ekle"yi seçin.\n\n✨ BAŞLANGIÇ:\nTelefonunuzun ana ekranına gelen LUMIO simgesine dokunun. Yukarıdaki telefonunuzu ve şifrenizi bir defaya mahsus girerek kullanmaya başlayabilirsiniz. Sistem sizi otomatik tanıyacaktır.\n\nBol kazançlar ve bereketli çalışmalar dileriz! 🌸\nLUMIO Yazılım ve Destek Ekibi`;
+      let msg = `LUMIO Ailesine Hoş Geldiniz! ✨\n\nSayın ${ad},\nİşletmenizi kolayca yönetmenizi sağlayacak LUMIO lisansınız aktif edilmiştir. 🌟\n\n📲 GİRİŞ BİLGİLERİNİZ:\n🌐 Terminal Adresi: ${guncelDomain}\n📞 Kullanıcı Numaranız: ${tel}\n🔑 Giriş Şifreniz: ${pin}\n📅 Lisans Süreniz: ${sureMetni}\n\n🔒 GÜVENLİK NOTU:\nLütfen usta giriş şifrenizi kimseyle paylaşmayınız.\n\n🍎 iPHONE (iOS) 1 DAKİKADA KURULUM:\n1. Safari tarayıcısını açıp ${guncelDomain} adresine girin.\n2. Ekranın en altındaki "Paylaş" simgesine dokunun.\n3. "Ana Ekrana Ekle"yi seçin.\n\n🤖 ANDROID 1 DAKİKADA KURULUM:\n1. Chrome tarayıcısında ${guncelDomain} adresine girin.\n2. Sağ üstteki üç nokta (⋮) simgesine dokunun.\n3. "Uygulamayı Yükle" veya "Ana Ekrana Ekle"yi seçin.\n\nBol kazançlar dileriz! 🌸\nLUMIO Destek Ekibi`;
       anindaWhatsAppAc(tel, msg);
     }
 
@@ -3269,7 +3316,11 @@ function musteriSec(id) {
       container.innerHTML = html;
     }
 
-    function musteriSecRehberden(id) { musteriSec(id); musteriRehberiModalKapat(); }
+    function musteriSecRehberden(id) { 
+      musteriSec(id); 
+      musteriRehberiModalKapat(); 
+      if (typeof lumioAiArayuzuDileGoreGuncelle === 'function') lumioAiArayuzuDileGoreGuncelle();
+    }
 
     function ustaRehberiModalAc() {
       document.getElementById('modalUstaRehberi').classList.remove('hidden');
@@ -3363,11 +3414,7 @@ function musteriSec(id) {
       if (sekme === 'reminders') canliBildirimMerkeziniGuncelle();
     }
 
-    /* ==========================================================================
-       BÖLÜM 4: 30 DK SLOTLU / "↳ DEVAM" BLOKLU AJANDA & SİHİRBAZ MOTORU
-       ========================================================================== */
-
-    /* AJANDA TARİH ŞERİDİ (7 GÜNLÜK HIZLI GEÇİŞ) */
+    /* AJANDA TARİH ŞERİDİ */
     function ajandaTarihSeridiOlustur() {
       const serit = document.getElementById('hizliGunlerSeridi');
       if (!serit) return;
@@ -3417,7 +3464,7 @@ function musteriSec(id) {
       ajandaTarihSec(bugunStr);
     }
 
-    /* 30 DAKİKALIK HASSAS SLOTLAR VE "↳ DEVAM" KİLİTLEME MOTORU (08:00 - 21:30) */
+    /* 30 DAKİKALIK HASSAS SLOTLAR VE "↳ DEVAM" KİLİTLEME MOTORU */
     function ajandaSaatleriniCiz() {
       const container = document.getElementById('ajandaSaatlerContainer');
       if (!container) return;
@@ -3425,7 +3472,6 @@ function musteriSec(id) {
       const d = SOZLUK[aktifDil] || SOZLUK.tr;
       const gunRandevulari = randevular.filter(r => akilliTarihDuzelt(r.tarih) === seciliTarihStr);
 
-      // 08:00'den 21:30'a kadar 30 dakikalık zaman dilimleri
       const slotlar = [];
       for (let hour = 8; hour <= 21; hour++) {
         slotlar.push(`${hour.toString().padStart(2, '0')}:00`);
@@ -3436,10 +3482,8 @@ function musteriSec(id) {
         const [sH, sM] = slotSaat.split(':').map(Number);
         const slotDk = (sH * 60) + sM;
 
-        // 1. Bu saatte doğrudan başlayan randevular
         const baslayanlar = gunRandevulari.filter(r => r.saat === slotSaat);
 
-        // 2. Önceki saatte başlayıp bu slota sarkan ("↳ Devam") randevular
         const devamEdenler = gunRandevulari.filter(r => {
           if (!r.saat || r.blokMu) return false;
           const [rH, rM] = r.saat.split(':').map(Number);
@@ -3493,7 +3537,6 @@ function musteriSec(id) {
           }).join('');
         }
 
-        // Slot devam eden bir işleme aitse "↳ Devam" bandı çek!
         if (devamEdenler.length > 0) {
           return devamEdenler.map(devam => `
             <div class="bg-slate-950/70 p-2 rounded-xl border border-dashed border-amber-500/30 flex justify-between items-center text-xs">
@@ -3508,7 +3551,6 @@ function musteriSec(id) {
           `).join('');
         }
 
-        // Boş Slot
         return `
           <div class="bg-slate-950/40 p-2 rounded-xl border border-slate-900 flex justify-between items-center text-xs hover:border-slate-800 transition">
             <span class="font-mono font-bold text-slate-500 text-xs">${slotSaat}</span>
@@ -3525,7 +3567,6 @@ function musteriSec(id) {
       }).join('');
     }
 
-    /* RANDEVUDAN TEK TIKLA MASAYA / TERMİNALE AKTARIM */
     function randevuyuMasayaAktar(id) {
       const r = randevular.find(x => x.id === id);
       if (!r) return;
@@ -3548,11 +3589,9 @@ function musteriSec(id) {
       document.getElementById('visitDate').value = akilliTarihDuzelt(r.tarih) || bugununTarihiStr();
       document.getElementById('visitTime').value = r.saat || "14:00";
 
-      // Hizmet masasına satırı ve otomatik fiyatını ekle
       document.getElementById('serviceRowsContainer').innerHTML = "";
       tabloyaSatirEkle(r.hizmet);
 
-      // Müşteri rehberden eşleşiyorsa aktif et
       const eslesen = musteriler.find(m => (m.tel && m.tel === r.tel) || turkceNormalize(m.ad) === turkceNormalize(r.musteriAdi));
       if (eslesen) musteriSec(eslesen.id);
 
@@ -3639,10 +3678,7 @@ function musteriSec(id) {
       anindaWhatsAppAc(r.tel, msg);
     }
 
-    /* ==========================================================================
-       AKILLI RANDEVU SİHİRBAZI & ÇAKIŞMA YÖNETİM MOTORU
-       ========================================================================== */
-
+    /* AKILLI RANDEVU SİHİRBAZI */
     function sihirbazBaslat() {
       shAdim = 1;
       shData = {
@@ -3829,7 +3865,6 @@ function musteriSec(id) {
       }
     }
 
-    /* ÇAKIŞMA TESPİT VE GÜVENLİ KAYIT */
     function sihirbazRandevuKaydet(ciftOnay = false) {
       const [h, m] = shData.saat.split(':').map(Number);
       const yeniBaslangic = (h * 60) + m;
@@ -3952,10 +3987,6 @@ function musteriSec(id) {
       bekleyenRandevuData = null;
     }
 
-    /* ==========================================================================
-       AYARLAR, ŞİFRE DEĞİŞTİRME VE ÇEKİRDEK BAŞLATICI MOTORU
-       ========================================================================== */
-
     function ayarlariUygula() {
       if (document.getElementById('setLisansKodu')) document.getElementById('setLisansKodu').value = aktifLisansKodu;
       if (document.getElementById('setUstaAdi')) document.getElementById('setUstaAdi').value = salonAyarlari.ustaAdi || "Server YILMAZ";
@@ -3990,7 +4021,6 @@ function musteriSec(id) {
       salonAyarlari.bolum = document.getElementById('setBolumTuru').value || "kuafor";
       salonAyarlari.ozelBolumAdi = document.getElementById('setOzelBolumAdi').value.trim();
 
-      // Aktif dildeki şablonları güncelle
       if (!salonAyarlari['sablons_' + aktifDil]) salonAyarlari['sablons_' + aktifDil] = {};
       salonAyarlari['sablons_' + aktifDil].msg1 = document.getElementById('tplMsg1').value;
       salonAyarlari['sablons_' + aktifDil].msg2 = document.getElementById('tplMsg2').value;
@@ -4010,7 +4040,6 @@ function musteriSec(id) {
         .catch(err => alert("Ayarlar kaydedilemedi: " + err.message));
     }
 
-    /* USTA KENDİ GİRİŞ ŞİFRESİNİ DEĞİŞTİRME (YÜZDE YÜZ DİL UYUMLU) */
     function ustaKendiSifresiniGuncelle() {
       const eskiSifre = document.getElementById('setEskiSifre').value.trim();
       const yeniSifre = document.getElementById('setYeniSifre').value.trim();
@@ -4057,8 +4086,7 @@ function musteriSec(id) {
       anindaWhatsAppAc("905354049392", "Merhaba LUMIO Destek, usta giriş şifremi unuttum. Yardımcı olabilir misiniz?");
     }
 /* ==========================================================================
-       BÖLÜM 5: CANLI GOOGLE GEMINI MASTER AI MOTORU (ÇOKLU MODEL YEDEKLİ)
-       (gemini-flash-latest, Otomatik Fallback, inlineData & Vision Destekli)
+       BÖLÜM 5: CANLI GOOGLE GEMINI MASTER AI MOTORU (SIFIR İFŞA & 4 DİLLİ)
        ========================================================================== */
 
     let aiRecognition = null;
@@ -4068,6 +4096,7 @@ function musteriSec(id) {
     let aiParsedRandevu = null;
     let aiSeciliFotoDataUrl = "";
 
+    // SIFIR İFŞA GÜVENLİK STANDARDI: Kod içinde tek bir harf bile API key yazılmaz!
     let geminiApiKey = localStorage.getItem('lumio_gemini_api_key') || "";
 
     let patronUrunListesi = JSON.parse(localStorage.getItem('lumio_patron_urunler')) || [
@@ -4111,7 +4140,7 @@ function musteriSec(id) {
       },
       ru: {
         langCode: "ru-RU",
-        selam: "Привет, мастер! 🌸 Как дела в салоне? Кто сегодня в кресле, над чем работаем? Задавай вопросы по колористике или давай просканируем волосы!",
+        selam: "Привет, мастер! 🌸 Кто сегодня в кресле, над чем работаем? Задавай вопросы по колористике или давай сделаем анализ волос!",
         micReady: "Готов. Нажмите на микрофон и говорите.",
         micListening: "🔴 Слушаю вас, мастер...",
         noCust: "Клиент не выбран (Нажмите для выбора ➔)",
@@ -4119,7 +4148,7 @@ function musteriSec(id) {
       },
       en: {
         langCode: "en-US",
-        selam: "Hey boss! 🌸 How's the rush today? Who's in the chair? Ask me about formulas or let's do a live hair scan!",
+        selam: "Hey boss! 🌸 Who's in the chair today? Ask me about formulas or let's scan hair condition!",
         micReady: "Ready. Tap microphone to speak.",
         micListening: "🔴 Listening to you, boss...",
         noCust: "No Client Selected (Tap to Select ➔)",
@@ -4127,7 +4156,7 @@ function musteriSec(id) {
       },
       de: {
         langCode: "de-DE",
-        selam: "Hallo Meister! 🌸 Wie läuft das Geschäft? Wer sitzt heute auf dem Stuhl? Lass uns Formeln checken oder scannen!",
+        selam: "Hallo Meister! 🌸 Wer sitzt heute auf dem Stuhl? Frag mich nach Rezepturen oder lass uns scannen!",
         micReady: "Bereit. Mikrofon antippen und sprechen.",
         micListening: "🔴 Ich höre zu, Meister...",
         noCust: "Kein Kunde gewählt (Tippen zum Wählen ➔)",
@@ -4135,22 +4164,24 @@ function musteriSec(id) {
       }
     };
 
-    /* GOOGLE GEMINI İÇİN KURŞUN GEÇİRMEZ ÇOKLU MODEL ÇAĞIRICI */
+    /* RESMİ 'x-goog-api-key' HEADER VE ÇOKLU MODEL YEDEKLİ ÇAĞIRICI */
     async function geminiApiCagir(payload) {
       if (!geminiApiKey) {
-        throw new Error("Lütfen Patron Paneli'ndeki [🔑 Gemini Şifresi] butonundan API anahtarınızı giriniz.");
+        throw new Error("Lütfen Patron Paneli'nden [🔑 Google Gemini Yapay Zeka] butonuna basarak API anahtarınızı giriniz.");
       }
 
-      // Google'ın en güncel ve resmi modelleri sırayla denenir
-      const modeller = ['gemini-flash-latest', 'gemini-2.0-flash', 'gemini-2.5-flash'];
+      const modeller = ['gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-1.5-pro'];
       let sonHata = "";
 
       for (const model of modeller) {
         try {
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiApiKey}`;
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
           const res = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'x-goog-api-key': geminiApiKey
+            },
             body: JSON.stringify(payload)
           });
 
@@ -4162,7 +4193,6 @@ function musteriSec(id) {
 
           if (data.error) {
             sonHata = data.error.message;
-            // Eğer model adı bulunamadıysa hemen sonraki güncel modele geç!
             if (data.error.code === 404 || data.error.message.includes('not found')) {
               continue;
             } else {
@@ -4182,7 +4212,6 @@ function musteriSec(id) {
       modalGeriTusuKaydi('modalLumioAi');
       lumioAiSekme('ses');
       lumioAiArayuzuDileGoreGuncelle();
-      lumioAiIstisareMikrofonuEkle();
     }
 
     function lumioAiModaliKapat() {
@@ -4190,69 +4219,116 @@ function musteriSec(id) {
         aiRecognition.stop();
         aiDinliyorMu = false;
       }
+      if (aiIstisareDinliyorMu && aiRecognition) {
+        aiRecognition.stop();
+        aiIstisareDinliyorMu = false;
+      }
       document.getElementById('modalLumioAi').classList.add('hidden');
     }
 
     function lumioAiArayuzuDileGoreGuncelle() {
       const dAyari = AI_DIL_AYARLARI[aktifDil] || AI_DIL_AYARLARI.tr;
 
-      let greetingEl = document.getElementById('aiGreetingBanner');
-      if (!greetingEl) {
-        greetingEl = document.createElement('div');
-        greetingEl.id = 'aiGreetingBanner';
-        greetingEl.className = "bg-amber-500/10 border border-amber-500/30 p-2.5 rounded-xl text-xs text-amber-300 font-medium leading-relaxed mb-2 shadow flex items-center gap-2";
-        const contentBox = document.getElementById('aiTabContentSes');
-        if (contentBox) contentBox.insertBefore(greetingEl, contentBox.firstChild);
-      }
-      greetingEl.innerHTML = `<i class="fa-solid fa-sparkles text-amber-400"></i> <span>${dAyari.selam}</span>`;
-
       const badge = document.getElementById('aiActiveCustBadge');
       if (badge) {
-        badge.onclick = lumioAiRehberdenMusteriSec;
-        badge.style.cursor = "pointer";
         if (aktifMusteri && aktifMusteri.ad) {
           badge.innerText = `👤 ${turkceHitapIsimDuzenle(aktifMusteri.ad)} (Değiştir ➔)`;
-          badge.className = "text-[10px] text-emerald-400 font-bold bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/40 hover:bg-emerald-500/30 transition";
+          badge.className = "text-[10px] text-emerald-400 font-bold bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/40 hover:bg-emerald-500/30 transition cursor-pointer";
         } else {
           badge.innerText = dAyari.noCust;
-          badge.className = "text-[10px] text-amber-400 font-bold bg-amber-500/20 px-2 py-0.5 rounded border border-amber-500/40 hover:bg-amber-500/30 transition animate-pulse";
+          badge.className = "text-[10px] text-amber-400 font-bold bg-amber-500/20 px-2 py-0.5 rounded border border-amber-500/40 hover:bg-amber-500/30 transition cursor-pointer animate-pulse";
         }
       }
 
       const micStatus = document.getElementById('aiMicStatus');
       if (micStatus && !aiDinliyorMu) micStatus.innerText = dAyari.micReady;
+
+      const voiceBtnTxt = document.getElementById('lblVoiceBtnTxt');
+      if (voiceBtnTxt) voiceBtnTxt.innerText = dAyari.voiceBtnText;
     }
 
     function lumioAiRehberdenMusteriSec() {
-      const rehberModal = document.getElementById('modalMusteriRehberi');
-      if (rehberModal) {
-        rehberModal.style.zIndex = "99999999999";
-      }
       musteriRehberiModalAc();
-      
-      const eskiSecim = window.musteriSecRehberden;
-      window.musteriSecRehberden = function(id) {
-        eskiSecim(id);
-        lumioAiArayuzuDileGoreGuncelle();
-        document.getElementById('modalMusteriRehberi').classList.add('hidden');
-        document.getElementById('modalLumioAi').classList.remove('hidden');
-        window.musteriSecRehberden = eskiSecim;
-      };
     }
 
-    function lumioAiIstisareMikrofonuEkle() {
-      let askContainer = document.querySelector('#aiTabContentIstisare .flex.space-x-1\\.5');
-      if (!askContainer || document.getElementById('btnAiIstisareMic')) return;
+    function lumioAiSekme(sekmeAdi) {
+      const sekmeler = ['ses', 'istisare', 'kamera'];
+      sekmeler.forEach(s => {
+        const btn = document.getElementById('aiTabBtn' + s.charAt(0).toUpperCase() + s.slice(1));
+        const content = document.getElementById('aiTabContent' + s.charAt(0).toUpperCase() + s.slice(1));
+        if (btn && content) {
+          if (s === sekmeAdi) {
+            btn.className = "ai-nav-tab active-tab py-2 rounded-lg bg-amber-500 text-slate-950 shadow transition font-black";
+            content.classList.remove('hidden');
+          } else {
+            btn.className = "ai-nav-tab py-2 rounded-lg text-slate-400 hover:text-white transition";
+            content.classList.add('hidden');
+          }
+        }
+      });
+      lumioAiArayuzuDileGoreGuncelle();
+    }
 
-      const micBtn = document.createElement('button');
-      micBtn.id = 'btnAiIstisareMic';
-      micBtn.type = 'button';
-      micBtn.onclick = lumioAiIstisareBasKonusToggle;
-      micBtn.className = "w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 hover:bg-amber-500 hover:text-slate-950 border border-amber-500/40 flex items-center justify-center text-sm shadow transition active:scale-90 flex-shrink-0";
-      micBtn.title = "Bas-Konuş ile Sesli Sor";
-      micBtn.innerHTML = `<i class="fa-solid fa-microphone" id="iconIstisareMic"></i>`;
+    function lumioAiBasKonusToggle() {
+      const btn = document.getElementById('aiMicBtn');
+      const status = document.getElementById('aiMicStatus');
+      const dAyari = AI_DIL_AYARLARI[aktifDil] || AI_DIL_AYARLARI.tr;
 
-      askContainer.insertBefore(micBtn, askContainer.firstChild);
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Tarayıcınız ses tanımayı desteklemiyor. Lütfen Chrome veya Safari kullanınız.");
+        return;
+      }
+
+      if (aiDinliyorMu) {
+        if (aiRecognition) aiRecognition.stop();
+        aiDinliyorMu = false;
+        btn.classList.remove('from-red-600', 'to-rose-500', 'animate-pulse');
+        btn.classList.add('from-amber-500', 'to-amber-300');
+        status.innerText = "İşleniyor...";
+        return;
+      }
+
+      try {
+        aiRecognition = new SpeechRecognition();
+        aiRecognition.lang = dAyari.langCode;
+        aiRecognition.continuous = false;
+        aiRecognition.interimResults = false;
+
+        aiRecognition.onstart = function () {
+          aiDinliyorMu = true;
+          btn.classList.remove('from-amber-500', 'to-amber-300');
+          btn.classList.add('from-red-600', 'to-rose-500', 'animate-pulse');
+          status.innerText = dAyari.micListening;
+          document.getElementById('aiTranscriptCard').classList.remove('hidden');
+          document.getElementById('aiTranscriptText').innerText = "...";
+        };
+
+        aiRecognition.onresult = function (event) {
+          const transcript = event.results[0][0].transcript;
+          aiSonAlgilananMetin = transcript;
+          document.getElementById('aiTranscriptText').innerText = `"${transcript}"`;
+          lumioAiSokakDiliCoz(transcript);
+        };
+
+        aiRecognition.onerror = function () {
+          status.innerText = "Ses algılanamadı.";
+          aiDinliyorMu = false;
+          btn.classList.remove('from-red-600', 'to-rose-500', 'animate-pulse');
+          btn.classList.add('from-amber-500', 'to-amber-300');
+        };
+
+        aiRecognition.onend = function () {
+          aiDinliyorMu = false;
+          btn.classList.remove('from-red-600', 'to-rose-500', 'animate-pulse');
+          btn.classList.add('from-amber-500', 'to-amber-300');
+          status.innerText = dAyari.micReady;
+        };
+
+        aiRecognition.start();
+      } catch (err) {
+        alert("Mikrofon hatası: " + err.message);
+      }
     }
 
     function lumioAiIstisareBasKonusToggle() {
@@ -4309,148 +4385,108 @@ function musteriSec(id) {
       }
     }
 
-    function lumioAiSekme(sekmeAdi) {
-      const sekmeler = ['ses', 'istisare', 'kamera'];
-      sekmeler.forEach(s => {
-        const btn = document.getElementById('aiTabBtn' + s.charAt(0).toUpperCase() + s.slice(1));
-        const content = document.getElementById('aiTabContent' + s.charAt(0).toUpperCase() + s.slice(1));
-        if (btn && content) {
-          if (s === sekmeAdi) {
-            btn.className = "py-2 rounded-lg bg-amber-500 text-slate-950 shadow transition font-black";
-            content.classList.remove('hidden');
-          } else {
-            btn.className = "py-2 rounded-lg text-slate-400 hover:text-white transition";
-            content.classList.add('hidden');
-          }
-        }
-      });
-      lumioAiArayuzuDileGoreGuncelle();
-    }
-
-    function lumioAiBasKonusToggle() {
-      const btn = document.getElementById('aiMicBtn');
-      const status = document.getElementById('aiMicStatus');
-      const dAyari = AI_DIL_AYARLARI[aktifDil] || AI_DIL_AYARLARI.tr;
-
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        alert("Tarayıcınız ses tanımayı desteklemiyor.");
-        return;
-      }
-
-      if (aiDinliyorMu) {
-        if (aiRecognition) aiRecognition.stop();
-        aiDinliyorMu = false;
-        btn.classList.remove('from-red-600', 'to-rose-500', 'animate-pulse');
-        btn.classList.add('from-amber-500', 'to-amber-300');
-        status.innerText = "İşleniyor...";
-        return;
-      }
-
-      try {
-        aiRecognition = new SpeechRecognition();
-        aiRecognition.lang = dAyari.langCode;
-        aiRecognition.continuous = false;
-        aiRecognition.interimResults = false;
-
-        aiRecognition.onstart = function () {
-          aiDinliyorMu = true;
-          btn.classList.remove('from-amber-500', 'to-amber-300');
-          btn.classList.add('from-red-600', 'to-rose-500', 'animate-pulse');
-          status.innerText = dAyari.micListening;
-          document.getElementById('aiTranscriptCard').classList.remove('hidden');
-          document.getElementById('aiTranscriptText').innerText = "...";
-        };
-
-        aiRecognition.onresult = function (event) {
-          const transcript = event.results[0][0].transcript;
-          aiSonAlgilananMetin = transcript;
-          document.getElementById('aiTranscriptText').innerText = `"${transcript}"`;
-          lumioAiSokakDiliCoz(transcript);
-        };
-
-        aiRecognition.onerror = function () {
-          status.innerText = "Ses algılanamadı.";
-          aiDinliyorMu = false;
-          btn.classList.remove('from-red-600', 'to-rose-500', 'animate-pulse');
-          btn.classList.add('from-amber-500', 'to-amber-300');
-        };
-
-        aiRecognition.onend = function () {
-          aiDinliyorMu = false;
-          btn.classList.remove('from-red-600', 'to-rose-500', 'animate-pulse');
-          btn.classList.add('from-amber-500', 'to-amber-300');
-          status.innerText = dAyari.micReady;
-        };
-
-        aiRecognition.start();
-      } catch (err) {
-        alert("Mikrofon hatası: " + err.message);
-      }
-    }
-
+    /* 4 DİLLİ NLP: SOKAK DİLİ, HİTAP/UNVAN VE KÖK İSİM ÇÖZÜCÜ (NİYET AYRIMLI) */
     function lumioAiSokakDiliCoz(metin) {
       if (!metin) return;
-      let raw = metin.toLocaleLowerCase('tr-TR');
-      let now = new Date();
+      let raw = metin.toLocaleLowerCase(aktifDil === 'tr' ? 'tr-TR' : 'en-US').trim();
 
-      if (raw.includes("konuşabilir") || raw.includes("selam") || raw.includes("naber") || raw.includes("nasılsın") || raw.includes("привет") || raw.includes("поговорим")) {
+      // NİYET AYRIMI: Usta sohbet mi ediyor yoksa randevu mu veriyor?
+      const sohbetKelimeleri = [
+        "konuşabilir", "selam", "naber", "nasılsın", "kolay gelsin", "günaydın",
+        "привет", "как дела", "поговорим", "здравствуйте",
+        "hello", "hi", "how are you", "can we talk",
+        "hallo", "guten tag", "wie gehts"
+      ];
+      
+      let sohbetMi = sohbetKelimeleri.some(s => raw.includes(s));
+      if (sohbetMi && !raw.includes("randevu") && !raw.includes("saat") && !raw.includes("yaz")) {
         lumioAiSekme('istisare');
         document.getElementById('aiAskInput').value = metin;
         lumioAiSoruSor();
         return;
       }
 
+      // Fonetik Jargon Düzeltmesi (Kuaför ses kaymaları)
       raw = raw.replace(/\bfırına\b/g, "fön").replace(/\bfırın\b/g, "fön").replace(/\bfene\b/g, "fön");
 
+      let now = new Date();
       let targetDate = new Date();
       if (raw.includes("yarın") || raw.includes("завтра") || raw.includes("tomorrow") || raw.includes("morgen")) {
         targetDate.setDate(now.getDate() + 1);
       }
       let tarihStr = targetDate.getDate().toString().padStart(2, '0') + '.' + (targetDate.getMonth() + 1).toString().padStart(2, '0') + '.' + targetDate.getFullYear();
 
+      // Saat Ayıklama
       let saatStr = "14:00";
       let digitMatch = raw.match(/(\b[0-2]?[0-9])[:.]([0-5][0-9]\b)/);
       if (digitMatch) {
         saatStr = digitMatch[1].padStart(2, '0') + ':' + digitMatch[2];
       } else {
-        const saatMap = { "on": "10:00", "on bir": "11:00", "oniki": "12:00", "bir": "13:00", "iki": "14:00", "üç": "15:00", "dört": "16:00", "beş": "17:00", "12": "12:00", "15": "15:00" };
-        for (let [k, s] of Object.entries(saatMap)) { if (raw.includes(k)) { saatStr = s; break; } }
+        const saatMap = {
+          "on": "10:00", "on bir": "11:00", "oniki": "12:00", "bir": "13:00", "iki": "14:00", "üç": "15:00", "dört": "16:00", "beş": "17:00",
+          "10": "10:00", "11": "11:00", "12": "12:00", "13": "13:00", "14": "14:00", "15": "15:00", "16": "16:00", "17": "17:00", "18": "18:00"
+        };
+        for (let [k, s] of Object.entries(saatMap)) {
+          let rRegex = new RegExp(`\\b${k}['\\s]?(de|da|e|a|te|ta)?\\b`);
+          if (rRegex.test(raw)) { saatStr = s; break; }
+        }
       }
 
-      const yasakliKelimeler = ["hanım", "hanim", "bey", "abla", "abi", "teyze", "kanka", "usta", "hocam", "госпожа", "господин", "mrs", "mr", "konuşabilir", "gelecek", "gel", "randevu"];
-      let temizKelimeler = raw.split(/[\s,.'"]+/).filter(w => w.length > 2 && !yasakliKelimeler.includes(w) && !w.includes(':') && isNaN(w));
+      // 4 DİLLİ HİTAP & SAYGI EKİ AYIKLAYICI (KÖK İSME ULAŞMA)
+      const hitapEkleri = [
+        "hanım", "hanima", "hanıma", "hanim", "bey", "beye", "abla", "ablaya", "abim", "abi", "abime", "teyze", "teyzeye", "kanka", "hocam", "usta",
+        "тётя", "тетя", "дядя", "госпожа", "господин", "мастер", "девушка",
+        "frau", "herr", "tante", "onkel",
+        "aunt", "uncle", "mrs", "mr", "miss", "bro", "sis",
+        "saat", "öğleden", "sonra", "randevu", "gelecek", "gel", "çak", "yaz", "olsun"
+      ];
+
+      // Kelimeleri temizle
+      let kelimeler = raw.split(/[\s,.'"]+/).filter(w => w.length > 1 && !w.includes(':') && isNaN(w));
+      
+      // Hitap eklerini unvan olarak işaretle, kök ismi bul
+      let adayIsimler = kelimeler.filter(w => !hitapEkleri.includes(w));
 
       let bulunanMusteri = "";
       let bulunanTel = "";
 
-      for (let m of musteriler) {
-        let mKelimeler = m.ad.toLocaleLowerCase('tr-TR').split(/\s+/).filter(w => !yasakliKelimeler.includes(w));
-        for (let adKelime of mKelimeler) {
-          if (temizKelimeler.includes(adKelime)) {
-            bulunanMusteri = m.ad;
-            bulunanTel = m.tel || "";
+      // 1. Rehberdeki kayıtlı müşterilerle akıllı eşleştirme
+      if (musteriler && musteriler.length > 0) {
+        for (let aday of adayIsimler) {
+          let adayNorm = turkceNormalize(aday);
+          let eslesen = musteriler.find(m => {
+            let mNorm = turkceNormalize(m.ad);
+            let mParcalar = mNorm.split(/\s+/);
+            return mParcalar.some(p => p.startsWith(adayNorm) || adayNorm.startsWith(p));
+          });
+
+          if (eslesen) {
+            bulunanMusteri = eslesen.ad;
+            bulunanTel = eslesen.tel || "";
             break;
           }
         }
-        if (bulunanMusteri) break;
       }
 
-      if (!bulunanMusteri && temizKelimeler.length > 0) {
-        bulunanMusteri = turkceHitapIsimDuzenle(temizKelimeler[0]);
+      // 2. Eğer rehberde yoksa usta yeni bir müşteri ismi söylemiştir
+      if (!bulunanMusteri && adayIsimler.length > 0) {
+        bulunanMusteri = turkceHitapIsimDuzenle(adayIsimler[0]);
       }
       if (!bulunanMusteri) bulunanMusteri = "Değerli Müşteri";
 
+      // Hizmet ve Süre Tespiti
       let hizmetStr = "İŞLEM";
       let sureDk = 60;
       const liste = salonAyarlari.hizmetler || VARSAYILAN_BOLUM_HIZMETLERI.kuafor;
 
-      if (raw.includes("fön") || raw.includes("укладка") || raw.includes("blowdry")) {
+      if (raw.includes("fön") || raw.includes("укладка") || raw.includes("blowdry") || raw.includes("föhn")) {
         hizmetStr = "FÖN"; sureDk = 30;
-      } else if (raw.includes("boya") || raw.includes("окрашивание") || raw.includes("color")) {
+      } else if (raw.includes("boya") || raw.includes("окрашивание") || raw.includes("color") || raw.includes("färben")) {
         hizmetStr = "DİP BOYA"; sureDk = 90;
-      } else if (raw.includes("kesim") || raw.includes("стрижка") || raw.includes("cut")) {
+      } else if (raw.includes("kesim") || raw.includes("стрижка") || raw.includes("cut") || raw.includes("schneiden")) {
         hizmetStr = "KESİM"; sureDk = 45;
+      } else if (raw.includes("röfle") || raw.includes("balyaj") || raw.includes("мелирование") || raw.includes("balayage")) {
+        hizmetStr = "RÖFLE"; sureDk = 180;
       } else {
         for (let h of liste) {
           if (raw.includes(h.ad.toLocaleLowerCase('tr-TR'))) {
@@ -4501,7 +4537,7 @@ function musteriSec(id) {
 
       riskCard.classList.add('hidden');
       adviceCard.classList.remove('hidden');
-      adviceText.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-amber-400"></i> Düşünüyorum ustam, formüle bakıyorum...`;
+      adviceText.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-amber-400"></i> Düşünüyorum ustam, geçmiş formüllere ve kimyaya bakıyorum...`;
 
       let gecmisOzeti = "Müşteri henüz seçilmedi veya geçmiş kaydı yok.";
       if (aktifMusteri) {
@@ -4514,12 +4550,12 @@ function musteriSec(id) {
       let urunlerMetni = patronUrunListesi.map(u => `${u.ad} (Kategori: ${u.kategori}, Endikasyon: ${u.sorun}, Kullanım: ${u.kullanim})`).join("; ");
 
       const systemPrompt = `Sen kuaför ve güzellik salonlarında 20 yılını tezgâha vermiş, Oswald renk çarkını, pigmentasyonu ve saç kimyasını su gibi bilen efsanevi baş kalfa ve usta renk uzmanı (Master Colorist) Ayşe'sin.
-Karşındaki kişi senin yıllardır birlikte çalıştığın Ahmet Usta / tezgâh ortağındır.
+Karşındaki kişi senin yıllardır birlikte çalıştığın usta meslektaşın / tezgâh ortağındır.
 ASLA robotik, soğuk veya resmi konuşma! Tam bir usta-kalfa samimiyetiyle, dükkan diliyle konuş.
 Eğer usta tehlikeli bir işlemden bahsederse (yakın zamanda açılmış saça tekrar direkt 30 volüm vurmak gibi) uyar: 'Dur ustam saçı yakarız, lastikleşir!' de ve güvenli alternatif (10 volüm Bleach Wash + Plex) sun.
 Müşteri Geçmişi: ${gecmisOzeti}
-Mevcut Ürünler: ${urunlerMetni}
-DİL KURALI: Ustanın kullandığı dilde (${aktifDil.toUpperCase()}) ve o dilin salon samimiyetiyle yanıt ver.`;
+Mevcut Salon Bakım Ürünleri: ${urunlerMetni}
+DİL KURALI: Ustanın konuştuğu dilde (${aktifDil.toUpperCase()}) ve o dilin salon meslektaş samimiyetiyle yanıt ver.`;
 
       try {
         const cevap = await geminiApiCagir({
@@ -4528,14 +4564,14 @@ DİL KURALI: Ustanın kullandığı dilde (${aktifDil.toUpperCase()}) ve o dilin
           ]
         });
 
-        if (cevap.toLowerCase().includes("dur") || cevap.toLowerCase().includes("yak") || cevap.toLowerCase().includes("lastik") || cevap.toLowerCase().includes("осторожно")) {
+        if (cevap.toLowerCase().includes("dur") || cevap.toLowerCase().includes("yak") || cevap.toLowerCase().includes("lastik") || cevap.toLowerCase().includes("осторожно") || cevap.toLowerCase().includes("stop")) {
           riskCard.classList.remove('hidden');
           document.getElementById('aiRiskTitle').innerText = "⚠️ KİMYASAL HASAR UYARISI!";
           document.getElementById('aiRiskBody').innerText = cevap;
         }
         adviceText.innerText = cevap;
       } catch (err) {
-        adviceText.innerHTML = `⚠️ <b>Google API Hatası:</b> ${err.message}`;
+        adviceText.innerHTML = `⚠️ <b>Google AI Hatası:</b> ${err.message}`;
       }
 
       input.value = "";
@@ -4551,7 +4587,7 @@ DİL KURALI: Ustanın kullandığı dilde (${aktifDil.toUpperCase()}) ve o dilin
       window.speechSynthesis.speak(utter);
     }
 
-    /* 3. GERÇEK GEMINI VISION: FOTOĞRAFTAN PİKSEL DÜZEYİNDE TRİKOLOJİ */
+    /* 3. GERÇEK MULTIMODAL VISION: FOTOĞRAFTAN PİKSEL DÜZEYİNDE DÜRÜST ANALİZ */
     function lumioAiFotoYuklendi(input) {
       if (!input.files || !input.files[0]) return;
       const file = input.files[0];
@@ -4578,16 +4614,16 @@ DİL KURALI: Ustanın kullandığı dilde (${aktifDil.toUpperCase()}) ve o dilin
 
       let urunlerMetni = patronUrunListesi.map(u => `ID: ${u.id}, Ad: ${u.ad}, Sorun: ${u.sorun}, Link: ${u.link}`).join(" | ");
 
-      const visionPrompt = `Sen uzman bir trikolog ve master kuaförsün. Bu fotoğraftaki saçı dürüstçe incele.
+      const visionPrompt = `Sen uzman bir trikolog ve master kuaförsün. Bu fotoğraftaki saç/tırnak durumunu piksellerden dürüstçe incele.
 Saç doğal ve bakir (virgin) mi, yoksa açıcı/boya yıpranması var mı?
-DİKKAT: Eğer saç fotoğrafta koyu, parlak ve doğal görünüyorsa sakın yüksek hasar uydurma! Doğal olduğunu dürüstçe söyle (Hasar: %10 civarı).
+DİKKAT KURALI: Eğer saç fotoğrafta parlak, koyu ve doğal görünüyorsa sakın yüksek hasar uydurma! Doğal olduğunu dürüstçe söyle (Hasar: %10 civarı).
 Ürün Listesinden bu saça GERÇEKTEN en uygun olan 2 ürünü seç ve gerekçesini açıkla:
 Ürün Listesi: ${urunlerMetni}
 
-Yanıtını YALNIZCA şu JSON formatında ver, başka hiçbir yazı yazma:
+Yanıtını YALNIZCA şu JSON formatında ver, markdown veya başka açıklama ekleme:
 {
   "hasarSkoru": 10,
-  "teshis": "Doğal ve bakir saç tespit edildi. Kimyasal işlem yok, pullar kapalı ve sağlıklı.",
+  "teshis": "Doğal saç tespit edildi. Pullar kapalı ve sağlıklı.",
   "secilenUrunler": [
     { "ad": "Ürün Adı", "gerekce": "Neden önerildiği", "link": "linki" }
   ]
@@ -4662,7 +4698,20 @@ ${i+1}. ${u.ad}
       anindaWhatsAppAc(tel, msg);
     }
 
-    /* 5. PATRON PANELİ: GİZLİ GEMINI ŞİFRE BUTONU VE ÜRÜN YÖNETİMİ */
+    /* 5. PATRON PANELİ: GÜVENLİ GEMINI ŞİFRESİ VE ÜRÜN YÖNETİMİ */
+    function patronGeminiSifresiAyarla() {
+      let girilen = prompt("Google AI Studio'dan aldığınız Gemini API anahtarınızı yapıştırınız:", geminiApiKey);
+      if (girilen === null) return;
+      girilen = girilen.trim();
+      if (!girilen) {
+        alert("API Anahtarı boş bırakılamaz!");
+        return;
+      }
+      geminiApiKey = girilen;
+      localStorage.setItem('lumio_gemini_api_key', girilen);
+      alert("🎉 Google Gemini Yapay Zeka Anahtarınız tarayıcınıza güvenle kaydedildi! Yapay zeka ve sesli asistan artık aktif.");
+    }
+
     function patronUrunListesiniCiz() {
       let alan = document.getElementById('patronUrunYonetimAlani');
       if (alan) alan.remove();
@@ -4678,12 +4727,7 @@ ${i+1}. ${u.ad}
           <span class="text-amber-400 font-bold flex items-center text-xs">
             <i class="fa-solid fa-boxes-stacked mr-1.5"></i> 🛍️ ÜRÜN & PAZARYERİ LİNKLERİ
           </span>
-          <div class="flex items-center space-x-1.5">
-            <button onclick="patronGeminiSifresiAyarla()" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold px-2 py-0.5 rounded border border-slate-700 shadow flex items-center gap-1">
-              <i class="fa-solid fa-key"></i> <span>🔑 Gemini Şifresi</span>
-            </button>
-            <button onclick="patronYeniUrunEklePrompt()" class="text-[10px] bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded shadow">+ Ürün Ekle</button>
-          </div>
+          <button onclick="patronYeniUrunEklePrompt()" class="text-[10px] bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded shadow active:scale-95 transition">+ Ürün Ekle</button>
         </div>
         <div id="patronUrunlerContainer" class="space-y-1.5 max-h-40 overflow-y-auto scroll-touch"></div>
       `;
@@ -4703,26 +4747,13 @@ ${i+1}. ${u.ad}
       `).join('');
     }
 
-    function patronGeminiSifresiAyarla() {
-      let girilen = prompt("Google AI Studio'dan aldığınız yeni Gemini API anahtarınızı buraya yapıştırınız:", geminiApiKey);
-      if (girilen === null) return;
-      girilen = girilen.trim();
-      if (!girilen) {
-        alert("Boş bırakılamaz!");
-        return;
-      }
-      geminiApiKey = girilen;
-      localStorage.setItem('lumio_gemini_api_key', girilen);
-      alert("🎉 Google Gemini Yapay Zeka Anahtarınız telefona kaydedildi! Canlı yapay zeka beyni artık aktif.");
-    }
-
     function patronYeniUrunEklePrompt() {
       let ad = prompt("Ürün Adı (Örn: Olaplex No:3 veya Kerastase Maske):");
       if (!ad) return;
       let platform = prompt("Hangi Mağaza? (Örn: Trendyol, Hepsiburada, Amazon, Kendi Sitemiz):", "Trendyol");
       let link = prompt("Satın Alma Linki (Örn: https://ty.gl/... veya https://hepsiburada.com/...):");
       if (!link) return;
-      let kullanim = prompt("Kullanım Şekli & Gerekçesi (Örn: Haftada 2 kez uygulanır, kırıkları onarır):", "Haftada 2 kez uygulanır.");
+      let kullanim = prompt("Kullanım Şekli & Gerekçesi (Örn: Haftada 2 kez uygulanır, bağları onarır):", "Haftada 2 kez uygulanır.");
       let kat = prompt("Kategori seçin: dogal / boyali / hasarli", "hasarli");
 
       patronUrunListesi.push({
@@ -4735,7 +4766,7 @@ ${i+1}. ${u.ad}
       });
 
       localStorage.setItem('lumio_patron_urunler', JSON.stringify(patronUrunListesi));
-      alert("✅ Yeni ürün ve özel linki başarıyla eklendi! Yapay zeka artık bu ürünü reçete edecek.");
+      alert("✅ Yeni ürün ve özel linki başarıyla eklendi! Yapay zeka artık bu ürünü reçetelerde önerecek.");
       patronUrunListesiniCiz();
     }
 
@@ -4745,12 +4776,6 @@ ${i+1}. ${u.ad}
       localStorage.setItem('lumio_patron_urunler', JSON.stringify(patronUrunListesi));
       patronUrunListesiniCiz();
     }
-
-    const eskiPatronYukle = window.patronVerileriniYukle;
-    window.patronVerileriniYukle = function() {
-      if (eskiPatronYukle) eskiPatronYukle();
-      patronUrunListesiniCiz();
-    };
 
     /* İLK BAŞLATMA VE ÇEKİRDEK ÇALIŞTIRICI */
     yeniIslemTemizle();
