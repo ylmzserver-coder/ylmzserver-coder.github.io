@@ -58,7 +58,7 @@
     .scroll-touch { -webkit-overflow-scrolling: touch; }
 
     /* ==========================================================================
-       KESİN ÇALIŞAN ÇİFT TEMA (APPLE / FRESHA STANDARDI AÇIK VE KOYU MOD)
+       YÜKSEK KONTRASTLI VE GÖZ YORMAYAN ÇİFT TEMA (APPLE & FRESHA STANDARDI)
        ========================================================================== */
     body.theme-light { 
       background-color: #f8fafc !important; 
@@ -79,7 +79,7 @@
     body.theme-light [class*="border-slate-800"],
     body.theme-light [class*="border-slate-900"],
     body.theme-light [class*="border-slate-700"] {
-      border-color: #e2e8f0 !important;
+      border-color: #cbd5e1 !important;
     }
     body.theme-light .text-white,
     body.theme-light [class*="text-slate-100"],
@@ -87,42 +87,57 @@
       color: #0f172a !important;
     }
     body.theme-light [class*="text-slate-300"],
-    body.theme-light [class*="text-slate-400"],
+    body.theme-light [class*="text-slate-400"] {
+      color: #334155 !important;
+    }
     body.theme-light [class*="text-slate-500"] {
-      color: #475569 !important;
+      color: #64748b !important;
     }
     body.theme-light input, 
     body.theme-light select, 
     body.theme-light textarea {
       color: #0f172a !important;
-      background-color: #f1f5f9 !important;
+      background-color: #f8fafc !important;
       border-color: #cbd5e1 !important;
       font-weight: 600 !important;
     }
     body.theme-light .quick-date-btn,
     body.theme-light .bg-slate-800 {
-      background-color: #e2e8f0 !important;
-      color: #0f172a !important;
+      background-color: #f1f5f9 !important;
+      color: #1e293b !important;
       border-color: #cbd5e1 !important;
     }
+
+    /* GÖRSELDEKİ "EN SON FORMÜLÜ AL" BUTONU: YÜKSEK KONTRASTLI ZÜMRÜT YEŞİLİ */
+    body.theme-light #btnGetLastFormula {
+      background-color: #d1fae5 !important;
+      color: #065f46 !important;
+      border-color: #10b981 !important;
+      font-weight: 800 !important;
+    }
+
+    /* AÇIK MODDA ŞAMPANYA VE ALTIN TONLARI: OKUNABİLİR TOK KEHRİBAR */
     body.theme-light .text-amber-400,
     body.theme-light .text-amber-300 { 
       color: #b45309 !important; 
+      font-weight: 700 !important;
     }
     body.theme-light #headerLicenseBadge {
-      background-color: #e2e8f0 !important;
+      background-color: #f1f5f9 !important;
       color: #334155 !important;
       border-color: #cbd5e1 !important;
     }
+
+    /* AJANDA VE ŞERİT KONTRASTI */
     body.theme-light #ajandaSaatlerContainer > div {
       background-color: #ffffff !important;
       border-color: #e2e8f0 !important;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
     }
     body.theme-light #hizliGunlerSeridi button:not(.bg-amber-500) {
-      background-color: #f1f5f9 !important;
+      background-color: #f8fafc !important;
       border-color: #cbd5e1 !important;
-      color: #334155 !important;
+      color: #1e293b !important;
     }
     body.theme-light .service-row {
       background-color: #f8fafc !important;
@@ -213,7 +228,7 @@
     </button>
   </div>
 
-  <!-- LİSANS KURULUM MODALI (YASAL SÖZLEŞME VE KVKK ONAY KUTUSU DAHİL) -->
+  <!-- LİSANS KURULUM MODALI (YASAL ONAY KUTUSU DAHİL) -->
   <div id="licenseSetupModal" class="hidden fixed inset-0 modal-overlay-bg z-[9999999999] flex flex-col items-center justify-center p-6 text-center">
     <div class="w-20 h-20 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center p-2 mb-4 shadow-xl">
       <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow">
@@ -465,7 +480,7 @@
         </div>
       </div>
 
-      <!-- HİZMET VE FORMÜL MASASI -->
+      <!-- HİZMET VE FORMÜL MASASI (750 TL TEMİZLENDİ - 0,00 TL İLE BAŞLAR) -->
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3">
         <div class="flex justify-between items-center">
           <span class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center" id="lblServiceCardTitle">
@@ -507,7 +522,7 @@
             <span class="text-xs font-bold text-slate-300" id="selectedDateText">Bugün</span>
             <input type="date" id="calendarPicker" onchange="takvimTarihSecildi(this.value)" class="bg-slate-950 text-amber-400 text-xs font-bold border border-slate-700 rounded-lg px-2.5 py-1 focus:outline-none">
           </div>
-          <!-- 7 GÜNLÜK İLERİYE DÖNÜK ŞERİT -->
+          <!-- 7 GÜNLÜK İLERİYE DÖNÜK ŞERİT (EN SOLDAKİ 1. BUTON DAİMA BUGÜNDÜR) -->
           <div id="hizliGunlerSeridi" class="grid grid-cols-7 gap-1 text-center text-xs"></div>
         </div>
       </div>
@@ -531,7 +546,8 @@
             <h2 class="text-sm font-bold text-amber-400 flex items-center" id="lblHistoryTitle"><i class="fa-solid fa-clock-rotate-left mr-2"></i> Müşteri Formül Geçmişi</h2>
             <p id="historyCustName" class="text-xs text-slate-400 mt-0.5">Müşteri seçilmedi</p>
           </div>
-          <button onclick="sonFormuluMasayaAktar()" class="text-xs btn-emerald-contrast bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 px-3 py-1.5 rounded-xl font-bold active:scale-95 transition" id="btnGetLastFormula">En Son Formülü Al</button>
+          <!-- YÜKSEK KONTRASTLI ZÜMRÜT FORMÜL BUTONU -->
+          <button onclick="sonFormuluMasayaAktar()" class="text-xs bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 px-3 py-1.5 rounded-xl font-bold active:scale-95 transition" id="btnGetLastFormula">En Son Formülü Al</button>
         </div>
         <div id="historyListContainer" class="space-y-3 text-xs scroll-touch max-h-[520px] overflow-y-auto"></div>
       </div>
@@ -857,12 +873,12 @@
         <input type="text" id="custDirectorySearchInput" oninput="musteriRehberindeAra(this.value)" placeholder="Ad, Soyad veya Telefon ile ara..." class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-8 pr-3 py-2 text-xs text-white font-bold focus:outline-none focus:border-amber-400">
       </div>
 
-      <!-- Müşteri Listesi (İçinde hem Seç hem de Düzenle butonu olacak) -->
+      <!-- Müşteri Listesi (Hem Seç hem de Düzenle butonu içerir) -->
       <div id="custDirectoryList" class="flex-1 overflow-y-auto space-y-1.5 pr-1 scroll-touch"></div>
     </div>
   </div>
 
-  <!-- MODAL: MÜŞTERİ DÜZENLEME PENCERESİ (YENİ EKLENDİ) -->
+  <!-- MODAL: MÜŞTERİ BİLGİLERİNİ DÜZENLEME PENCERESİ -->
   <div id="modalMusteriDuzenle" class="hidden fixed inset-0 modal-overlay-bg flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-sm w-full p-5 space-y-3.5 shadow-2xl">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -1206,7 +1222,7 @@
     </div>
   </div>
 
-  <!-- BİLDİRİM EKRANI (DOSYA İNDİRME TAMAMEN KALKTI, DOSYASIZ TAKVİM GELDİ) -->
+  <!-- BİLDİRİM EKRANI (TEMİZLENMİŞ: DOSYA İNDİRME TAMAMEN KALKTI!) -->
   <div id="bildirimAksiyonModal" class="hidden fixed inset-0 modal-overlay-bg z-[99999999] flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-emerald-500/50 rounded-2xl max-w-sm w-full p-5 space-y-3.5 shadow-2xl text-center">
       <div class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl mx-auto"><i class="fa-solid fa-circle-check"></i></div>
@@ -1216,11 +1232,7 @@
         <button onclick="bildirimAksiyonTetikle('musteri')" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl shadow active:scale-95 flex items-center justify-center space-x-2" id="btnSendClientConfirm">
           <i class="fa-brands fa-whatsapp text-base"></i><span>Müşteriye Teyit Gönder (Şablon 6)</span>
         </button>
-        <!-- DOSYASIZ DOĞRUDAN GOOGLE TAKVİMİ AÇAR -->
-        <button onclick="googleTakvimeAktar()" class="w-full bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 font-black py-2.5 rounded-xl shadow active:scale-95 flex items-center justify-center space-x-2" id="btnAddCalendarAlarm">
-          <i class="fa-solid fa-calendar-plus text-base"></i><span>📅 Google Takvimde Aç (Dosyasız)</span>
-        </button>
-        <button onclick="bildirimAksiyonTetikle('usta')" id="btnUstaBildirim" class="w-full bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold py-2 rounded-xl border border-slate-700 flex items-center justify-center space-x-2">
+        <button onclick="bildirimAksiyonTetikle('usta')" id="btnUstaBildirim" class="w-full bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold py-2.5 rounded-xl border border-slate-700 flex items-center justify-center space-x-2 shadow active:scale-95 transition">
           <i class="fa-solid fa-bell"></i><span>Kendi Numarama WhatsApp Bildir</span>
         </button>
         <button onclick="bildirimModaliniKapat()" class="w-full bg-slate-950 text-slate-400 py-2 rounded-xl" id="btnCloseNotificationModal">Kapat</button>
@@ -1254,7 +1266,7 @@
         <button onclick="patronPaneliKapat()" class="text-slate-400 hover:text-white text-base">✕</button>
       </div>
 
-      <!-- SIFIR İFŞA: GOOGLE GEMINI API ANAHTARI VE HUKUKİ İSPAT BUTONU -->
+      <!-- SIFIR İFŞA: GOOGLE GEMINI API VE HUKUKİ İSPAT BUTONU -->
       <div class="grid grid-cols-2 gap-2">
         <button onclick="patronGeminiSifresiAyarla()" class="p-2.5 bg-slate-950 hover:bg-slate-800 text-amber-400 rounded-xl border border-amber-500/40 text-[10px] font-black text-center shadow active:scale-95 transition">
           🔑 Gemini Anahtarı
@@ -1343,7 +1355,7 @@
 
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1">
           <h4 class="font-bold text-amber-400 text-xs">3. KVKK VE YURT DIŞI AKTARIM AÇIK RIZASI</h4>
-          <p>Yazılım verileri güvenli bulut altyapısında (Google Firebase) şifreli olarak tutulmaktadır. Yalnızca yapay zeka analiz özellikleri kullanıldığında, danışılan sorular ve yüklenen saç fotoğrafları bilimsel trikoloji analizi amacıyla Google AI (Gemini) sunucularına iletilir. Kullanıcı bu aktarımı açık rızasıyla kabul eder.</p>
+          <p>Yazılım verileri güvenli bulut altyapısında (Google Firebase) şifreli olarak tutulmaktadır. Yalnızca yapay zeka analiz özellikleri kullanıldığında, danışılan sorular ve yüklenen saç fotoğrafları bilimsel trikoloji analizi amacıyla Google AI altyapısına iletilir. Kullanıcı bu aktarımı açık rızasıyla kabul eder.</p>
         </div>
       </div>
 
@@ -1355,7 +1367,7 @@
     </div>
   </div>
 
-  <!-- MODAL: HUKUKİ TUTANAK VE İSPAT BELGESİ (PATRON İÇİN RESMİ DELİL) -->
+  <!-- MODAL: HUKUKİ TUTANAK VE İSPAT BELGESİ -->
   <div id="modalYasalTutanak" class="hidden fixed inset-0 modal-overlay-bg flex items-center justify-center p-3">
     <div class="bg-slate-900 border border-emerald-500/50 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col max-h-[85vh]">
       <div class="flex justify-between items-center pb-2 border-b border-slate-800">
@@ -1534,6 +1546,7 @@ function internetDurumunuGuncelle() {
         serviceCardTitle: "Hizmet & Formül Masası", addServiceRow: "Satır Ekle", totalAmount: "Toplam Tutar:", saveVisit: "İŞLEMİ KAYDET",
         agendaTitle: "Kişisel Randevu Ajandam", backToday: "Bugün'e Dön", dailyFlowTitle: "Günlük Randevu Akışı", remindTip: "🔔 Hatırlat ile tek tık WhatsApp",
         historyTitle: "Müşteri Formül Geçmişi", lastFormula: "En Son Formülü Al",
+        noCustHistory: "Müşteri seçilmedi", noHistoryRecords: "Bu müşteriye ait geçmiş işlem bulunamadı.",
         settingsHeading: "Profil, Hizmetler & Mesaj Ayarları", saveSettings: "Tüm Ayarları ve Şablonları Kaydet",
         step1: "1. Randevu hangi gün olacak?", step2: "2. Müşterimizin Adı ve Telefonu nedir?",
         step3: "3. Yapılacak işlem / hizmet nedir?", step4: "4. Bu işlem için ne kadar vakit ayıralım?", step5: "5. Randevu saat kaçta başlasın?",
@@ -1599,6 +1612,7 @@ function internetDurumunuGuncelle() {
         serviceCardTitle: "Services & Formulas", addServiceRow: "Add Row", totalAmount: "Total Amount:", saveVisit: "SAVE VISIT",
         agendaTitle: "Personal Appointment Agenda", backToday: "Back to Today", dailyFlowTitle: "Daily Appointment Flow", remindTip: "🔔 1-Click WhatsApp Reminder",
         historyTitle: "Client Formula History", lastFormula: "Get Last Formula",
+        noCustHistory: "No client selected", noHistoryRecords: "No past formulas found for this client.",
         settingsHeading: "Profile, Services & Message Settings", saveSettings: "Save All Settings & Templates",
         step1: "1. Which day is the appointment?", step2: "2. Client's name and phone number?",
         step3: "3. What service will be performed?", step4: "4. How much time should we allocate?", step5: "5. What time should it start?",
@@ -1664,6 +1678,7 @@ function internetDurumunuGuncelle() {
         serviceCardTitle: "Service- & Formeltisch", addServiceRow: "Zeile Hinzufügen", totalAmount: "Gesamtbetrag:", saveVisit: "SPEICHERN",
         agendaTitle: "Persönlicher Terminkalender", backToday: "Zurück zu Heute", dailyFlowTitle: "Täglicher Ablauf", remindTip: "🔔 1-Klick WhatsApp Erinnerung",
         historyTitle: "Kunden-Formel-Historie", lastFormula: "Letzte Formel Übernehmen",
+        noCustHistory: "Kein Kunde ausgewählt", noHistoryRecords: "Keine Formel-Historie für diesen Kunden gefunden.",
         settingsHeading: "Profil, Services & Vorlagen", saveSettings: "Alle Einstellungen Speichern",
         step1: "1. An welchem Tag ist der Termin?", step2: "2. Name und Telefon des Kunden?",
         step3: "3. Welche Behandlung wird gewünscht?", step4: "4. Wie viel Zeit einplanen?", step5: "5. Um wie viel Uhr beginnen?",
@@ -1729,12 +1744,13 @@ function internetDurumunuGuncelle() {
         serviceCardTitle: "Услуги и Формулы", addServiceRow: "Добавить строку", totalAmount: "Итого:", saveVisit: "СОХРАНИТЬ",
         agendaTitle: "Личный график записей", backToday: "На сегодня", dailyFlowTitle: "Расписание на день", remindTip: "🔔 Напоминание в WhatsApp",
         historyTitle: "История формул клиента", lastFormula: "Взять последнюю формулу",
+        noCustHistory: "Клиент не выбран", noHistoryRecords: "История формул для этого клиента не найдена.",
         settingsHeading: "Профиль, Услуги и Сообщения", saveSettings: "Сохранить все настройки",
         step1: "1. На какой день запись?", step2: "2. Имя и телефон клиента?",
         step3: "3. Какая услуга?", step4: "4. Сколько времени потребуется?", step5: "5. Во сколько начало?",
         celebrate: "Поздравить", remind: "Напомнить", edit: "Изменить", book: "Записать", noPhone: "Без номера", availableSlot: "Свободное время", cont: "↳ Прод.",
         daysLeft: "дн. осталось", today: "Сегодня!", tomorrow: "Завтра!", clients: "Клиентов",
-        rowTitle: "СТРОКА УСЛУГИ", remove: "✕ Удалить", s1: "1. УСЛУГА", s2: "2. ФОРМУЛА / ДЕТАЛИ", s3: "3. ЗАМЕТКИ", s4: "4. ЦЕНА",
+        rowTitle: "СТРОКА УСLUGI", remove: "✕ Удалить", s1: "1. УСЛУГА", s2: "2. ФОРМУЛА / ДЕТАЛИ", s3: "3. ЗАМЕТКИ", s4: "4. ЦЕНА",
         sFormulaPh: "Граммовка, краска или продукт...", sNotesPh: "Заметки...", curr: "₽",
         zoomBtn: "Увеличить", zoomModalTitle: "Просмотр формулы / заметок",
         licenseKeyTitle: "ВАШ ЛИЦЕНЗИОННЫЙ КЛЮЧ", deptTitle: "ВАША СПЕЦИАЛИЗАЦИЯ / ОТДЕЛ",
@@ -1989,6 +2005,7 @@ function internetDurumunuGuncelle() {
       if (typeof tabloyuYenidenCiz === 'function') tabloyuYenidenCiz();
       if (typeof musteriRehberiSayaciGuncelle === 'function') musteriRehberiSayaciGuncelle();
       if (typeof lumioAiArayuzuDileGoreGuncelle === 'function') lumioAiArayuzuDileGoreGuncelle();
+      if (typeof gecmisListesiniGuncelle === 'function') gecmisListesiniGuncelle();
     }
 
     function bolumSecenekleriniDoldur() {
@@ -2407,33 +2424,6 @@ function internetDurumunuGuncelle() {
       });
     }
 
-    /* DOSYASIZ VE ÇÖPSÜZ DOĞRUDAN GOOGLE TAKVİM AÇICI */
-    function googleTakvimeAktar() {
-      if (!bekleyenRandevuData) return;
-      let hitap = turkceHitapIsimDuzenle(bekleyenRandevuData.musteriAdi);
-      let hizmet = bekleyenRandevuData.hizmet || "İşlem";
-      let tarih = akilliTarihDuzelt(bekleyenRandevuData.tarih);
-      let saat = bekleyenRandevuData.saat;
-      let sureDk = parseInt(bekleyenRandevuData.sure) || 60;
-
-      let p = tarih.split('.');
-      if (p.length !== 3) return;
-      let [h, m] = saat.split(':').map(Number);
-
-      let baslangic = new Date(parseInt(p[2]), parseInt(p[1]) - 1, parseInt(p[0]), h, m);
-      let bitis = new Date(baslangic.getTime() + (sureDk * 60000));
-
-      const formatIso = (d) => d.toISOString().replace(/-|:|\.\d\d\d/g, "");
-      let baslangicIso = formatIso(baslangic);
-      let bitisIso = formatIso(bitis);
-
-      let title = encodeURIComponent(`LUMIO: ${hitap} (${hizmet})`);
-      let details = encodeURIComponent(`Müşteri: ${hitap}\nHizmet: ${hizmet}\nTelefon: ${bekleyenRandevuData.tel || ''}\nSüre: ${sureDk} Dk\n\nLUMIO Randevu Terminali`);
-      let gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${baslangicIso}/${bitisIso}&details=${details}`;
-
-      window.open(gCalUrl, '_blank');
-    }
-
     function ustaRandevuAlarmKontrol() {
       const alarmDk = parseInt(salonAyarlari.alarmSuresi) || 0;
       if (alarmDk === 0) return;
@@ -2669,16 +2659,19 @@ function internetDurumunuGuncelle() {
       }
     }
 
+    /* MÜŞTERİ GEÇMİŞİ (4 DİLDE KUSURSUZ BAŞLIK VE ALT YAZI) */
     function gecmisListesiniGuncelle() {
       const container = document.getElementById('historyListContainer');
       const title = document.getElementById('historyCustName');
+      const d = SOZLUK[aktifDil] || SOZLUK.tr;
       if (!container) return;
+
       if (!aktifMusteri) {
-        if (title) title.innerText = "Müşteri seçilmedi";
-        container.innerHTML = `<div class="text-slate-400 p-6 text-center text-xs">Müşteri seçilmedi.</div>`;
+        if (title) title.innerText = d.noCustHistory || "Müşteri seçilmedi";
+        container.innerHTML = `<div class="text-slate-400 p-6 text-center text-xs">${d.noCustHistory || "Müşteri seçilmedi."}</div>`;
         return;
       }
-      if (title) title.innerText = turkceHitapIsimDuzenle(aktifMusteri.ad) + " - Geçmiş";
+      if (title) title.innerText = turkceHitapIsimDuzenle(aktifMusteri.ad) + " - " + d.history;
       
       const islemler = gecmisIslemler.filter(g => {
         if (g.isHizliFis === true || g.musteriAdi === 'Hızlı Kasa İşlemi') return false;
@@ -2689,7 +2682,7 @@ function internetDurumunuGuncelle() {
       });
 
       if (islemler.length === 0) {
-        container.innerHTML = `<div class="text-slate-400 p-6 text-center text-xs">Bu müşteriye ait geçmiş işlem bulunamadı.</div>`;
+        container.innerHTML = `<div class="text-slate-400 p-6 text-center text-xs">${d.noHistoryRecords || "Bu müşteriye ait geçmiş işlem bulunamadı."}</div>`;
         return;
       }
 
@@ -3021,6 +3014,7 @@ function internetDurumunuGuncelle() {
 
     function aramaKutusunuKapat() { let res = document.getElementById('searchResults'); if (res) res.classList.add('hidden'); }
 
+    /* MASA TEMİZLEME MOTORU: 750 TL SATIRI TAMAMEN KALDIRILDI (0,00 TL İLE BAŞLAR) */
     function yeniIslemTemizle() {
       aktifMusteri = null;
       if (document.getElementById('custSearch')) document.getElementById('custSearch').value = "";
@@ -3040,7 +3034,7 @@ function internetDurumunuGuncelle() {
 
       let sContainer = document.getElementById('serviceRowsContainer');
       if (sContainer) sContainer.innerHTML = "";
-      tabloyaSatirEkle();
+      // Otomatik 750 TL satırı açılması engellendi, masa tertemiz 0,00 TL kalır!
       toplamHesapla();
       gecmisListesiniGuncelle();
     }
@@ -3248,7 +3242,7 @@ function musteriSilOnayli() {
           return; 
         }
 
-        // HUKUKİ İSPAT BELGESİ: Firestore'a inkâr edilemez resmi onay logu yazılır
+        // HUKUKİ İSPAT BELGESİ: Firestore'a resmi onay tutanağı yazılır
         const auditLog = {
           sozlesmeKodu: "LUMIO-SOZLESME-V1-2026",
           onaylandi: true,
@@ -3269,6 +3263,7 @@ function musteriSilOnayli() {
 
         aktifLisansKodu = temizKod;
         localStorage.setItem('hair_lisans_kodu', aktifLisansKodu);
+        localStorage.setItem('lumio_sozlesme_onayli_' + aktifLisansKodu, 'EVET');
         document.getElementById('licenseSetupModal').classList.add('hidden');
         bulutVerileriniBaslat();
         alert(`Hoş geldiniz Sayın ${data.ad || 'Usta'}! LUMIO terminaliniz açıldı.`);
@@ -3286,6 +3281,14 @@ function musteriSilOnayli() {
     /* ULUSLARARASI AKILLI KÖPRÜ (Eski Müşterileri Kurtarır + Lisansı Asla Düşürmez) */
     function bulutVerileriniBaslat() {
       if (!aktifLisansKodu) { document.getElementById('licenseSetupModal').classList.remove('hidden'); return; }
+
+      // Mevcut giriş yapmış ustalarda sözleşme kontrolü (Gerekirse yasal onay ister)
+      let sozlesmeOnay = localStorage.getItem('lumio_sozlesme_onayli_' + aktifLisansKodu);
+      if (!sozlesmeOnay) {
+        document.getElementById('licenseSetupModal').classList.remove('hidden');
+        document.getElementById('setupLicenseInput').value = aktifLisansKodu.startsWith('90') ? aktifLisansKodu.substring(2) : aktifLisansKodu;
+        return;
+      }
 
       if (unsubscribeLisans) unsubscribeLisans();
       if (unsubscribeMusteriler) unsubscribeMusteriler();
@@ -3681,7 +3684,7 @@ function musteriSilOnayli() {
       if (sekme === 'reminders') canliBildirimMerkeziniGuncelle();
     }
 
-    /* 7 GÜNLÜK İLERİYE DÖNÜK KAYAN ŞERİT (MADDE 9: EN SOLDAKİ 1. BUTON DAİMA BUGÜN) */
+    /* 7 GÜNLÜK İLERİYE DÖNÜK KAYAN ŞERİT (MADDE 9: EN SOLDAKİ 1. BUTON DAİMA BUGÜNDÜR) */
     function ajandaTarihSeridiOlustur() {
       const serit = document.getElementById('hizliGunlerSeridi');
       if (!serit) return;
@@ -3690,7 +3693,7 @@ function musteriSilOnayli() {
       let html = "";
       let bugun = new Date();
 
-      // i = 0'dan 6'ya: Bugün en solda 1. sırada, önünde 6 gün!
+      // i = 0'dan 6'ya: Bugün daima en solda 1. sırada, önünde 6 gün!
       for (let i = 0; i < 7; i++) {
         let d = new Date();
         d.setDate(bugun.getDate() + i);
@@ -4353,8 +4356,9 @@ function musteriSilOnayli() {
     function sifremiUnuttumWhatsApp() {
       anindaWhatsAppAc("905354049392", "Merhaba LUMIO Destek, usta giriş şifremi unuttum. Yardımcı olabilir misiniz?");
     }
-/* ==========================================================================
-       BÖLÜM 5: CANLI GOOGLE GEMINI MASTER AI MOTORU (JET HIZI & 4 DİLLİ)
+
+    /* ==========================================================================
+       BÖLÜM 5: CANLI GOOGLE GEMINI 3.8 FLASH JET MOTORU (4 DİLLİ)
        ========================================================================== */
 
     let aiRecognition = null;
@@ -4432,18 +4436,17 @@ function musteriSilOnayli() {
       }
     };
 
-    /* RESMİ 'x-goog-api-key' HEADER, ZAMAN AŞIMI KORUMALI JET MODEL ÇAĞIRICI */
+    /* RESMİ GOOGLE GEMINI 3.8 FLASH JET MOTORU (ZAMAN AŞIMI VE KESİN BAĞLANTI) */
     async function geminiApiCagir(payload) {
       if (!geminiApiKey) {
         throw new Error("Lütfen Patron Paneli'nden [🔑 Gemini Anahtarı] butonuna basarak API anahtarınızı giriniz.");
       }
 
-      // En hızlı ve hafif Google Gemini modelleri
-      const modeller = ['gemini-2.5-flash', 'gemini-flash-latest', 'gemini-2.0-flash'];
+      // Google'ın zorunlu kıldığı en güncel resmi modeller
+      const modeller = ['gemini-3.8-flash', 'gemini-flash-latest', 'gemini-2.5-flash'];
       let sonHata = "";
 
       for (const model of modeller) {
-        // 7 Saniyelik Zaman Aşımı (Timeout): Asla sonsuz "düşünüyor..." döngüsünde kalmaz!
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 7000);
 
@@ -4468,7 +4471,7 @@ function musteriSilOnayli() {
 
           if (data.error) {
             sonHata = data.error.message;
-            if (data.error.code === 404 || data.error.message.includes('not found') || data.error.message.includes('not supported')) {
+            if (data.error.code === 404 || data.error.message.includes('not found') || data.error.message.includes('not supported') || data.error.message.includes('no longer available')) {
               continue;
             } else {
               throw new Error(data.error.message);
@@ -4798,7 +4801,7 @@ function musteriSilOnayli() {
       lumioAiArayuzuDileGoreGuncelle();
     }
 
-    /* 2. JET HIZINDA, BOŞ LAFSIZ VE DOĞRUDAN FORMÜL VEREN İSTİŞARE */
+    /* 2. DOĞAL MESLEKTAŞ ÜSLUPLU, YILDIZSIZ VE JET HIZINDA GOOGLE GEMINI İSTİŞARE */
     async function lumioAiSoruSor() {
       const input = document.getElementById('aiAskInput');
       const soru = input.value.trim();
@@ -4812,7 +4815,7 @@ function musteriSilOnayli() {
       adviceCard.classList.remove('hidden');
       adviceText.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-amber-400"></i> Kontrol ediliyor...`;
 
-      // Hızlı Selamlaşma Tepkisi (Google'a gitmeden 1 saniyede doğrudan yanıt verir!)
+      // Hızlı Selamlaşma Tepkisi (1 saniyede doğrudan meslektaş yanıtı)
       const sAlt = soru.toLowerCase();
       if (sAlt === "privet" || sAlt === "привет" || sAlt === "здравствуйте") {
         adviceText.innerText = "Привет, мастер! Какую формулу или стрижку сегодня делаем? Задавай вопрос!";
@@ -4835,7 +4838,7 @@ function musteriSilOnayli() {
         return;
       }
 
-      // Soruda müşteri ismi geçiyorsa otomatik algıla
+      // Soruda müşteri ismi geçiyorsa otomatik tespit et
       let seciliMusteri = aktifMusteri;
       if (!seciliMusteri && musteriler && musteriler.length > 0) {
         let soruNorm = turkceNormalize(soru);
@@ -4852,14 +4855,14 @@ function musteriSilOnayli() {
 
       let urunlerMetni = patronUrunListesi.slice(0, 2).map(u => `${u.ad} (${u.kullanim})`).join("; ");
 
-      // DİNAMİK TEK DİL FİŞEĞİ: Sadece 2-3 satırlık sade, yıldızsız ve net talimat
-      let dilTalimati = "Sen uzman bir kuaför ve renk uzmanısın. ASLA boş muhabbet yapma, çay veya pelerin hikayesi anlatma. ASLA yıldız (**) veya liste işareti kullanma. Düz Türkçe ile doğrudan net formül, oksidan volümü ve bekleme süresini ver. En fazla 2-3 cümle yaz.";
+      // DOĞAL MESLEKTAŞ TALİMATI: Tiyatro yok, yıldız yok, sıcak meslektaş dili var!
+      let dilTalimati = "Sen usta bir kuaför ve renk uzmanısın. Karşındaki kişi senin tezgâh ortağın olan bir meslektaştır. Çay koydum veya pelerini bağla gibi gereksiz tiyatrolara ASLA girme. ASLA yıldız (**) veya liste işareti kullanma. Düz ve akıcı konuş. Sıcak bir meslektaş üslubuyla doğrudan formül, gramaj, oksidan volümü ve süreyi 2-3 cümlede özetle.";
       if (aktifDil === 'ru') {
-        dilTalimati = "Ты профессиональный колорист. Отвечай прямо и кратко в 2-3 предложениях. Формула, оксид, время. Без звездочек (**) и лишних слов.";
+        dilTalimati = "Ты опытный колорист и парикмахер. Твой собеседник — коллега по цеху. Отвечай прямо, профессионально и по-дружески в 2-3 предложениях. Без звездочек (**) и лишней театральщины.";
       } else if (aktifDil === 'en') {
-        dilTalimati = "You are a professional colorist. Give direct, concise technical formula, volume and processing time in 2-3 sentences. No asterisks (**) or fluff.";
+        dilTalimati = "You are an expert colorist talking to a fellow hairstylist. Be warm, direct, and concise in 2-3 sentences. Give exact formula, volume and time. No asterisks (**) or theatrical roleplay.";
       } else if (aktifDil === 'de') {
-        dilTalimati = "Du bist ein professioneller Colorist. Gib direkt und kurz die Rezeptur, Oxidant und Einwirkzeit in 2-3 Sätzen an. Keine Sternchen (**) oder Plaudereien.";
+        dilTalimati = "Du bist ein erfahrener Colorist und sprichst mit einem Meisterkollegen. Antworte direkt, kollegial und präzise in 2-3 Sätzen. Keine Sternchen (**) oder Theatergeschichten.";
       }
 
       try {
@@ -4868,12 +4871,12 @@ function musteriSilOnayli() {
             { parts: [{ text: `${dilTalimati}\nGeçmiş: ${gecmisOzeti}\nÜrünler: ${urunlerMetni}\nSoru: "${soru}"` }] }
           ],
           generationConfig: {
-            maxOutputTokens: 180,
-            temperature: 0.2
+            maxOutputTokens: 200,
+            temperature: 0.3
           }
         });
 
-        // Yıldız ve sembolleri metinden kazı
+        // Yıldız ve sembolleri metinden temizle
         let temizCevap = cevap.replace(/[*#_`]/g, '').trim();
 
         if (temizCevap.toLowerCase().includes("dikkat") || temizCevap.toLowerCase().includes("yanabilir") || temizCevap.toLowerCase().includes("осторожно") || temizCevap.toLowerCase().includes("danger")) {
