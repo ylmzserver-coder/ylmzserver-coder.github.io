@@ -71,7 +71,6 @@
       color: #0f172a !important; 
     }
 
-    /* Gündüz modunda opak/saydam tüm koyu kutuları ve kartları ezen saf beyaz filtre */
     body.theme-light header, 
     body.theme-light nav, 
     body.theme-light main section > div,
@@ -86,14 +85,12 @@
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
     }
 
-    /* Çerçeve ve bordür kontrastı */
     body.theme-light [class*="border-slate-800"],
     body.theme-light [class*="border-slate-900"],
     body.theme-light [class*="border-slate-700"] {
       border-color: #cbd5e1 !important;
     }
 
-    /* Koyu kutuda siyah yazı kalmasını engelleyen kesin tipografi kalkanı */
     body.theme-light .text-white,
     body.theme-light [class*="text-slate-100"],
     body.theme-light [class*="text-slate-200"] {
@@ -107,7 +104,6 @@
       color: #64748b !important;
     }
 
-    /* Giriş alanları, seçim kutuları ve metin alanları (Inputs) */
     body.theme-light input, 
     body.theme-light select, 
     body.theme-light textarea {
@@ -122,14 +118,12 @@
       font-weight: 500 !important;
     }
 
-    /* Hızlı butonlar */
     body.theme-light .quick-date-btn {
       background-color: #f1f5f9 !important;
       color: #1e293b !important;
       border-color: #cbd5e1 !important;
     }
 
-    /* Gündüz modunda okunabilir asil şampanya/kehribar vurguları */
     body.theme-light .text-amber-400,
     body.theme-light .text-amber-300 { 
       color: #b45309 !important; 
@@ -141,7 +135,6 @@
       border-color: #cbd5e1 !important;
     }
 
-    /* Ajanda şeridi & servis satırları */
     body.theme-light #ajandaSaatlerContainer > div {
       background-color: #ffffff !important;
       border-color: #e2e8f0 !important;
@@ -157,7 +150,6 @@
       border-color: #e2e8f0 !important;
     }
 
-    /* Kendiliğinden metne göre uzayan akıllı textarea */
     .auto-expand-area {
       resize: none;
       overflow-y: hidden;
@@ -165,7 +157,6 @@
       line-height: 1.4;
     }
 
-    /* Animasyonlar */
     .pulse-ring {
       box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6);
       animation: pulseWave 1.8s infinite cubic-bezier(0.66, 0, 0, 1);
@@ -174,14 +165,12 @@
       to { box-shadow: 0 0 0 14px rgba(245, 158, 11, 0); }
     }
 
-    /* Modal kaplama */
     .modal-overlay-bg {
       background-color: rgba(9, 13, 22, 0.88) !important;
       backdrop-filter: blur(8px) !important;
       -webkit-backdrop-filter: blur(8px) !important;
     }
 
-    /* Master AI Banner gündüz kartı */
     body.theme-light #cardMasterAiBanner {
       background: linear-gradient(135deg, #fffbeb 0%, #ffffff 50%, #fef3c7 100%) !important;
       border-color: #fde68a !important;
@@ -190,7 +179,6 @@
     body.theme-light #cardMasterAiBanner h3 { color: #b45309 !important; }
     body.theme-light #cardMasterAiBanner p { color: #475569 !important; }
 
-    /* Modalların iç kartları gündüz modu */
     body.theme-light .ai-modal-box {
       background-color: #ffffff !important;
       border-color: #cbd5e1 !important;
@@ -213,7 +201,6 @@
       color: #090d16 !important;
     }
 
-    /* Z-Index Kalkanı */
     #modalLumioAi { z-index: 9999990 !important; }
     #modalMusteriRehberi { z-index: 9999999 !important; }
     #modalMusteriDuzenle { z-index: 99999999 !important; }
@@ -382,7 +369,7 @@
         </button>
       </div>
 
-      <!-- MASTER AI & SESLİ ASİSTAN KARTI -->
+      <!-- MASTER AI KARTI -->
       <div id="cardMasterAiBanner" class="bg-gradient-to-r from-amber-500/15 via-slate-900 to-amber-500/10 border border-amber-500/40 rounded-2xl p-3.5 shadow-xl flex items-center justify-between transition">
         <div class="flex items-center space-x-3">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 text-slate-950 flex items-center justify-center text-lg shadow-lg pulse-ring">
@@ -526,8 +513,7 @@
         </button>
       </div>
     </section>
-
-    <!-- SEKME 2: AJANDAM -->
+<!-- SEKME 2: AJANDAM -->
     <section id="tab-agenda" class="hidden space-y-3.5">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3">
         <div class="flex justify-between items-center pb-2 border-b border-slate-800">
@@ -1054,8 +1040,7 @@
       </div>
     </div>
   </div>
-
-  <!-- MODAL: LUMIO MASTER AI & SESLİ İSTİŞARE MERKEZİ -->
+<!-- MODAL: LUMIO MASTER AI & SESLİ İSTİŞARE MERKEZİ -->
   <div id="modalLumioAi" class="hidden fixed inset-0 modal-overlay-bg flex items-center justify-center p-3">
     <div class="ai-modal-box bg-slate-900 border border-amber-500/40 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col max-h-[92vh]">
       
@@ -1239,7 +1224,7 @@
     </div>
   </div>
 
-  <!-- BİLDİRİM EKRANI (DOSYASIZ GOOGLE TAKVİM VE WHATSAPP) -->
+  <!-- BİLDİRİM EKRANI -->
   <div id="bildirimAksiyonModal" class="hidden fixed inset-0 modal-overlay-bg z-[99999999] flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-amber-500/40 rounded-2xl max-w-sm w-full p-5 space-y-3.5 shadow-2xl text-center">
       <div class="w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl mx-auto"><i class="fa-solid fa-circle-check"></i></div>
@@ -1549,7 +1534,7 @@
       ]
     };
 
-    /* 4 DİLLİ TAM SENKRON SÖZLÜK (AJANDA GÜNLERİ VE BİLDİRİMLER DAHİL) */
+    /* 4 DİLLİ TAM SENKRON SÖZLÜK */
     const SOZLUK = {
       tr: {
         terminal: "Terminal", agenda: "Ajandam", history: "Geçmiş", remindersTab: "Hatırlatmalar", settings: "Ayarlar",
@@ -1769,7 +1754,7 @@
         noCustHistory: "Клиент не выбран", noHistoryRecords: "История формул для этого клиента не найдена.",
         settingsHeading: "Профиль, Услуги и Сообщения", saveSettings: "Сохранить все настройки",
         step1: "1. На какой день запись?", step2: "2. Имя и телефон клиента?",
-        step3: "3. Какая услуга?", step4: "4. Сколько времени потребуется?", step5: "5. Во сколько начало?",
+        step3: "3. Какая услуga?", step4: "4. Сколько времени потребуется?", step5: "5. Во сколько начало?",
         celebrate: "Поздравить", remind: "Напомнить", edit: "Изменить", book: "Записать", noPhone: "Без номера", availableSlot: "Свободное время", cont: "↳ Прод.",
         daysLeft: "дн. осталось", today: "Сегодня!", tomorrow: "Завтра!", clients: "Клиентов",
         daysOfWeek: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
@@ -1990,7 +1975,8 @@
       }
     }
     temaUygula();
-function aktifDilSablonlariniAl(dil) {
+
+    function aktifDilSablonlariniAl(dil) {
       const varsayilan = (SOZLUK[dil] || SOZLUK.tr).sablons;
       let ustaKaydi = (salonAyarlari && salonAyarlari['sablons_' + dil]) ? salonAyarlari['sablons_' + dil] : {};
       
@@ -2486,7 +2472,8 @@ function aktifDilSablonlariniAl(dil) {
       });
     }
     setInterval(ustaRandevuAlarmKontrol, 25000);
-function autoExpandArea(el) {
+
+    function autoExpandArea(el) {
       if (!el) return;
       el.style.height = 'auto';
       el.style.height = (el.scrollHeight) + 'px';
@@ -3291,7 +3278,7 @@ function autoExpandArea(el) {
       anindaWhatsAppAc("905354049392", "Merhaba, LUMIO uygulamasını kullanmak için lisans satın almak / yenilemek istiyorum.");
     }
 
-    /* DOKUNULMAZ ÇEKİRDEK: ULUSLARARASI AKILLI KÖPRÜ (Eski Müşterileri Kurtarır + Lisansı Asla Düşürmez) */
+    /* DOKUNULMAZ ÇEKİRDEK: ULUSLARARASI KÖPRÜ */
     function bulutVerileriniBaslat() {
       if (!aktifLisansKodu) { document.getElementById('licenseSetupModal').classList.remove('hidden'); return; }
 
@@ -3334,7 +3321,6 @@ function autoExpandArea(el) {
         }
       });
 
-      // ESKİ MÜŞTERİLERİ KURTARMA KÖPRÜSÜ
       unsubscribeMusteriler = db.collection('ustalar').doc(aktifLisansKodu).collection('musteriler').onSnapshot((snapshot) => {
         if (snapshot.empty && aktifLisansKodu.startsWith('90')) {
           const altKod = aktifLisansKodu.substring(2);
@@ -3387,7 +3373,6 @@ function autoExpandArea(el) {
       });
     }
 
-    /* PATRON PANELİ FONKSİYONLARI */
     function patronPaneliAc() {
       let kayitliPin = localStorage.getItem('hair_patron_pin') || "SEEOFSİ";
       let girilen = prompt("Yönetici Güvenlik PIN Kodunu Giriniz:");
@@ -3570,7 +3555,6 @@ function autoExpandArea(el) {
       anindaWhatsAppAc(tel, msg);
     }
 
-    /* RESMİ HUKUKİ İSPAT VE ELEKTRONİK DELİL TUTANAK MOTORU (HMK MD. 199) */
     function patronYasalTutanaklariGor() {
       const container = document.getElementById('tutanakIcerikAlani');
       if (!container) return;
@@ -3697,7 +3681,7 @@ function autoExpandArea(el) {
       if (sekme === 'reminders') canliBildirimMerkeziniGuncelle();
     }
 
-    /* 7 GÜNLÜK İLERİYE DÖNÜK ŞERİT (4 DİLLİ GÜN İSİMLERİ İLE) */
+    /* 7 GÜNLÜK İLERİYE DÖNÜK ŞERİT (4 DİLLİ) */
     function ajandaTarihSeridiOlustur() {
       const serit = document.getElementById('hizliGunlerSeridi');
       if (!serit) return;
@@ -3749,7 +3733,7 @@ function autoExpandArea(el) {
       ajandaTarihSec(bugunStr);
     }
 
-    /* 30 DAKİKALIK SLOTLAR VE "↳ DEVAM" KİLİTLEME MOTORU */
+    /* 30 DAKİKALIK SLOTLAR VE DEVAM EDEN İŞLEMLER */
     function ajandaSaatleriniCiz() {
       const container = document.getElementById('ajandaSaatlerContainer');
       if (!container) return;
@@ -3962,7 +3946,8 @@ function autoExpandArea(el) {
 
       anindaWhatsAppAc(r.tel, msg);
     }
-/* AKILLI RANDEVU SİHİRBAZI */
+
+    /* AKILLI RANDEVU SİHİRBAZI FONKSİYONLARI */
     function sihirbazBaslat() {
       shAdim = 1;
       shData = {
@@ -4369,763 +4354,3 @@ function autoExpandArea(el) {
     function sifremiUnuttumWhatsApp() {
       anindaWhatsAppAc("905354049392", "Merhaba LUMIO Destek, usta giriş şifremi unuttum. Yardımcı olabilir misiniz?");
     }
-/* ==========================================================================
-       BÖLÜM 5: LUMIO MASTER AI JET MOTORU (GEMINI 2.5 FLASH & MESLEKTAŞ AKLI)
-       ========================================================================== */
-
-    let aiRecognition = null;
-    let aiDinliyorMu = false;
-    let aiIstisareDinliyorMu = false;
-    let aiSonAlgilananMetin = "";
-    let aiParsedRandevu = null;
-    let aiSeciliFotoDataUrl = "";
-
-    // SIFIR İFŞA GÜVENLİK STANDARDI
-    let geminiApiKey = localStorage.getItem('lumio_gemini_api_key') || "";
-
-    let patronUrunListesi = JSON.parse(localStorage.getItem('lumio_patron_urunler')) || [
-      {
-        id: "u1",
-        ad: "LUMIO Bond-Plex No:3 Yoğun Onarıcı Maske",
-        kategori: "hasarli",
-        sorun: "Açıcı yanığı, elastikiyet kaybı, yüksek porozite",
-        kullanim: "Haftada 2 kez nemli saça 10 dk bekletilir. Disülfit bağlarını onarır.",
-        platform: "Trendyol",
-        link: "https://ty.gl/lumio-bond-plex"
-      },
-      {
-        id: "u2",
-        ad: "LUMIO Color Shield Argan & Keratin İksiri",
-        kategori: "boyali",
-        sorun: "Boya akması, matlaşma, ısı hasarı",
-        kullanim: "Her duş ve fön öncesi boy ve uçlara 2 damla. Rengi 6 haftaya kadar kilitler.",
-        platform: "Hepsiburada",
-        link: "https://hepsiburada.com/lumio-color-shield"
-      },
-      {
-        id: "u3",
-        ad: "LUMIO Silk Touch Doğal Saç Parlaklık Serumu",
-        kategori: "dogal",
-        sorun: "Nemsizlik, elektriklenme, doğal saç koruması",
-        kullanim: "Günlük kullanım. Doğal saç pulcuklarını besler, ipeksi ışıltı verir.",
-        platform: "Resmi Mağaza",
-        link: "https://lumiomarket.com/urun/silk-touch"
-      }
-    ];
-
-    const AI_DIL_AYARLARI = {
-      tr: {
-        langCode: "tr-TR",
-        selam: "Selam ustam, kolay gelsin! 🌸 Koltukta kim var bugün, ne yapıyoruz?",
-        micReady: "Hazır. Konuşmak için butona dokunun.",
-        micListening: "🔴 Dinliyorum ustam, dükkan diliyle konuş...",
-        noCust: "Müşteri Seçilmedi (Dokun & Koltuğa Oturt ➔)",
-        voiceBtnText: "Sesli Oku"
-      },
-      ru: {
-        langCode: "ru-RU",
-        selam: "Привет, мастер! 🌸 Кто сегодня в кресле, над чем работаем?",
-        micReady: "Готов. Нажмите на микрофон и говорите.",
-        micListening: "🔴 Слушаю вас, мастер...",
-        noCust: "Клиент не выбран (Нажмите для выбора ➔)",
-        voiceBtnText: "Озвучить"
-      },
-      en: {
-        langCode: "en-US",
-        selam: "Hey boss! 🌸 Who's in the chair today? Ask me anything!",
-        micReady: "Ready. Tap microphone to speak.",
-        micListening: "🔴 Listening to you, boss...",
-        noCust: "No Client Selected (Tap to Select ➔)",
-        voiceBtnText: "Speak"
-      },
-      de: {
-        langCode: "de-DE",
-        selam: "Hallo Meister! 🌸 Wer sitzt heute auf dem Stuhl?",
-        micReady: "Bereit. Mikrofon antippen und sprechen.",
-        micListening: "🔴 Ich höre zu, Meister...",
-        noCust: "Kein Kunde gewählt (Tippen zum Wählen ➔)",
-        voiceBtnText: "Vorlesen"
-      }
-    };
-
-    /* RESMİ GOOGLE GEMINI FLASH JET MOTORU (404 HATASINI BİTİREN GÜNCEL KÖPRÜ) */
-    async function geminiApiCagir(payload) {
-      if (!geminiApiKey) {
-        throw new Error("Lütfen Patron Paneli'nden [🔑 Gemini Anahtarı] butonuna basarak API anahtarınızı giriniz.");
-      }
-
-      // Google'ın en güncel ve kararlı resmi modelleri
-      const modeller = ['gemini-3.8-flash', 'gemini-3-flash-preview', 'gemini-3.5-flash-lite'];
-      let sonHata = "";
-
-      for (const model of modeller) {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
-
-        try {
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiApiKey}`;
-          const res = await fetch(url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'x-goog-api-key': geminiApiKey
-            },
-            body: JSON.stringify(payload),
-            signal: controller.signal
-          });
-
-          clearTimeout(timeoutId);
-          const data = await res.json();
-
-          if (res.ok && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
-            return data.candidates[0].content.parts[0].text;
-          }
-
-          if (data.error) {
-            sonHata = data.error.message;
-            if (data.error.code === 404 || data.error.message.includes('not found') || data.error.message.includes('no longer available')) {
-              continue;
-            } else {
-              throw new Error(data.error.message);
-            }
-          }
-        } catch (e) {
-          clearTimeout(timeoutId);
-          sonHata = e.name === 'AbortError' ? "Bağlantı zaman aşımına uğradı, lütfen tekrar deneyin." : e.message;
-        }
-      }
-
-      throw new Error(sonHata || "Yapay zeka motoruna ulaşılamadı. Lütfen API anahtarınızı kontrol edin.");
-    }
-
-    function lumioAiModaliAc() {
-      document.getElementById('modalLumioAi').classList.remove('hidden');
-      modalGeriTusuKaydi('modalLumioAi');
-      lumioAiSekme('ses');
-      lumioAiArayuzuDileGoreGuncelle();
-    }
-
-    function lumioAiModaliKapat() {
-      if (aiDinliyorMu && aiRecognition) {
-        aiRecognition.stop();
-        aiDinliyorMu = false;
-      }
-      if (aiIstisareDinliyorMu && aiRecognition) {
-        aiRecognition.stop();
-        aiIstisareDinliyorMu = false;
-      }
-      document.getElementById('modalLumioAi').classList.add('hidden');
-    }
-
-    function lumioAiArayuzuDileGoreGuncelle() {
-      const dAyari = AI_DIL_AYARLARI[aktifDil] || AI_DIL_AYARLARI.tr;
-
-      const badge = document.getElementById('aiActiveCustBadge');
-      if (badge) {
-        if (aktifMusteri && aktifMusteri.ad) {
-          badge.innerText = `👤 ${turkceHitapIsimDuzenle(aktifMusteri.ad)} (Değiştir ➔)`;
-          badge.className = "text-[10px] text-amber-400 font-bold bg-amber-500/20 px-2 py-0.5 rounded border border-amber-500/40 hover:bg-amber-500/30 transition cursor-pointer";
-        } else {
-          badge.innerText = dAyari.noCust;
-          badge.className = "text-[10px] text-slate-400 font-bold bg-slate-800 px-2 py-0.5 rounded border border-slate-700 hover:bg-slate-700 transition cursor-pointer";
-        }
-      }
-
-      const micStatus = document.getElementById('aiMicStatus');
-      if (micStatus && !aiDinliyorMu) micStatus.innerText = dAyari.micReady;
-
-      const voiceBtnTxt = document.getElementById('lblVoiceBtnTxt');
-      if (voiceBtnTxt) voiceBtnTxt.innerText = dAyari.voiceBtnText;
-    }
-
-    function lumioAiRehberdenMusteriSec() {
-      musteriRehberiModalAc();
-    }
-
-    function lumioAiSekme(sekmeAdi) {
-      const sekmeler = ['ses', 'istisare', 'kamera'];
-      sekmeler.forEach(s => {
-        const btn = document.getElementById('aiTabBtn' + s.charAt(0).toUpperCase() + s.slice(1));
-        const content = document.getElementById('aiTabContent' + s.charAt(0).toUpperCase() + s.slice(1));
-        if (btn && content) {
-          if (s === sekmeAdi) {
-            btn.className = "ai-nav-tab active-tab py-2 rounded-lg bg-amber-500 text-slate-950 shadow transition font-black";
-            content.classList.remove('hidden');
-          } else {
-            btn.className = "ai-nav-tab py-2 rounded-lg text-slate-400 hover:text-white transition";
-            content.classList.add('hidden');
-          }
-        }
-      });
-      lumioAiArayuzuDileGoreGuncelle();
-    }
-
-    function lumioAiBasKonusToggle() {
-      const btn = document.getElementById('aiMicBtn');
-      const status = document.getElementById('aiMicStatus');
-      const dAyari = AI_DIL_AYARLARI[aktifDil] || AI_DIL_AYARLARI.tr;
-
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        alert("Tarayıcınız ses tanımayı desteklemiyor. Lütfen Chrome veya Safari kullanınız.");
-        return;
-      }
-
-      if (aiDinliyorMu) {
-        if (aiRecognition) aiRecognition.stop();
-        aiDinliyorMu = false;
-        btn.classList.remove('from-amber-600', 'to-amber-500', 'animate-pulse');
-        btn.classList.add('from-amber-500', 'to-amber-300');
-        status.innerText = "İşleniyor...";
-        return;
-      }
-
-      try {
-        aiRecognition = new SpeechRecognition();
-        aiRecognition.lang = dAyari.langCode;
-        aiRecognition.continuous = false;
-        aiRecognition.interimResults = false;
-
-        aiRecognition.onstart = function () {
-          aiDinliyorMu = true;
-          btn.classList.remove('from-amber-500', 'to-amber-300');
-          btn.classList.add('from-amber-600', 'to-amber-500', 'animate-pulse');
-          status.innerText = dAyari.micListening;
-          document.getElementById('aiTranscriptCard').classList.remove('hidden');
-          document.getElementById('aiTranscriptText').innerText = "...";
-        };
-
-        aiRecognition.onresult = function (event) {
-          const transcript = event.results[0][0].transcript;
-          aiSonAlgilananMetin = transcript;
-          document.getElementById('aiTranscriptText').innerText = `"${transcript}"`;
-          lumioAiSokakDiliCoz(transcript);
-        };
-
-        aiRecognition.onerror = function () {
-          status.innerText = "Ses algılanamadı.";
-          aiDinliyorMu = false;
-          btn.classList.remove('from-amber-600', 'to-amber-500', 'animate-pulse');
-          btn.classList.add('from-amber-500', 'to-amber-300');
-        };
-
-        aiRecognition.onend = function () {
-          aiDinliyorMu = false;
-          btn.classList.remove('from-amber-600', 'to-amber-500', 'animate-pulse');
-          btn.classList.add('from-amber-500', 'to-amber-300');
-          status.innerText = dAyari.micReady;
-        };
-
-        aiRecognition.start();
-      } catch (err) {
-        alert("Mikrofon hatası: " + err.message);
-      }
-    }
-
-    function lumioAiIstisareBasKonusToggle() {
-      const micBtn = document.getElementById('btnAiIstisareMic');
-      const input = document.getElementById('aiAskInput');
-      const dAyari = AI_DIL_AYARLARI[aktifDil] || AI_DIL_AYARLARI.tr;
-
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        alert("Tarayıcınız ses tanımayı desteklemiyor.");
-        return;
-      }
-
-      if (aiIstisareDinliyorMu) {
-        if (aiRecognition) aiRecognition.stop();
-        aiIstisareDinliyorMu = false;
-        micBtn.className = "w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-sm shadow flex-shrink-0";
-        return;
-      }
-
-      try {
-        aiRecognition = new SpeechRecognition();
-        aiRecognition.lang = dAyari.langCode;
-        aiRecognition.continuous = false;
-        aiRecognition.interimResults = false;
-
-        aiRecognition.onstart = function() {
-          aiIstisareDinliyorMu = true;
-          micBtn.className = "w-10 h-10 rounded-xl bg-amber-500 text-slate-950 animate-pulse flex items-center justify-center text-sm shadow flex-shrink-0";
-          input.placeholder = "Dinliyorum ustam...";
-        };
-
-        aiRecognition.onresult = function(e) {
-          const transcript = e.results[0][0].transcript;
-          input.value = transcript;
-          lumioAiSoruSor();
-        };
-
-        aiRecognition.onerror = function() {
-          aiIstisareDinliyorMu = false;
-          micBtn.className = "w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-sm shadow flex-shrink-0";
-          input.placeholder = "Örn: Randevuları dök bana veya 7.34 kızıllık yapar mı?";
-        };
-
-        aiRecognition.onend = function() {
-          aiIstisareDinliyorMu = false;
-          micBtn.className = "w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-sm shadow flex-shrink-0";
-          input.placeholder = "Örn: Randevuları dök bana veya 7.34 kızıllık yapar mı?";
-        };
-
-        aiRecognition.start();
-      } catch(err) {
-        alert("Mikrofon hatası: " + err.message);
-      }
-    }
-
-    /* 4 DİLLİ NLP VE SOKAK DİLİ ÇÖZÜCÜ */
-    function lumioAiSokakDiliCoz(metin) {
-      if (!metin) return;
-      let raw = metin.toLocaleLowerCase(aktifDil === 'tr' ? 'tr-TR' : 'en-US').trim();
-
-      const sohbetKelimeleri = [
-        "konuş", "selam", "naber", "nasılsın", "kolay gelsin", "günaydın",
-        "yoğun mu", "randevuları dök", "kimler var", "formül", "yapar mı",
-        "привет", "как дела", "здравствуйте", "записи",
-        "hello", "hi", "how are you", "schedule",
-        "hallo", "guten tag", "wie gehts", "termine"
-      ];
-      
-      let sohbetMi = sohbetKelimeleri.some(s => raw.includes(s));
-      if (sohbetMi && !raw.includes("randevu yaz") && !raw.includes("çak") && !raw.includes("ekle")) {
-        lumioAiSekme('istisare');
-        document.getElementById('aiAskInput').value = metin;
-        lumioAiSoruSor();
-        return;
-      }
-
-      raw = raw.replace(/\bfırına\b/g, "fön").replace(/\bfırın\b/g, "fön").replace(/\bfene\b/g, "fön");
-
-      let now = new Date();
-      let targetDate = new Date();
-      if (raw.includes("yarın") || raw.includes("завтра") || raw.includes("tomorrow") || raw.includes("morgen")) {
-        targetDate.setDate(now.getDate() + 1);
-      }
-      let tarihStr = targetDate.getDate().toString().padStart(2, '0') + '.' + (targetDate.getMonth() + 1).toString().padStart(2, '0') + '.' + targetDate.getFullYear();
-
-      let saatStr = "14:00";
-      let digitMatch = raw.match(/(\b[0-2]?[0-9])[:.]([0-5][0-9]\b)/);
-      if (digitMatch) {
-        saatStr = digitMatch[1].padStart(2, '0') + ':' + digitMatch[2];
-      } else {
-        const saatMap = {
-          "on": "10:00", "on bir": "11:00", "oniki": "12:00", "bir": "13:00", "iki": "14:00", "üç": "15:00", "dört": "16:00", "beş": "17:00",
-          "10": "10:00", "11": "11:00", "12": "12:00", "13": "13:00", "14": "14:00", "15": "15:00", "16": "16:00", "17": "17:00", "18": "18:00"
-        };
-        for (let [k, s] of Object.entries(saatMap)) {
-          let rRegex = new RegExp(`\\b${k}['\\s]?(de|da|e|a|te|ta)?\\b`);
-          if (rRegex.test(raw)) { saatStr = s; break; }
-        }
-      }
-
-      const hitapEkleri = [
-        "hanım", "hanima", "hanıma", "hanim", "bey", "beye", "abla", "ablaya", "abim", "abi", "abime", "teyze", "teyzeye", "kanka", "hocam", "usta",
-        "тётя", "тетя", "дядя", "госпожа", "господин", "мастер", "девушка",
-        "frau", "herr", "tante", "onkel",
-        "aunt", "uncle", "mrs", "mr", "miss", "bro", "sis",
-        "saat", "öğleden", "sonra", "randevu", "gelecek", "gel", "çak", "yaz", "olsun"
-      ];
-
-      let kelimeler = raw.split(/[\s,.'"]+/).filter(w => w.length > 1 && !w.includes(':') && isNaN(w));
-      let adayIsimler = kelimeler.filter(w => !hitapEkleri.includes(w));
-
-      let bulunanMusteri = "";
-      let bulunanTel = "";
-
-      if (musteriler && musteriler.length > 0) {
-        for (let aday of adayIsimler) {
-          let adayNorm = turkceNormalize(aday);
-          let eslesen = musteriler.find(m => {
-            let mNorm = turkceNormalize(m.ad);
-            let mParcalar = mNorm.split(/\s+/);
-            return mParcalar.some(p => p.startsWith(adayNorm) || adayNorm.startsWith(p));
-          });
-
-          if (eslesen) {
-            bulunanMusteri = eslesen.ad;
-            bulunanTel = eslesen.tel || "";
-            break;
-          }
-        }
-      }
-
-      if (!bulunanMusteri && adayIsimler.length > 0) {
-        bulunanMusteri = turkceHitapIsimDuzenle(adayIsimler[0]);
-      }
-      if (!bulunanMusteri) bulunanMusteri = "Değerli Müşteri";
-
-      let hizmetStr = "İŞLEM";
-      let sureDk = 60;
-      const liste = salonAyarlari.hizmetler || VARSAYILAN_BOLUM_HIZMETLERI.kuafor;
-
-      if (raw.includes("fön") || raw.includes("укладка") || raw.includes("blowdry") || raw.includes("föhn")) {
-        hizmetStr = "FÖN"; sureDk = 30;
-      } else if (raw.includes("boya") || raw.includes("окрашивание") || raw.includes("color") || raw.includes("färben")) {
-        hizmetStr = "DİP BOYA"; sureDk = 90;
-      } else if (raw.includes("kesim") || raw.includes("стрижка") || raw.includes("cut") || raw.includes("schneiden")) {
-        hizmetStr = "KESİM"; sureDk = 45;
-      } else if (raw.includes("röfle") || raw.includes("balyaj") || raw.includes("мелирование") || raw.includes("balayage")) {
-        hizmetStr = "RÖFLE"; sureDk = 180;
-      } else {
-        for (let h of liste) {
-          if (raw.includes(h.ad.toLocaleLowerCase('tr-TR'))) {
-            hizmetStr = h.ad; sureDk = h.sure || 60; break;
-          }
-        }
-      }
-
-      aiParsedRandevu = {
-        musteri: turkceHitapIsimDuzenle(bulunanMusteri),
-        tel: bulunanTel,
-        tarih: tarihStr,
-        saat: saatStr,
-        hizmet: hizmetStr,
-        sure: sureDk
-      };
-
-      document.getElementById('aiResMusteri').innerText = aiParsedRandevu.musteri;
-      document.getElementById('aiResTarih').innerText = aiParsedRandevu.tarih;
-      document.getElementById('aiResSaat').innerText = aiParsedRandevu.saat;
-      document.getElementById('aiResHizmet').innerText = `${aiParsedRandevu.hizmet} (${aiParsedRandevu.sure} Dk)`;
-      document.getElementById('aiParsedCard').classList.remove('hidden');
-    }
-
-    function lumioAiRandevuyuOnayla() {
-      if (!aiParsedRandevu) return;
-      shData = { ...aiParsedRandevu };
-      lumioAiModaliKapat();
-      sihirbazRandevuKaydet(false);
-    }
-
-    function lumioAiSesiSifirla() {
-      aiParsedRandevu = null;
-      document.getElementById('aiTranscriptCard').classList.add('hidden');
-      document.getElementById('aiParsedCard').classList.add('hidden');
-      lumioAiArayuzuDileGoreGuncelle();
-    }
-
-    /* GERÇEK MESLEKTAŞ AKLI: RANDEVULARI DÖKER, MÜŞTERİ FORMÜLÜNÜ VE ÇİFT İSİMLERİ ÇÖZER */
-   /* GERÇEK MESLEKTAŞ AKLI: TÜM SALON HİZMETLERİ, CANLI AJANDA VE MÜŞTERİ HAFIZASI */
-    async function lumioAiSoruSor() {
-      const input = document.getElementById('aiAskInput');
-      const soru = input.value.trim();
-      if (!soru) return;
-
-      const riskCard = document.getElementById('aiRiskAlertCard');
-      const adviceCard = document.getElementById('aiAdviceCard');
-      const adviceText = document.getElementById('aiAdviceText');
-
-      riskCard.classList.add('hidden');
-      adviceCard.classList.remove('hidden');
-      adviceText.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-amber-400"></i> Düşünüyorum ustam...`;
-
-      // 1. DÜKKÂN DURUMU & RANDEVU DEFTERİ SORGUSU
-      const bugunStr = bugununTarihiStr();
-      const bugunRandevulari = randevular.filter(r => akilliTarihDuzelt(r.tarih) === bugunStr && !r.blokMu);
-      
-      let randevuOzeti = "";
-      if (bugunRandevulari.length === 0) {
-        randevuOzeti = "Bugün ajandada hiç randevu görünmüyor, tezgâh tamamen boş.";
-      } else {
-        bugunRandevulari.sort((a,b) => (a.saat || '').localeCompare(b.saat || ''));
-        randevuOzeti = `Bugün toplam ${bugunRandevulari.length} randevu var: ` + 
-          bugunRandevulari.map(r => `${r.saat} ${turkceHitapIsimDuzenle(r.musteriAdi)} (${r.hizmet})`).join(", ");
-      }
-
-      // 2. MÜŞTERİ İSMİ & ÇİFT İSİM KONTROLÜ
-      let eslesenMusteriler = [];
-      let kelimeler = soru.split(/[\s,.'"]+/).filter(k => k.length > 2);
-      
-      for (let k of kelimeler) {
-        let kNorm = turkceNormalize(k);
-        let bulunanlar = musteriler.filter(m => turkceNormalize(m.ad).split(' ')[0] === kNorm || turkceNormalize(m.ad).includes(kNorm));
-        if (bulunanlar.length > 0) {
-          eslesenMusteriler = bulunanlar;
-          break;
-        }
-      }
-
-      // İki kişi varsa seçim ister
-      if (eslesenMusteriler.length > 1) {
-        let isimListesi = eslesenMusteriler.map((m, idx) => `${idx + 1}. ${turkceHitapIsimDuzenle(m.ad)}`).join(" ve ");
-        adviceText.innerText = `Ustam rehberde ${eslesenMusteriler.length} kişi buldum: ${isimListesi}. Koltuktaki hangisi, soyadını veya son işlemini belirtirsen hemen bilgilerini dökeyim.`;
-        input.value = "";
-        return;
-      }
-
-      // Tek müşteri tespit edildiyse veya koltukta müşteri seçiliyse TÜM geçmiş işlemleri tara
-      let seciliMusteri = eslesenMusteriler.length === 1 ? eslesenMusteriler[0] : aktifMusteri;
-      let musteriBilgiHafizasi = "Koltukta veya soruda belirli bir müşteri ismi geçmiyor.";
-
-      if (seciliMusteri) {
-        let islemler = gecmisIslemler.filter(g => 
-          (g.musteriId && g.musteriId === seciliMusteri.id) || 
-          (seciliMusteri.tel && g.tel === seciliMusteri.tel) ||
-          turkceNormalize(g.musteriAdi) === turkceNormalize(seciliMusteri.ad)
-        );
-
-        if (islemler.length > 0) {
-          musteriBilgiHafizasi = `Müşteri: ${turkceHitapIsimDuzenle(seciliMusteri.ad)}. Geçmiş Ziyaret Kayıtları (yeniden eskiye): ` + 
-            islemler.slice(0, 4).map(i => `[Tarih: ${i.tarih}, Yapılan İşlem: ${i.hizmet}${i.formul ? ', Formül/Detay: ' + i.formul : ''}${i.not ? ', Usta Notu: ' + i.not : ''}]`).join(" | ");
-        } else {
-          musteriBilgiHafizasi = `Müşteri: ${turkceHitapIsimDuzenle(seciliMusteri.ad)}, rehberde kayıtlı ancak sistemde henüz geçmiş bir işlem/fiş kaydı bulunmuyor.`;
-        }
-      }
-
-      // 3. TAM DONANIMLI SALON MESLEKTAŞI PROMPTU
-      let sistemTalimati = `Sen salonda tezgâh başında ustanın yanında duran, tecrübeli ve bilge bir salon danışmanı / kıdemli meslek arkadaşısın. Salondaki her işleme (kesim, fön, dip boya, komple boya, röfle, ombre, manikür, pedikür, protez tırnak, bakım, ağda vb.) tamamen hâkimsin.
-Kurallar:
-1. Kesinlikle tiyatro replikleri (çay koydum, pelerini bağla vs.) yapma. Boş lakırdı yasak.
-2. ASLA yıldız (**), diyez (#) veya markdown liste işareti kullanma. Düz ve akıcı konuş.
-3. Usta 'randevuları dök', 'dükkan yoğun mu', 'kimler var' dediğinde canlı ajandadaki saatleri, kişileri ve işlemleri tezgâh diliyle tek tek dök.
-4. Usta 'en son ne yaptık / ne işlem yaptık' dediğinde, müşterinin geçmişindeki EN SON işlemi söyle (kesim mi, fön mü, tırnak mı, boya mı). Asla kendiliğinden 'boya yapılmadı' deme; yapılan gerçek işlem neyse onu söyle. Eğer yapılan işlem boya ise formülünü ve süresini de ekle. Müşterinin hiç işlem kaydı yoksa 'Rehberde kayıtlı ama henüz geçmiş fişi/işlemi girilmemiş ustam' de.
-5. Usta teknik boya/renk sorarsa (örn: 7.34 kızıllık yapar mı, turuncu nasıl kırılır) 2-3 cümlede net reçete, oksidan volümü ve bekleme süresi ver.
-6. Yanıtların daima samimi, saygılı, net ve tezgâh arkadaşı sıcaklığında olsun.
-
-SİSTEM CANLI BİLGİLERİ:
-- Bugünün Canlı Randevuları: ${randevuOzeti}
-- İncelenen Müşteri Hafızası: ${musteriBilgiHafizasi}`;
-
-      if (aktifDil === 'ru') {
-        sistemTalimati = `Ты опытный мастер салона и коллега. Знаешь все услуги: стрижки, укладки, окрашивание, ногти. Отвечай прямо, без звездочек (**). Записи: ${randevuOzeti}. Клиент: ${musteriBilgiHafizasi}`;
-      } else if (aktifDil === 'en') {
-        sistemTalimati = `You are an experienced salon colleague knowing all services (cuts, colors, styling, nails). Direct, friendly tone without asterisks (**). Appointments: ${randevuOzeti}. Client History: ${musteriBilgiHafizasi}`;
-      } else if (aktifDil === 'de') {
-        sistemTalimati = `Du bist ein erfahrener Salon-Kollege für alle Dienstleistungen (Schnitt, Farbe, Föhnen, Nägel). Freundlich und direkt ohne Sternchen (**). Termine: ${randevuOzeti}. Kundenhistorie: ${musteriBilgiHafizasi}`;
-      }
-
-      try {
-        const cevap = await geminiApiCagir({
-          contents: [
-            { parts: [{ text: `${sistemTalimati}\n\nUstanın Sorusu / Sözü: "${soru}"` }] }
-          ],
-          generationConfig: {
-            maxOutputTokens: 3000,
-            temperature: 0.35
-          }
-        });
-
-        let temizCevap = cevap.replace(/[*#_`]/g, '').trim();
-
-        if (temizCevap.toLowerCase().includes("dikkat") || temizCevap.toLowerCase().includes("yanabilir") || temizCevap.toLowerCase().includes("risk")) {
-          riskCard.classList.remove('hidden');
-          document.getElementById('aiRiskTitle').innerText = "⚠️ DİKKAT: KİMYASAL İŞLEM RİSKİ!";
-          document.getElementById('aiRiskBody').innerText = temizCevap;
-        }
-
-        adviceText.innerText = temizCevap;
-      } catch (err) {
-        adviceText.innerHTML = `⚠️ <b>Hata:</b> ${err.message}`;
-      }
-
-      input.value = "";
-    }
-      function lumioAiCevabiSeslendir()
-const txt = document.getElementById('aiAdviceText').innerText;
-      if (!txt || !('speechSynthesis' in window)) return;
-      
-      window.speechSynthesis.cancel();
-      let okumaMetni = txt.replace(/[*#_`]/g, '').replace(/\(.*?\)/g, '').trim();
-
-      const utter = new SpeechSynthesisUtterance(okumaMetni);
-      utter.lang = (AI_DIL_AYARLARI[aktifDil] || AI_DIL_AYARLARI.tr).langCode;
-      utter.rate = 1.05;
-      window.speechSynthesis.speak(utter);
-    }
-
-    /* MULTIMODAL VISION: SAÇ & TIRNAK FOTOĞRAF ANALİZİ */
-    function lumioAiFotoYuklendi(input) {
-      if (!input.files || !input.files[0]) return;
-      const file = input.files[0];
-      const reader = new FileReader();
-
-      reader.onload = function (e) {
-        aiSeciliFotoDataUrl = e.target.result;
-        document.getElementById('aiPreviewImg').src = aiSeciliFotoDataUrl;
-        document.getElementById('aiPhotoPreviewBox').classList.remove('hidden');
-        document.getElementById('aiVisionResultCard').classList.add('hidden');
-      };
-      reader.readAsDataURL(file);
-    }
-
-    async function lumioAiFotoAnalizBaslat() {
-      if (!aiSeciliFotoDataUrl) return;
-
-      const btn = document.getElementById('btnStartVisionScan');
-      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Gemini İnceliyor...</span>`;
-      btn.disabled = true;
-
-      const base64Data = aiSeciliFotoDataUrl.split(',')[1];
-      const mimeType = aiSeciliFotoDataUrl.split(';')[0].split(':')[1] || 'image/jpeg';
-
-      let urunlerMetni = patronUrunListesi.map(u => `ID: ${u.id}, Ad: ${u.ad}, Sorun: ${u.sorun}, Link: ${u.link}`).join(" | ");
-
-      const visionPrompt = `Sen uzman bir trikolog ve renk uzmanısın. Fotoğraftaki saçı dürüstçe incele.
-Saç doğal ve parlaksa sakın yüksek hasar uydurma.
-Uygun 2 bakım ürününü seç: ${urunlerMetni}
-
-Yanıtını YALNIZCA şu JSON formatında ver:
-{
-  "hasarSkoru": 15,
-  "teshis": "Doğal ve sağlıklı saç yapısı.",
-  "secilenUrunler": [
-    { "ad": "Ürün Adı", "gerekce": "Neden önerildiği", "link": "linki" }
-  ]
-}`;
-
-      try {
-        let rawText = await geminiApiCagir({
-          contents: [
-            {
-              parts: [
-                { inlineData: { mimeType: mimeType, data: base64Data } },
-                { text: visionPrompt }
-              ]
-            }
-          ]
-        });
-
-        rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
-        const parsed = JSON.parse(rawText);
-
-        const badgeEl = document.getElementById('aiDamageBadge');
-        const teshisEl = document.getElementById('aiTehisText');
-        const receteKutu = document.getElementById('aiProductPrescription');
-
-        badgeEl.innerText = `Hasar Skoru: %${parsed.hasarSkoru}`;
-        badgeEl.className = parsed.hasarSkoru > 40
-          ? "text-[10px] bg-slate-800 text-amber-400 border border-slate-700 px-2 py-0.5 rounded font-black"
-          : "text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded font-black";
-
-        teshisEl.innerText = parsed.teshis;
-
-        receteKutu.innerHTML = parsed.secilenUrunler.map((u, i) => `
-          <div class="bg-slate-950 p-2.5 rounded-lg border border-amber-500/30 space-y-1">
-            <div class="flex justify-between items-center">
-              <span class="font-bold text-amber-300 text-xs">${i+1}. ${u.ad}</span>
-              <span class="text-[9px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded border border-amber-500/40 font-bold">Özel Reçete</span>
-            </div>
-            <p class="text-[10px] text-slate-400 leading-tight">💡 <b>Neden Seçildi:</b> ${u.gerekce}</p>
-            <a href="${u.link}" target="_blank" class="inline-block text-[10px] text-amber-400 font-bold hover:underline pt-0.5">
-              🔗 Satın Alma Bağlantısı ➔
-            </a>
-          </div>
-        `).join('');
-
-        document.getElementById('aiVisionResultCard').classList.remove('hidden');
-      } catch (err) {
-        alert("Görsel analiz hatası: " + err.message);
-      } finally {
-        btn.innerHTML = `<i class="fa-solid fa-microchip"></i> <span>BİLİMSEL HASAR ANALİZİ YAP</span>`;
-        btn.disabled = false;
-      }
-    }
-
-    function lumioAiWhatsAppReceteGonder() {
-      let tel = aktifMusteri ? aktifMusteri.tel : prompt("Müşteri WhatsApp numarasını giriniz:");
-      if (!tel) { alert("Telefon numarası bulunamadı."); return; }
-
-      let mAd = aktifMusteri ? turkceHitapIsimDuzenle(aktifMusteri.ad) : "Değerli Müşterimiz";
-      let uAdi = salonAyarlari.ustaAdi || "Server YILMAZ";
-      let sAdi = salonAyarlari.salonAdi || "LUMIO Studio";
-
-      let urunMetinleri = patronUrunListesi.slice(0, 2).map((u, i) => `
-${i+1}. ${u.ad}
-💡 Neden: ${u.kullanim}
-🛒 Satın Alma Linki: ${u.link}`).join('\n');
-
-      let msg = aktifDil === 'ru' 
-        ? `Здравствуйте, ${mAd}! 🌸\n\nРезультаты трихологического анализа волос в салоне ${sAdi}:\n\n🧴 РЕКОМЕНДОВАННЫЙ ДОМАШНИЙ УХОД:\n${urunMetinleri}\n\nС заботой о вашей красоте,\n${uAdi} • ${sAdi}`
-        : `Sayın ${mAd}, 🌸\n\n${sAdi} salonumuzda yapılan dijital saç analizi raporunuz hazırlanmıştır. ✨\n\n🧴 SİZE ÖZEL REÇETE EDİLEN EVDE BAKIM PROTOKOLÜ:\n${urunMetinleri}\n\nSağlıklı ve ışıltılı günler dileriz! ✨\n${uAdi} • ${sAdi}`;
-
-      anindaWhatsAppAc(tel, msg);
-    }
-
-    function patronGeminiSifresiAyarla() {
-      let girilen = prompt("Google AI Studio'dan aldığınız Gemini API anahtarınızı yapıştırınız:", geminiApiKey);
-      if (girilen === null) return;
-      girilen = girilen.trim();
-      if (!girilen) {
-        alert("API Anahtarı boş bırakılamaz!");
-        return;
-      }
-      geminiApiKey = girilen;
-      localStorage.setItem('lumio_gemini_api_key', girilen);
-      alert("🎉 Google Gemini Yapay Zeka Anahtarınız tarayıcınıza güvenle kaydedildi! Yapay zeka ve sesli asistan artık aktif.");
-    }
-
-    function patronUrunListesiniCiz() {
-      let alan = document.getElementById('patronUrunYonetimAlani');
-      if (alan) alan.remove();
-
-      const patronModalKutu = document.querySelector('#patronModal .space-y-3\\.5');
-      if (!patronModalKutu) return;
-
-      alan = document.createElement('div');
-      alan.id = 'patronUrunYonetimAlani';
-      alan.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2.5 text-xs";
-      alan.innerHTML = `
-        <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
-          <span class="text-amber-400 font-bold flex items-center text-xs">
-            <i class="fa-solid fa-boxes-stacked mr-1.5"></i> 🛍️ ÜRÜN & PAZARYERİ LİNKLERİ
-          </span>
-          <button onclick="patronYeniUrunEklePrompt()" class="text-[10px] bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded shadow active:scale-95 transition">+ Ürün Ekle</button>
-        </div>
-        <div id="patronUrunlerContainer" class="space-y-1.5 max-h-40 overflow-y-auto scroll-touch"></div>
-      `;
-      patronModalKutu.appendChild(alan);
-
-      const container = document.getElementById('patronUrunlerContainer');
-      if (!container) return;
-
-      container.innerHTML = patronUrunListesi.map((u, idx) => `
-        <div class="bg-slate-900 p-2 rounded-lg border border-slate-800 flex justify-between items-start text-[11px] gap-2">
-          <div class="flex-1 min-w-0">
-            <div class="font-bold text-white truncate">${u.ad}</div>
-            <div class="text-[9px] text-amber-400">${u.platform} • <span class="text-slate-400 font-mono truncate">${u.link}</span></div>
-          </div>
-          <button onclick="patronUrunSil(${idx})" class="text-slate-500 hover:text-red-400 p-1 text-xs">✕</button>
-        </div>
-      `).join('');
-    }
-
-    function patronYeniUrunEklePrompt() {
-      let ad = prompt("Ürün Adı (Örn: Olaplex No:3 veya Kerastase Maske):");
-      if (!ad) return;
-      let platform = prompt("Hangi Mağaza? (Örn: Trendyol, Hepsiburada, Amazon, Kendi Sitemiz):", "Trendyol");
-      let link = prompt("Satın Alma Linki (Örn: https://ty.gl/... veya https://hepsiburada.com/...):");
-      if (!link) return;
-      let kullanim = prompt("Kullanım Şekli & Gerekçesi (Örn: Haftada 2 kez uygulanır, bağları onarır):", "Haftada 2 kez uygulanır.");
-      let kat = prompt("Kategori seçin: dogal / boyali / hasarli", "hasarli");
-
-      patronUrunListesi.push({
-        id: "u_" + Date.now(),
-        ad: ad.trim(),
-        platform: platform || "Mağaza",
-        link: link.trim(),
-        kullanim: kullanim || "Düzenli bakım.",
-        kategori: kat || "hasarli"
-      });
-
-      localStorage.setItem('lumio_patron_urunler', JSON.stringify(patronUrunListesi));
-      alert("✅ Yeni ürün ve özel linki başarıyla eklendi! Yapay zeka artık bu ürünü reçetelerde önerecek.");
-      patronUrunListesiniCiz();
-    }
-
-    function patronUrunSil(idx) {
-      if (!confirm("Bu ürünü listeden kaldırmak istediğinize emin misiniz?")) return;
-      patronUrunListesi.splice(idx, 1);
-      localStorage.setItem('lumio_patron_urunler', JSON.stringify(patronUrunListesi));
-      patronUrunListesiniCiz();
-    }
-
-    /* İLK BAŞLATMA VE ÇEKİRDEK ÇALIŞTIRICI */
-    yeniIslemTemizle();
-    bulutVerileriniBaslat();
-    patronGozatKontrol();
-  </script>
-</body>
-</html>
