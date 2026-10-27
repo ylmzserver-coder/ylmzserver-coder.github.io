@@ -4808,6 +4808,7 @@ function autoExpandArea(el) {
     }
 
     /* GERÇEK MESLEKTAŞ AKLI: RANDEVULARI DÖKER, MÜŞTERİ FORMÜLÜNÜ VE ÇİFT İSİMLERİ ÇÖZER */
+   /* GERÇEK MESLEKTAŞ AKLI: TÜM SALON HİZMETLERİ, CANLI AJANDA VE MÜŞTERİ HAFIZASI */
     async function lumioAiSoruSor() {
       const input = document.getElementById('aiAskInput');
       const soru = input.value.trim();
@@ -4820,8 +4821,6 @@ function autoExpandArea(el) {
       riskCard.classList.add('hidden');
       adviceCard.classList.remove('hidden');
       adviceText.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-amber-400"></i> Düşünüyorum ustam...`;
-
-      const soruNorm = turkceNormalize(soru);
 
       // 1. DÜKKÂN DURUMU & RANDEVU DEFTERİ SORGUSU
       const bugunStr = bugununTarihiStr();
@@ -4836,7 +4835,7 @@ function autoExpandArea(el) {
           bugunRandevulari.map(r => `${r.saat} ${turkceHitapIsimDuzenle(r.musteriAdi)} (${r.hizmet})`).join(", ");
       }
 
-      // 2. MÜŞTERİ İSMİ & ÇİFT İSİM KONTROLÜ (Örn: İki Sayime Varsa)
+      // 2. MÜŞTERİ İSMİ & ÇİFT İSİM KONTROLÜ
       let eslesenMusteriler = [];
       let kelimeler = soru.split(/[\s,.'"]+/).filter(k => k.length > 2);
       
@@ -4849,17 +4848,17 @@ function autoExpandArea(el) {
         }
       }
 
-      // Eğer sorulan isimde 2 veya daha fazla müşteri varsa usta ile netleştirme diyaloğu başlatır
+      // İki kişi varsa seçim ister
       if (eslesenMusteriler.length > 1) {
         let isimListesi = eslesenMusteriler.map((m, idx) => `${idx + 1}. ${turkceHitapIsimDuzenle(m.ad)}`).join(" ve ");
-        adviceText.innerText = `Ustam rehberde ${eslesenMusteriler.length} kişi buldum: ${isimListesi}. Koltuktaki hangisi, soyadını veya son işlemini belirtirsen hemen formülünü dökeyim.`;
+        adviceText.innerText = `Ustam rehberde ${eslesenMusteriler.length} kişi buldum: ${isimListesi}. Koltuktaki hangisi, soyadını veya son işlemini belirtirsen hemen bilgilerini dökeyim.`;
         input.value = "";
         return;
       }
 
-      // Tek müşteri tespit edildiyse veya koltuktaki müşteri seçiliyse geçmiş formülleri çek
+      // Tek müşteri tespit edildiyse veya koltukta müşteri seçiliyse TÜM geçmiş işlemleri tara
       let seciliMusteri = eslesenMusteriler.length === 1 ? eslesenMusteriler[0] : aktifMusteri;
-      let musteriBilgiHafizasi = "Koltukta veya soruda belirli bir müşteri ismi yok.";
+      let musteriBilgiHafizasi = "Koltukta veya soruda belirli bir müşteri ismi geçmiyor.";
 
       if (seciliMusteri) {
         let islemler = gecmisIslemler.filter(g => 
@@ -4869,42 +4868,42 @@ function autoExpandArea(el) {
         );
 
         if (islemler.length > 0) {
-          musteriBilgiHafizasi = `Müşteri: ${turkceHitapIsimDuzenle(seciliMusteri.ad)}. Geçmiş İşlemleri: ` + 
-            islemler.slice(0, 3).map(i => `[Tarih: ${i.tarih}, İşlem: ${i.hizmet}, Formül: ${i.formul || 'Formül yazılmamış'}, Not: ${i.not || 'Yok'}]`).join(" | ");
+          musteriBilgiHafizasi = `Müşteri: ${turkceHitapIsimDuzenle(seciliMusteri.ad)}. Geçmiş Ziyaret Kayıtları (yeniden eskiye): ` + 
+            islemler.slice(0, 4).map(i => `[Tarih: ${i.tarih}, Yapılan İşlem: ${i.hizmet}${i.formul ? ', Formül/Detay: ' + i.formul : ''}${i.not ? ', Usta Notu: ' + i.not : ''}]`).join(" | ");
         } else {
-          musteriBilgiHafizasi = `Müşteri: ${turkceHitapIsimDuzenle(seciliMusteri.ad)}, fakat sistemde kayıtlı geçmiş bir boya formülü bulunmuyor.`;
+          musteriBilgiHafizasi = `Müşteri: ${turkceHitapIsimDuzenle(seciliMusteri.ad)}, rehberde kayıtlı ancak sistemde henüz geçmiş bir işlem/fiş kaydı bulunmuyor.`;
         }
       }
 
-      // 3. KUAFÖR MESLEKTAŞ TALİMATI (PROMPT)
-      let sistemTalimati = `Sen salonda tezgâh başında ustanın yanında duran, 20 yıllık kıdemli renk uzmanı (Colorist) meslek arkadaşısın.
+      // 3. TAM DONANIMLI SALON MESLEKTAŞI PROMPTU
+      let sistemTalimati = `Sen salonda tezgâh başında ustanın yanında duran, tecrübeli ve bilge bir salon danışmanı / kıdemli meslek arkadaşısın. Salondaki her işleme (kesim, fön, dip boya, komple boya, röfle, ombre, manikür, pedikür, protez tırnak, bakım, ağda vb.) tamamen hâkimsin.
 Kurallar:
-1. Kesinlikle tiyatro replikleri (çay koydum, pelerini bağla vs.) yapma. Boş muhabbeti kes.
-2. ASLA yıldız (**), diyez (#) veya markdown liste işareti kullanma. Düz, akıcı Türkçe konuş.
-3. Usta 'randevuları dök', 'dükkan yoğun mu', 'kimler var' dediğinde hemen canlı ajandadaki saatleri, kişileri ve işlemleri tezgâh diliyle söyle.
-4. Müşterinin eski formülü sorulduğunda geçmiş kayıtları inceleyip net gramaj, oksidan ve bekleme süresini söyle.
-5. Kimyasal işlem sorulursa (örn: 7.34 kızıllık yapar mı) zemin tonu, yansıma ve nötrleme kuralını 2-3 cümlede net reçete olarak ver.
-6. Yanıtların samimi, saygılı ve usta dilinde olsun.
+1. Kesinlikle tiyatro replikleri (çay koydum, pelerini bağla vs.) yapma. Boş lakırdı yasak.
+2. ASLA yıldız (**), diyez (#) veya markdown liste işareti kullanma. Düz ve akıcı konuş.
+3. Usta 'randevuları dök', 'dükkan yoğun mu', 'kimler var' dediğinde canlı ajandadaki saatleri, kişileri ve işlemleri tezgâh diliyle tek tek dök.
+4. Usta 'en son ne yaptık / ne işlem yaptık' dediğinde, müşterinin geçmişindeki EN SON işlemi söyle (kesim mi, fön mü, tırnak mı, boya mı). Asla kendiliğinden 'boya yapılmadı' deme; yapılan gerçek işlem neyse onu söyle. Eğer yapılan işlem boya ise formülünü ve süresini de ekle. Müşterinin hiç işlem kaydı yoksa 'Rehberde kayıtlı ama henüz geçmiş fişi/işlemi girilmemiş ustam' de.
+5. Usta teknik boya/renk sorarsa (örn: 7.34 kızıllık yapar mı, turuncu nasıl kırılır) 2-3 cümlede net reçete, oksidan volümü ve bekleme süresi ver.
+6. Yanıtların daima samimi, saygılı, net ve tezgâh arkadaşı sıcaklığında olsun.
 
 SİSTEM CANLI BİLGİLERİ:
-- Bugünün Randevuları: ${randevuOzeti}
-- Sorgulanan Müşteri Hafızası: ${musteriBilgiHafizasi}`;
+- Bugünün Canlı Randevuları: ${randevuOzeti}
+- İncelenen Müşteri Hafızası: ${musteriBilgiHafizasi}`;
 
       if (aktifDil === 'ru') {
-        sistemTalimati = `Ты опытный колорист и парикмахер, работающий рядом с мастером. Без звездочек (**) и театральщины. Отвечай прямо, профессионально и по делу. Сегодняшние записи: ${randevuOzeti}. Данные клиента: ${musteriBilgiHafizasi}`;
+        sistemTalimati = `Ты опытный мастер салона и коллега. Знаешь все услуги: стрижки, укладки, окрашивание, ногти. Отвечай прямо, без звездочек (**). Записи: ${randevuOzeti}. Клиент: ${musteriBilgiHafizasi}`;
       } else if (aktifDil === 'en') {
-        sistemTalimati = `You are a senior colorist and salon colleague standing next to the master hairstylist. No asterisks (**), no fluff. Direct, concise formulas or appointment breakdowns. Today's Appointments: ${randevuOzeti}. Client History: ${musteriBilgiHafizasi}`;
+        sistemTalimati = `You are an experienced salon colleague knowing all services (cuts, colors, styling, nails). Direct, friendly tone without asterisks (**). Appointments: ${randevuOzeti}. Client History: ${musteriBilgiHafizasi}`;
       } else if (aktifDil === 'de') {
-        sistemTalimati = `Du bist ein erfahrener Colorist und Kollege im Salon. Keine Sternchen (**), direkt auf den Punkt. Heutige Termine: ${randevuOzeti}. Kundenhistorie: ${musteriBilgiHafizasi}`;
+        sistemTalimati = `Du bist ein erfahrener Salon-Kollege für alle Dienstleistungen (Schnitt, Farbe, Föhnen, Nägel). Freundlich und direkt ohne Sternchen (**). Termine: ${randevuOzeti}. Kundenhistorie: ${musteriBilgiHafizasi}`;
       }
 
       try {
         const cevap = await geminiApiCagir({
           contents: [
-            { parts: [{ text: `${sistemTalimati}\n\nUstanın Sözü / Sorusu: "${soru}"` }] }
+            { parts: [{ text: `${sistemTalimati}\n\nUstanın Sorusu / Sözü: "${soru}"` }] }
           ],
           generationConfig: {
-            maxOutputTokens: 250,
+            maxOutputTokens: 3000,
             temperature: 0.35
           }
         });
@@ -4924,10 +4923,8 @@ SİSTEM CANLI BİLGİLERİ:
 
       input.value = "";
     }
-
-    /* SESLİ OKUMA: YILDIZSIZ, SERİ SIRI TARZI OKUMA */
-    function lumioAiCevabiSeslendir() {
-      const txt = document.getElementById('aiAdviceText').innerText;
+      function lumioAiCevabiSeslendir()
+const txt = document.getElementById('aiAdviceText').innerText;
       if (!txt || !('speechSynthesis' in window)) return;
       
       window.speechSynthesis.cancel();
