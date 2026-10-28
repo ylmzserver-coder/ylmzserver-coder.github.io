@@ -1,12 +1,23 @@
-/* LUMIO AI Terminal - Service Worker & Banka Tipi Web Push Motoru */
-const CACHE_NAME = 'lumio-ai-cache-v2';
+/* LUMIO AI Terminal - Service Worker & Banka Tipi Web Push Motoru (V5) */
+const CACHE_NAME = 'lumio-ai-cache-v5';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
+/* ESKİ HAYALET ÖNBELLEKLERİ TEMİZLE VE ANINDA DEVREYE GİR */
 self.addEventListener('activate', (event) => {
-  event.waitUntil(clients.claim());
+  event.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
 });
 
 /* BANKA BİLDİRİMİ GİBİ KİLİT EKRANINA FIRLATMA MOTORU */
@@ -30,7 +41,7 @@ self.addEventListener('push', (event) => {
     body: data.body,
     icon: data.icon || 'logo.png',
     badge: data.badge || 'logo.png',
-    vibrate: [300, 100, 300, 100, 300], // Belirgin banka titreşimi
+    vibrate: [300, 100, 300, 100, 300], // Belirgin banka tipi titreşim
     tag: 'lumio-alarm-' + Date.now(),
     renotify: true,
     requireInteraction: true // Usta kapatana kadar ekranda asılı kalsın
