@@ -1,5 +1,5 @@
 /* LUMIO AI Terminal - Service Worker & Banka Tipi Web Push Motoru */
-const CACHE_NAME = 'lumio-ai-cache-v1';
+const CACHE_NAME = 'lumio-ai-cache-v2';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
