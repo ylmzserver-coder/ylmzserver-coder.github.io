@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" id="htmlRoot">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="LUMIO">
-  <meta name="theme-color" content="#090a0f">
+  <meta name="theme-color" content="#090a0f" id="metaThemeColor">
   <meta name="mobile-web-app-capable" content="yes">
 
   <link rel="icon" type="image/png" href="logo.png">
@@ -35,13 +35,7 @@
             obsidian: {
               950: '#090a0f',
               900: '#12151d',
-              850: '#181c26',
-              800: '#1e2330'
-            },
-            champagne: {
-              400: '#e5c378',
-              500: '#d97706',
-              600: '#b45309'
+              850: '#181c26'
             }
           }
         }
@@ -55,6 +49,7 @@
       -webkit-tap-highlight-color: transparent;
       transition: background-color 0.2s ease, color 0.2s ease;
       background-color: #090a0f;
+      color: #f8fafc;
     }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -64,28 +59,20 @@
     .scroll-touch { -webkit-overflow-scrolling: touch; }
 
     /* ==========================================================================
-       FRESHA & APPLE STANDARDINDA SESSİZ LÜKS (QUIET LUXURY) CSS MİMARİSİ
+       TELEFONDA VE BİLGİSAYARDA KESİN GÜNDÜZ / GECE CSS KALKANI
        ========================================================================== */
-    
-    /* KARANLIK MODDA ÇİĞ TURUNCU ÇERÇEVELERİ ASİL İSVİÇRE SAATİ ÇİZGİSİNE ÇEKME */
+
+    /* KARANLIK MODDA ÇİĞ RENKLERİ VE TURUNCU ÇERÇEVELERİ ASİL OBSİDYENE ÇEKME */
     body:not(.theme-light) [class*="border-amber-500/"],
     body:not(.theme-light) [class*="border-slate-800"],
     body:not(.theme-light) [class*="border-slate-700"] {
       border-color: rgba(255, 255, 255, 0.08) !important;
     }
 
-    /* KARTLARI ASİL MAT OBSİDYENE ÇEKME */
-    body:not(.theme-light) .bg-slate-900,
-    body:not(.theme-light) #gunlukCiroKarti,
-    body:not(.theme-light) .asistan-card {
-      background-color: #12151d !important;
-    }
-    body:not(.theme-light) .bg-slate-950 {
-      background-color: #0d0f15 !important;
-    }
-
-    /* GÜNDÜZ MODU: SAF SÜT BEYAZI STÜDYO (APPLE MINIMALIST) */
-    body.theme-light { 
+    /* GÜNDÜZ MODU: TELEFONDA TARTIŞMASIZ SAF SÜT BEYAZI (APPLE / FRESHA STANDARDI) */
+    html.theme-light, 
+    body.theme-light, 
+    body.theme-light #appBody { 
       background-color: #f8fafc !important; 
       color: #0f172a !important; 
     }
@@ -96,20 +83,30 @@
     body.theme-light .asistan-card,
     body.theme-light #gunlukCiroKarti,
     body.theme-light .ai-modal-box,
-    body.theme-light [class*="bg-slate-900"]:not(.modal-overlay-bg):not(#btnHizliOdemeKart),
-    body.theme-light [class*="bg-slate-950"]:not(.modal-overlay-bg):not(.modal-backdrop),
-    body.theme-light [class*="bg-slate-800"]:not(.modal-overlay-bg) {
+    body.theme-light [class*="bg-[#12151d]"],
+    body.theme-light .bg-slate-900,
+    body.theme-light .bg-slate-950,
+    body.theme-light [class*="bg-slate-800"]:not(.badge-gold) {
       background-color: #ffffff !important;
       border-color: #e2e8f0 !important;
       color: #0f172a !important;
-      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03) !important;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
     }
 
-    /* Saydam koyulukları gündüz modunda yok etme */
+    /* Koyu kutucukları ve alt kartları gündüz modunda süt beyazı / açık griye çevirme */
+    body.theme-light .ai-sub-card,
+    body.theme-light .service-row,
+    body.theme-light [class*="bg-[#090a0f]"]:not(header):not(nav),
     body.theme-light [class*="bg-slate-950/"],
-    body.theme-light [class*="bg-slate-900/"],
-    body.theme-light [class*="bg-black/"] {
-      background-color: #f1f5f9 !important;
+    body.theme-light [class*="bg-slate-900/"] {
+      background-color: #f8fafc !important;
+      border-color: #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+
+    body.theme-light [class*="border-white/"],
+    body.theme-light [class*="border-slate-800"],
+    body.theme-light [class*="border-slate-700"] {
       border-color: #e2e8f0 !important;
     }
 
@@ -124,12 +121,12 @@
       color: #475569 !important;
     }
 
-    /* Gündüz Modu Form Elemanları */
+    /* Gündüz Modu Giriş Alanları */
     body.theme-light input, 
     body.theme-light select, 
     body.theme-light textarea {
       color: #0f172a !important;
-      background-color: #f8fafc !important;
+      background-color: #ffffff !important;
       border-color: #cbd5e1 !important;
       font-weight: 600 !important;
     }
@@ -139,7 +136,6 @@
       font-weight: 500 !important;
     }
 
-    /* Vurgu Renkleri */
     body.theme-light .text-amber-400,
     body.theme-light .text-amber-300 { 
       color: #b45309 !important; 
@@ -151,6 +147,14 @@
       overflow-y: hidden;
       min-height: 42px;
       line-height: 1.4;
+    }
+
+    .pulse-ring {
+      box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.6);
+      animation: pulseWave 1.8s infinite cubic-bezier(0.66, 0, 0, 1);
+    }
+    @keyframes pulseWave {
+      to { box-shadow: 0 0 0 14px rgba(217, 119, 6, 0); }
     }
 
     .modal-overlay-bg {
@@ -186,7 +190,7 @@
       <i class="fa-solid fa-triangle-exclamation text-sm animate-bounce text-amber-400" id="iconLisansUyari"></i>
       <span id="txtLisansUyariMetin">Lisansınızın bitmesine az kaldı.</span>
     </div>
-    <button onclick="yetkiliyeLisansSorWhatsApp()" class="px-2.5 py-1 rounded-lg bg-slate-900 text-amber-300 border border-amber-500/30 text-[10px] font-black shadow active:scale-95 transition">
+    <button onclick="yetkiliyeLisansSorWhatsApp()" class="px-2.5 py-1 rounded-lg bg-slate-900 text-amber-300 border border-white/10 text-[10px] font-black shadow active:scale-95 transition">
       Şimdi Yenile ➔
     </button>
   </div>
@@ -199,12 +203,10 @@
         <path d="M45,20 C55,20 65,30 65,45 C65,55 58,62 52,70 C48,75 48,82 48,82 C48,82 46,74 44,68 C40,58 35,50 35,38 C35,28 40,20 45,20 Z" fill="#d97706"/>
         <circle cx="68" cy="72" r="6" fill="none" stroke="#d97706" stroke-width="2.5"/>
         <circle cx="78" cy="78" r="6" fill="none" stroke="#d97706" stroke-width="2.5"/>
-        <line x1="65" y1="68" x2="52" y2="48" stroke="#d97706" stroke-width="2.5" stroke-linecap="round"/>
-        <line x1="75" y1="74" x2="60" y2="45" stroke="#d97706" stroke-width="2.5" stroke-linecap="round"/>
       </svg>
     </div>
     <h2 class="text-base font-black text-white mb-1" id="lblSetupTitle">LUMIO GİRİŞİ</h2>
-    <p class="text-[11px] text-slate-400 max-w-xs mb-4" id="lblSetupSub">Lütfen yöneticiniz tarafından tanımlanan cep telefonunuzu ve usta şifrenizi giriniz.</p>
+    <p class="text-[11px] text-slate-400 max-w-xs mb-4" id="lblSetupSub">Lütfen yöneticiniz tarafından tanımlanan cep telefonunuzu ve şifrenizi giriniz.</p>
     
     <div class="w-full max-w-xs space-y-2.5">
       <div>
@@ -219,7 +221,7 @@
         <input type="password" maxlength="6" id="setupPinInput" placeholder="••••••" class="w-full bg-[#12151d] border border-white/10 rounded-xl px-4 py-2.5 text-center text-amber-400 font-black tracking-widest text-lg focus:outline-none focus:border-amber-500/50">
       </div>
 
-      <!-- YASAL KORUMA: HMK MD. 199 ZORUNLU ONAY -->
+      <!-- HMK MD. 199 ZORUNLU ONAY -->
       <div class="pt-1 text-left flex items-start space-x-2">
         <input type="checkbox" id="chkYasalOnay" class="w-4 h-4 mt-0.5 rounded border-slate-700 text-amber-500 focus:ring-0 cursor-pointer">
         <label for="chkYasalOnay" class="text-[10px] text-slate-400 leading-tight cursor-pointer">
@@ -246,13 +248,13 @@
       <i class="fa-solid fa-lock"></i>
     </div>
     <h2 class="text-lg font-bold text-white mb-2" id="lblLockTitle">ERİŞİM DURDURULDU</h2>
-    <p id="lockMessageText" class="text-xs text-slate-400 max-w-xs leading-relaxed mb-6">Kullanım lisans süreniz dolmuştur. Randevu ve müşteri kayıtlarınıza erişmek için lütfen yöneticinizle iletişime geçiniz.</p>
+    <p id="lockMessageText" class="text-xs text-slate-400 max-w-xs leading-relaxed mb-6">Kullanım lisans süreniz dolmuştur. Lütfen yöneticinizle iletişime geçiniz.</p>
     <button onclick="yetkiliyeLisansSorWhatsApp()" class="p-3 bg-[#12151d] hover:bg-slate-800 border border-white/10 rounded-xl text-xs text-amber-400 font-bold flex items-center space-x-2">
       <i class="fa-brands fa-whatsapp text-base text-emerald-400"></i><span id="lblLockContact">Yetkili Lisans İletişim Hattı</span>
     </button>
   </div>
 
-  <!-- ÜST HEADER (SESSİZ LÜKS) -->
+  <!-- ÜST HEADER (QUIET LUXURY) -->
   <header class="bg-[#12151d] border-b border-white/5 px-3.5 pb-2.5 safe-pt sticky top-0 z-40 flex items-center justify-between shadow-sm">
     <div class="flex items-center space-x-2.5 cursor-pointer" onclick="patronPaneliAc()">
       <div class="w-8 h-8 rounded-xl bg-[#090a0f] border border-white/10 flex items-center justify-center overflow-hidden flex-shrink-0 p-1">
@@ -308,7 +310,8 @@
       </button>
     </div>
   </nav>
-<main class="flex-1 p-3 max-w-lg mx-auto w-full space-y-3">
+
+  <main class="flex-1 p-3 max-w-lg mx-auto w-full space-y-3">
     <!-- SEKME 1: TERMİNAL -->
     <section id="tab-terminal" class="space-y-3">
       <!-- BUGÜNKÜ DURUM KARTI -->
@@ -327,9 +330,8 @@
         </button>
       </div>
 
-      <!-- YENİ LÜKS ÇÖZÜM: TEK SATIRDA YAN YANA 2 BUTON (DİKEY ALAN İSRAFI BİTTİ) -->
+      <!-- TEK SATIRDA YAN YANA 2'Lİ KOMPAKT BUTON -->
       <div class="grid grid-cols-2 gap-2">
-        <!-- BUTON 1: LUMIO MASTER AI -->
         <button onclick="lumioAiModaliAc()" class="p-2.5 bg-gradient-to-r from-amber-500/15 via-[#12151d] to-[#12151d] hover:bg-slate-800 border border-white/5 rounded-2xl flex items-center space-x-2.5 shadow-sm active:scale-95 transition text-left group">
           <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-sm flex-shrink-0 group-hover:bg-amber-500 group-hover:text-slate-950 transition">
             <i class="fa-solid fa-microphone"></i>
@@ -340,7 +342,6 @@
           </div>
         </button>
 
-        <!-- BUTON 2: AKILLI RANDEVU OLUŞTUR -->
         <button onclick="sihirbazBaslat()" class="p-2.5 bg-[#12151d] hover:bg-slate-800 border border-white/5 rounded-2xl flex items-center space-x-2.5 shadow-sm active:scale-95 transition text-left group">
           <div class="w-8 h-8 rounded-xl bg-slate-800 text-amber-300 border border-white/10 flex items-center justify-center text-sm flex-shrink-0 group-hover:bg-amber-500 group-hover:text-slate-950 transition">
             <i class="fa-solid fa-calendar-plus"></i>
@@ -551,7 +552,8 @@
         </div>
       </div>
     </section>
-<!-- SEKME 5: AYARLAR (ULUSLARARASI BANKA & 9 ŞABLON) -->
+
+    <!-- SEKME 5: AYARLAR (YALNIZCA MÜŞTERİ MESAJLARI & BANKA BİLGİLERİ) -->
     <section id="tab-settings" class="hidden space-y-3">
       <div class="bg-[#12151d] border border-white/5 rounded-2xl p-3.5 shadow-sm space-y-3">
         <h2 class="text-xs font-bold text-amber-400 flex items-center pb-2 border-b border-white/5">
@@ -647,7 +649,7 @@
             <input type="text" id="setGoogleLink" placeholder="https://g.page/r/..." class="w-full bg-[#090a0f] border border-white/10 rounded-xl px-3 py-1.5 text-white focus:outline-none">
           </div>
 
-          <!-- ULUSLARARASI ÖDEME / BANKA & IBAN -->
+          <!-- ULUSLARARASI ÖDEME / BANKA & IBAN BİLGİLERİ -->
           <div class="p-2.5 bg-[#090a0f] border border-white/5 rounded-xl space-y-2">
             <span class="text-amber-400 block text-[10px] font-bold uppercase tracking-wider">🏦 ULUSLARARASI HESAP / IBAN / KASPI BİLGİSİ</span>
             <div>
@@ -665,10 +667,10 @@
           </div>
         </div>
 
-        <!-- 9 ADET WHATSAPP ŞABLONU -->
+        <!-- MÜŞTERİ WHATSAPP ŞABLONLARI -->
         <div class="pt-2 border-t border-white/5 space-y-2.5">
           <div>
-            <span class="text-amber-400 font-bold block text-xs" id="lblTplHeader">MÜŞTERİ WHATSAPP ŞABLONLARI (9 ADET)</span>
+            <span class="text-amber-400 font-bold block text-xs" id="lblTplHeader">MÜŞTERİ WHATSAPP ŞABLONLARI</span>
             <p class="text-[9px] text-slate-400" id="lblTplSub">Değişkenler: {MUSTERI_ADI}, {TARIH}, {SAAT}, {HIZMET}, {USTA_ADI}, {UNVAN}, {SALON_ADI}, {GOOGLE_LINK}, {INSTAGRAM_LINK}, {BANKA_ADI}, {HESAP_SAHIBI}, {IBAN_NO}</p>
           </div>
 
@@ -702,11 +704,7 @@
               <textarea id="tplMsg7" rows="3" class="w-full bg-[#090a0f] border border-white/10 rounded-xl p-2 text-slate-200 text-xs focus:outline-none leading-relaxed"></textarea>
             </div>
             <div>
-              <label class="text-amber-300 block text-[9px] font-bold mb-0.5">8. Lisans Kurulum Rehberi (PWA)</label>
-              <textarea id="tplMsg8" rows="4" class="w-full bg-[#090a0f] border border-white/10 rounded-xl p-2 text-slate-200 text-xs focus:outline-none leading-relaxed font-mono"></textarea>
-            </div>
-            <div>
-              <label class="text-amber-300 block text-[9px] font-bold mb-0.5">9. Uluslararası IBAN & Hesap Bilgisi</label>
+              <label class="text-amber-300 block text-[9px] font-bold mb-0.5">8. Uluslararası IBAN & Hesap Bilgisi</label>
               <textarea id="tplMsg9" rows="3" class="w-full bg-[#090a0f] border border-white/10 rounded-xl p-2 text-slate-200 text-xs focus:outline-none leading-relaxed"></textarea>
             </div>
           </div>
@@ -997,7 +995,8 @@
       </div>
     </div>
   </div>
-<!-- MODAL: LUMIO MASTER AI & SESLİ İSTİŞARE MERKEZİ -->
+
+  <!-- MODAL: LUMIO MASTER AI & SESLİ İSTİŞARE MERKEZİ -->
   <div id="modalLumioAi" class="hidden fixed inset-0 modal-overlay-bg flex items-center justify-center p-3">
     <div class="ai-modal-box bg-[#12151d] border border-white/10 rounded-2xl max-w-md w-full p-3.5 space-y-2.5 shadow-2xl flex flex-col max-h-[92vh]">
       
@@ -1052,13 +1051,16 @@
           <p id="aiTranscriptText" class="text-white italic text-[11px] font-medium leading-relaxed"></p>
         </div>
 
-        <!-- Çözümlenen Randevu Kartı -->
+        <!-- Çözümlenen Randevu Kartı (Rehber Kontrolü & Akıllı Uyarı) -->
         <div id="aiParsedCard" class="hidden ai-sub-card bg-[#090a0f] p-3 rounded-xl border border-amber-500/30 space-y-2 text-xs shadow-lg">
           <div class="flex justify-between items-center border-b border-white/5 pb-1">
             <span class="text-amber-400 font-bold text-[10px] flex items-center">
               <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Çözümlenen Randevu
             </span>
-            <span class="text-[8px] bg-amber-500/15 text-amber-300 px-1.5 py-0.5 rounded-full font-bold">Hazır</span>
+            <div class="flex items-center space-x-1">
+              <span id="aiNewCustBadge" class="hidden text-[8px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 py-0.5 rounded font-bold">⚠️ Rehberde Yok (Yeni Müşteri)</span>
+              <span class="text-[8px] bg-amber-500/15 text-amber-300 px-1.5 py-0.5 rounded-full font-bold">Hazır</span>
+            </div>
           </div>
           <div class="grid grid-cols-2 gap-1.5 text-[10px]">
             <div><span class="text-slate-400 block">Müşteri:</span> <b id="aiResMusteri" class="text-white">-</b></div>
@@ -1082,7 +1084,7 @@
             <span class="text-[9px] text-slate-400 font-bold uppercase">Koltuktaki Müşteri:</span>
             <span id="aiActiveCustBadge" onclick="lumioAiRehberdenMusteriSec()" class="text-[9px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-white/5 cursor-pointer">Müşteri Seçilmedi ➔</span>
           </div>
-          <p class="text-[9px] text-slate-400 leading-tight">Yapay zeka; ajandayı, geçmiş boya gramajlarını ve alerji notlarını inceleyerek meslektaşın gibi cevap verir.</p>
+          <p class="text-[9px] text-slate-400 leading-tight">Yapay zeka; ajandayı, geçmiş formülleri ve 1 ay gelmeyenleri inceleyerek meslektaşın gibi cevap verir.</p>
         </div>
 
         <div id="aiRiskAlertCard" class="hidden bg-[#090a0f] border-2 border-amber-500 p-2.5 rounded-xl space-y-1 text-xs">
@@ -1095,7 +1097,7 @@
             <button id="btnAiIstisareMic" type="button" onclick="lumioAiIstisareBasKonusToggle()" class="w-8 h-8 rounded-xl bg-amber-500/15 text-amber-400 border border-white/5 flex items-center justify-center text-xs flex-shrink-0">
               <i class="fa-solid fa-microphone"></i>
             </button>
-            <input type="text" id="aiAskInput" placeholder="Randevuları dök bana veya 7.34 kızıllık yapar mı?" class="flex-1 bg-[#090a0f] border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-white font-medium focus:outline-none">
+            <input type="text" id="aiAskInput" placeholder="Kimi çağıralım veya 7.34 kızıllık yapar mı?" class="flex-1 bg-[#090a0f] border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-white font-medium focus:outline-none">
             <button onclick="lumioAiSoruSor()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-3 py-1.5 rounded-xl text-xs shadow active:scale-95 transition">Sor</button>
           </div>
         </div>
@@ -1111,11 +1113,11 @@
         </div>
       </div>
 
-      <!-- İÇERİK 3: TRİKOLOJİ FOTO ANALİZ -->
+      <!-- İÇERİK 3: TRİKOLOJİ FOTO ANALİZ (404 HATASIZ) -->
       <div id="aiTabContentKamera" class="hidden space-y-2.5 flex-1 overflow-y-auto pr-1 scroll-touch">
         <div class="ai-sub-card bg-[#090a0f] p-3 rounded-xl border border-white/5 text-center space-y-2">
           <span class="text-xs font-bold text-white block">📸 Saç / Tırnak Trikoloji Analizi</span>
-          <p class="text-[9px] text-slate-400">Telefon kamerasıyla saç uçlarının fotoğrafını çekin; hasar skorunu ve reçeteyi çıkarın.</p>
+          <p class="text-[9px] text-slate-400">Kamerayla saç uçlarının fotoğrafını çekin; hasar skorunu ve reçeteyi çıkarın.</p>
           <input type="file" id="aiCameraInput" accept="image/*" capture="environment" onchange="lumioAiFotoYuklendi(this)" class="hidden">
           <button onclick="document.getElementById('aiCameraInput').click()" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black py-2.5 rounded-xl text-xs shadow flex items-center justify-center space-x-1.5">
             <i class="fa-solid fa-camera"></i> <span>FOTOĞRAF ÇEK</span>
@@ -1198,7 +1200,7 @@
     </div>
   </div>
 
-  <!-- PATRON MODAL (CRM) -->
+  <!-- PATRON MODAL (CRM & PWA KURULUM REHBERİ) -->
   <div id="patronModal" class="hidden fixed inset-0 modal-overlay-bg z-[9999999999] flex items-center justify-center p-3">
     <div class="bg-[#12151d] border border-white/10 rounded-2xl max-w-sm w-full p-3.5 space-y-3 shadow-2xl max-h-[90vh] overflow-y-auto scroll-touch">
       <div class="flex justify-between items-center pb-2 border-b border-white/5">
@@ -1285,7 +1287,7 @@
     </div>
   </div>
 
-  <!-- WHATSAPP ŞABLON SEÇİM MODALI (9 BUTONLU) -->
+  <!-- WHATSAPP ŞABLON SEÇİM MODALI (SALON MÜŞTERİLERİ İÇİN 8 ŞABLON) -->
   <div id="whatsappModal" class="hidden fixed inset-0 modal-overlay-bg z-50 flex items-end sm:items-center justify-center p-3">
     <div class="bg-[#12151d] border border-white/10 rounded-2xl max-w-sm w-full p-3.5 space-y-2 shadow-2xl max-h-[88vh] overflow-y-auto scroll-touch">
       <div class="flex justify-between items-center pb-1.5 border-b border-white/5">
@@ -1293,15 +1295,14 @@
         <button onclick="whatsappModalKapat()" class="text-slate-400 hover:text-white text-sm">✕</button>
       </div>
       <div class="space-y-1 text-xs">
-        <button onclick="whatsappGonder(1)" class="w-full text-left p-2 rounded-xl bg-[#090a0f] text-amber-300 font-bold border border-white/5 hover:bg-slate-800 active:scale-95 transition" id="waBtn1">1. 📅 Randevu Hatırlatma (3 Gün)</button>
+        <button onclick="whatsappGonder(1)" class="w-full text-left p-2 rounded-xl bg-[#090a0f] text-amber-300 font-bold border border-white/5 hover:bg-slate-800 active:scale-95 transition" id="waBtn1">1. 📅 Randevu Takip (3 Gün Kuralı)</button>
         <button onclick="whatsappGonder(2)" class="w-full text-left p-2 rounded-xl bg-[#090a0f] text-amber-300 font-bold border border-white/5 hover:bg-slate-800 active:scale-95 transition" id="waBtn2">2. 🎂 Doğum Günü Kutlaması</button>
         <button onclick="whatsappGonder(3)" class="w-full text-left p-2 rounded-xl bg-[#090a0f] text-amber-300 font-bold border border-white/5 hover:bg-slate-800 active:scale-95 transition" id="waBtn3">3. ⭐ Google 5 Yıldız Değerlendirme</button>
         <button onclick="whatsappGonder(4)" class="w-full text-left p-2 rounded-xl bg-[#090a0f] text-amber-300 font-bold border border-white/5 hover:bg-slate-800 active:scale-95 transition" id="waBtn4">4. 💬 Memnuniyet Anketi</button>
-        <button onclick="whatsappGonder(5)" class="w-full text-left p-2 rounded-xl bg-[#090a0f] text-amber-300 font-bold border border-white/5 hover:bg-slate-800 active:scale-95 transition" id="waBtn5">5. 📸 Instagram Daveti</button>
+        <button onclick="whatsappGonder(5)" class="w-full text-left p-2 rounded-xl bg-[#090a0f] text-amber-300 font-bold border border-white/5 hover:bg-slate-800 active:scale-95 transition" id="waBtn5">5. 📸 Instagram Daveti (Çekiliş Şartlı)</button>
         <button onclick="whatsappGonder(6)" class="w-full text-left p-2 rounded-xl bg-[#090a0f] text-amber-300 font-bold border border-white/5 hover:bg-slate-800 active:scale-95 transition" id="waBtn6">6. ✨ Anlık Randevu Teyidi</button>
-        <button onclick="whatsappGonder(7)" class="w-full text-left p-2 rounded-xl bg-[#090a0f] text-amber-300 font-bold border border-white/5 hover:bg-slate-800 active:scale-95 transition" id="waBtn7">7. ☕ Sizi Özledik (Kahveli)</button>
-        <button onclick="whatsappGonder(8)" class="w-full text-left p-2 rounded-xl bg-[#090a0f] text-amber-300 font-bold border border-white/5 hover:bg-slate-800 active:scale-95 transition" id="waBtn8">8. 📲 Lisans Kurulum Rehberi</button>
-        <button onclick="whatsappGonder(9)" class="w-full text-left p-2 rounded-xl bg-amber-500/10 text-amber-400 font-black border border-amber-500/30 hover:bg-amber-500/20 active:scale-95 transition" id="waBtn9">9. 🏦 Uluslararası IBAN / Kaspi Bilgisi</button>
+        <button onclick="whatsappGonder(7)" class="w-full text-left p-2 rounded-xl bg-[#090a0f] text-amber-300 font-bold border border-white/5 hover:bg-slate-800 active:scale-95 transition" id="waBtn7">7. ☕ Sizi Özledik / Geri Çağırma (Kahveli)</button>
+        <button onclick="whatsappGonder(9)" class="w-full text-left p-2 rounded-xl bg-amber-500/10 text-amber-400 font-black border border-amber-500/30 hover:bg-amber-500/20 active:scale-95 transition" id="waBtn9">8. 🏦 Uluslararası IBAN & Hesap Bilgisi</button>
       </div>
     </div>
   </div>
@@ -1404,7 +1405,7 @@
       ozel: [{ ad: "ÖZEL İŞLEM 1", sure: 60, ucret: 500 }, { ad: "ÖZEL İŞLEM 2", sure: 90, ucret: 750 }]
     };
 
-    /* %100 DÖRT DİLLİ TAM SENKRON SÖZLÜK VE 9 ŞABLON */
+    /* %100 DÖRT DİLLİ TAM SENKRON SÖZLÜK VE ŞABLONLAR */
     const SOZLUK = {
       tr: {
         terminal: "Terminal", agenda: "Ajandam", history: "Geçmiş", remindersTab: "Hatırlatmalar", settings: "Ayarlar",
@@ -1438,7 +1439,7 @@
         backupSub: "Tüm müşteri listenizi telefonunuza dosya olarak indirir.", downloadBackup: "İndir",
         masterNameTitle: "USTA ADI VE SOYADI ({USTA_ADI})", masterTitleTag: "MESAJ UNVANINIZ / MESLEĞİNİZ ({UNVAN})",
         salonNameTitle: "SALON / MARKA ADI ({SALON_ADI})", masterPhoneTitle: "USTA WHATSAPP BİLDİRİM NUMARASI",
-        tplHeader: "MÜŞTERİ WHATSAPP ŞABLONLARI (9 ADET)", tplSub: "Değişkenler: {MUSTERI_ADI}, {TARIH}, {SAAT}, {HIZMET}, {USTA_ADI}, {UNVAN}, {SALON_ADI}, {GOOGLE_LINK}, {INSTAGRAM_LINK}, {BANKA_ADI}, {HESAP_SAHIBI}, {IBAN_NO}",
+        tplHeader: "MÜŞTERİ WHATSAPP ŞABLONLARI", tplSub: "Değişkenler: {MUSTERI_ADI}, {TARIH}, {SAAT}, {HIZMET}, {USTA_ADI}, {UNVAN}, {SALON_ADI}, {GOOGLE_LINK}, {INSTAGRAM_LINK}, {BANKA_ADI}, {HESAP_SAHIBI}, {IBAN_NO}",
         custDirectoryTitle: "Müşteri Rehberi", custDirectoryBtn: "Müşteri",
         departments: { kuafor: "💇 Kuaför & Saç Tasarımı", tirnak: "💅 Protez Tırnak & Manikür", agda: "✨ Ağda & Epilasyon", makyaj: "💄 Makyaj & Cilt", berber: "✂️ Erkek Berberi", ozel: "⭐ Özel Hizmetler" },
         unvanMap: { kuafor: "Kuaförünüz", tirnak: "Tırnak Uzmanınız", agda: "Güzellik Uzmanınız", makyaj: "Makyaj Uzmanınız", berber: "Berberiniz", ozel: "Uzmanınız" },
@@ -1450,7 +1451,6 @@
           msg5: "Merhaba Sayın {MUSTERI_ADI}, ✨\n\n🎁 Salonumuzun yeni trendlerinden haberdar olmak, sürpriz çekilişlerimize ve hediyelerimize hak kazanmak için Instagram sayfamızdaki paylaşımlarımızı beğenmeyi, yorum yapmayı ve takip etmeyi unutmayın!\n\n📸 Instagram Profilimiz:\n{INSTAGRAM_LINK}\n\n{UNVAN} {USTA_ADI}",
           confirm: "Merhaba Sayın {MUSTERI_ADI}, ✨\n\n🗓️ Tarih: {TARIH}\n⏰ Saat: {SAAT}\n💇 İşlem: {HIZMET}\n\nRandevunuz başarıyla oluşturulmuştur. Planlarınızda bir değişiklik olursa önceden haber vermenizi rica ederiz. 🙏\n\nSizi ağırlamak için sabırsızlanıyoruz!\n{UNVAN} {USTA_ADI}",
           msg7: "Merhaba Sayın {MUSTERI_ADI}, ☕🌸\n\n{SALON_ADI} olarak bir süredir yokluğunuzu hissediyor, sizi çok özlüyoruz!\n\nHem kendinize hak ettiğiniz ışıltıyı yeniden kazandırmak hem de sıcak bir kahvemiz eşliğinde keyifli bir mola vermek için sizi salonumuza bekliyoruz. ✨\n\nSize en uygun gün ve saati birlikte planlamak için bu mesaja yanıt vermeniz yeterli.\n\nSevgiyle ve güzellikle kalın,\n{UNVAN} {USTA_ADI}",
-          msg8: "LUMIO Ailesine Hoş Geldiniz! ✨\n\nSayın {USTA_ADI},\nİşletmenizi kolayca yönetmenizi sağlayacak LUMIO lisansınız aktif edilmiştir. 🌟\n\n📲 GİRİŞ BİLGİLERİNİZ:\n🌐 Terminal Adresi: https://lumioterminal.netlify.app\n📞 Kullanıcı Numaranız: {USTA_TEL}\n🔑 Giriş Şifreniz: {USTA_PIN}\n📅 Lisans Süreniz: {PAKET_SURESI}\n\n🔒 GÜVENLİK NOTU:\nLütfen usta giriş şifrenizi kimseyle paylaşmayınız.\n\n🍎 iPHONE KURULUM: Safari'den girip 'Paylaş' simgesinden 'Ana Ekrana Ekle' deyin.\n🤖 ANDROID KURULUM: Chrome'dan girip 'Üç Nokta' menüsünden 'Uygulamayı Yükle' veya 'Ana Ekrana Ekle' deyin.\n\nBol kazançlar dileriz! 🌸\nLUMIO Destek Ekibi",
           msg9: "Merhaba Sayın {MUSTERI_ADI}, 🌸\n\nÖdemenizi aşağıdaki banka / transfer hesabımıza güvenle gerçekleştirebilirsiniz:\n\n🏦 Banka: {BANKA_ADI}\n👤 Hesap Sahibi: {HESAP_SAHIBI}\n💳 IBAN / Hesap / Kart No: {IBAN_NO}\n\nÖdeme sonrası bilgi vermenizi rica eder, güzel günler dileriz! ✨\n{UNVAN} {USTA_ADI}"
         }
       },
@@ -1477,7 +1477,7 @@
         lostDaysTitle: "⏰ DORMANT CLIENT ALARM", lostDaysUnit: "Days", serviceListTitle: "SERVICES LIST", addNewService: "+ New Service",
         alarmTitle: "ALARM", backupTitle: "Backup Contacts", backupSub: "Download client list.", downloadBackup: "Download",
         masterNameTitle: "SPECIALIST NAME ({USTA_ADI})", masterTitleTag: "TITLE ({UNVAN})", salonNameTitle: "SALON NAME ({SALON_ADI})", masterPhoneTitle: "WHATSAPP",
-        tplHeader: "WHATSAPP TEMPLATES (9)", tplSub: "Variables: {MUSTERI_ADI}, {TARIH}, {SAAT}, {HIZMET}, {USTA_ADI}, {UNVAN}, {SALON_ADI}, {GOOGLE_LINK}, {INSTAGRAM_LINK}, {BANKA_ADI}, {HESAP_SAHIBI}, {IBAN_NO}",
+        tplHeader: "WHATSAPP TEMPLATES", tplSub: "Variables: {MUSTERI_ADI}, {TARIH}, {SAAT}, {HIZMET}, {USTA_ADI}, {UNVAN}, {SALON_ADI}, {GOOGLE_LINK}, {INSTAGRAM_LINK}, {BANKA_ADI}, {HESAP_SAHIBI}, {IBAN_NO}",
         custDirectoryTitle: "Client Directory", custDirectoryBtn: "Clients",
         departments: { kuafor: "💇 Hair Salon", tirnak: "💅 Nail Art", agda: "✨ Waxing", makyaj: "💄 Makeup", berber: "✂️ Barber", ozel: "⭐ Custom" },
         unvanMap: { kuafor: "Your Hairstylist", tirnak: "Your Nail Artist", agda: "Your Beautician", makyaj: "Your Makeup Artist", berber: "Your Barber", ozel: "Your Specialist" },
@@ -1489,7 +1489,6 @@
           msg5: "Hello {MUSTERI_ADI}, 🎁 Follow, like and comment on our Instagram to qualify for exclusive giveaways:\n{INSTAGRAM_LINK}\n\n{UNVAN} {USTA_ADI}",
           confirm: "Hello {MUSTERI_ADI}, ✨\n\nYour appointment for {HIZMET} on {TARIH} at {SAAT} is confirmed! 🙏\n\n{UNVAN} {USTA_ADI}",
           msg7: "Hello {MUSTERI_ADI}, ☕🌸\n\nWe miss you at {SALON_ADI}! Come visit us for a fresh look and relaxing coffee. Reply to book anytime! ✨\n{UNVAN} {USTA_ADI}",
-          msg8: "Welcome to LUMIO! ✨\n\nDear {USTA_ADI}, your license is active. 🌟\n🌐 Link: https://lumioterminal.netlify.app\n📞 User: {USTA_TEL}\n🔑 PIN: {USTA_PIN}\n\nLUMIO Support Team",
           msg9: "Hello {MUSTERI_ADI}, 🌸\n\nYou can send payment to:\n🏦 Bank: {BANKA_ADI}\n👤 Name: {HESAP_SAHIBI}\n💳 Account/IBAN: {IBAN_NO}\n\nThank you! ✨\n{UNVAN} {USTA_ADI}"
         }
       },
@@ -1509,7 +1508,7 @@
         pwdChangeTitle: "🔒 PASSWORT", pwdOld: "ALT:", pwdNew: "NEU:", pwdBtn: "Aktualisieren", lostDaysTitle: "⏰ INAKTIV TAGE", lostDaysUnit: "Tage",
         serviceListTitle: "SERVICES", addNewService: "+ Neu", alarmTitle: "ALARM", backupTitle: "Backup", backupSub: "Herunterladen.", downloadBackup: "Download",
         masterNameTitle: "NAME ({USTA_ADI})", masterTitleTag: "TITEL ({UNVAN})", salonNameTitle: "SALON ({SALON_ADI})", masterPhoneTitle: "WHATSAPP",
-        tplHeader: "VORLAGEN (9)", tplSub: "Variablen...", custDirectoryTitle: "Verzeichnis", custDirectoryBtn: "Kunden",
+        tplHeader: "VORLAGEN", tplSub: "Variablen...", custDirectoryTitle: "Verzeichnis", custDirectoryBtn: "Kunden",
         departments: { kuafor: "💇 Friseur", tirnak: "💅 Nägel", agda: "✨ Enthaarung", makyaj: "💄 Make-up", berber: "✂️ Barber", ozel: "⭐ Spezial" },
         unvanMap: { kuafor: "Ihr Friseur", tirnak: "Ihr Nagelspezialist", agda: "Ihre Kosmetikerin", makyaj: "Ihre Visagistin", berber: "Ihr Barbier", ozel: "Ihr Spezialist" },
         sablons: {
@@ -1520,7 +1519,6 @@
           msg5: "Hallo {MUSTERI_ADI}, 🎁 Verlosungen auf unserem Instagram:\n{INSTAGRAM_LINK}\n{UNVAN} {USTA_ADI}",
           confirm: "Hallo {MUSTERI_ADI}, ✨ Termin für {HIZMET} am {TARIH} um {SAAT} Uhr bestätigt! 🙏\n{UNVAN} {USTA_ADI}",
           msg7: "Hallo {MUSTERI_ADI}, ☕🌸 Wir vermissen Sie bei {SALON_ADI}! Zeit für eine Auszeit bei Kaffee und Pflege? ✨\n{UNVAN} {USTA_ADI}",
-          msg8: "Willkommen bei LUMIO! ✨\n{USTA_ADI}, Ihre Lizenz ist aktiv.\n🌐 https://lumioterminal.netlify.app\n📞 {USTA_TEL}\n🔑 {USTA_PIN}",
           msg9: "Hallo {MUSTERI_ADI}, 🌸\nBankverbindung:\n🏦 Bank: {BANKA_ADI}\n👤 Name: {HESAP_SAHIBI}\n💳 IBAN: {IBAN_NO}\nDanke! ✨\n{UNVAN} {USTA_ADI}"
         }
       },
@@ -1540,7 +1538,7 @@
         pwdChangeTitle: "🔒 ПАРОЛЬ", pwdOld: "СТАРЫЙ:", pwdNew: "НОВЫЙ:", pwdBtn: "Обновить", lostDaysTitle: "⏰ СРОК НЕАКТИВНОСТИ", lostDaysUnit: "Дней",
         serviceListTitle: "УСЛУГИ", addNewService: "+ Услуга", alarmTitle: "НАПОМИНАНИЕ", backupTitle: "Резервная копия", backupSub: "Скачать список.", downloadBackup: "Скачать",
         masterNameTitle: "МАСТЕР ({USTA_ADI})", masterTitleTag: "ПРОФЕССИЯ ({UNVAN})", salonNameTitle: "САЛОН ({SALON_ADI})", masterPhoneTitle: "WHATSAPP",
-        tplHeader: "ШАБЛОНЫ (9)", tplSub: "Переменные...", custDirectoryTitle: "Клиенты", custDirectoryBtn: "Клиенты",
+        tplHeader: "ШАБЛОНЫ", tplSub: "Переменные...", custDirectoryTitle: "Клиенты", custDirectoryBtn: "Клиенты",
         departments: { kuafor: "💇 Парикмахер", tirnak: "💅 Маникюр", agda: "✨ Депиляция", makyaj: "💄 Макияж", berber: "✂️ Барбер", ozel: "⭐ Другое" },
         unvanMap: { kuafor: "Ваш парикмахер", tirnak: "Ваш мастер маникюра", agda: "Ваш мастер депиляции", makyaj: "Ваш визажист", berber: "Ваш барбер", ozel: "Ваш специалист" },
         sablons: {
@@ -1551,7 +1549,6 @@
           msg5: "Здравствуйте, {MUSTERI_ADI}! 🎁 Участвуйте в розыгрышах в нашем Instagram:\n{INSTAGRAM_LINK}\n{UNVAN} {USTA_ADI}",
           confirm: "Здравствуйте, {MUSTERI_ADI}! ✨ Запись на «{HIZMET}» создана на {TARIH} в {SAAT}. Ждем вас! 🙏\n{UNVAN} {USTA_ADI}",
           msg7: "Здравствуйте, {MUSTERI_ADI}! ☕🌸 Мы соскучились в {SALON_ADI}! Приглашаем на кофе и обновление образа. ✨\n{UNVAN} {USTA_ADI}",
-          msg8: "Добро пожаловать в LUMIO! ✨\n{USTA_ADI}, лицензия активна.\n🌐 https://lumioterminal.netlify.app\n📞 {USTA_TEL}\n🔑 {USTA_PIN}",
           msg9: "Здравствуйте, {MUSTERI_ADI}! 🌸\nРеквизиты для оплаты:\n🏦 Банк: {BANKA_ADI}\n👤 Получатель: {HESAP_SAHIBI}\n💳 Счёт/IBAN/Kaspi: {IBAN_NO}\nСпасибо! ✨\n{UNVAN} {USTA_ADI}"
         }
       }
@@ -1575,21 +1572,9 @@
     let gizlenenKayipMusteriler = JSON.parse(sessionStorage.getItem('lumio_gizlenen_kayip_' + aktifLisansKodu)) || [];
 
     let salonAyarlari = JSON.parse(localStorage.getItem('hair_kisisel_ayarlar_' + aktifLisansKodu)) || {
-      ustaAdi: "Server YILMAZ",
-      unvan: "Kuaförünüz",
-      salonAdi: "Ekip Kuaför",
-      ustaCountryCode: "+90",
-      ustaTel: "",
-      instagram: "",
-      googleLink: "",
-      bankaAdi: "",
-      hesapSahibi: "",
-      ibanNo: "",
-      ustaYuzde: 50,
-      bolum: "kuafor",
-      ozelBolumAdi: "",
-      kayipGun: 60,
-      alarmSuresi: "60",
+      ustaAdi: "Server YILMAZ", unvan: "Kuaförünüz", salonAdi: "Ekip Kuaför", ustaCountryCode: "+90", ustaTel: "",
+      instagram: "", googleLink: "", bankaAdi: "", hesapSahibi: "", ibanNo: "", ustaYuzde: 50,
+      bolum: "kuafor", ozelBolumAdi: "", kayipGun: 60, alarmSuresi: "60",
       hizmetler: VARSAYILAN_BOLUM_HIZMETLERI.kuafor,
       sablons_tr: SOZLUK.tr.sablons,
       sablons_en: SOZLUK.en.sablons,
@@ -1610,7 +1595,30 @@
 
     let unsubscribeLisans = null, unsubscribeMusteriler = null, unsubscribeGecmis = null, unsubscribeRandevular = null, unsubscribeAyarlar = null;
 
-    /* TEMEL DÖNÜŞTÜRÜCÜ & BİÇİMLENDİRİCİ YARDIMCILAR */
+    /* TEMA UYGULAMA MOTORU */
+    function temaDegistir() {
+      aktifTema = (aktifTema === 'dark') ? 'light' : 'dark';
+      localStorage.setItem('hair_aktif_tema', aktifTema);
+      temaUygula();
+    }
+
+    function temaUygula() {
+      const root = document.getElementById('htmlRoot'), body = document.getElementById('appBody'), btn = document.getElementById('themeToggleBtn'), meta = document.getElementById('metaThemeColor');
+      if (aktifTema === 'light') {
+        if (root) root.classList.add('theme-light');
+        if (body) body.classList.add('theme-light');
+        if (btn) btn.innerText = "🌙";
+        if (meta) meta.content = "#f8fafc";
+      } else {
+        if (root) root.classList.remove('theme-light');
+        if (body) body.classList.remove('theme-light');
+        if (btn) btn.innerText = "☀️";
+        if (meta) meta.content = "#090a0f";
+      }
+    }
+    temaUygula();
+
+    /* DÖNÜŞTÜRÜCÜ & BİÇİMLENDİRİCİLER */
     function turkceNormalize(str) {
       if (!str) return "";
       return str.toString().replace(/İ/g, 'i').replace(/I/g, 'ı').toLocaleLowerCase('tr-TR').trim();
@@ -1675,19 +1683,6 @@
       if (v.length === 4) el.value = v.substring(0, 2) + '.' + v.substring(2, 4);
     }
 
-    function temaDegistir() {
-      aktifTema = (aktifTema === 'dark') ? 'light' : 'dark';
-      localStorage.setItem('hair_aktif_tema', aktifTema);
-      temaUygula();
-    }
-
-    function temaUygula() {
-      const body = document.getElementById('appBody'), btn = document.getElementById('themeToggleBtn');
-      if (aktifTema === 'light') { body.classList.add('theme-light'); if (btn) btn.innerText = "🌙"; }
-      else { body.classList.remove('theme-light'); if (btn) btn.innerText = "☀️"; }
-    }
-    temaUygula();
-
     function aktifDilSablonlariniAl(dil) {
       const varsayilan = (SOZLUK[dil] || SOZLUK.tr).sablons;
       let uKaydi = (salonAyarlari && salonAyarlari['sablons_' + dil]) ? salonAyarlari['sablons_' + dil] : {};
@@ -1699,7 +1694,6 @@
         msg5: (uKaydi.msg5 && uKaydi.msg5.trim()) ? uKaydi.msg5 : varsayilan.msg5,
         confirm: (uKaydi.confirm && uKaydi.confirm.trim()) ? uKaydi.confirm : varsayilan.confirm,
         msg7: (uKaydi.msg7 && uKaydi.msg7.trim()) ? uKaydi.msg7 : varsayilan.msg7,
-        msg8: (uKaydi.msg8 && uKaydi.msg8.trim()) ? uKaydi.msg8 : varsayilan.msg8,
         msg9: (uKaydi.msg9 && uKaydi.msg9.trim()) ? uKaydi.msg9 : varsayilan.msg9
       };
     }
@@ -1708,10 +1702,10 @@
       aktifDil = lang;
       localStorage.setItem('hair_aktif_dil', lang);
       const s = aktifDilSablonlariniAl(lang);
-      for (let i = 1; i <= 9; i++) {
-        let key = (i === 6) ? 'confirm' : ('msg' + i);
-        let el = document.getElementById(i === 6 ? 'tplConfirm' : ('tplMsg' + i));
-        if (el && s[key]) el.value = s[key];
+      let mapIds = { msg1: 'tplMsg1', msg2: 'tplMsg2', msg3: 'tplMsg3', msg4: 'tplMsg4', msg5: 'tplMsg5', confirm: 'tplConfirm', msg7: 'tplMsg7', msg9: 'tplMsg9' };
+      for (let [k, id] of Object.entries(mapIds)) {
+        let el = document.getElementById(id);
+        if (el && s[k]) el.value = s[k];
       }
       diliArayuzeUygula();
       bolumSecenekleriniDoldur();
@@ -1755,8 +1749,8 @@
       seciliHizliOdemeTuru = tur;
       const bNakit = document.getElementById('btnHizliOdemeNakit'), bKart = document.getElementById('btnHizliOdemeKart');
       if (!bNakit || !bKart) return;
-      bNakit.className = (tur === 'nakit') ? "px-2 py-0.5 rounded text-[9px] font-black bg-amber-500 text-slate-950 shadow" : "px-2 py-0.5 rounded text-[9px] font-black bg-[#12151d] text-slate-400 border border-white/10";
-      bKart.className = (tur === 'kart') ? "px-2 py-0.5 rounded text-[9px] font-black bg-amber-500 text-slate-950 shadow" : "px-2 py-0.5 rounded text-[9px] font-black bg-[#12151d] text-slate-400 border border-white/10";
+      bNakit.className = (tur === 'nakit') ? "px-2 py-0.5 rounded text-[9px] font-black bg-amber-500 text-slate-950" : "px-2 py-0.5 rounded text-[9px] font-black bg-[#12151d] text-slate-400 border border-white/10";
+      bKart.className = (tur === 'kart') ? "px-2 py-0.5 rounded text-[9px] font-black bg-amber-500 text-slate-950" : "px-2 py-0.5 rounded text-[9px] font-black bg-[#12151d] text-slate-400 border border-white/10";
     }
 
     function diliArayuzeUygula() {
@@ -1779,7 +1773,7 @@
       setT('shStep1Title', d.step1); setT('shStep2Title', d.step2); setT('shStep3Title', d.step3); setT('shStep4Title', d.step4); setT('shStep5Title', d.step5);
       setT('lblLicenseKeyTitle', d.licenseKeyTitle); setT('lblDeptTitle', d.deptTitle); setT('lblLostDaysTitle', d.lostDaysTitle);
       setT('lblLostDaysUnit', d.lostDaysUnit); setT('lblServiceListTitle', d.serviceListTitle); setT('btnAddNewService', d.addNewService);
-      setT('lblAlarmTitle', d.alarmTitle); setT('lblBackupTitle', d.backupTitle); setT('lblBackupSub', d.backupSub); setT('btnDownloadBackup', d.downloadBackup);
+      setT('alarmTitle', d.alarmTitle); setT('lblBackupTitle', d.backupTitle); setT('lblBackupSub', d.backupSub); setT('btnDownloadBackup', d.downloadBackup);
       setT('lblMasterNameTitle', d.masterNameTitle); setT('lblMasterTitleTag', d.masterTitleTag); setT('lblSalonNameTitle', d.salonNameTitle);
       setT('lblMasterPhoneTitle', d.masterPhoneTitle); setT('lblTplHeader', d.tplHeader); setT('lblTplSub', d.tplSub);
       setT('lblCustDirectoryTitle', d.custDirectoryTitle);
@@ -2925,7 +2919,7 @@ function ayarlarHizmetListesiniCiz() {
       }).join('');
     }
 
-    /* 9 ŞABLONLU WHATSAPP MESAJ MOTORU */
+    /* WHATSAPP MESAJ MOTORU (8 ŞABLON) */
     function whatsappModalAc() {
       let tel = tamTelefonAl('custCountryCode', 'custPhone');
       if (!tel) { alert("Önce bir müşteri seçiniz ya da geçerli telefon giriniz."); return; }
@@ -2970,10 +2964,7 @@ function ayarlarHizmetListesiniCiz() {
         .replace(/{INSTAGRAM_LINK}/g, ig)
         .replace(/{BANKA_ADI}/g, banka)
         .replace(/{HESAP_SAHIBI}/g, sahip)
-        .replace(/{IBAN_NO}/g, iban)
-        .replace(/{USTA_TEL}/g, tel)
-        .replace(/{USTA_PIN}/g, "113300")
-        .replace(/{PAKET_SURESI}/g, "30 Gün");
+        .replace(/{IBAN_NO}/g, iban);
 
       anindaWhatsAppAc(tel, msg);
     }
@@ -3038,7 +3029,6 @@ function ayarlarHizmetListesiniCiz() {
       if (!container) return;
       const d = SOZLUK[aktifDil] || SOZLUK.tr, gunRand = randevular.filter(r => akilliTarihDuzelt(r.tarih) === seciliTarihStr);
       
-      // 24 SAATİN TAMAMI: 00:00'DAN 23:30'A KADAR
       const slotlar = [];
       for (let h = 0; h <= 23; h++) {
         slotlar.push(`${h.toString().padStart(2, '0')}:00`);
@@ -3345,7 +3335,7 @@ function ayarlarHizmetListesiniCiz() {
     }
     function bildirimModaliniKapat() { document.getElementById('bildirimAksiyonModal').classList.add('hidden'); bekleyenRandevuData = null; }
 
-    /* AYARLARI UYGULA VE BULUTA KAYDET */
+    /* AYARLAR UYGULAMA VE BULUTA KAYDET */
     function ayarlariUygula() {
       const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = (v !== undefined) ? v : ""; };
       setVal('setLisansKodu', aktifLisansKodu);
@@ -3393,9 +3383,10 @@ function ayarlarHizmetListesiniCiz() {
       salonAyarlari.ozelBolumAdi = document.getElementById('setOzelBolumAdi').value.trim();
 
       if (!salonAyarlari['sablons_' + aktifDil]) salonAyarlari['sablons_' + aktifDil] = {};
-      for (let i = 1; i <= 9; i++) {
-        let el = document.getElementById(i === 6 ? 'tplConfirm' : ('tplMsg' + i));
-        if (el) salonAyarlari['sablons_' + aktifDil][i === 6 ? 'confirm' : ('msg' + i)] = el.value;
+      let mapIds = { msg1: 'tplMsg1', msg2: 'tplMsg2', msg3: 'tplMsg3', msg4: 'tplMsg4', msg5: 'tplMsg5', confirm: 'tplConfirm', msg7: 'tplMsg7', msg9: 'tplMsg9' };
+      for (let [k, id] of Object.entries(mapIds)) {
+        let el = document.getElementById(id);
+        if (el) salonAyarlari['sablons_' + aktifDil][k] = el.value;
       }
 
       localStorage.setItem('hair_kisisel_ayarlar_' + aktifLisansKodu, JSON.stringify(salonAyarlari));
@@ -3426,7 +3417,7 @@ function ayarlarHizmetListesiniCiz() {
     }
 
     /* ==========================================================================
-       LUMIO MASTER AI (GEMINI 3.8 FLASH, "SABAH 8" & "EDİP ORAYA" ZEKA MOTORU)
+       LUMIO MASTER AI (GEMINI 3.8 FLASH, "SABAH 8" & "EDİT ORAYA" ZEKA MOTORU)
        ========================================================================== */
     let aiRecognition = null;
     let aiDinliyorMu = false;
@@ -3455,13 +3446,12 @@ function ayarlarHizmetListesiniCiz() {
         throw new Error("Lütfen Patron Paneli'nden [🔑 Gemini 3.8 Key] butonuna basarak Google API anahtarınızı giriniz.");
       }
 
-      // Kapatılan eski gemini-2.5-flash tamamen çıkarıldı:
       const modeller = ['gemini-3.8-flash', 'gemini-3.5-flash-lite'];
       let sonHata = "";
 
       for (const model of modeller) {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 12000);
+        const timeoutId = setTimeout(() => controller.abort(), 45000); // 45 Saniye zaman aşımı kalkanı
 
         try {
           const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiApiKey}`;
@@ -3643,14 +3633,14 @@ function ayarlarHizmetListesiniCiz() {
       } catch (err) { alert("Mikrofon hatası: " + err.message); }
     }
 
-    /* GELİŞMİŞ SOKAK DİLİ ÇÖZÜCÜ: "SABAH 8" & "EDİP ORAYA" (DİP BOYA) DÜZELTİCİ */
+    /* GELİŞMİŞ SES ZEKÂSI: "SABAH 8" & "EDİP ORAYA" (DİP BOYA) DÜZELTİCİ & YENİ MÜŞTERİ SORULARI */
     function lumioAiSokakDiliCoz(metin) {
       if (!metin) return;
       let raw = metin.toLocaleLowerCase(aktifDil === 'tr' ? 'tr-TR' : 'en-US').trim();
 
       const sohbetKelimeleri = [
         "konuş", "selam", "naber", "nasılsın", "kolay gelsin", "günaydın", "yoğun mu", "randevuları dök",
-        "kimler var", "formül", "yapar mı", "привет", "как дела", "здравствуйте", "записи", "hello", "hi", "how are you", "termine"
+        "kimler var", "formül", "yapar mı", "kimi çağıralım", "gelmeyen", "привет", "как дела", "здравствуйте", "записи", "hello", "hi", "how are you", "termine"
       ];
       
       let sohbetMi = sohbetKelimeleri.some(s => raw.includes(s));
@@ -3661,7 +3651,7 @@ function ayarlarHizmetListesiniCiz() {
         return;
       }
 
-      // FONETİK SES SAPMASI VE DÜKKÂN DİLİ FİLTRESİ
+      // FONETİK SES SAPMASI DÜZELTİCİ ("edip oraya" -> dip boya)
       raw = raw.replace(/\bedip oraya\b/g, "dip boya")
                .replace(/\bedip\b/g, "dip")
                .replace(/\bfırına\b/g, "fön")
@@ -3696,7 +3686,7 @@ function ayarlarHizmetListesiniCiz() {
             if (isSabah && finalH <= 12) finalH = finalH;
             else if (isAksam && finalH < 12) finalH = finalH + 12;
             else if (!isSabah && !isAksam) {
-              if (finalH >= 1 && finalH <= 6) finalH = finalH + 12; // "2'de" denirse 14:00
+              if (finalH >= 1 && finalH <= 6) finalH = finalH + 12; // "2'de" dendiğinde 14:00
             }
             saatStr = finalH.toString().padStart(2, '0') + ':00';
             break;
@@ -3708,7 +3698,8 @@ function ayarlarHizmetListesiniCiz() {
       let kelimeler = raw.split(/[\s,.'"]+/).filter(w => w.length > 1 && !w.includes(':') && isNaN(w));
       let adayIsimler = kelimeler.filter(w => !hitapEkleri.includes(w));
 
-      let bulunanMusteri = "", bulunanTel = "", eslesenMusteriObj = null;
+      let bulunanMusteri = "", bulunanTel = "", eslesenMusteriObj = null, rehberdeVarMi = true;
+
       if (musteriler && musteriler.length > 0) {
         for (let aday of adayIsimler) {
           let aNorm = turkceNormalize(aday);
@@ -3722,10 +3713,13 @@ function ayarlarHizmetListesiniCiz() {
         }
       }
 
-      if (!bulunanMusteri && adayIsimler.length > 0) bulunanMusteri = turkceHitapIsimDuzenle(adayIsimler[0]);
-      if (!bulunanMusteri) bulunanMusteri = "Değerli Müşteri";
+      if (!bulunanMusteri && adayIsimler.length > 0) {
+        bulunanMusteri = turkceHitapIsimDuzenle(adayIsimler[0]);
+        rehberdeVarMi = false; // REHBERDE YOK! YENİ MÜŞTERİ UYARISI ÇIKACAK
+      }
+      if (!bulunanMusteri) { bulunanMusteri = "Değerli Müşteri"; rehberdeVarMi = false; }
 
-      // İŞLEM TESPİTİ VE MÜŞTERİ GEÇMİŞİNDEN OTOMATİK TAMAMLAMA
+      // İŞLEM TESPİTİ VEYA GEÇMİŞTEN OTOMATİK ÇEKME
       let hizmetStr = "", sureDk = 60;
       const liste = salonAyarlari.hizmetler || VARSAYILAN_BOLUM_HIZMETLERI.kuafor;
 
@@ -3739,30 +3733,47 @@ function ayarlarHizmetListesiniCiz() {
         }
       }
 
-      // SESLE İŞLEM ÇIKMADIYSA MÜŞTERİ GEÇMİŞİNE BAK
+      // SESLE İŞLEM BELİRTİLMEDİYSE MÜŞTERİNİN SON GEÇMİŞ İŞLEMİNİ GETİR
       if (!hizmetStr && eslesenMusteriObj) {
         let sonGecmis = gecmisIslemler.find(g => (!g.isHizliFis) && ((g.musteriId && g.musteriId === eslesenMusteriObj.id) || (eslesenMusteriObj.tel && g.tel === eslesenMusteriObj.tel)));
-        if (sonGecmis && sonGecmis.hizmet) {
-          hizmetStr = sonGecmis.hizmet;
-          sureDk = 60;
-        }
+        if (sonGecmis && sonGecmis.hizmet) { hizmetStr = sonGecmis.hizmet; sureDk = 60; }
       }
       if (!hizmetStr) hizmetStr = "İŞLEM";
 
       aiParsedRandevu = {
-        musteri: turkceHitapIsimDuzenle(bulunanMusteri), tel: bulunanTel, tarih: tarihStr, saat: saatStr, hizmet: hizmetStr, sure: sureDk
+        musteri: turkceHitapIsimDuzenle(bulunanMusteri), tel: bulunanTel, tarih: tarihStr, saat: saatStr, hizmet: hizmetStr, sure: sureDk, yeniKayitMi: !rehberdeVarMi
       };
 
       document.getElementById('aiResMusteri').innerText = aiParsedRandevu.musteri;
       document.getElementById('aiResTarih').innerText = aiParsedRandevu.tarih;
       document.getElementById('aiResSaat').innerText = aiParsedRandevu.saat;
       document.getElementById('aiResHizmet').innerText = `${aiParsedRandevu.hizmet} (${aiParsedRandevu.sure} Dk)`;
+
+      const newCustBadge = document.getElementById('aiNewCustBadge');
+      if (newCustBadge) {
+        if (!rehberdeVarMi && aiParsedRandevu.musteri !== "Değerli Müşteri") {
+          newCustBadge.innerText = `⚠️ Kayıtlarımızda ${aiParsedRandevu.musteri} yok, yeni kayıt oluşturulsun mu?`;
+          newCustBadge.classList.remove('hidden');
+        } else {
+          newCustBadge.classList.add('hidden');
+        }
+      }
+
       document.getElementById('aiParsedCard').classList.remove('hidden');
     }
 
     function lumioAiRandevuyuOnayla() {
       if (!aiParsedRandevu) return;
       shData = { ...aiParsedRandevu };
+
+      // YENİ MÜŞTERİYSE OTOMATİK REHBERE KAYDET
+      if (aiParsedRandevu.yeniKayitMi && aiParsedRandevu.musteri && aiParsedRandevu.musteri !== "Değerli Müşteri") {
+        let mId = 'm_' + Date.now();
+        db.collection('ustalar').doc(aktifLisansKodu).collection('musteriler').doc(mId).set({
+          ad: aiParsedRandevu.musteri, tel: aiParsedRandevu.tel || "", sonZiyaret: aiParsedRandevu.tarih, usta: salonAyarlari.ustaAdi, guncellemeZamani: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+      }
+
       lumioAiModaliKapat();
       sihirbazRandevuKaydet(false);
     }
@@ -3774,7 +3785,7 @@ function ayarlarHizmetListesiniCiz() {
       lumioAiArayuzuDileGoreGuncelle();
     }
 
-    /* SALON MESLEKTAŞI AKILLI İSTİŞARE */
+    /* SALON MESLEKTAŞI AKILLI İSTİŞARE (1 AY / 25-45 GÜN HESAPLAYICI & TİYATRO YASAĞI) */
     async function lumioAiSoruSor() {
       const inp = document.getElementById('aiAskInput');
       const soru = inp.value.trim();
@@ -3788,11 +3799,39 @@ function ayarlarHizmetListesiniCiz() {
       adviceCard.classList.remove('hidden');
       adviceText.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-amber-400"></i> Düşünüyorum ustam...`;
 
+      const bugunMs = new Date().setHours(0,0,0,0);
       const bugunStr = bugununTarihiStr();
       const bugunRand = randevular.filter(r => akilliTarihDuzelt(r.tarih) === bugunStr && !r.blokMu);
       let randevuOzeti = (bugunRand.length === 0) 
         ? "Bugün hiç randevu yok, dükkan tamamen müsait." 
         : `Bugün toplam ${bugunRand.length} randevu var: ` + bugunRand.map(r => `${r.saat} ${turkceHitapIsimDuzenle(r.musteriAdi)} (${r.hizmet})`).join(", ");
+
+      // KİMİ ÇAĞIRALIM / 1 AY KURALI ANALİZİ
+      let cagrilacaklarMetni = "";
+      if (soru.toLowerCase().includes("çağır") || soru.toLowerCase().includes("gelmeyen") || soru.toLowerCase().includes("kim var")) {
+        let adaylar = [];
+        musteriler.forEach(m => {
+          let sonTarihStr = m.sonZiyaret || m.sonraki;
+          if (!sonTarihStr) {
+            let cg = gecmisIslemler.filter(g => (g.musteriId && g.musteriId === m.id) || (m.tel && g.tel === m.tel));
+            if (cg.length > 0) sonTarihStr = cg[0].tarih;
+          }
+          if (sonTarihStr) {
+            let dObj = tarihStringToDate(sonTarihStr);
+            if (dObj) {
+              let gunFarki = Math.floor((bugunMs - dObj.getTime()) / 86400000);
+              if (gunFarki >= 25 && gunFarki <= 90) { // 25 gün ile 3 ay arası gelmeyenler
+                adaylar.push({ ad: turkceHitapIsimDuzenle(m.ad), tel: m.tel || 'Numarasız', gun: gunFarki, son: akilliTarihDuzelt(sonTarihStr) });
+              }
+            }
+          }
+        });
+        if (adaylar.length > 0) {
+          cagrilacaklarMetni = "Sistemdeki 1 ay ve üzeri (25 gün ve üstü) gelmeyen gerçek müşteri listesi: " + adaylar.map(a => `${a.ad} (Son işlem tarihi: ${a.son}, ${a.gun} gün önce)`).join(" | ");
+        } else {
+          cagrilacaklarMetni = "Rehberde son işleminin üzerinden 25-30 gün geçen kimse bulunmuyor, herkes taze gelmiş.";
+        }
+      }
 
       let eslesenMusteriler = [];
       let kelimeler = soru.split(/[\s,.'"]+/).filter(k => k.length > 2);
@@ -3816,31 +3855,33 @@ function ayarlarHizmetListesiniCiz() {
         if (islemler.length > 0) {
           musteriHafizasi = `Müşteri: ${turkceHitapIsimDuzenle(seciliMusteri.ad)}. Geçmiş Ziyaretler (yeniden eskiye): ` + islemler.slice(0, 4).map(i => `[Tarih: ${i.tarih}, İşlem: ${i.hizmet}${i.formul ? ', Formül: ' + i.formul : ''}${i.not ? ', Not: ' + i.not : ''}]`).join(" | ");
         } else {
-          musteriHafizasi = `Müşteri: ${turkceHitapIsimDuzenle(seciliMusteri.ad)}, rehberde kayıtlı fakat geçmiş işlem fişi henüz girilmemiş.`;
+          musteriHafizasi = `Müşteri: ${turkceHitapIsimDuzenle(seciliMusteri.ad)}, rehberde kayıtlı fakat geçmiş işlem fişi girilmemiş.`;
         }
       }
 
-      let sistemTalimati = `Sen salonda tezgâh başında ustanın yanında duran kıdemli ve usta bir salon danışmanısın. Salondaki her işleme (kesim, fön, dip boya, komple boya, röfle, ombre, manikür, pedikür, protez tırnak, bakım, ağda vb.) tamamen hâkimsin.
-Kurallar:
-1. Kesinlikle tiyatro replikleri yapma.
+      let sistemTalimati = `Sen salonda tezgâh başında ustanın yanında duran kıdemli ve usta bir salon danışmanısın. Salondaki her işleme tamamen hâkimsin.
+ÖNEMLİ KURALLAR:
+1. Kesinlikle tiyatro replikleri (dükkan temizliği, malzeme sayımı, çay koydum, paspas vb.) yapmak KESİNLİKLE YASAKTIR. Saçma sapan hayali hikâyeler anlatmayacaksın.
 2. ASLA yıldız (**), diyez (#) veya markdown liste işareti kullanma. Düz ve akıcı konuş.
 3. Usta 'randevuları dök', 'dükkan yoğun mu' dediğinde canlı ajandayı saat saat dök.
-4. Usta 'en son ne yaptık' dediğinde, müşterinin geçmişindeki EN SON işlemi söyle. Gerçekte ne yapıldıysa onu söyle.
-5. Usta teknik boya/renk sorarsa 2-3 cümlede net reçete, oksidan ve süre ver.
-6. Yanıtların samimi, saygılı ve tezgâh arkadaşı sıcaklığında olsun.
+4. Usta 'en son ne yaptık' dediğinde, müşterinin geçmişindeki EN SON işlemi söyle.
+5. Usta 'kimi çağıralım' veya 'gelmeyenler kim' dediğinde aşağıda verilen gerçek veritabanı müşteri listesini dikkate alarak net isimler ve gün sayıları ver.
+6. Yanıtların samimi, saygılı ve profesyonel usta diliyle olsun.
 
-CANLI BİLGİLER:
+BUGÜNKÜ CANLI VERİLER:
+- Bugünün Tarihi: 28.10.2026
 - Günün Randevuları: ${randevuOzeti}
+- Geri Çağırma (1 Ay / 25+ gün gelmeyenler) Analizi: ${cagrilacaklarMetni}
 - Müşteri Hafızası: ${musteriHafizasi}`;
 
-      if (aktifDil === 'ru') sistemTalimati = `Ты опытный мастер салона и коллега. Знаешь все услуги (стрижки, окрашивание, ногти). Отвечай прямо, без звездочек (**). Записи: ${randevuOzeti}. Клиент: ${musteriHafizasi}`;
-      else if (aktifDil === 'en') sistemTalimati = `You are an experienced salon colleague knowing all services. Direct, friendly tone without asterisks (**). Appointments: ${randevuOzeti}. Client: ${musteriHafizasi}`;
-      else if (aktifDil === 'de') sistemTalimati = `Du bist ein erfahrener Salon-Kollege für alle Dienste. Direkt und ohne Sternchen (**). Termine: ${randevuOzeti}. Kunde: ${musteriHafizasi}`;
+      if (aktifDil === 'ru') sistemTalimati = `Ты опытный мастер салона. Никакой уборки и выдумок! Записи: ${randevuOzeti}. Клиент: ${musteriHafizasi}. Списки: ${cagrilacaklarMetni}`;
+      else if (aktifDil === 'en') sistemTalimati = `You are a professional salon assistant. No fake stories! Appointments: ${randevuOzeti}. Client: ${musteriHafizasi}. List: ${cagrilacaklarMetni}`;
+      else if (aktifDil === 'de') sistemTalimati = `Du bist ein professioneller Salon-Assistent. Keine Fantasiegeschichten! Termine: ${randevuOzeti}. Kunde: ${musteriHafizasi}.`;
 
       try {
         const cevap = await geminiApiCagir({
           contents: [{ parts: [{ text: `${sistemTalimati}\n\nUstanın Sorusu: "${soru}"` }] }],
-          generationConfig: { maxOutputTokens: 3000, temperature: 0.35 }
+          generationConfig: { maxOutputTokens: 3000, temperature: 0.25 }
         });
 
         let temiz = cevap.replace(/[*#_`]/g, '').trim();
@@ -3867,22 +3908,38 @@ CANLI BİLGİLER:
 
     function lumioAiFotoYuklendi(input) {
       if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
       const reader = new FileReader();
+
       reader.onload = function (e) {
-        aiSeciliFotoDataUrl = e.target.result;
-        document.getElementById('aiPreviewImg').src = aiSeciliFotoDataUrl;
-        document.getElementById('aiPhotoPreviewBox').classList.remove('hidden');
-        document.getElementById('aiVisionResultCard').classList.add('hidden');
+        // BÜYÜK FOTOĞRAFLARI ARKADA KÜÇÜLTME (ZAMAN AŞIMI ÖNLEYİCİ)
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          let w = img.width, h = img.height;
+          const maxW = 1000, maxH = 1000;
+          if (w > h) { if (w > maxW) { h *= maxW / w; w = maxW; } }
+          else { if (h > maxH) { w *= maxH / h; h = maxH; } }
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          aiSeciliFotoDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+          document.getElementById('aiPreviewImg').src = aiSeciliFotoDataUrl;
+          document.getElementById('aiPhotoPreviewBox').classList.remove('hidden');
+          document.getElementById('aiVisionResultCard').classList.add('hidden');
+        };
       };
-      reader.readAsDataURL(input.files[0]);
+      reader.readAsDataURL(file);
     }
 
-    /* 404 HATASI GİDERİLMİŞ TRİKOLOJİ FOTOĞRAF ANALİZİ */
+    /* 404 HATASIZ VE 45 SN ZAMAN AŞIMI KALKANLI TRİKOLOJİ FOTO ANALİZ */
     async function lumioAiFotoAnalizBaslat() {
       if (!aiSeciliFotoDataUrl) return;
 
       const btn = document.getElementById('btnStartVisionScan');
-      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Gemini 3.8 İnceliyor...</span>`;
+      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Gemini 3.8 İnceliyor (45sn)...</span>`;
       btn.disabled = true;
 
       const base64Data = aiSeciliFotoDataUrl.split(',')[1];
