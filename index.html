@@ -689,11 +689,8 @@
     function temaDegistir() {
       let aktifTema = localStorage.getItem('hair_aktif_tema') || 'dark';
       let yeniTema = (aktifTema === 'dark') ? 'light' : 'dark';
-      
-      // Tercihi hafızaya kaydet
       localStorage.setItem('hair_aktif_tema', yeniTema);
       
-      // HTML ve Body etiketlerine tema sınıfını ve color-scheme'i zorla uygula
       const root = document.documentElement;
       const body = document.getElementById('appBody');
       const metaTheme = document.getElementById('themeColorMeta');
@@ -716,7 +713,6 @@
       }
     }
 
-    // Sayfa ilk açıldığında hafızadaki temayı anında uygula (Yanıp sönmeyi önler)
     (function () {
       try {
         let t = localStorage.getItem('hair_aktif_tema') || 'dark';
