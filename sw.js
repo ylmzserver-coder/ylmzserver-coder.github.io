@@ -1,26 +1,23 @@
-/* LUMIO AI Terminal - Service Worker & Banka Tipi Web Push Motoru (V5) */
-const CACHE_NAME = 'lumio-ai-cache-v5';
+/* LUMIO AI Terminal - Service Worker & Banka Tipi Web Push Motoru (V6) */
+const CACHE_NAME = 'lumio-ai-cache-v6';
 
-self.addEventListener('install', (event) => {
+self.addEventListener('install', () => {
   self.skipWaiting();
 });
 
-/* ESKİ HAYALET ÖNBELLEKLERİ TEMİZLE VE ANINDA DEVREYE GİR */
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
         keys.map((key) => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
-          }
+          if (key !== CACHE_NAME) return caches.delete(key);
         })
       );
     }).then(() => self.clients.claim())
   );
 });
 
-/* BANKA BİLDİRİMİ GİBİ KİLİT EKRANINA FIRLATMA MOTORU */
+/* BANKA BİLDİRİMİ GİBİ KİLİT EKRANINA FIRLATMA + ERTELEME MOTORU */
 self.addEventListener('push', (event) => {
   let data = {
     title: '⏰ LUMIO: Randevu Vakti Yaklaştı!',
@@ -41,10 +38,14 @@ self.addEventListener('push', (event) => {
     body: data.body,
     icon: data.icon || 'logo.png',
     badge: data.badge || 'logo.png',
-    vibrate: [300, 100, 300, 100, 300], // Belirgin banka tipi titreşim
-    tag: 'lumio-alarm-' + Date.now(),
+    vibrate: [400, 200, 400, 200, 400], // Belirgin titreşim
+    tag: 'lumio-randevu-alarm',
     renotify: true,
-    requireInteraction: true // Usta kapatana kadar ekranda asılı kalsın
+    requireInteraction: true, // Usta dokunana kadar ekranda asılı kalsın
+    actions: [
+      { action: 'tamam', title: 'Tamam 👍' },
+      { action: 'ertele', title: '10 Dk Ertele ⏱️' }
+    ]
   };
 
   event.waitUntil(
@@ -52,19 +53,32 @@ self.addEventListener('push', (event) => {
   );
 });
 
-/* BİLDİRİME TIKLAYINCA DİREKT UYGULAMAYI AÇ */
+/* BİLDİRİM BUTONLARINA BASILDIĞINDA (ERTELE / TAMAM) */
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-      for (const client of clientList) {
-        if (client.url.includes('index.html') && 'focus' in client) {
-          return client.focus();
+
+  if (event.action === 'ertele') {
+    // 10 dakika sonra tekrar ekrana fırlat
+    setTimeout(() => {
+      self.registration.showNotification('⏰ ERTELENEN RANDEVU!', {
+        body: '10 dakika önce ertelediğiniz randevu vakti geldi!',
+        icon: 'logo.png',
+        badge: 'logo.png',
+        vibrate: [400, 200, 400],
+        requireInteraction: true
+      });
+    }, 10 * 60 * 1000);
+  } else {
+    // Tamam'a basıldıysa veya bildirime dokunulduysa uygulamayı öne getir
+    event.waitUntil(
+      clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+        for (const client of clientList) {
+          if (client.url.includes('index.html') && 'focus' in client) {
+            return client.focus();
+          }
         }
-      }
-      if (clients.openWindow) {
-        return clients.openWindow('./index.html');
-      }
-    })
-  );
+        if (clients.openWindow) return clients.openWindow('./index.html');
+      })
+    );
+  }
 });
