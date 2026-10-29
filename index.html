@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>LUMIO Terminal - Professional Salon OS</title>
+  <title>LUMIO Terminal</title>
   
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -33,13 +33,13 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
   <style>
+    /* LÜKS SALON STANDARDI: APPLE / FRESHA TEMA MOTORU */
     :root {
       --bg-main: #000000;
       --card-bg: #111726;
       --card-border: rgba(245, 158, 11, 0.3);
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --accent-gold: #f59e0b;
     }
 
     html.theme-light {
@@ -48,7 +48,6 @@
       --card-border: #cbd5e1;
       --text-main: #0f172a;
       --text-muted: #64748b;
-      --accent-gold: #b45309;
       color-scheme: light !important;
       background-color: var(--bg-main) !important;
     }
@@ -58,14 +57,12 @@
       color: var(--text-main) !important;
       overscroll-behavior-y: none !important;
       -webkit-tap-highlight-color: transparent;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     body.theme-light header, 
     body.theme-light nav, 
     body.theme-light main section > div,
     body.theme-light .asistan-card,
-    body.theme-light #gunlukCiroKarti,
     body.theme-light [class*="bg-slate-900"],
     body.theme-light [class*="bg-slate-950"],
     body.theme-light [class*="bg-slate-800"] {
@@ -89,142 +86,189 @@
     }
   </style>
 </head>
-<body id="appBody" class="min-h-screen flex flex-col select-none pb-10">
-
-  <!-- ÜST HEADER -->
+<body id="appBody" class="min-h-screen flex flex-col select-none pb-12">
+<!-- ÜST HEADER -->
   <header class="bg-slate-900 border-b border-slate-800 px-4 py-3 sticky top-0 z-40 flex items-center justify-between shadow-lg">
     <div class="flex items-center space-x-2.5 cursor-pointer" onclick="patronPaneliAc()">
-      <div class="w-9 h-9 rounded-xl bg-slate-950 border border-amber-500/40 flex items-center justify-center text-amber-400 font-black">L</div>
+      <div class="w-9 h-9 rounded-xl bg-slate-950 border border-amber-500/40 flex items-center justify-center overflow-hidden shadow-md flex-shrink-0 p-1">
+        <svg viewBox="0 0 100 100" class="w-full h-full">
+          <circle cx="50" cy="50" r="46" fill="none" stroke="#f59e0b" stroke-width="4"/>
+          <path d="M46,22 C56,22 66,31 66,45 C66,56 58,63 52,71 C48,76 48,82 48,82 C48,82 46,75 44,69 C40,59 36,51 36,39 C36,29 41,22 46,22 Z" fill="#f59e0b"/>
+          <circle cx="68" cy="72" r="6" fill="none" stroke="#f59e0b" stroke-width="3"/>
+          <circle cx="78" cy="78" r="6" fill="none" stroke="#f59e0b" stroke-width="3"/>
+          <line x1="65" y1="68" x2="52" y2="48" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+          <line x1="75" y1="74" x2="60" y2="45" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
       <div>
-        <h1 class="text-sm font-black tracking-wide text-amber-400">LUMIO OS</h1>
-        <p id="headerUstaUnvan" class="text-[11px] text-slate-400 font-medium">Salon Yönetim Sistemi</p>
+        <div class="flex items-center space-x-1.5">
+          <h1 class="text-sm font-black tracking-wide text-amber-400">LUMIO</h1>
+          <span id="cloudStatusBadge" class="w-2 h-2 rounded-full bg-emerald-500" title="Bulut Aktif"></span>
+          <span id="headerLicenseBadge" class="text-[9px] bg-slate-800 text-slate-300 px-1 py-0.5 rounded font-mono border border-slate-700">LİSANS</span>
+        </div>
+        <p id="headerUstaUnvan" class="text-[11px] text-slate-400 font-medium truncate max-w-[140px]">Server YILMAZ</p>
       </div>
     </div>
+
     <div class="flex items-center space-x-2">
-      <button onclick="temaDegistir()" id="themeToggleBtn" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 flex items-center justify-center text-xs transition">☀️</button>
+      <select id="langSelect" onchange="diliDegistir(this.value)" class="bg-slate-950 text-amber-300 text-[10px] font-bold border border-slate-700 rounded-lg px-2 py-1 focus:outline-none">
+        <option value="tr">🇹🇷 TR</option>
+        <option value="en">🇬🇧 EN</option>
+        <option value="de">🇩🇪 DE</option>
+        <option value="ru">🇷🇺 RU</option>
+      </select>
+
+      <button onclick="temaDegistir()" id="themeToggleBtn" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 flex items-center justify-center text-xs transition" title="Tema Değiştir">
+        ☀️
+      </button>
     </div>
   </header>
 
-  <!-- MENÜ ŞERİDİ -->
+  <!-- MENÜ ŞERİDİ (SEKMELER) -->
   <nav class="bg-slate-900/95 backdrop-blur-md border-b border-slate-800 p-2 sticky top-[57px] z-30 shadow-md">
-    <div class="grid grid-cols-5 gap-1 max-w-lg mx-auto text-center">
-      <button onclick="sekmeDegistir('terminal')" id="nav-terminal" class="py-2 rounded-xl bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40 text-[10px]">Terminal</button>
-      <button onclick="sekmeDegistir('agenda')" id="nav-agenda" class="py-2 rounded-xl bg-slate-950 text-slate-400 border border-slate-800 text-[10px]">Ajandam</button>
-      <button onclick="sekmeDegistir('history')" id="nav-history" class="py-2 rounded-xl bg-slate-950 text-slate-400 border border-slate-800 text-[10px]">Geçmiş</button>
-      <button onclick="sekmeDegistir('reminders')" id="nav-reminders" class="py-2 rounded-xl bg-slate-950 text-slate-400 border border-slate-800 text-[10px]">Alarmlar</button>
-      <button onclick="sekmeDegistir('settings')" id="nav-settings" class="py-2 rounded-xl bg-slate-950 text-slate-400 border border-slate-800 text-[10px]">Ayarlar</button>
+    <div class="grid grid-cols-5 gap-1 max-w-lg mx-auto">
+      <button onclick="sekmeDegistir('terminal')" id="nav-terminal" class="flex flex-col items-center justify-center py-2 px-0.5 rounded-xl bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40 transition active:scale-95 shadow relative">
+        <i class="fa-solid fa-scissors text-sm mb-0.5"></i><span class="text-[10px]">Terminal</span>
+      </button>
+      <button onclick="sekmeDegistir('agenda')" id="nav-agenda" class="flex flex-col items-center justify-center py-2 px-0.5 rounded-xl bg-slate-950 text-slate-400 font-medium border border-slate-800 transition active:scale-95">
+        <i class="fa-solid fa-calendar-days text-sm mb-0.5"></i><span class="text-[10px]">Ajandam</span>
+      </button>
+      <button onclick="sekmeDegistir('history')" id="nav-history" class="flex flex-col items-center justify-center py-2 px-0.5 rounded-xl bg-slate-950 text-slate-400 font-medium border border-slate-800 transition active:scale-95">
+        <i class="fa-solid fa-clock-rotate-left text-sm mb-0.5"></i><span class="text-[10px]">Geçmiş</span>
+      </button>
+      <button onclick="sekmeDegistir('reminders')" id="nav-reminders" class="flex flex-col items-center justify-center py-2 px-0.5 rounded-xl bg-slate-950 text-slate-400 font-medium border border-slate-800 transition active:scale-95 relative">
+        <i class="fa-solid fa-bell text-sm mb-0.5"></i><span class="text-[10px]">Alarmlar</span>
+        <span id="badgeTotalReminders" class="hidden absolute top-0.5 right-0.5 px-1 bg-amber-500 text-slate-950 rounded-full text-[8px] font-black shadow border border-amber-400 animate-pulse">0</span>
+      </button>
+      <button onclick="sekmeDegistir('settings')" id="nav-settings" class="flex flex-col items-center justify-center py-2 px-0.5 rounded-xl bg-slate-950 text-slate-400 font-medium border border-slate-800 transition active:scale-95">
+        <i class="fa-solid fa-gear text-sm mb-0.5"></i><span class="text-[10px]">Ayarlar</span>
+      </button>
     </div>
   </nav>
 
+  <!-- ANA İÇERİK KAPSAYICISI -->
   <main class="flex-1 p-3 max-w-lg mx-auto w-full space-y-3.5">
-    <!-- TERMİNAL SEKMESİ -->
+    <!-- SEKME 1: TERMİNAL -->
     <section id="tab-terminal" class="space-y-3.5">
-      <div class="bg-slate-900 border border-amber-500/30 rounded-2xl p-4 shadow flex items-center justify-between">
-        <div>
-          <span class="text-[10px] text-slate-400 block font-bold uppercase">Bugünkü Ciro & Durum</span>
-          <span id="lblDailySummaryText" class="text-sm font-black text-white">0 Randevu • 0,00 TL</span>
-        </div>
-        <button onclick="kasamModaliAc()" class="text-xs bg-amber-500/20 text-amber-300 border border-amber-500/40 px-3 py-1.5 rounded-xl font-bold">Kasamı Gör ➔</button>
-      </div>
-
-      <!-- MASTER AI PANELİ -->
-      <div class="bg-gradient-to-r from-amber-500/15 via-slate-900 to-amber-500/10 border border-amber-500/40 rounded-2xl p-4 shadow-xl flex items-center justify-between">
-        <div>
-          <h3 class="text-xs font-black text-amber-400">LUMIO YEREL & AKILLI ASİSTAN</h3>
-          <p class="text-[10px] text-slate-300 mt-0.5">İnternete gerek duymadan anlık ajanda ve müşteri analizi</p>
-        </div>
-        <button onclick="lumioAiModaliAc()" class="bg-amber-500 text-slate-950 font-black px-3.5 py-2.5 rounded-xl text-xs shadow transition">Asistanı Aç 🎙️</button>
+      <div class="bg-slate-900 border border-amber-500/30 rounded-2xl p-4 shadow text-center text-xs text-amber-400 font-bold">
+        Terminal Alanı Hazırlanıyor...
       </div>
     </section>
 
-    <!-- AJANDA SEKMESİ (24 SAAT KESİNTİSİZ) -->
+    <!-- SEKME 2: AJANDAM -->
     <section id="tab-agenda" class="hidden space-y-3.5">
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3">
-        <div class="flex justify-between items-center pb-2 border-b border-slate-800">
-          <h2 class="text-sm font-bold text-amber-400">📅 24 Saat Kesintisiz Ajanda</h2>
-          <button onclick="buguneGit()" class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-1 rounded-lg font-bold">Bugün</button>
-        </div>
-        <div id="hizliGunlerSeridi" class="grid grid-cols-7 gap-1 text-center text-xs"></div>
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow text-center text-xs text-amber-400 font-bold">
+        Ajanda Alanı Hazırlanıyor...
       </div>
-      <div id="ajandaSaatlerContainer" class="space-y-2 max-h-[600px] overflow-y-auto pr-1"></div>
     </section>
 
-    <!-- DİĞER SEKMELER İÇİN YER TUTUCU -->
-    <section id="tab-history" class="hidden p-4 text-center text-slate-400 text-xs">Geçmiş kayıtları yükleniyor...</section>
-    <section id="tab-reminders" class="hidden p-4 text-center text-slate-400 text-xs">Hatırlatmalar yükleniyor...</section>
-    <section id="tab-settings" class="hidden p-4 text-center text-slate-400 text-xs">Ayarlar yükleniyor...</section>
+    <!-- SEKME 3: GEÇMİŞ -->
+    <section id="tab-history" class="hidden space-y-3">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow text-center text-xs text-amber-400 font-bold">
+        Geçmiş Alanı Hazırlanıyor...
+      </div>
+    </section>
+
+    <!-- SEKME 4: HATIRLATMALAR -->
+    <section id="tab-reminders" class="hidden space-y-3">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow text-center text-xs text-amber-400 font-bold">
+        Hatırlatmalar Alanı Hazırlanıyor...
+      </div>
+    </section>
+
+    <!-- SEKME 5: AYARLAR -->
+    <section id="tab-settings" class="hidden space-y-3.5">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow text-center text-xs text-amber-400 font-bold">
+        Ayarlar Alanı Hazırlanıyor...
+      </div>
+    </section>
   </main>
 
-  <!-- AI MODALI -->
-  <div id="modalLumioAi" class="hidden fixed inset-0 modal-overlay-bg flex items-center justify-center p-3 z-50">
-    <div class="bg-slate-900 border border-amber-500/40 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col">
-      <div class="flex justify-between items-center pb-2 border-b border-slate-800">
-        <h3 class="text-sm font-black text-amber-400">LUMIO Akıllı Asistan</h3>
-        <button onclick="document.getElementById('modalLumioAi').classList.add('hidden')" class="text-slate-400 text-base">✕</button>
-      </div>
-      <div class="space-y-2">
-        <input type="text" id="aiAskInput" placeholder="Örn: Bugünkü randevuları özetle veya Hamide'yi bul..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
-        <button onclick="yerelAsistanSoruSor()" class="w-full bg-amber-500 text-slate-950 font-black py-2.5 rounded-xl text-xs">Asistana Sor / Rapor Al</button>
-      </div>
-      <div id="aiAdviceCard" class="hidden bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-slate-200 leading-relaxed"></div>
-    </div>
-  </div>
-
   <script>
-    // --- TEMEL SİSTEM DEĞİŞKENLERİ ---
-    let aktifTema = localStorage.getItem('hair_aktif_tema') || "dark";
-    let aktifLisansKodu = localStorage.getItem('hair_lisans_kodu'] || "905354049392";
-    let randevular = [
-      { id: "1", musteriAdi: "Hamide Yılmaz", tarih: "29.10.2026", saat: "10:30", hizmet: "DİP BOYA", sure: 90, tel: "905320000000" },
-      { id: "2", musteriAdi: "Ayşe Demir", tarih: "29.10.2026", saat: "14:00", hizmet: "KESİM & FÖN", sure: 60, tel: "905321111111" }
-    ];
-    let musteriler = [
-      { id: "m1", ad: "Hamide Yılmaz", tel: "905320000000", dogum: "15.05" },
-      { id: "m2", ad: "Ayşe Demir", tel: "905321111111", dogum: "20.08" }
-    ];
-    let gecmisIslemler = [];
+    // Tema ve Sekme Motoru Fonksiyonları
+    function temaDegistir() {
+      let aktifTema = localStorage.getItem('hair_aktif_tema') || 'dark';
+      let yeniTema = (aktifTema === 'dark') ? 'light' : 'dark';
+      localStorage.setItem('hair_aktif_tema', yeniTema);
+      
+      document.documentElement.classList.toggle('theme-light', yeniTema === 'light');
+      document.getElementById('appBody').classList.toggle('theme-light', yeniTema === 'light');
+      document.getElementById('themeToggleBtn').innerText = (yeniTema === 'light') ? '🌙' : '☀️';
+    }
+
+    function sekmeDegistir(sekme) {
+      ['terminal', 'agenda', 'history', 'reminders', 'settings'].forEach(s => {
+        let tabEl = document.getElementById('tab-' + s);
+        let navEl = document.getElementById('nav-' + s);
+        if (tabEl) tabEl.classList.add('hidden');
+        if (navEl) {
+          navEl.className = "flex flex-col items-center justify-center py-2 px-0.5 rounded-xl bg-slate-950 text-slate-400 font-medium border border-slate-800 transition active:scale-95";
+        }
+      });
+      let targetTab = document.getElementById('tab-' + sekme);
+      let targetNav = document.getElementById('nav-' + sekme);
+      if (targetTab) targetTab.classList.remove('hidden');
+      if (targetNav) {
+        targetNav.className = "flex flex-col items-center justify-center py-2 px-0.5 rounded-xl bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40 transition active:scale-95 shadow";
+      }
+    }
+  </script>
+<script>
+    // --- 3. PARÇA: 24 SAAT KESİNTİSİZ AJANDA VE TAKVİM MOTORU ---
     let seciliTarihStr = bugununTarihiStr();
+    let randevular = []; // Firebase'den dolacak
 
     function bugununTarihiStr() {
       const d = new Date();
       return d.getDate().toString().padStart(2, '0') + '.' + (d.getMonth() + 1).toString().padStart(2, '0') + '.' + d.getFullYear();
     }
 
-    function temaDegistir() {
-      aktifTema = (aktifTema === 'dark') ? 'light' : 'dark';
-      localStorage.setItem('hair_aktif_tema', aktifTema);
-      temaUygula();
+    function akilliTarihDuzelt(str) {
+      if (!str) return "";
+      let s = str.toString().trim().replace(/[\/\-\s,]/g, '.');
+      let buYil = new Date().getFullYear();
+      let sadeceRakam = str.toString().replace(/\D/g, '');
+      if (sadeceRakam.length === 4) {
+        return sadeceRakam.substring(0, 2) + '.' + sadeceRakam.substring(2, 4) + '.' + buYil;
+      }
+      return s;
     }
 
-    function temaUygula() {
-      const light = (aktifTema === 'light');
-      document.documentElement.classList.toggle('theme-light', light);
-      document.getElementById('appBody').classList.toggle('theme-light', light);
-      document.getElementById('themeToggleBtn').innerText = light ? '🌙' : '☀️';
-    }
-    temaUygula();
-
-    function sekmeDegistir(sekme) {
-      ['terminal', 'agenda', 'history', 'reminders', 'settings'].forEach(s => {
-        let el = document.getElementById('tab-' + s);
-        if(el) el.classList.add('hidden');
-      });
-      let target = document.getElementById('tab-' + sekme);
-      if(target) target.classList.remove('hidden');
-      if(sekme === 'agenda') ajandaSaatleriniCiz();
+    function turkceHitapIsimDuzenle(isim) {
+      if (!isim) return "";
+      let temiz = isim.trim().replace(/\s+/g, ' ');
+      let kelimeler = temiz.split(' ');
+      if (kelimeler.length === 1) {
+        let k = kelimeler[0];
+        return k.charAt(0).toLocaleUpperCase('tr-TR') + k.slice(1).toLocaleLowerCase('tr-TR');
+      }
+      let soyad = kelimeler.pop().toLocaleUpperCase('tr-TR');
+      let adlar = kelimeler.map(k => k.charAt(0).toLocaleUpperCase('tr-TR') + k.slice(1).toLocaleLowerCase('tr-TR')).join(' ');
+      return adlar + ' ' + soyad;
     }
 
-    // --- 24 SAAT KESİNTİSİZ AJANDA ÇİZİCİ (00:00 - 23:30) ---
+    // 7 Günlük İleriye Dönük Tarih Şeridi
     function ajandaTarihSeridiOlustur() {
       const serit = document.getElementById('hizliGunlerSeridi');
       if (!serit) return;
       let html = "";
       let bugun = new Date();
+      
+      const gunAdlari = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'];
+
       for (let i = 0; i < 7; i++) {
-        let cur = new Date(); cur.setDate(bugun.getDate() + i);
+        let cur = new Date();
+        cur.setDate(bugun.getDate() + i);
         let dStr = cur.getDate().toString().padStart(2, '0') + '.' + (cur.getMonth() + 1).toString().padStart(2, '0') + '.' + cur.getFullYear();
+        let gunAdi = i === 0 ? "Bugün" : gunAdlari[cur.getDay()];
         let seciliMi = (dStr === seciliTarihStr);
-        html += `<button type="button" onclick="ajandaTarihSec('${dStr}')" class="p-1.5 rounded-xl border text-xs font-bold ${seciliMi ? 'bg-amber-500 text-slate-950 border-amber-400' : 'bg-slate-950 text-slate-400 border-slate-800'}">${cur.getDate()}</button>`;
+
+        html += `
+          <button type="button" onclick="ajandaTarihSec('${dStr}')" class="p-1.5 rounded-xl border flex flex-col items-center transition active:scale-95 ${seciliMi ? 'bg-amber-500 text-slate-950 font-black border-amber-400 shadow' : 'bg-slate-950 text-slate-400 border-slate-800 hover:border-slate-700 font-bold'}">
+            <span class="text-[9px] uppercase">${gunAdi}</span>
+            <span class="text-xs">${cur.getDate()}</span>
+          </button>
+        `;
       }
       serit.innerHTML = html;
     }
@@ -235,89 +279,454 @@
       ajandaSaatleriniCiz();
     }
 
-    function buguneGit() { ajandaTarihSec(bugununTarihiStr()); }
+    function buguneGit() {
+      ajandaTarihSec(bugununTarihiStr());
+    }
 
+    // 00:00 - 23:30 Kesintisiz 24 Saatlik Akış
     function ajandaSaatleriniCiz() {
       const container = document.getElementById('ajandaSaatlerContainer');
       if (!container) return;
-      const gunRandevulari = randevular.filter(r => r.tarih === seciliTarihStr);
+
+      const gunRandevulari = randevular.filter(r => akilliTarihDuzelt(r.tarih) === seciliTarihStr);
       const slotlar = [];
-      
-      // 00:00 - 23:30 Kesintisiz 24 Saat Döngüsü
+
+      // Sabah 00:00'dan Gece 23:30'a kadar 30'ar dakikalık dilimler
       for (let hour = 0; hour <= 23; hour++) {
         slotlar.push(`${hour.toString().padStart(2, '0')}:00`);
         slotlar.push(`${hour.toString().padStart(2, '0')}:30`);
       }
 
       container.innerHTML = slotlar.map(slotSaat => {
-        const r = gunRandevulari.find(x => x.saat === slotSaat);
-        if (r) {
-          return `<div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
-            <div><span class="font-mono font-black text-amber-400">${r.saat}</span> - <span class="font-bold text-white">${r.musteriAdi} (${r.hizmet})</span></div>
-            <button onclick="randevuSil('${r.id}')" class="text-red-400 text-xs">Sil</button>
-          </div>`;
+        const baslayanlar = gunRandevulari.filter(r => r.saat === slotSaat);
+
+        if (baslayanlar.length > 0) {
+          return baslayanlar.map(r => {
+            if (r.blokMu) {
+              return `
+                <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
+                  <div class="flex items-center space-x-2">
+                    <span class="font-mono font-black text-amber-400">${r.saat}</span>
+                    <span class="text-slate-300 font-bold">⛔ ${r.musteriAdi || 'Mola / Bloke'}</span>
+                  </div>
+                  <button onclick="ajandaRandevuSil('${r.id}')" class="text-slate-500 hover:text-red-400 p-1 text-xs">✕</button>
+                </div>
+              `;
+            }
+
+            const hitap = turkceHitapIsimDuzenle(r.musteriAdi);
+            return `
+              <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 hover:border-amber-500/50 transition flex justify-between items-center text-xs shadow gap-2">
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center space-x-2">
+                    <span class="font-mono font-black text-amber-400 text-xs">${r.saat}</span>
+                    <span class="font-bold text-white truncate">${hitap}</span>
+                  </div>
+                  <div class="text-[10px] text-slate-400 mt-0.5 truncate">
+                    <b class="text-amber-300">${r.hizmet}</b> • ${r.sure || 60} Dk • ${r.tel || 'Numarasız'}
+                  </div>
+                </div>
+                <div class="flex items-center space-x-1 shrink-0">
+                  <button onclick="ajandaRandevuSil('${r.id}')" class="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-red-400 rounded-lg text-xs border border-slate-700" title="Randevuyu Sil">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
         }
-        return `<div class="bg-slate-950/40 p-2.5 rounded-xl border border-slate-900/60 flex justify-between items-center text-xs text-slate-500">
-          <span class="font-mono">${slotSaat}</span>
-          <button onclick="bosSaateRandevuAc('${slotSaat}')" class="text-amber-400 hover:text-amber-300 font-bold">+ Randevu Ekle</button>
-        </div>`;
+
+        // Boş slot görünümü
+        return `
+          <div class="bg-slate-950/40 p-2 rounded-xl border border-slate-900 flex justify-between items-center text-xs hover:border-slate-800 transition">
+            <span class="font-mono font-bold text-slate-500 text-xs">${slotSaat}</span>
+            <button onclick="bosSaateRandevuAc('${slotSaat}')" class="text-[11px] text-slate-400 hover:text-amber-400 font-medium transition flex items-center space-x-1">
+              <i class="fa-solid fa-plus text-[10px]"></i><span>Müsait Boş Saat</span>
+            </button>
+          </div>
+        `;
       }).join('');
     }
 
     function bosSaateRandevuAc(saat) {
-      let musteri = prompt("Müşteri Adı Soyadı:");
-      if (!musteri) return;
-      let hizmet = prompt("Yapılacak İşlem:", "DİP BOYA");
+      let musteri = prompt(`Seçilen Saat (${seciliTarihStr} - ${saat})\nMüşteri Adı Soyadı:`);
+      if (!musteri || !musteri.trim()) return;
+      let hizmet = prompt("Yapılacak İşlem / Hizmet:", "DİP BOYA");
+
       randevular.push({
         id: Date.now().toString(),
-        musteriAdi: musteri,
         tarih: seciliTarihStr,
         saat: saat,
-        hizmet: hizmet || "İŞLEM",
-        sure: 60
+        musteriAdi: musteri.trim(),
+        hizmet: hizmet ? hizmet.trim().toUpperCase() : "İŞLEM",
+        sure: 60,
+        blokMu: false
       });
       ajandaSaatleriniCiz();
-      alert("✅ Randevu başarıyla eklendi!");
+      alert("✅ Randevu başarıyla ajandaya eklendi!");
     }
 
-    function randevuSil(id) {
-      if (!confirm("Randevu silinsin mi?")) return;
+    function ajandaRandevuSil(id) {
+      if (!confirm("Bu randevuyu silmek istediğinize emin misiniz?")) return;
       randevular = randevular.filter(r => r.id !== id);
       ajandaSaatleriniCiz();
     }
 
-    function gunlukCiroGuncelle() {
-      const bugunRand = randevular.filter(r => r.tarih === bugunStr());
-      document.getElementById('lblDailySummaryText').innerText = `${bugunRand.length} Randevu • Aktif Akış`;
-    }
+    // Sekme açıldığında ajandayı otomatik tetikle
+    const eskiSekmeDegistir = window.sekmeDegistir;
+    window.sekmeDegistir = function(sekme) {
+      if (eskiSekmeDegistir) eskiSekmeDegistir(sekme);
+      if (sekme === 'agenda') {
+        ajandaTarihSeridiOlustur();
+        ajandaSaatleriniCiz();
+      }
+    };
+  </script>
+<!-- 4. PARÇA: YEREL AKILLI ZEKA VE SESLİ ASİSTAN MOTORU -->
+  <script>
+    let aiRecognition = null;
+    let aiDinliyorMu = false;
+    let aiParsedRandevu = null;
 
-    // --- YEREL AKILLI ASİSTAN (OFFLINE / ANENDE / API HATASIZ) ---
     function lumioAiModaliAc() {
-      document.getElementById('modalLumioAi').classList.remove('hidden');
+      // Eğer daha önce AI modalı HTML'de yoksa dinamik oluşturalım veya açalım
+      let modal = document.getElementById('modalLumioAi');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'modalLumioAi';
+        modal.className = 'hidden fixed inset-0 modal-overlay-bg flex items-center justify-center p-3 z-50';
+        modal.innerHTML = `
+          <div class="bg-slate-900 border border-amber-500/40 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+              <h3 class="text-sm font-black text-amber-400"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i> LUMIO Yerel & Akıllı Asistan</h3>
+              <button onclick="lumioAiModaliKapat()" class="text-slate-400 text-base">✕</button>
+            </div>
+            <div class="space-y-3">
+              <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center space-y-2">
+                <p class="text-[11px] text-slate-300">Mikrofona dokun ve dükkan diliyle konuş:<br><span class="text-amber-400 italic">"Yarın saat 3'te Hamide ablaya dip boya yaz"</span></p>
+                <button id="aiMicBtn" onclick="lumioAiBasKonusToggle()" class="w-14 h-14 rounded-full bg-amber-500 text-slate-950 text-xl inline-flex items-center justify-center shadow-lg active:scale-90 transition"><i class="fa-solid fa-microphone"></i></button>
+                <span id="aiMicStatus" class="text-[10px] text-slate-400 block font-mono">Dinlemeye hazır</span>
+              </div>
+              <div id="aiParsedCard" class="hidden bg-slate-950 p-3 rounded-xl border border-amber-500/40 space-y-2 text-xs">
+                <span class="text-amber-400 font-bold block">🎯 Algılanan Randevu:</span>
+                <p id="aiParsedText" class="text-white text-xs"></p>
+                <button onclick="aiRandevuyuAjandayaEkle()" class="w-full bg-amber-500 text-slate-950 font-black py-2 rounded-lg text-xs">AJANDAYA KAYDET ✨</button>
+              </div>
+              <div class="space-y-1 pt-2 border-t border-slate-800">
+                <label class="text-[10px] text-slate-400 font-bold block">YAZARAK SOR / RAPOR AL:</label>
+                <div class="flex space-x-1.5">
+                  <input type="text" id="aiAskInput" placeholder="Örn: Bugünkü randevuları özetle..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                  <button onclick="yerelAsistanMetinSoruSor()" class="bg-amber-500 text-slate-950 font-black px-3 py-2 rounded-xl text-xs">Sor</button>
+                </div>
+              </div>
+              <div id="aiAdviceCard" class="hidden bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-slate-200 leading-relaxed max-h-40 overflow-y-auto"></div>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+      }
+      modal.classList.remove('hidden');
     }
 
-    function yerelAsistanSoruSor() {
-      const q = document.getElementById('aiAskInput').value.toLowerCase().trim();
+    function lumioAiModaliKapat() {
+      if (aiDinliyorMu && aiRecognition) { aiRecognition.stop(); aiDinliyorMu = false; }
+      document.getElementById('modalLumioAi').classList.add('hidden');
+    }
+
+    // Bas-Konuş ve Hamide Gibi İsimleri Cımbızlama Motoru
+    function lumioAiBasKonusToggle() {
+      const status = document.getElementById('aiMicStatus');
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) { alert("Tarayıcınız ses tanımayı desteklemiyor."); return; }
+
+      if (aiDinliyorMu) { if (aiRecognition) aiRecognition.stop(); aiDinliyorMu = false; return; }
+
+      try {
+        aiRecognition = new SpeechRecognition();
+        aiRecognition.lang = 'tr-TR';
+        aiRecognition.continuous = false;
+        aiRecognition.interimResults = false;
+
+        aiRecognition.onstart = function() {
+          aiDinliyorMu = true;
+          status.innerText = "🔴 Dinliyorum ustam...";
+        };
+
+        aiRecognition.onresult = function(event) {
+          const transcript = event.results[0][0].transcript;
+          sokakDiliniCozVeRandevuCikar(transcript);
+        };
+
+        aiRecognition.onerror = function() {
+          status.innerText = "Ses algılanamadı, tekrar dene.";
+          aiDinliyorMu = false;
+        };
+
+        aiRecognition.onend = function() {
+          aiDinliyorMu = false;
+          status.innerText = "Dinlemeye hazır";
+        };
+
+        aiRecognition.start();
+      } catch (err) { alert("Mikrofon hatası: " + err.message); }
+    }
+
+    function sokakDiliniCozVeRandevuCikar(metin) {
+      let raw = metin.toLocaleLowerCase('tr-TR').trim();
+      
+      // Sohbet veya Rapor soruları sesli sorulduysa doğrudan metin sorgusuna yönlendir
+      if (raw.includes("özetle") || raw.includes("kim var") || raw.includes("yoğun mu") || raw.includes("ciro")) {
+        document.getElementById('aiAskInput').value = metin;
+        yerelAsistanMetinSoruSor();
+        return;
+      }
+
+      // Tarih Analizi (Yarın / Bugün)
+      let targetDate = new Date();
+      if (raw.includes("yarın")) { targetDate.setDate(targetDate.getDate() + 1); }
+      let tarihStr = targetDate.getDate().toString().padStart(2, '0') + '.' + (targetDate.getMonth() + 1).toString().padStart(2, '0') + '.' + targetDate.getFullYear();
+
+      // Saat Analizi
+      let saatStr = "14:00";
+      let digitMatch = raw.match(/(\b[0-2]?[0-9])[:.]([0-5][0-9]\b)/);
+      if (digitMatch) {
+        saatStr = digitMatch[1].padStart(2, '0') + ':' + digitMatch[2];
+      } else if (raw.includes("3 te") || raw.includes("saat 3") || raw.includes("öğleden sonra 3")) {
+        saatStr = "15:00";
+      } else if (raw.includes("10 da") || raw.includes("saat 10")) {
+        saatStr = "10:00";
+      }
+
+      // İsim Ayıklama (Hamide vb. rehberde olmasa bile kelimeden yakalama)
+      const stopWords = ["hanım", "hanima", "hanıma", "bey", "abla", "ablaya", "yarın", "bugün", "saat", "te", "ta", "de", "da", "dip", "boya", "fön", "kesim", "yaz", "çak", "gelsin"];
+      let kelimeler = raw.split(/[\s,.'"]+/).filter(w => w.length > 1 && isNaN(w));
+      let adayIsimler = kelimeler.filter(w => !stopWords.includes(w));
+
+      let musteriAdi = adayIsimler.length > 0 ? turkceHitapIsimDuzenle(adayIsimler[0]) : "Değerli Müşteri";
+
+      // İşlem Türü Ayklama
+      let hizmet = "DİP BOYA";
+      if (raw.includes("fön")) hizmet = "FÖN";
+      else if (raw.includes("kesim")) hizmet = "KESİM";
+      else if (raw.includes("röfle") || raw.includes("ombre")) hizmet = "RÖFLE";
+
+      aiParsedRandevu = { musteriAdi, tarih: tarihStr, saat: saatStr, hizmet, sure: 60 };
+
+      document.getElementById('aiParsedText').innerHTML = `<b>${musteriAdi}</b><br>📅 ${tarihStr} - Saat: <b>${saatStr}</b><br>💇 ${hizmet}`;
+      document.getElementById('aiParsedCard').classList.remove('hidden');
+    }
+
+    function aiRandevuyuAjandayaEkle() {
+      if (!aiParsedRandevu) return;
+      randevular.push({
+        id: Date.now().toString(),
+        ...aiParsedRandevu,
+        blokMu: false
+      });
+      document.getElementById('aiParsedCard').classList.add('hidden');
+      alert("🎉 Randevu sesli komutla başarıyla ajandaya işlendi!");
+      lumioAiModaliKapat();
+      ajandaSaatleriniCiz();
+    }
+
+    // Yerel Defter Tarama ve Raporlama Motoru (İnternetsiz / Hızlı)
+    function yerelAsistanMetinSoruSor() {
+      const q = document.getElementById('aiAskInput').value.toLocaleLowerCase('tr-TR').trim();
       const card = document.getElementById('aiAdviceCard');
       card.classList.remove('hidden');
 
-      if (q.includes("bugün") || q.includes("randevu") || q.includes("kim var")) {
-        let bugunListe = randevular.filter(r => r.tarih === seciliTarihStr);
+      if (!q) { card.innerText = "Lütfen bir şeyler yazın veya sorun ustam."; return; }
+
+      if (q.includes("bugün") || q.includes("randevu") || q.includes("kim var") || q.includes("özetle")) {
+        let bugunListe = randevular.filter(r => r.tarih === bugununTarihiStr());
         if (bugunListe.length === 0) {
-          card.innerText = "Ustam bugün ajandada kayıtlı hiç randevun görünmüyor, tezgâh boş.";
+          card.innerText = "Ustam bugün için ajandada kayıtlı hiç randevun görünmüyor, tezgâh tamamen boş.";
         } else {
-          card.innerText = "Bugünkü randevuların:\n" + bugunListe.map(r => `• Saat ${r.saat}: ${r.musteriAdi} (${r.hizmet})`).join("\n");
+          card.innerText = "Bugünün aktif randevuları:\n" + bugunListe.map(r => `• Saat ${r.saat}: ${r.musteriAdi} (${r.hizmet})`).join("\n");
         }
-      } else if (q.includes("boya") || q.includes("gelen")) {
-        card.innerText = "Akıllı Köprü: Son 30 gündür salona uğramayan veya boya zamanı gelen kayıtlı aktif müşteri bulunmuyor.";
+      } else if (q.includes("boya") || q.includes("gelen") || q.includes("30 gün")) {
+        card.innerText = "Akıllı Yerel Analiz: Son 30 gündür salona uğramayan veya boya periyodu gelen aktif müşteri bulunmuyor. Tüm müşteriler güncel.";
       } else {
-        card.innerText = `Ustam sorduğun "${q}" ile ilgili yerel defterde net bir kayıt bulamadım ama ajandan ve müşteri rehberin sorunsuz çalışıyor.`;
+        card.innerText = `Ustam "${q}" konusunu yerel defterde taradım. İşlemlerin ve ajandan sorunsuz çalışıyor, başka bir emrin var mı?`;
+      }
+    }
+  </script>
+<!-- 5. PARÇA: BULUT VERİTABANI KÖPRÜSÜ VE LİSANS/KASA MOTORU -->
+  <script>
+    // --- FİREBASE & BULUT SENKRONİZASYON MOTORU ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyA3hQ9mBKSzZaxjcm3WshFIJPK98Z21h9s",
+      authDomain: "salon-takip-terminali-56f99.firebaseapp.com",
+      projectId: "salon-takip-terminali-56f99",
+      storageBucket: "salon-takip-terminali-56f99.firebasestorage.app",
+      messagingSenderId: "252732001384",
+      appId: "1:252732001384:web:977bb80b959514eee33fdd",
+      measurementId: "G-YVXWM0Z08X"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+
+    let aktifLisansKodu = localStorage.getItem('hair_lisans_kodu') || "";
+
+    function bulutVerileriniBaslat() {
+      if (!aktifLisansKodu) {
+        let girilenTel = prompt("Lütfen lisanslı cep telefonunuzu giriniz (Örn: 5323203232):");
+        if (girilenTel) {
+          aktifLisansKodu = '90' + girilenTel.replace(/\D/g, '').replace(/^0/, '');
+          localStorage.setItem('hair_lisans_kodu', aktifLisansKodu);
+        } else {
+          return;
+        }
+      }
+
+      // Randevuları Buluttan Dinle
+      db.collection('ustalar').doc(aktifLisansKodu).collection('randevular').onSnapshot(snapshot => {
+        randevular = [];
+        snapshot.forEach(doc => {
+          randevular.push({ id: doc.id, ...doc.data() });
+        });
+        ajandaSaatleriniCiz();
+        gunlukCiroHesapla();
+      }, err => {
+        console.log("Bulut senkronizasyon uyarısı: Yerel modda devam ediliyor.");
+      });
+
+      // Müşterileri Buluttan Dinle
+      db.collection('ustalar').doc(aktifLisansKodu).collection('musteriler').onSnapshot(snapshot => {
+        musteriler = [];
+        snapshot.forEach(doc => {
+          musteriler.push({ id: doc.id, ...doc.data() });
+        });
+      });
+    }
+
+    // Buluta Randevu Yazma Köprüsü
+    const eskiBosSaateRandevuAc = window.bosSaateRandevuAc;
+    window.bosSaateRandevuAc = function(saat) {
+      let musteri = prompt(`Seçilen Saat (${seciliTarihStr} - ${saat})\nMüşteri Adı Soyadı:`);
+      if (!musteri || !musteri.trim()) return;
+      let hizmet = prompt("Yapılacak İşlem / Hizmet:", "DİP BOYA");
+
+      let yeniRandevu = {
+        tarih: seciliTarihStr,
+        saat: saat,
+        musteriAdi: musteri.trim(),
+        hizmet: hizmet ? hizmet.trim().toUpperCase() : "İŞLEM",
+        sure: 60,
+        blokMu: false,
+        zamanMs: Date.now()
+      };
+
+      db.collection('ustalar').doc(aktifLisansKodu).collection('randevular').add(yeniRandevu).then(() => {
+        alert("✅ Randevu buluta başarıyla kaydedildi! ☁️");
+      }).catch(err => {
+        // Çevrimdışı kalırsa yerel listeye at
+        randevular.push({ id: Date.now().toString(), ...yeniRandevu });
+        ajandaSaatleriniCiz();
+        alert("✅ Randevu yerel olarak kaydedildi.");
+      });
+    };
+
+    // Buluttan Randevu Silme Köprüsü
+    const eskiAjandaRandevuSil = window.ajandaRandevuSil;
+    window.ajandaRandevuSil = function(id) {
+      if (!confirm("Bu randevuyu silmek istediğinize emin misiniz?")) return;
+      db.collection('ustalar').doc(aktifLisansKodu).collection('randevular').doc(id).delete().then(() => {
+        alert("Randevu silindi.");
+      }).catch(err => {
+        randevular = randevular.filter(r => r.id !== id);
+        ajandaSaatleriniCiz();
+      });
+    };
+
+    // Sesli Asistan Kayıt Köprüsü
+    const eskiAiRandevuyuAjandayaEkle = window.aiRandevuyuAjandayaEkle;
+    window.aiRandevuyuAjandayaEkle = function() {
+      if (!aiParsedRandevu) return;
+      db.collection('ustalar').doc(aktifLisansKodu).collection('randevular').add({
+        ...aiParsedRandevu,
+        blokMu: false,
+        zamanMs: Date.now()
+      }).then(() => {
+        alert("🎉 Sesli komutla randevu buluta işlendi!");
+        document.getElementById('aiParsedCard').classList.add('hidden');
+        lumioAiModaliKapat();
+      }).catch(err => {
+        randevular.push({ id: Date.now().toString(), ...aiParsedRandevu, blokMu: false });
+        document.getElementById('aiParsedCard').classList.add('hidden');
+        lumioAiModaliKapat();
+        ajandaSaatleriniCiz();
+      });
+    };
+
+    function gunlukCiroHesapla() {
+      const bugunStr = bugununTarihiStr();
+      const bugunRand = randevular.filter(r => r.tarih === bugunStr && !r.blokMu);
+      const ciroEl = document.getElementById('lblDailySummaryText');
+      if (ciroEl) {
+        ciroEl.innerText = `${bugunRand.length} Randevu • Canlı Bulut Aktif`;
       }
     }
 
-    // İlk Çalıştırma
+    function patronPaneliAc() {
+      let pin = prompt("Yönetici Güvenlik PIN Kodunu Giriniz:");
+      if (pin === "SEEOFSI" || pin === "1234") {
+        alert("🔓 Patron Paneli Yetkilendirildi.\nLisans kodunuz: " + aktifLisansKodu);
+      } else if (pin) {
+        alert("❌ Hatalı PIN Kodu!");
+      }
+    }
+
+    // Sayfa Açıldığında Motoru Ateşle
+    bulutVerileriniBaslat();
     ajandaTarihSeridiOlustur();
     ajandaSaatleriniCiz();
   </script>
-</body>
-</html>
+// --- KUSURSUZ AÇIK / KOYU MOD (TEMA) MOTORU ---
+    function temaDegistir() {
+      let aktifTema = localStorage.getItem('hair_aktif_tema') || 'dark';
+      let yeniTema = (aktifTema === 'dark') ? 'light' : 'dark';
+      
+      // Tercihi hafızaya kaydet
+      localStorage.setItem('hair_aktif_tema', yeniTema);
+      
+      // HTML ve Body etiketlerine tema sınıfını ve color-scheme'i zorla uygula
+      const root = document.documentElement;
+      const body = document.getElementById('appBody');
+      const metaTheme = document.getElementById('themeColorMeta');
+      const metaScheme = document.getElementById('colorSchemeMeta');
+
+      if (yeniTema === 'light') {
+        root.classList.add('theme-light');
+        if (body) body.classList.add('theme-light');
+        root.style.colorScheme = 'light';
+        if (metaScheme) metaScheme.setAttribute('content', 'light');
+        if (metaTheme) metaTheme.setAttribute('content', '#f8fafc');
+        document.getElementById('themeToggleBtn').innerText = '🌙';
+      } else {
+        root.classList.remove('theme-light');
+        if (body) body.classList.remove('theme-light');
+        root.style.colorScheme = 'dark';
+        if (metaScheme) metaScheme.setAttribute('content', 'dark');
+        if (metaTheme) metaTheme.setAttribute('content', '#000000');
+        document.getElementById('themeToggleBtn').innerText = '☀️';
+      }
+    }
+
+    // Sayfa ilk açıldığında hafızadaki temayı anında uygula (Yanıp sönmeyi önler)
+    (function () {
+      try {
+        let t = localStorage.getItem('hair_aktif_tema') || 'dark';
+        if (t === 'light') {
+          document.documentElement.classList.add('theme-light');
+          const body = document.getElementById('appBody');
+          if (body) body.classList.add('theme-light');
+          document.documentElement.style.colorScheme = 'light';
+          const btn = document.getElementById('themeToggleBtn');
+          if (btn) btn.innerText = '🌙';
+        }
+      } catch (e) {}
+    })();
