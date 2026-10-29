@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -10,8 +9,11 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="LUMIO">
-  <meta name="theme-color" content="#090d16">
+  <meta id="themeColorMeta" name="theme-color" content="#090d16">
   <meta name="mobile-web-app-capable" content="yes">
+  <!-- MOBİLDE CHROME VE SAFARI'NİN ZORAKİ KARARTMASINI ENGELLEYEN KESİN KALKAN -->
+  <meta name="color-scheme" content="light dark">
+  <meta name="supported-color-schemes" content="light dark">
 
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="apple-touch-icon" href="logo.png">
@@ -51,6 +53,10 @@
     }
   </script>
   <style>
+    :root {
+      color-scheme: light dark;
+    }
+
     html, body {
       overscroll-behavior-y: none !important;
       overscroll-behavior-x: none !important;
@@ -65,8 +71,13 @@
     .scroll-touch { -webkit-overflow-scrolling: touch; }
 
     /* ==========================================================================
-       LÜKS SALON STANDARDI: KUSURSUZ GÜNDÜZ / GECE CSS KALKANI (QUIET LUXURY)
+       MOBİL VE MASAÜSTÜ İÇİN KUSURSUZ GÜNDÜZ MODU (APPLE / FRESHA STANDARDI)
        ========================================================================== */
+    body.theme-light,
+    body.theme-light * { 
+      color-scheme: light !important; /* Mobil tarayıcının zorla karartmasını engeller */
+    }
+
     body.theme-light { 
       background-color: #f8fafc !important; 
       color: #0f172a !important; 
@@ -77,22 +88,35 @@
     body.theme-light main section > div,
     body.theme-light .asistan-card,
     body.theme-light #gunlukCiroKarti,
-    body.theme-light [class*="bg-slate-900"]:not(.modal-overlay-bg):not(#btnHizliOdemeKart),
+    body.theme-light [class*="bg-slate-900"]:not(.modal-overlay-bg):not(#btnHizliOdemeKart):not(#btnEditFisKart),
     body.theme-light [class*="bg-slate-950"]:not(.modal-overlay-bg):not(.modal-backdrop),
     body.theme-light [class*="bg-slate-800"]:not(.modal-overlay-bg):not(.btn-accent-colored) {
       background-color: #ffffff !important;
+      background-image: none !important;
       border-color: #e2e8f0 !important;
       color: #0f172a !important;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
     }
 
-    /* Saydam koyu Tailwind sınıflarını gündüz modunda kesin olarak ezen süt beyazı kalkan */
+    /* Saydam koyu Tailwind sınıflarını mobilde ezen süt beyazı kalkan */
     body.theme-light [class*="bg-slate-950/"],
     body.theme-light [class*="bg-slate-900/"] {
       background-color: #ffffff !important;
+      background-image: none !important;
       border-color: #e2e8f0 !important;
       color: #0f172a !important;
     }
+
+    /* Master AI kartındaki siyah gradyan lekesini gündüz modunda tertemiz şampanyaya çevir */
+    body.theme-light #cardMasterAiBanner,
+    body.theme-light [class*="via-slate-900"],
+    body.theme-light [class*="via-slate-950"] {
+      background: linear-gradient(135deg, #fffbeb 0%, #ffffff 50%, #fef3c7 100%) !important;
+      border-color: #fde68a !important;
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.08) !important;
+    }
+    body.theme-light #cardMasterAiBanner h3 { color: #b45309 !important; }
+    body.theme-light #cardMasterAiBanner p { color: #475569 !important; }
 
     body.theme-light [class*="border-slate-800"],
     body.theme-light [class*="border-slate-900"],
@@ -179,14 +203,6 @@
       backdrop-filter: blur(8px) !important;
       -webkit-backdrop-filter: blur(8px) !important;
     }
-
-    body.theme-light #cardMasterAiBanner {
-      background: linear-gradient(135deg, #fffbeb 0%, #ffffff 50%, #fef3c7 100%) !important;
-      border-color: #fde68a !important;
-      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.08) !important;
-    }
-    body.theme-light #cardMasterAiBanner h3 { color: #b45309 !important; }
-    body.theme-light #cardMasterAiBanner p { color: #475569 !important; }
 
     body.theme-light .ai-modal-box {
       background-color: #ffffff !important;
@@ -845,7 +861,7 @@
         </button>
       </div>
 
-      <!-- YENİ: USTA HAKEDİŞ YÜZDESİ (%) VE HAKEDİŞ DAĞILIM KUTUSU -->
+      <!-- USTA HAKEDİŞ YÜZDESİ (%) VE HAKEDİŞ DAĞILIM KUTUSU -->
       <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-2">
         <div class="flex justify-between items-center">
           <span class="text-[10px] text-amber-400 font-bold block uppercase tracking-wider">💰 HAKEDİŞ & PAYLAŞIM MOTORU</span>
@@ -890,7 +906,6 @@
           <i class="fa-solid fa-receipt mr-1 text-amber-400"></i> Fiş Dökümü:
         </span>
         <div class="flex items-center space-x-2">
-          <!-- YENİ: HESABI KAPAT / SIFIRLA BUTONU (GEÇMİŞİ ASLA SİLMEZ, SAYACI SIFIRLAR) -->
           <button onclick="kasaHesabiKapat()" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 rounded-lg text-[10px] font-bold active:scale-95 transition flex items-center" title="Mevcut Sayacı Sıfırla (Geçmiş Veriler Korunur)">
             <i class="fa-solid fa-rotate-left mr-1"></i> Hesabı Kapat / Sıfırla
           </button>
@@ -903,12 +918,12 @@
         <span id="kasaSeciliGunToplam" class="text-sm font-black text-amber-400">0,00 TL</span>
       </div>
 
-      <!-- FİŞLER LİSTESİ (HEM DÜZENLEME HEM SİLME DESTEKLİ) -->
+      <!-- FİŞLER LİSTESİ -->
       <div id="kasaGunlukIslemlerListesi" class="flex-1 overflow-y-auto space-y-2 pr-1 scroll-touch min-h-[180px] max-h-[46vh]"></div>
     </div>
   </div>
 
-  <!-- YENİ MODAL: FİŞ VE HİZMET DÜZENLEME PENCERESİ (EDIT MODU) -->
+  <!-- MODAL: FİŞ VE HİZMET DÜZENLEME PENCERESİ (EDIT MODU) -->
   <div id="modalFisDuzenle" class="hidden fixed inset-0 modal-overlay-bg flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-amber-500/40 rounded-2xl max-w-sm w-full p-4 space-y-3.5 shadow-2xl">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -1883,7 +1898,7 @@
         licenseKeyTitle: "ВАШ ЛИЦЕНЗИОННЫЙ КЛЮЧ", deptTitle: "ВАША СПЕЦИАЛИЗАЦИЯ / ОТДЕЛ",
         pwdChangeTitle: "🔒 ИЗМЕНИТЬ ПАРОЛЬ ВХОДА", pwdOld: "СТАРЫЙ ПАРОЛЬ:", pwdNew: "НОВЫЙ ПАРОЛЬ (6 ЦИФР):", pwdBtn: "Обновить пароль",
         lostDaysTitle: "⏰ НАПОМИНАНИЕ О «ПОТЕРЯННЫХ» КЛИЕНТАХ (Через сколько дней?)", lostDaysUnit: "Дней",
-        serviceListTitle: "СПИСОК ВАШИХ УСЛУГ (Кнопки записи)", addNewService: "+ Новая услуга",
+        serviceListTitle: "СПИСОК ВAШИХ УСЛУГ (Кнопки записи)", addNewService: "+ Новая услуга",
         alarmTitle: "НАПОМИНАНИЕ МАСТЕРУ (За сколько предупреждать)", backupTitle: "Резервная копия контактов",
         backupSub: "Скачивает список всех клиентов в файл на телефон.", downloadBackup: "Скачать",
         masterNameTitle: "ИМЯ И ФАМИЛИЯ МАСТЕРА ({USTA_ADI})", masterTitleTag: "ВАША ПРОФЕССИЯ / ЗВАНИЕ ({UNVAN})",
@@ -2092,15 +2107,1333 @@
     function temaUygula() {
       const body = document.getElementById('appBody');
       const btn = document.getElementById('themeToggleBtn');
+      const metaTheme = document.getElementById('themeColorMeta') || document.querySelector('meta[name="theme-color"]');
+      
       if (aktifTema === 'light') {
         body.classList.add('theme-light');
         if (btn) btn.innerText = "🌙";
+        if (metaTheme) metaTheme.setAttribute('content', '#f8fafc'); // Mobil üst barı da aydınlık süt beyazına çevirir
       } else {
         body.classList.remove('theme-light');
         if (btn) btn.innerText = "☀️";
+        if (metaTheme) metaTheme.setAttribute('content', '#090d16'); // Mobil üst barı gece rengine çevirir
       }
     }
     temaUygula();
+function aktifDilSablonlariniAl(dil) {
+      const varsayilan = (SOZLUK[dil] || SOZLUK.tr).sablons;
+      let ustaKaydi = (salonAyarlari && salonAyarlari['sablons_' + dil]) ? salonAyarlari['sablons_' + dil] : {};
+      
+      return {
+        msg1: (ustaKaydi.msg1 && ustaKaydi.msg1.trim()) ? ustaKaydi.msg1 : varsayilan.msg1,
+        msg2: (ustaKaydi.msg2 && ustaKaydi.msg2.trim()) ? ustaKaydi.msg2 : varsayilan.msg2,
+        msg3: (ustaKaydi.msg3 && ustaKaydi.msg3.trim()) ? ustaKaydi.msg3 : varsayilan.msg3,
+        msg4: (ustaKaydi.msg4 && ustaKaydi.msg4.trim()) ? ustaKaydi.msg4 : varsayilan.msg4,
+        msg5: (ustaKaydi.msg5 && ustaKaydi.msg5.trim()) ? ustaKaydi.msg5 : varsayilan.msg5,
+        confirm: (ustaKaydi.confirm && ustaKaydi.confirm.trim()) ? ustaKaydi.confirm : varsayilan.confirm,
+        msg7: (ustaKaydi.msg7 && ustaKaydi.msg7.trim()) ? ustaKaydi.msg7 : varsayilan.msg7,
+        msg8: (ustaKaydi.msg8 && ustaKaydi.msg8.trim()) ? ustaKaydi.msg8 : varsayilan.msg8,
+        msg9: (ustaKaydi.msg9 && ustaKaydi.msg9.trim()) ? ustaKaydi.msg9 : varsayilan.msg9
+      };
+    }
+
+    function diliDegistir(lang) {
+      aktifDil = lang;
+      localStorage.setItem('hair_aktif_dil', lang);
+      
+      const s = aktifDilSablonlariniAl(lang);
+      if (document.getElementById('tplMsg1')) document.getElementById('tplMsg1').value = s.msg1 || "";
+      if (document.getElementById('tplMsg2')) document.getElementById('tplMsg2').value = s.msg2 || "";
+      if (document.getElementById('tplMsg3')) document.getElementById('tplMsg3').value = s.msg3 || "";
+      if (document.getElementById('tplMsg4')) document.getElementById('tplMsg4').value = s.msg4 || "";
+      if (document.getElementById('tplMsg5')) document.getElementById('tplMsg5').value = s.msg5 || "";
+      if (document.getElementById('tplConfirm')) document.getElementById('tplConfirm').value = s.confirm || "";
+      if (document.getElementById('tplMsg7')) document.getElementById('tplMsg7').value = s.msg7 || "";
+      if (document.getElementById('tplMsg9')) document.getElementById('tplMsg9').value = s.msg9 || "";
+
+      diliArayuzeUygula();
+      bolumSecenekleriniDoldur();
+      if (typeof canliBildirimMerkeziniGuncelle === 'function') canliBildirimMerkeziniGuncelle();
+      if (typeof ajandaTarihSeridiOlustur === 'function') ajandaTarihSeridiOlustur();
+      if (typeof ajandaSaatleriniCiz === 'function') ajandaSaatleriniCiz();
+      if (typeof sihirbazAdimGoster === 'function') sihirbazAdimGoster(shAdim);
+      if (typeof gunlukCiroGuncelle === 'function') gunlukCiroGuncelle();
+      if (typeof tabloyuYenidenCiz === 'function') tabloyuYenidenCiz();
+      if (typeof musteriRehberiSayaciGuncelle === 'function') musteriRehberiSayaciGuncelle();
+      if (typeof lumioAiArayuzuDileGoreGuncelle === 'function') lumioAiArayuzuDileGoreGuncelle();
+      if (typeof gecmisListesiniGuncelle === 'function') gecmisListesiniGuncelle();
+    }
+
+    function bolumSecenekleriniDoldur() {
+      const select = document.getElementById('setBolumTuru');
+      if (!select) return;
+      const d = SOZLUK[aktifDil] || SOZLUK.tr;
+      const secili = salonAyarlari.bolum || "kuafor";
+
+      select.innerHTML = Object.entries(d.departments).map(([key, val]) => `
+        <option value="${key}" ${key === secili ? 'selected' : ''}>${val}</option>
+      `).join('');
+
+      const ozelKutu = document.getElementById('ozelBolumKutusu');
+      if (secili === 'ozel') {
+        ozelKutu.classList.remove('hidden');
+        document.getElementById('setOzelBolumAdi').value = salonAyarlari.ozelBolumAdi || "";
+      } else {
+        ozelKutu.classList.add('hidden');
+      }
+    }
+
+    function bolumDegistirildi(yeniBolum) {
+      salonAyarlari.bolum = yeniBolum;
+      salonAyarlari.hizmetler = VARSAYILAN_BOLUM_HIZMETLERI[yeniBolum] || VARSAYILAN_BOLUM_HIZMETLERI.kuafor;
+      
+      const d = SOZLUK[aktifDil] || SOZLUK.tr;
+      salonAyarlari.unvan = d.unvanMap[yeniBolum] || d.unvanMap.kuafor;
+      document.getElementById('setUnvan').value = salonAyarlari.unvan;
+
+      const ozelKutu = document.getElementById('ozelBolumKutusu');
+      if (yeniBolum === 'ozel') {
+        ozelKutu.classList.remove('hidden');
+      } else {
+        ozelKutu.classList.add('hidden');
+      }
+
+      if (typeof ayarlarHizmetListesiniCiz === 'function') ayarlarHizmetListesiniCiz();
+      if (typeof sihirbazHizmetButonlariniCiz === 'function') sihirbazHizmetButonlariniCiz();
+    }
+
+    function ozelBolumAdiGuncelle(val) {
+      salonAyarlari.ozelBolumAdi = val;
+      if (val.trim()) {
+        salonAyarlari.unvan = val.trim();
+        document.getElementById('setUnvan').value = val.trim();
+      }
+    }
+
+    function hizliOdemeTuruSec(tur) {
+      seciliHizliOdemeTuru = tur;
+      const btnNakit = document.getElementById('btnHizliOdemeNakit');
+      const btnKart = document.getElementById('btnHizliOdemeKart');
+      if (!btnNakit || !btnKart) return;
+      if (tur === 'nakit') {
+        btnNakit.className = "px-2 py-0.5 rounded text-[10px] font-black bg-amber-500 text-slate-950 shadow";
+        btnKart.className = "px-2 py-0.5 rounded text-[10px] font-black bg-slate-900 text-slate-400 border border-slate-700";
+      } else {
+        btnKart.className = "px-2 py-0.5 rounded text-[10px] font-black bg-amber-500 text-slate-950 shadow";
+        btnNakit.className = "px-2 py-0.5 rounded text-[10px] font-black bg-slate-900 text-slate-400 border border-slate-700";
+      }
+    }
+
+    function diliArayuzeUygula() {
+      const d = SOZLUK[aktifDil] || SOZLUK.tr;
+      if (document.getElementById('langSelect')) document.getElementById('langSelect').value = aktifDil;
+
+      const setT = (id, txt) => { const el = document.getElementById(id); if (el) el.innerText = txt; };
+      setT('navTxtTerminal', d.terminal);
+      setT('navTxtAgenda', d.agenda);
+      setT('navTxtHistory', d.history);
+      setT('navTxtReminders', d.remindersTab);
+      setT('navTxtSettings', d.settings);
+      
+      setT('lblDailyFinTitle', d.dailyFinTitle);
+      setT('btnSeeFlow', d.seeFlow);
+      setT('lblRemindersMainTitle', d.remindersMainTitle);
+      setT('lblBdayBannerTitle', d.bdayBannerTitle);
+      setT('lblRemindBannerTitle', d.remindBannerTitle);
+      setT('lblRemindBannerSub', d.remindBannerSub);
+      setT('lblLostBannerTitle', d.lostBannerTitle);
+      setT('lblLostBannerSub', d.lostBannerSub);
+      setT('lblWizardCardTitle', d.wizardCardTitle);
+      setT('lblWizardCardSub', d.wizardCardSub);
+      setT('btnStartWizard', d.startWizard);
+      setT('lblCustCardTitle', d.custCardTitle);
+      setT('btnClearCustomer', d.clearCust);
+      setT('lblCustPhone', d.phone);
+      setT('lblCustBirth', d.birth);
+      setT('lblTimeCardTitle', d.timeCardTitle);
+      setT('lblVisitDate', d.visitDate);
+      setT('lblVisitTime', d.visitTime);
+      setT('lblNextVisit', d.nextVisit);
+      setT('btnQuick15', d.q15);
+      setT('btnQuick21', d.q21);
+      setT('btnQuick30', d.qMonth);
+      setT('lblServiceCardTitle', d.serviceCardTitle);
+      setT('btnAddServiceRow', d.addServiceRow);
+      setT('lblTotalAmount', d.totalAmount);
+      setT('btnSaveVisit', d.saveVisit);
+      setT('lblAgendaTitle', d.agendaTitle);
+      setT('btnBackToday', d.backToday);
+      setT('lblDailyFlowTitle', d.dailyFlowTitle);
+      setT('lblRemindTip', d.remindTip);
+      setT('lblHistoryTitle', d.historyTitle);
+      setT('btnGetLastFormula', d.lastFormula);
+      
+      setT('lblSettingsHeading', d.settingsHeading);
+      setT('btnSaveSettings', d.saveSettings);
+      setT('lblPwdChangeTitle', d.pwdChangeTitle);
+      setT('lblPwdOld', d.pwdOld);
+      setT('lblPwdNew', d.pwdNew);
+      setT('btnPwdUpdate', d.pwdBtn);
+      
+      setT('shStep1Title', d.step1);
+      setT('shStep2Title', d.step2);
+      setT('shStep3Title', d.step3);
+      setT('shStep4Title', d.step4);
+      setT('shStep5Title', d.step5);
+      setT('lblLicenseKeyTitle', d.licenseKeyTitle);
+      setT('lblDeptTitle', d.deptTitle);
+      setT('lblLostDaysTitle', d.lostDaysTitle);
+      setT('lblLostDaysUnit', d.lostDaysUnit);
+      setT('lblServiceListTitle', d.serviceListTitle);
+      setT('btnAddNewService', d.addNewService);
+      setT('lblAlarmTitle', d.alarmTitle);
+      setT('lblBackupTitle', d.backupTitle);
+      setT('lblBackupSub', d.backupSub);
+      setT('btnDownloadBackup', d.downloadBackup);
+      setT('lblMasterNameTitle', d.masterNameTitle);
+      setT('lblMasterTitleTag', d.masterTitleTag);
+      setT('lblSalonNameTitle', d.salonNameTitle);
+      setT('lblMasterPhoneTitle', d.masterPhoneTitle);
+      setT('lblTplHeader', d.tplHeader);
+      setT('lblTplSub', d.tplSub);
+      setT('lblTpl1', d.tpl1Title);
+      setT('lblTpl2', d.tpl2Title);
+      setT('lblTpl3', d.tpl3Title);
+      setT('lblTpl4', d.tpl4Title);
+      setT('lblTpl5', d.tpl5Title);
+      setT('lblTpl6', d.tpl6Title);
+      setT('lblTpl7', d.tpl7Title);
+      if (document.getElementById('lblTpl9')) document.getElementById('lblTpl9').innerText = d.tpl9Title;
+      setT('lblCustDirectoryTitle', d.custDirectoryTitle);
+
+      const sInp = document.getElementById('custSearch');
+      if (sInp) sInp.placeholder = d.searchPlaceholder;
+      const cBirth = document.getElementById('custBirth');
+      if (cBirth) cBirth.placeholder = d.birthPh;
+      const vNext = document.getElementById('visitNext');
+      if (vNext) vNext.placeholder = d.datePh;
+
+      if (!aktifMusteri) {
+        if (document.getElementById('custLoyaltyTier')) document.getElementById('custLoyaltyTier').innerText = "🥉 " + d.newCustStatus;
+        if (document.getElementById('custFrequencyText')) document.getElementById('custFrequencyText').innerText = "";
+      }
+    }
+
+    function ustaLisansUyariKontrol(kalanGun) {
+      const banner = document.getElementById('bannerLisansUyarisi');
+      const txt = document.getElementById('txtLisansUyariMetin');
+      if (!banner) return;
+
+      if (kalanGun <= 7 && kalanGun > 1) {
+        banner.className = "px-3.5 py-2 text-xs font-bold flex items-center justify-between border-b shadow-md transition bg-slate-900 text-amber-300 border-amber-500/40";
+        txt.innerText = `⚠️ Lisans sürenizin dolmasına ${kalanGun} gün kaldı.`;
+        banner.classList.remove('hidden');
+      } else if (kalanGun <= 1 && kalanGun >= 0) {
+        banner.className = "px-3.5 py-2 text-xs font-bold flex items-center justify-between border-b shadow-md transition bg-slate-900 text-amber-400 border-amber-500 animate-pulse";
+        txt.innerText = kalanGun === 0 ? "🚨 DİKKAT: Lisans süreniz BUGÜN doluyor!" : "🚨 DİKKAT: Lisans süreniz YARIN doluyor!";
+        banner.classList.remove('hidden');
+      } else {
+        banner.classList.add('hidden');
+      }
+    }
+
+    function ayarlarHizmetListesiniCiz() {
+      const container = document.getElementById('ayarlarHizmetListesiContainer');
+      if (!container) return;
+      const liste = salonAyarlari.hizmetler || [];
+      const d = SOZLUK[aktifDil] || SOZLUK.tr;
+
+      container.innerHTML = liste.map((item, idx) => `
+        <div class="flex items-center space-x-1.5 bg-slate-900 p-1.5 rounded-lg border border-slate-800 text-[11px]">
+          <input type="text" value="${item.ad}" onchange="hizmetGuncelle(${idx}, 'ad', this.value)" class="flex-1 bg-slate-950 text-white font-bold px-2 py-1 rounded border border-slate-700 focus:outline-none">
+          <input type="number" value="${item.sure || 60}" onchange="hizmetGuncelle(${idx}, 'sure', this.value)" placeholder="Dk" class="w-14 bg-slate-950 text-amber-300 font-bold px-1.5 py-1 rounded border border-slate-700 text-center focus:outline-none">
+          <input type="number" value="${item.ucret || 0}" onchange="hizmetGuncelle(${idx}, 'ucret', this.value)" placeholder="${d.curr}" class="w-16 bg-slate-950 text-amber-400 font-bold px-1.5 py-1 rounded border border-slate-700 text-right focus:outline-none">
+          <button onclick="hizmetSil(${idx})" class="text-slate-400 hover:text-white px-2 py-1 bg-slate-800 rounded border border-slate-700">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function hizmetGuncelle(idx, alan, val) {
+      if (!salonAyarlari.hizmetler[idx]) return;
+      if (alan === 'sure' || alan === 'ucret') val = parseInt(val) || 0;
+      salonAyarlari.hizmetler[idx][alan] = val;
+    }
+
+    function yeniHizmetSatiriEkle() {
+      if (!salonAyarlari.hizmetler) salonAyarlari.hizmetler = [];
+      salonAyarlari.hizmetler.push({ ad: "YENİ HİZMET", sure: 60, ucret: 0 });
+      ayarlarHizmetListesiniCiz();
+      sihirbazHizmetButonlariniCiz();
+    }
+
+    function hizmetSil(idx) {
+      salonAyarlari.hizmetler.splice(idx, 1);
+      ayarlarHizmetListesiniCiz();
+      sihirbazHizmetButonlariniCiz();
+    }
+
+    function sihirbazHizmetButonlariniCiz() {
+      const knt = document.getElementById('shDinamikHizmetButonlari');
+      if (!knt) return;
+      const liste = salonAyarlari.hizmetler || VARSAYILAN_BOLUM_HIZMETLERI.kuafor;
+
+      knt.innerHTML = liste.map(h => `
+        <button type="button" onclick="shHizmetAta('${h.ad}', ${h.sure || 60})" class="p-2 rounded-xl border border-slate-800 bg-slate-950 hover:border-amber-500 text-slate-200 text-[11px] font-bold text-center truncate shadow transition active:scale-95">
+          ${h.ad}
+        </button>
+      `).join('');
+    }
+
+    function bugununTarihiStr() {
+      const d = new Date();
+      return d.getDate().toString().padStart(2, '0') + '.' + (d.getMonth() + 1).toString().padStart(2, '0') + '.' + d.getFullYear();
+    }
+    seciliTarihStr = bugununTarihiStr();
+
+    /* ==========================================================================
+       KASAM & CİRO MOTORU: HAKEDİŞ YÜZDESİ (%) VE ANLIK HESAP KAPATMA SIFIRLAYICI
+       ========================================================================== */
+
+    function kasaHakedisGuncelle(val) {
+      let yuzde = parseInt(val);
+      if (isNaN(yuzde) || yuzde < 0) yuzde = 0;
+      if (yuzde > 100) yuzde = 100;
+      salonAyarlari.hakedisYuzde = yuzde;
+      localStorage.setItem('hair_kisisel_ayarlar_' + aktifLisansKodu, JSON.stringify(salonAyarlari));
+      gunlukCiroGuncelle();
+      kasaListesiniCizVeHesapla(document.getElementById('kasaTarihSecici').value);
+    }
+
+    function kasaHesabiKapat() {
+      if (!confirm("Seçili dönemin kasasını kapatıp anlık masayı sıfırlamak istiyor musunuz?\n\n(DİKKAT: Geçmiş fiş kayıtlarınız Firestore veritabanında aynen korunur. Yalnızca mevcut çalışma oturumu sıfırlanır.)")) return;
+      salonAyarlari.sonKasaKapatmaZamani = Date.now();
+      localStorage.setItem('hair_kisisel_ayarlar_' + aktifLisansKodu, JSON.stringify(salonAyarlari));
+      gunlukCiroGuncelle();
+      kasaListesiniCizVeHesapla();
+      alert("✅ Kasa hesabı başarıyla kapatıldı ve anlık masa sıfırlandı!");
+    }
+
+    function gunlukCiroGuncelle() {
+      const el = document.getElementById('lblDailySummaryText');
+      const bugunStr = bugununTarihiStr();
+      const d = SOZLUK[aktifDil] || SOZLUK.tr;
+      const sifirlamaMs = salonAyarlari.sonKasaKapatmaZamani || 0;
+
+      const bugunRandevulari = randevular.filter(r => akilliTarihDuzelt(r.tarih) === bugunStr && !r.blokMu);
+      let bugunCiro = 0, haftaCiro = 0, ayCiro = 0;
+
+      let simdi = new Date();
+      let bugun00 = new Date(simdi.getFullYear(), simdi.getMonth(), simdi.getDate()).getTime();
+      let gunHafta = simdi.getDay() === 0 ? 7 : simdi.getDay();
+      let pazartesiMs = bugun00 - ((gunHafta - 1) * 86400000);
+      let ayinBasiMs = new Date(simdi.getFullYear(), simdi.getMonth(), 1).getTime();
+
+      gecmisIslemler.forEach(item => {
+        let itemDate = tarihStringToDate(item.tarih);
+        if (!itemDate) return;
+        let itemMs = (item.zaman && item.zaman.toMillis) ? item.zaman.toMillis() : itemDate.getTime();
+        
+        if (sifirlamaMs > 0 && itemMs <= sifirlamaMs) return;
+
+        let ucret = parseFloat(item.ucret) || 0;
+        if (akilliTarihDuzelt(item.tarih) === bugunStr) bugunCiro += ucret;
+        if (itemMs >= pazartesiMs) haftaCiro += ucret;
+        if (itemMs >= ayinBasiMs) ayCiro += ucret;
+      });
+
+      if (el) {
+        el.innerText = `${bugunRandevulari.length} ${d.bookingUnit} • ${bugunCiro.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ${d.curr}`;
+      }
+
+      const kBugun = document.getElementById('kasaBugunTutar');
+      const kHafta = document.getElementById('kasaHaftaTutar');
+      const kAy = document.getElementById('kasaAyTutar');
+
+      if (kBugun) kBugun.innerText = `${bugunCiro.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ${d.curr}`;
+      if (kHafta) kHafta.innerText = `${haftaCiro.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ${d.curr}`;
+      if (kAy) kAy.innerText = `${ayCiro.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ${d.curr}`;
+    }
+
+    function kasaPeriyotFiltrele(periyot) {
+      aktifKasaFiltresi = periyot;
+      ['bugun', 'hafta', 'ay'].forEach(p => {
+        let btn = document.getElementById('btnKasa' + (p === 'bugun' ? 'Bugun' : (p === 'hafta' ? 'Hafta' : 'Ay')));
+        if (btn) {
+          btn.classList.remove('ring-2', 'ring-amber-400', 'scale-95');
+          if (p === periyot) btn.classList.add('ring-2', 'ring-amber-400', 'scale-95');
+        }
+      });
+      document.getElementById('kasaTarihSecici').value = "";
+      kasaListesiniCizVeHesapla();
+    }
+
+    function kasaTarihFiltrele(isoDate) {
+      if (isoDate) {
+        aktifKasaFiltresi = 'ozel';
+        ['bugun', 'hafta', 'ay'].forEach(p => {
+          let btn = document.getElementById('btnKasa' + (p === 'bugun' ? 'Bugun' : (p === 'hafta' ? 'Hafta' : 'Ay')));
+          if (btn) btn.classList.remove('ring-2', 'ring-amber-400', 'scale-95');
+        });
+      }
+      kasaListesiniCizVeHesapla(isoDate);
+    }
+
+    function kasaListesiniCizVeHesapla(isoDate = null) {
+      const container = document.getElementById('kasaGunlukIslemlerListesi');
+      const d = SOZLUK[aktifDil] || SOZLUK.tr;
+      const sifirlamaMs = salonAyarlari.sonKasaKapatmaZamani || 0;
+      
+      let simdi = new Date();
+      let bugun00 = new Date(simdi.getFullYear(), simdi.getMonth(), simdi.getDate()).getTime();
+      let gunHafta = simdi.getDay() === 0 ? 7 : simdi.getDay();
+      let pazartesiMs = bugun00 - ((gunHafta - 1) * 86400000);
+      let ayinBasiMs = new Date(simdi.getFullYear(), simdi.getMonth(), 1).getTime();
+      let bugunStr = bugununTarihiStr();
+      
+      let seciliBaslik = "";
+
+      let filtrelenen = gecmisIslemler.filter(g => {
+        let itemDate = tarihStringToDate(g.tarih);
+        if (!itemDate) return false;
+        let itemMs = (g.zaman && g.zaman.toMillis) ? g.zaman.toMillis() : itemDate.getTime();
+
+        if (aktifKasaFiltresi === 'ozel' && isoDate) {
+          let p = isoDate.split('-');
+          let tStr = p[2] + '.' + p[1] + '.' + p[0];
+          seciliBaslik = `${tStr} Tarihli`;
+          return akilliTarihDuzelt(g.tarih) === tStr;
+        }
+
+        if (sifirlamaMs > 0 && itemMs <= sifirlamaMs) return false;
+
+        if (aktifKasaFiltresi === 'bugun') { seciliBaslik = "Bugünkü"; return akilliTarihDuzelt(g.tarih) === bugunStr; }
+        if (aktifKasaFiltresi === 'hafta') { seciliBaslik = "Bu Haftaki"; return itemMs >= pazartesiMs; }
+        if (aktifKasaFiltresi === 'ay') { seciliBaslik = "Bu Ayki"; return itemMs >= ayinBasiMs; }
+        return false;
+      });
+
+      filtrelenen.sort((a, b) => {
+        let tA = (a.zaman && a.zaman.toMillis) ? a.zaman.toMillis() : (tarihStringToDate(a.tarih) ? tarihStringToDate(a.tarih).getTime() : 0);
+        let tB = (b.zaman && b.zaman.toMillis) ? b.zaman.toMillis() : (tarihStringToDate(b.tarih) ? tarihStringToDate(b.tarih).getTime() : 0);
+        return tB - tA;
+      });
+
+      document.getElementById('kasaSeciliTarihEtiket').innerText = `${seciliBaslik} Kasa Toplamı:`;
+
+      let toplam = 0, nakitToplam = 0, kartToplam = 0;
+      filtrelenen.forEach(f => {
+        let uc = parseFloat(f.ucret) || 0;
+        toplam += uc;
+        if (f.odemeTuru === 'kart') kartToplam += uc;
+        else nakitToplam += uc;
+      });
+
+      document.getElementById('kasaSeciliGunToplam').innerHTML = `
+        <span>${toplam.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ${d.curr}</span>
+        <span class="block text-[9px] text-slate-400 font-normal">💵 Nakit: ${nakitToplam.toLocaleString('tr-TR')} | 💳 Kart: ${kartToplam.toLocaleString('tr-TR')}</span>
+      `;
+
+      const ustaYuzde = (salonAyarlari.hakedisYuzde !== undefined) ? salonAyarlari.hakedisYuzde : 50;
+      const ustaPay = (toplam * ustaYuzde) / 100;
+      const salonPay = toplam - ustaPay;
+
+      if (document.getElementById('kasaUstaPayi')) document.getElementById('kasaUstaPayi').innerText = `${ustaPay.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ${d.curr}`;
+      if (document.getElementById('kasaSalonPayi')) document.getElementById('kasaSalonPayi').innerText = `${salonPay.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ${d.curr}`;
+
+      if (filtrelenen.length === 0) {
+        container.innerHTML = `<div class="text-slate-500 text-xs p-4 text-center italic">Bu döneme ait aktif fiş bulunmuyor.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtrelenen.map(item => `
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-start text-xs hover:border-amber-500/40 transition gap-2">
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center space-x-1.5 mb-1 flex-wrap">
+              <span class="font-bold text-white text-xs truncate">${item.musteriAdi || 'Hızlı Kasa İşlemi'}</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded font-bold ${item.odemeTuru === 'kart' ? 'bg-slate-800 text-amber-300 border border-slate-700' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">${item.odemeTuru === 'kart' ? '💳 Kart' : '💵 Nakit'}</span>
+            </div>
+            <div class="text-[10px] text-amber-300 font-medium">📅 ${item.tarih} • <b>${item.hizmet}</b></div>
+            ${item.formul ? `<div class="text-[10px] text-slate-300 mt-1 line-clamp-2 bg-slate-900/60 p-1.5 rounded border border-slate-800/80 leading-relaxed"><b class="text-slate-400">Formül:</b> ${item.formul}</div>` : ''}
+          </div>
+          <div class="flex flex-col items-end shrink-0 pl-1">
+            <span class="font-black text-amber-400 text-sm whitespace-nowrap">${(parseFloat(item.ucret) || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ${d.curr}</span>
+            <div class="flex items-center space-x-1 mt-2">
+              <button onclick="kasaFisDuzenleModalAc('${item.id}', '${item.hizmet}', ${item.ucret || 0}, '${item.odemeTuru || 'nakit'}')" class="p-1.5 text-amber-400 hover:text-white bg-slate-800 rounded-md transition text-xs" title="Fişi Düzenle">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button onclick="kasaIslemSil('${item.id}')" class="p-1.5 text-slate-500 hover:text-red-400 hover:bg-slate-800 rounded-md transition text-xs" title="İşlemi Sil">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function kasamModaliAc() {
+      document.getElementById('modalKasam').classList.remove('hidden');
+      modalGeriTusuKaydi('modalKasam');
+      if (document.getElementById('kasaHakedisYuzde')) document.getElementById('kasaHakedisYuzde').value = (salonAyarlari.hakedisYuzde !== undefined) ? salonAyarlari.hakedisYuzde : 50;
+      kasaPeriyotFiltrele('bugun');
+      gunlukCiroGuncelle();
+    }
+
+    function kasaModalKapat() {
+      document.getElementById('modalKasam').classList.add('hidden');
+    }
+
+    function kasaIslemSil(docId) {
+      if (!confirm("Bu kasa işlemi silinsin mi? Tutar toplam cironuzdan otomatik düşecektir.")) return;
+      db.collection('ustalar').doc(aktifLisansKodu).collection('gecmis').doc(docId).delete().then(() => {
+        kasaListesiniCizVeHesapla(document.getElementById('kasaTarihSecici').value);
+        gunlukCiroGuncelle();
+        if (aktifMusteri) gecmisListesiniGuncelle();
+      });
+    }
+
+    function kasaHizliIslemEkle() {
+      let adInp = document.getElementById('kasaHizliIslemAd');
+      let ucretInp = document.getElementById('kasaHizliIslemUcret');
+      let islemAdi = adInp.value.trim() || "Genel Hizmet";
+      let ucret = parseFloat(ucretInp.value) || 0;
+
+      if (ucret <= 0) { alert("Lütfen geçerli bir tutar giriniz."); return; }
+
+      let bugun = bugununTarihiStr();
+      db.collection('ustalar').doc(aktifLisansKodu).collection('gecmis').add({
+        isHizliFis: true,
+        musteriId: "",
+        tel: "",
+        musteriAdi: "Hızlı Kasa İşlemi",
+        tarih: bugun,
+        hizmet: islemAdi.toUpperCase(),
+        formul: "Hızlı Fiş",
+        not: "",
+        odemeTuru: seciliHizliOdemeTuru,
+        usta: salonAyarlari.ustaAdi,
+        ucret: ucret,
+        zaman: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        adInp.value = "";
+        ucretInp.value = "";
+        kasaPeriyotFiltrele('bugun');
+      });
+    }
+
+    /* YENİ: FİŞ & HİZMET DÜZENLEME FONKSİYONLARI (EDIT MODU) */
+    let seciliEditFisOdeme = 'nakit';
+
+    function kasaFisDuzenleModalAc(docId, hizmet, ucret, odemeTuru) {
+      document.getElementById('editFisId').value = docId;
+      document.getElementById('editFisHizmet').value = hizmet || "";
+      document.getElementById('editFisUcret').value = ucret || 0;
+      editFisOdemeTuruSec(odemeTuru || 'nakit');
+      document.getElementById('modalFisDuzenle').classList.remove('hidden');
+      modalGeriTusuKaydi('modalFisDuzenle');
+    }
+
+    function kasaFisDuzenleKapat() {
+      document.getElementById('modalFisDuzenle').classList.add('hidden');
+    }
+
+    function editFisOdemeTuruSec(tur) {
+      seciliEditFisOdeme = tur;
+      const btnNakit = document.getElementById('btnEditFisNakit');
+      const btnKart = document.getElementById('btnEditFisKart');
+      if (!btnNakit || !btnKart) return;
+      if (tur === 'nakit') {
+        btnNakit.className = "p-2 rounded-xl text-xs font-black bg-amber-500 text-slate-950 shadow";
+        btnKart.className = "p-2 rounded-xl text-xs font-black bg-slate-900 text-slate-400 border border-slate-700";
+      } else {
+        btnKart.className = "p-2 rounded-xl text-xs font-black bg-amber-500 text-slate-950 shadow";
+        btnNakit.className = "p-2 rounded-xl text-xs font-black bg-slate-900 text-slate-400 border border-slate-700";
+      }
+    }
+
+    function kasaFisDuzenleKaydet() {
+      const docId = document.getElementById('editFisId').value;
+      const yeniHizmet = document.getElementById('editFisHizmet').value.trim();
+      const yeniUcret = parseFloat(document.getElementById('editFisUcret').value) || 0;
+
+      if (!yeniHizmet) { alert("Lütfen işlem adını boş bırakmayınız."); return; }
+
+      db.collection('ustalar').doc(aktifLisansKodu).collection('gecmis').doc(docId).update({
+        hizmet: yeniHizmet.toUpperCase(),
+        ucret: yeniUcret,
+        odemeTuru: seciliEditFisOdeme
+      }).then(() => {
+        kasaFisDuzenleKapat();
+        gunlukCiroGuncelle();
+        kasaListesiniCizVeHesapla(document.getElementById('kasaTarihSecici').value);
+        if (aktifMusteri) gecmisListesiniGuncelle();
+      }).catch(err => alert("Fiş güncelleme hatası: " + err.message));
+    }
+function ustaRandevuAlarmKontrol() {
+      const alarmDk = parseInt(salonAyarlari.alarmSuresi) || 0;
+      if (alarmDk === 0) return;
+
+      const simdi = new Date();
+      const simdikiSaatDk = (simdi.getHours() * 60) + simdi.getMinutes();
+      const bugunStr = bugununTarihiStr();
+
+      const bugunRand = randevular.filter(r => akilliTarihDuzelt(r.tarih) === bugunStr && !r.blokMu);
+      
+      bugunRand.forEach(r => {
+        if (!r.saat) return;
+        const [h, m] = r.saat.split(':').map(Number);
+        const randDk = (h * 60) + m;
+        const fark = randDk - simdikiSaatDk;
+
+        if (fark > 0 && fark <= alarmDk && !uyarilanRandevular.includes(r.id)) {
+          uyarilanRandevular.push(r.id);
+          
+          let hitap = turkceHitapIsimDuzenle(r.musteriAdi);
+          let bildirimMesaji = `Saat ${r.saat} için ${hitap} (${r.hizmet}) randevunuza ${fark} dakika kaldı!`;
+
+          alarmSesiCal();
+          if (navigator.vibrate) navigator.vibrate([400, 200, 400, 200, 400]);
+
+          if ('Notification' in window && Notification.permission === 'granted') {
+             new Notification("⏰ LUMIO Alarmı", {
+                 body: bildirimMesaji,
+                 icon: "logo.png"
+             });
+          } else {
+             document.getElementById('txtAlarmMesaji').innerText = bildirimMesaji;
+             document.getElementById('modalRandevuAlarmi').classList.remove('hidden');
+             modalGeriTusuKaydi('modalRandevuAlarmi');
+          }
+        }
+      });
+    }
+    setInterval(ustaRandevuAlarmKontrol, 25000);
+
+    function autoExpandArea(el) {
+      if (!el) return;
+      el.style.height = 'auto';
+      el.style.height = (el.scrollHeight) + 'px';
+    }
+
+    function notGenisletAc(btnEl, baslik) {
+      const row = btnEl.closest('.service-row');
+      if (!row) return;
+      const targetTextarea = row.querySelector('.service-formula');
+      if (!targetTextarea) return;
+      aktifZoomHedefArea = targetTextarea;
+      document.getElementById('lblZoomModalTitle').innerText = baslik || "Detaylı Formül Görüntüleyici";
+      document.getElementById('txtZoomContent').value = targetTextarea.value;
+      document.getElementById('modalNotGenislet').classList.remove('hidden');
+      modalGeriTusuKaydi('modalNotGenislet');
+      setTimeout(() => document.getElementById('txtZoomContent').focus(), 150);
+    }
+
+    function notGenisletKapat() {
+      document.getElementById('modalNotGenislet').classList.add('hidden');
+      aktifZoomHedefArea = null;
+    }
+
+    function notGenisletKaydet() {
+      if (aktifZoomHedefArea) {
+        aktifZoomHedefArea.value = document.getElementById('txtZoomContent').value;
+        autoExpandArea(aktifZoomHedefArea);
+      }
+      notGenisletKapat();
+    }
+
+    function satirHizmetDegisti(selectEl) {
+      const row = selectEl.closest('.service-row');
+      if (!row) return;
+      const secilenHizmet = selectEl.value;
+      const liste = salonAyarlari.hizmetler || VARSAYILAN_BOLUM_HIZMETLERI.kuafor;
+      const hObj = liste.find(x => x.ad === secilenHizmet);
+      const priceInput = row.querySelector('.service-price');
+      if (hObj && priceInput) {
+        priceInput.value = hObj.ucret || 0;
+        toplamHesapla();
+      }
+    }
+
+    function tabloyaSatirEkle(hizmetVal = "", formulVal = "", notVal = "", ucretVal = "") {
+      const container = document.getElementById('serviceRowsContainer');
+      const div = document.createElement('div');
+      div.className = "service-row bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2 relative shadow transition";
+      
+      const d = SOZLUK[aktifDil] || SOZLUK.tr;
+      const liste = salonAyarlari.hizmetler || VARSAYILAN_BOLUM_HIZMETLERI.kuafor;
+      
+      if (!hizmetVal && liste.length > 0) hizmetVal = liste[0].ad;
+
+      if (ucretVal === "" || ucretVal === undefined) {
+        const bul = liste.find(h => h.ad === hizmetVal);
+        if (bul) ucretVal = bul.ucret || 0;
+      }
+
+      const hizmetOptions = liste.map(h => `<option value="${h.ad}" ${h.ad === hizmetVal ? 'selected' : ''}>${h.ad}</option>`).join('');
+
+      div.innerHTML = `
+        <div class="flex justify-between items-center pb-1 border-b border-slate-900">
+          <span class="text-[10px] font-bold text-amber-400 row-title">${d.rowTitle}</span>
+          <button type="button" onclick="this.closest('.service-row').remove(); toplamHesapla();" class="text-slate-500 hover:text-red-400 text-xs px-1 row-remove-btn">${d.remove}</button>
+        </div>
+        <div>
+          <label class="text-[10px] text-slate-400 block font-semibold mb-0.5 lbl-s1">${d.s1}</label>
+          <select onchange="satirHizmetDegisti(this)" class="service-name w-full bg-slate-900 text-white text-xs p-2 rounded-lg border border-slate-700 font-bold focus:outline-none">${hizmetOptions}</select>
+        </div>
+        <div>
+          <div class="flex justify-between items-center mb-0.5">
+            <label class="text-[10px] text-slate-400 block font-semibold lbl-s2">${d.s2}</label>
+            <button type="button" onclick="notGenisletAc(this, '${d.s2}')" class="text-[10px] text-amber-400 hover:text-white font-bold flex items-center" title="Büyük Ekranda Gör / Düzenle">
+              <i class="fa-solid fa-maximize mr-1"></i> <span class="lbl-zoom-btn">${d.zoomBtn || 'Büyüt'}</span>
+            </button>
+          </div>
+          <textarea oninput="autoExpandArea(this)" placeholder="${d.sFormulaPh}" class="service-formula auto-expand-area w-full bg-slate-900 text-slate-200 text-xs p-2 rounded-lg border border-slate-700 focus:outline-none leading-relaxed">${formulVal}</textarea>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div class="col-span-2">
+            <label class="text-[10px] text-slate-400 block font-semibold mb-0.5 lbl-s3">${d.s3}</label>
+            <textarea oninput="autoExpandArea(this)" placeholder="${d.sNotesPh}" class="service-notes auto-expand-area w-full bg-slate-900 text-slate-200 text-xs p-2 rounded-lg border border-slate-700 focus:outline-none leading-relaxed">${notVal}</textarea>
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 block font-semibold mb-0.5 lbl-s4">${d.s4} (${d.curr})</label>
+            <input type="text" value="${ucretVal}" placeholder="0" oninput="toplamHesapla()" class="service-price w-full bg-slate-900 text-amber-300 font-black text-xs p-2 rounded-lg border border-slate-700 text-right focus:outline-none mt-0.5">
+          </div>
+        </div>`;
+      container.appendChild(div);
+
+      setTimeout(() => {
+        div.querySelectorAll('.auto-expand-area').forEach(ta => autoExpandArea(ta));
+      }, 50);
+
+      toplamHesapla();
+    }
+
+    function tabloyuYenidenCiz() {
+      const d = SOZLUK[aktifDil] || SOZLUK.tr;
+      document.querySelectorAll('.service-row').forEach(row => {
+        const title = row.querySelector('.row-title');
+        if (title) title.innerText = d.rowTitle;
+
+        const removeBtn = row.querySelector('.row-remove-btn');
+        if (removeBtn) removeBtn.innerText = d.remove;
+
+        const l1 = row.querySelector('.lbl-s1');
+        if (l1) l1.innerText = d.s1;
+
+        const l2 = row.querySelector('.lbl-s2');
+        if (l2) l2.innerText = d.s2;
+
+        const l3 = row.querySelector('.lbl-s3');
+        if (l3) l3.innerText = d.s3;
+
+        const l4 = row.querySelector('.lbl-s4');
+        if (l4) l4.innerText = `${d.s4} (${d.curr})`;
+
+        const fInp = row.querySelector('.service-formula');
+        if (fInp) fInp.placeholder = d.sFormulaPh;
+
+        const nInp = row.querySelector('.service-notes');
+        if (nInp) nInp.placeholder = d.sNotesPh;
+
+        const zoomBtn = row.querySelector('.lbl-zoom-btn');
+        if (zoomBtn) zoomBtn.innerText = d.zoomBtn || 'Büyüt';
+      });
+      toplamHesapla();
+    }
+
+    function toplamHesapla() {
+      let total = 0;
+      document.querySelectorAll('.service-price').forEach(input => {
+        let v = input.value.toString().trim().replace(/\./g, '').replace(',', '.');
+        total += parseFloat(v) || 0;
+      });
+      const d = SOZLUK[aktifDil] || SOZLUK.tr;
+      document.getElementById('totalAmountText').innerText = total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' ' + d.curr;
+    }
+
+    function ziyaretiKaydet() {
+      let hamAd = document.getElementById('custSearch').value.trim();
+      const tamTel = tamTelefonAl('custCountryCode', 'custPhone');
+      if (!hamAd) { alert("Müşteri adı zorunludur!"); return; }
+      const duzenliAd = turkceHitapIsimDuzenle(hamAd);
+      document.getElementById('custSearch').value = duzenliAd;
+
+      const rows = document.querySelectorAll('#serviceRowsContainer .service-row');
+      if (rows.length === 0) { alert("Lütfen en az bir hizmet ekleyin!"); return; }
+
+      const rawTarih = document.getElementById('visitDate').value || bugununTarihiStr();
+      const tarih = akilliTarihDuzelt(rawTarih);
+      const sonraki = akilliTarihDuzelt(document.getElementById('visitNext').value);
+      
+      let musteriDocId = (aktifMusteri && aktifMusteri.id) ? aktifMusteri.id : (tamTel ? ('tel_' + tamTel) : ('m_' + Date.now()));
+
+      db.collection('ustalar').doc(aktifLisansKodu).collection('musteriler').doc(musteriDocId).set({
+        ad: duzenliAd,
+        tel: tamTel,
+        dogum: document.getElementById('custBirth').value,
+        sonraki: sonraki,
+        sonZiyaret: tarih,
+        usta: salonAyarlari.ustaAdi,
+        guncellemeZamani: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+
+      rows.forEach(row => {
+        let fVal = row.querySelector('.service-formula') ? row.querySelector('.service-formula').value.trim() : "";
+        let nVal = row.querySelector('.service-notes') ? row.querySelector('.service-notes').value.trim() : "";
+        let uVal = row.querySelector('.service-price') ? parseFloat(row.querySelector('.service-price').value.replace(/\./g, '').replace(',', '.')) || 0 : 0;
+
+        db.collection('ustalar').doc(aktifLisansKodu).collection('gecmis').add({
+          musteriId: musteriDocId,
+          isHizliFis: false,
+          tel: tamTel,
+          musteriAdi: duzenliAd,
+          tarih: tarih,
+          hizmet: row.querySelector('.service-name').value,
+          formul: fVal,
+          not: nVal,
+          odemeTuru: 'nakit',
+          usta: salonAyarlari.ustaAdi,
+          ucret: uVal,
+          zaman: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      });
+
+      alert("İşlem başarıyla buluta kaydedildi! ☁️");
+      if (confirm("Yeni müşteriye geçmek için masa temizlensin mi?")) {
+        yeniIslemTemizle();
+      }
+    }
+
+    function gecmisListesiniGuncelle() {
+      const container = document.getElementById('historyListContainer');
+      const title = document.getElementById('historyCustName');
+      const d = SOZLUK[aktifDil] || SOZLUK.tr;
+      if (!container) return;
+
+      if (!aktifMusteri) {
+        if (title) title.innerText = d.noCustHistory || "Müşteri seçilmedi";
+        container.innerHTML = `<div class="text-slate-400 p-6 text-center text-xs">${d.noCustHistory || "Müşteri seçilmedi."}</div>`;
+        return;
+      }
+      if (title) title.innerText = turkceHitapIsimDuzenle(aktifMusteri.ad) + " - " + d.history;
+      
+      const islemler = gecmisIslemler.filter(g => {
+        if (g.isHizliFis === true || g.musteriAdi === 'Hızlı Kasa İşlemi') return false;
+        if (g.musteriId && g.musteriId === aktifMusteri.id) return true;
+        if (aktifMusteri.tel && g.tel && g.tel === aktifMusteri.tel) return true;
+        if (!g.tel && !aktifMusteri.tel && turkceNormalize(g.musteriAdi) === turkceNormalize(aktifMusteri.ad)) return true;
+        return false;
+      });
+
+      if (islemler.length === 0) {
+        container.innerHTML = `<div class="text-slate-400 p-6 text-center text-xs">${d.noHistoryRecords || "Bu müşteriye ait geçmiş işlem bulunamadı."}</div>`;
+        return;
+      }
+
+      let gruplar = {};
+      islemler.forEach((g, idx) => { if (!gruplar[g.tarih]) gruplar[g.tarih] = []; gruplar[g.tarih].push({...g, idx}); });
+      let html = "";
+      for (const [tarih, list] of Object.entries(gruplar)) {
+        html += `
+          <div class="bg-slate-950 p-3.5 rounded-2xl border border-slate-800 space-y-2.5">
+            <div class="flex justify-between items-center border-b border-slate-900 pb-2">
+              <span class="text-amber-400 font-bold text-xs">📅 ${tarih}</span>
+              <button onclick="secilenGunuMasayaAktar('${tarih}')" class="text-[11px] bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded-lg font-bold hover:bg-amber-500/30">Bu Günü Al</button>
+            </div>
+            ${list.map(it => `
+              <div class="text-[11px] space-y-1.5 bg-slate-900/60 p-2.5 rounded-lg border border-slate-800 relative hover:border-slate-700 transition">
+                <div class="flex justify-between items-center font-bold text-white">
+                  <span>${it.hizmet}</span>
+                  <div class="flex items-center space-x-2">
+                    <span class="text-amber-400">${it.ucret || 0} TL</span>
+                    <button onclick="gecmisIslemSil('${it.id}')" class="text-slate-500 hover:text-red-400 text-xs px-1" title="İşlemi ve Ücreti Sil">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+                ${it.formul ? `<div class="text-slate-200 leading-relaxed bg-slate-950/70 p-2 rounded border border-slate-800/80"><b class="text-amber-400">Formül:</b> ${it.formul}</div>` : ''}
+                ${it.not ? `<div class="text-slate-400 leading-relaxed"><b class="text-slate-500">Not:</b> ${it.not}</div>` : ''}
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+      container.innerHTML = html;
+    }
+
+    function gecmisIslemSil(docId) {
+      if (!confirm("Bu geçmiş işlemi ve ücretini silmek istediğinize emin misiniz? Tutar kasanızdan da otomatik düşülecektir.")) return;
+      db.collection('ustalar').doc(aktifLisansKodu).collection('gecmis').doc(docId).delete().then(() => {
+        gecmisListesiniGuncelle();
+        gunlukCiroGuncelle();
+      });
+    }
+
+    function sonFormuluMasayaAktar() {
+      if (!aktifMusteri) { alert("Önce müşteri seçin."); return; }
+      const islemler = gecmisIslemler.filter(g => {
+        if (g.isHizliFis === true || g.musteriAdi === 'Hızlı Kasa İşlemi') return false;
+        if (g.musteriId && g.musteriId === aktifMusteri.id) return true;
+        if (aktifMusteri.tel && g.tel && g.tel === aktifMusteri.tel) return true;
+        return false;
+      });
+      if (islemler.length === 0) { alert("Bu müşteriye ait geçmiş formül bulunamadı."); return; }
+      secilenGunuMasayaAktar(islemler[0].tarih);
+    }
+
+    function secilenGunuMasayaAktar(tarih) {
+      if (!aktifMusteri) return;
+      const sonIslemler = gecmisIslemler.filter(g => g.tarih === tarih && (!g.isHizliFis));
+      document.getElementById('serviceRowsContainer').innerHTML = "";
+      sonIslemler.forEach(item => tabloyaSatirEkle(item.hizmet, item.formul, item.not, item.ucret));
+      sekmeDegistir('terminal');
+    }
+
+    function canliBildirimMerkeziniGuncelle() {
+      const d = SOZLUK[aktifDil] || SOZLUK.tr;
+      const bugun = new Date();
+      const gun = bugun.getDate().toString().padStart(2, '0');
+      const ay = (bugun.getMonth() + 1).toString().padStart(2, '0');
+      const gunAy = gun + '.' + ay;
+      const bugunMs = new Date(bugun.getFullYear(), bugun.getMonth(), bugun.getDate()).getTime();
+
+      const doganlar = musteriler.filter(m => m.dogum && m.dogum.startsWith(gunAy));
+      const bdayBanner = document.getElementById('bannerDoğumGünü');
+      const bdayList = document.getElementById('bannerBdayList');
+
+      if (doganlar.length > 0) {
+        if (bdayBanner) bdayBanner.classList.remove('hidden');
+        if (document.getElementById('bannerBdayTextCount')) document.getElementById('bannerBdayTextCount').innerText = `${doganlar.length} ${d.clients}`;
+
+        if (bdayList) {
+          bdayList.innerHTML = doganlar.map(m => `
+            <div class="bday-row bg-slate-950 p-2.5 rounded-xl border border-slate-800 flex justify-between items-center transition">
+              <div class="cursor-pointer" onclick="sihirbazBaslatMusteriyle('${m.ad}', '${m.tel || ''}')" title="${d.book}">
+                <span class="font-bold text-white text-xs hover:text-amber-400 transition">${turkceHitapIsimDuzenle(m.ad)}</span>
+                <span class="text-[10px] text-amber-400 font-mono ml-2">${m.tel || d.noPhone}</span>
+              </div>
+              <div class="flex items-center space-x-1.5">
+                <button onclick="sihirbazBaslatMusteriyle('${m.ad}', '${m.tel || ''}')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-2 py-1 rounded text-[11px] shadow transition active:scale-95" title="${d.book}">
+                  📅 ${d.book}
+                </button>
+                <button onclick="dogumGunuMesajiGonder('${m.ad}', '${m.tel || ''}')" class="bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold px-2.5 py-1 rounded text-[11px] border border-slate-700 shadow active:scale-95 transition flex items-center space-x-1">
+                  <i class="fa-brands fa-whatsapp text-emerald-400"></i><span>${d.celebrate}</span>
+                </button>
+              </div>
+            </div>
+          `).join('');
+        }
+      } else {
+        if (bdayBanner) bdayBanner.classList.add('hidden');
+      }
+
+      const remindBanner = document.getElementById('bannerHatırlatma');
+      const remindList = document.getElementById('bannerRemindList');
+      const hatirlatilacaklar = [];
+
+      musteriler.forEach(m => {
+        if (!m.sonraki) return;
+        let temizSonraki = akilliTarihDuzelt(m.sonraki);
+        let parca = temizSonraki.split('.');
+        if (parca.length === 3) {
+          let hedefTarih = new Date(parseInt(parca[2]), parseInt(parca[1]) - 1, parseInt(parca[0]));
+          let farkGun = Math.ceil((hedefTarih.getTime() - bugunMs) / 86400000);
+          if (farkGun >= 0 && farkGun <= 3) {
+            hatirlatilacaklar.push({ ...m, kalanGun: farkGun, planTarih: temizSonraki });
+          }
+        }
+      });
+
+      if (hatirlatilacaklar.length > 0) {
+        if (remindBanner) remindBanner.classList.remove('hidden');
+        if (document.getElementById('bannerRemindTextCount')) document.getElementById('bannerRemindTextCount').innerText = `${hatirlatilacaklar.length} ${d.clients}`;
+
+        if (remindList) {
+          remindList.innerHTML = hatirlatilacaklar.map(m => {
+            let kalanMetin = m.kalanGun === 0 ? d.today : (m.kalanGun === 1 ? d.tomorrow : `${m.kalanGun} ${d.daysLeft}`);
+            return `
+              <div class="remind-row bg-slate-950 p-2.5 rounded-xl border border-amber-500/30 flex justify-between items-center transition">
+                <div class="cursor-pointer flex-1 mr-2" onclick="sihirbazBaslatMusteriyle('${m.ad}', '${m.tel || ''}')" title="${d.book}">
+                  <span class="font-bold text-white text-xs hover:text-amber-400 transition">${turkceHitapIsimDuzenle(m.ad)}</span>
+                  <div class="text-[10px] text-amber-400 font-medium">Planlanan: <b>${m.planTarih}</b> (${kalanMetin})</div>
+                </div>
+                <div class="flex items-center space-x-1.5">
+                  <button onclick="sihirbazBaslatMusteriyle('${m.ad}', '${m.tel || ''}')" class="bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold px-2 py-1 rounded text-[11px] border border-slate-700 transition active:scale-95" title="${d.book}">
+                    📅 ${d.book}
+                  </button>
+                  <button onclick="takipMesajiGonder('${m.ad}', '${m.tel || ''}', '${m.planTarih}')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-2.5 py-1 rounded text-[11px] shadow active:scale-95 transition flex items-center space-x-1">
+                    <i class="fa-brands fa-whatsapp text-sm"></i><span>${d.remind}</span>
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      } else {
+        if (remindBanner) remindBanner.classList.add('hidden');
+      }
+
+      const lostBanner = document.getElementById('bannerKayipMusteri');
+      const lostList = document.getElementById('bannerLostList');
+      const esikGun = parseInt(salonAyarlari.kayipGun) || 60;
+      const kayipMusteriler = [];
+
+      musteriler.forEach(m => {
+        let key = m.id || m.tel;
+        if (gizlenenKayipMusteriler.includes(key)) return;
+
+        let sonTarihStr = m.sonZiyaret || m.sonraki;
+        if (!sonTarihStr) {
+          let custGecmis = gecmisIslemler.filter(g => (g.musteriId && g.musteriId === m.id) || (m.tel && g.tel === m.tel));
+          if (custGecmis.length > 0) sonTarihStr = custGecmis[0].tarih;
+        }
+        if (!sonTarihStr) return;
+
+        let dObj = tarihStringToDate(sonTarihStr);
+        if (dObj) {
+          let gecenGun = Math.floor((bugunMs - dObj.getTime()) / 86400000);
+          if (gecenGun >= esikGun) {
+            kayipMusteriler.push({ ...m, gecenGun, sonIslemTarihi: akilliTarihDuzelt(sonTarihStr) });
+          }
+        }
+      });
+
+      if (kayipMusteriler.length > 0) {
+        if (lostBanner) lostBanner.classList.remove('hidden');
+        if (document.getElementById('bannerLostTextCount')) document.getElementById('bannerLostTextCount').innerText = `${kayipMusteriler.length} ${d.clients}`;
+
+        if (lostList) {
+          lostList.innerHTML = kayipMusteriler.map(m => `
+            <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 flex justify-between items-center transition">
+              <div class="cursor-pointer flex-1 mr-2" onclick="sihirbazBaslatMusteriyle('${m.ad}', '${m.tel || ''}')">
+                <span class="font-bold text-white text-xs hover:text-amber-300">${turkceHitapIsimDuzenle(m.ad)}</span>
+                <div class="text-[10px] text-amber-400 font-medium">Son Ziyaret: <b>${m.sonIslemTarihi}</b> (${m.gecenGun} Gün Oldu)</div>
+              </div>
+              <div class="flex items-center space-x-1.5">
+                <button onclick="kayipMusteriGeriCagirMesaji('${m.ad}', '${m.tel || ''}')" class="bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold px-2.5 py-1.5 rounded-xl text-[11px] border border-slate-700 shadow active:scale-95 transition flex items-center space-x-1">
+                  <i class="fa-brands fa-whatsapp text-sm text-emerald-400"></i><span>Davet</span>
+                </button>
+                <button onclick="kayipMusteriGizle('${m.id || m.tel}')" class="p-1.5 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white rounded-lg text-xs" title="Listeden Gizle">
+                  ✕
+                </button>
+              </div>
+            </div>
+          `).join('');
+        }
+      } else {
+        if (lostBanner) lostBanner.classList.add('hidden');
+      }
+
+      const totalReminders = doganlar.length + hatirlatilacaklar.length + kayipMusteriler.length;
+      const badgeTotal = document.getElementById('badgeTotalReminders');
+      const emptyMsg = document.getElementById('emptyRemindersMsg');
+      
+      if (badgeTotal) {
+        if (totalReminders > 0) {
+          badgeTotal.innerText = totalReminders;
+          badgeTotal.classList.remove('hidden');
+        } else {
+          badgeTotal.classList.add('hidden');
+        }
+      }
+      
+      if (emptyMsg) {
+        if (totalReminders === 0) emptyMsg.classList.remove('hidden');
+        else emptyMsg.classList.add('hidden');
+      }
+    }
+
+    function kayipMusteriGizle(id) {
+      if (!gizlenenKayipMusteriler.includes(id)) {
+        gizlenenKayipMusteriler.push(id);
+        sessionStorage.setItem('lumio_gizlenen_kayip_' + aktifLisansKodu, JSON.stringify(gizlenenKayipMusteriler));
+        canliBildirimMerkeziniGuncelle();
+      }
+    }
+
+    function kayipMusteriGeriCagirMesaji(ad, tel) {
+      if (!tel) { tel = prompt(`Sayın ${turkceHitapIsimDuzenle(ad)} için WhatsApp telefonu giriniz:`); }
+      if (!tel) return;
+      const hitapAd = turkceHitapIsimDuzenle(ad);
+      let uAdi = salonAyarlari.ustaAdi || "Server YILMAZ";
+      let unvan = salonAyarlari.unvan || "Kuaförünüz";
+      let sAdi = (salonAyarlari.salonAdi && salonAyarlari.salonAdi.trim()) ? salonAyarlari.salonAdi.trim() : unvan;
+      const s = aktifDilSablonlariniAl(aktifDil);
+      let msg = s.msg7.replace(/{MUSTERI_ADI}/g, hitapAd).replace(/{SALON_ADI}/g, sAdi).replace(/{USTA_ADI}/g, uAdi).replace(/{UNVAN}/g, unvan);
+      anindaWhatsAppAc(tel, msg);
+    }
+
+    function sihirbazBaslatMusteriyle(ad, tel) { sihirbazBaslat(); shMusteriSecildi(ad, tel); }
+
+    function dogumGunuMesajiGonder(ad, tel) {
+      if (!tel) { alert("Müşterinin kayıtlı telefonu yok."); return; }
+      const hitapAd = turkceHitapIsimDuzenle(ad);
+      let uAdi = salonAyarlari.ustaAdi || "Server YILMAZ";
+      let unvan = salonAyarlari.unvan || "Kuaförünüz";
+      let sAdi = (salonAyarlari.salonAdi && salonAyarlari.salonAdi.trim()) ? salonAyarlari.salonAdi.trim() : unvan;
+      const s = aktifDilSablonlariniAl(aktifDil);
+      let msg = s.msg2.replace(/{MUSTERI_ADI}/g, hitapAd).replace(/{SALON_ADI}/g, sAdi).replace(/{USTA_ADI}/g, uAdi).replace(/{UNVAN}/g, unvan);
+      anindaWhatsAppAc(tel, msg);
+    }
+
+    function takipMesajiGonder(ad, tel, tarih) {
+      if (!tel) { alert("Müşterinin telefon numarası kayıtlı değil."); return; }
+      const hitapAd = turkceHitapIsimDuzenle(ad);
+      let uAdi = salonAyarlari.ustaAdi || "Server YILMAZ";
+      let unvan = salonAyarlari.unvan || "Kuaförünüz";
+      let sAdi = (salonAyarlari.salonAdi && salonAyarlari.salonAdi.trim()) ? salonAyarlari.salonAdi.trim() : unvan;
+      const s = aktifDilSablonlariniAl(aktifDil);
+      let msg = s.msg1.replace(/{MUSTERI_ADI}/g, hitapAd).replace(/{TARIH}/g, tarih).replace(/{SALON_ADI}/g, sAdi).replace(/{USTA_ADI}/g, uAdi).replace(/{UNVAN}/g, unvan);
+      anindaWhatsAppAc(tel, msg);
+    }
+
+    function canliMusteriAra(query) {
+      const resContainer = document.getElementById('searchResults');
+      if (!query || query.trim().length < 1) {
+        if (resContainer) resContainer.classList.add('hidden');
+        let silBtn = document.querySelector('.id-sil-btn');
+        if (silBtn) silBtn.classList.add('hidden');
+        return;
+      }
+      const qNorm = turkceNormalize(query);
+      const qTel = query.replace(/\D/g, '');
+      const bulunanlar = musteriler.filter(m => {
+        let adNorm = turkceNormalize(m.ad);
+        let telTemiz = (m.tel || '').replace(/\D/g, '');
+        return adNorm.includes(qNorm) || (qTel.length > 1 && telTemiz.includes(qTel));
+      });
+      if (bulunanlar.length === 0) {
+        resContainer.innerHTML = `<div class="p-3 text-slate-400 text-xs italic text-center">'${query}' isimli kayıtlı müşteri bulunamadı.<br><span class="text-amber-400 font-bold">Yeni müşteri olarak kaydedebilirsiniz.</span></div>`;
+        resContainer.classList.remove('hidden');
+      } else {
+        resContainer.innerHTML = bulunanlar.map(m => `<div onclick="musteriSec('${m.id}')" class="p-3 hover:bg-slate-700 cursor-pointer flex justify-between items-center transition"><div><span class="font-bold text-white block">${turkceHitapIsimDuzenle(m.ad)}</span><span class="text-[11px] text-slate-400 font-mono">${m.tel || 'Numarasız'}</span></div><span class="text-[10px] text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">Seç ➔</span></div>`).join('');
+        resContainer.classList.remove('hidden');
+      }
+    }
+
+    function musteriSec(id) {
+      aktifMusteri = musteriler.find(m => m.id == id);
+      aramaKutusunuKapat();
+      if (!aktifMusteri) return;
+
+      document.getElementById('custSearch').value = turkceHitapIsimDuzenle(aktifMusteri.ad);
+      let t = aktifMusteri.tel || "";
+      if (t.startsWith('90')) { document.getElementById('custCountryCode').value = "+90"; document.getElementById('custPhone').value = t.substring(2); }
+      else if (t.length > 5) { document.getElementById('custCountryCode').value = "+" + t.substring(0, 2); document.getElementById('custPhone').value = t.substring(2); }
+      else { document.getElementById('custCountryCode').value = "+90"; document.getElementById('custPhone').value = t; }
+
+      document.getElementById('custBirth').value = aktifMusteri.dogum || "";
+      document.getElementById('visitNext').value = akilliTarihDuzelt(aktifMusteri.sonraki || "");
+      let silBtn = document.querySelector('.id-sil-btn');
+      if (silBtn) silBtn.classList.remove('hidden');
+
+      const d = SOZLUK[aktifDil] || SOZLUK.tr;
+      const custIslemler = gecmisIslemler.filter(g => {
+        if (g.isHizliFis === true || g.musteriAdi === 'Hızlı Kasa İşlemi') return false;
+        if (g.musteriId && g.musteriId === aktifMusteri.id) return true;
+        if (aktifMusteri.tel && g.tel && g.tel === aktifMusteri.tel) return true;
+        return false;
+      });
+      let count = custIslemler.length;
+
+      let tierText = "🥉 " + d.newCustStatus;
+      if (count >= 3 && count <= 5) tierText = "🥈 Düzenli Müşteri";
+      else if (count >= 6) tierText = "👑 VIP Sadık Müşteri";
+      if (document.getElementById('custLoyaltyTier')) document.getElementById('custLoyaltyTier').innerText = tierText;
+
+      let freqText = "";
+      if (count >= 2) {
+        let tarihler = custIslemler.map(i => tarihStringToDate(i.tarih)).filter(Boolean).sort((a,b) => a - b);
+        if (tarihler.length >= 2) {
+          let toplamGunFarki = (tarihler[tarihler.length - 1].getTime() - tarihler[0].getTime()) / 86400000;
+          let ortalamaGun = Math.round(toplamGunFarki / (tarihler.length - 1));
+          if (ortalamaGun > 0) freqText = `• Ortalama ${ortalamaGun} günde bir geliyor`;
+        }
+      }
+      if (document.getElementById('custFrequencyText')) document.getElementById('custFrequencyText').innerText = freqText;
+      if (document.getElementById('custBadgeVisits')) document.getElementById('custBadgeVisits').innerText = `${count} ${d.visits}`;
+      
+      gecmisListesiniGuncelle();
+    }
+
+    function aramaKutusunuKapat() { let res = document.getElementById('searchResults'); if (res) res.classList.add('hidden'); }
+
+    function yeniIslemTemizle() {
+      aktifMusteri = null;
+      if (document.getElementById('custSearch')) document.getElementById('custSearch').value = "";
+      if (document.getElementById('custCountryCode')) document.getElementById('custCountryCode').value = "+90";
+      if (document.getElementById('custPhone')) document.getElementById('custPhone').value = "";
+      if (document.getElementById('custBirth')) document.getElementById('custBirth').value = "";
+      if (document.getElementById('visitNext')) document.getElementById('visitNext').value = "";
+      if (document.getElementById('visitDate')) document.getElementById('visitDate').value = bugununTarihiStr();
+      if (document.getElementById('visitTime')) document.getElementById('visitTime').value = "14:00";
+      let silBtn = document.querySelector('.id-sil-btn');
+      if (silBtn) silBtn.classList.add('hidden');
+      
+      const d = SOZLUK[aktifDil] || SOZLUK.tr;
+      if (document.getElementById('custLoyaltyTier')) document.getElementById('custLoyaltyTier').innerText = "🥉 " + d.newCustStatus;
+      if (document.getElementById('custFrequencyText')) document.getElementById('custFrequencyText').innerText = "";
+      if (document.getElementById('custBadgeVisits')) document.getElementById('custBadgeVisits').innerText = `0 ${d.visits}`;
+
+      let sContainer = document.getElementById('serviceRowsContainer');
+      if (sContainer) sContainer.innerHTML = "";
+      toplamHesapla();
+      gecmisListesiniGuncelle();
+    }
+
+    function musteriRehberiSayaciGuncelle() {
+      const toplam = musteriler ? musteriler.length : 0;
+      const d = SOZLUK[aktifDil] || SOZLUK.tr;
+      const btnTxt = document.getElementById('lblCustDirectoryCount');
+      if (btnTxt) btnTxt.innerText = `${toplam} ${d.custDirectoryBtn || 'Müşteri'}`;
+      const badge = document.getElementById('custDirectoryTotalBadge');
+      if (badge) badge.innerText = `${toplam} ${d.custDirectoryBtn || 'Müşteri'}`;
+    }
+
+    function musteriRehberiModalAc() {
+      document.getElementById('modalMusteriRehberi').classList.remove('hidden');
+      modalGeriTusuKaydi('modalMusteriRehberi');
+      document.getElementById('custDirectorySearchInput').value = "";
+      musteriRehberListesiniCiz(musteriler);
+      setTimeout(() => document.getElementById('custDirectorySearchInput').focus(), 150);
+    }
+
+    function musteriRehberiModalKapat() { document.getElementById('modalMusteriRehberi').classList.add('hidden'); }
+
+    function musteriRehberindeAra(q) {
+      if (!q || q.trim().length === 0) { musteriRehberListesiniCiz(musteriler); return; }
+      const qNorm = turkceNormalize(q);
+      const qTel = q.replace(/\D/g, '');
+      const bulunanlar = musteriler.filter(m => {
+        let adNorm = turkceNormalize(m.ad);
+        let telTemiz = (m.tel || '').replace(/\D/g, '');
+        return adNorm.includes(qNorm) || (qTel.length > 1 && telTemiz.includes(qTel));
+      });
+      musteriRehberListesiniCiz(bulunanlar);
+    }
+
+    function musteriRehberListesiniCiz(liste) {
+      const container = document.getElementById('custDirectoryList');
+      if (!container) return;
+      if (!liste || liste.length === 0) {
+        container.innerHTML = `<div class="p-4 text-center text-slate-400 text-xs italic">Kayıtlı müşteri bulunamadı.</div>`; return;
+      }
+      const renderLimit = Math.min(liste.length, 300);
+      let html = "";
+      for (let i = 0; i < renderLimit; i++) {
+        let m = liste[i];
+        let duzgunAd = turkceHitapIsimDuzenle(m.ad);
+        let telGosterim = m.tel ? (m.tel.startsWith('90') ? '+' + m.tel : m.tel) : 'Numarasız';
+        html += `
+          <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 flex justify-between items-center text-xs hover:border-amber-500/40 transition gap-2">
+            <div class="cursor-pointer flex-1 min-w-0" onclick="musteriSecRehberden('${m.id}')">
+              <span class="font-bold text-white block text-xs hover:text-amber-400 truncate">${duzgunAd}</span>
+              <span class="text-[10px] text-amber-400 font-mono">${telGosterim}</span>
+            </div>
+            <div class="flex items-center space-x-1.5 shrink-0">
+              <button onclick="musteriDuzenleModalAc('${m.id}')" class="bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold px-2.5 py-1.5 rounded-lg text-[10px] border border-slate-700 transition active:scale-95" title="Bilgileri Düzenle">
+                <i class="fa-solid fa-pen mr-1"></i> Düzenle
+              </button>
+              <button onclick="musteriSecRehberden('${m.id}')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-3 py-1.5 rounded-lg text-[10px] shadow active:scale-95 transition">
+                Seç ➔
+              </button>
+            </div>
+          </div>`;
+      }
+      if (liste.length > renderLimit) { html += `<div class="p-2 text-center text-[10px] text-slate-500 italic">Toplam ${liste.length} müşteriden ilk ${renderLimit} tanesi gösteriliyor.</div>`; }
+      container.innerHTML = html;
+    }
+
+    function musteriSecRehberden(id) { 
+      musteriSec(id); 
+      musteriRehberiModalKapat(); 
+      if (typeof lumioAiArayuzuDileGoreGuncelle === 'function') lumioAiArayuzuDileGoreGuncelle();
+    }
+
+    function musteriDuzenleModalAc(id) {
+      const m = musteriler.find(x => x.id === id);
+      if (!m) return;
+      document.getElementById('editCustId').value = m.id;
+      document.getElementById('editCustName').value = m.ad || "";
+      let tel = m.tel || "";
+      if (tel.startsWith('90')) tel = tel.substring(2);
+      document.getElementById('editCustPhone').value = tel;
+      document.getElementById('editCustBirth').value = m.dogum || "";
+      document.getElementById('modalMusteriDuzenle').classList.remove('hidden');
+      modalGeriTusuKaydi('modalMusteriDuzenle');
+    }
+
+    function musteriDuzenleKapat() {
+      document.getElementById('modalMusteriDuzenle').classList.add('hidden');
+    }
+
+    function musteriDuzenleKaydet() {
+      const id = document.getElementById('editCustId').value;
+      const ad = document.getElementById('editCustName').value.trim();
+      const telHam = document.getElementById('editCustPhone').value.trim();
+      const dogum = document.getElementById('editCustBirth').value.trim();
+
+      if (!ad) { alert("Müşteri adı boş bırakılamaz!"); return; }
+      let temizTel = telHam.replace(/\D/g, '');
+      if (temizTel.startsWith('0')) temizTel = temizTel.substring(1);
+      if (temizTel.length === 10) temizTel = '90' + temizTel;
+
+      const duzenliAd = turkceHitapIsimDuzenle(ad);
+
+      db.collection('ustalar').doc(aktifLisansKodu).collection('musteriler').doc(id).update({
+        ad: duzenliAd,
+        tel: temizTel,
+        dogum: dogum,
+        guncellemeZamani: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        alert("✅ Müşteri bilgileri başarıyla güncellendi!");
+        musteriDuzenleKapat();
+        if (aktifMusteri && aktifMusteri.id === id) {
+          aktifMusteri.ad = duzenliAd;
+          aktifMusteri.tel = temizTel;
+          aktifMusteri.dogum = dogum;
+          musteriSec(id);
+        }
+      }).catch(err => alert("Güncelleme hatası: " + err.message));
+    }
+
+    function yasalSozlesmeModaliAc() {
+      document.getElementById('modalYasalSozlesme').classList.remove('hidden');
+      modalGeriTusuKaydi('modalYasalSozlesme');
+    }
+
+    function yasalSozlesmeModaliKapat() {
+      document.getElementById('modalYasalSozlesme').classList.add('hidden');
+    }
+
+    function musteriSilOnayli() {
+      if (!aktifMusteri) { alert("Önce müşteri seçin."); return; }
+      if (confirm(`'${aktifMusteri.ad}' isimli müşteriyi silmek istediğinize emin misiniz?\n\n(Not: Müşteri rehberden silinecektir, geçmiş kasa cironuz güvende kalır.)`)) {
+        db.collection('ustalar').doc(aktifLisansKodu).collection('musteriler').doc(aktifMusteri.id).delete().then(() => {
+          alert("Müşteri rehberden silindi."); yeniIslemTemizle();
+        });
+      }
+    }
+
+    function hizliRandevuEkle(g) {
+      const d = new Date(); d.setDate(d.getDate() + g);
+      document.getElementById('visitNext').value = d.getDate().toString().padStart(2, '0') + '.' + (d.getMonth() + 1).toString().padStart(2, '0') + '.' + d.getFullYear();
+    }
+
+    function musteriRehberiniIndir() {
+      if (!musteriler || musteriler.length === 0) { alert("İndirilecek kayıtlı müşteri bulunamadı."); return; }
+      let csv = "\uFEFFMüşteri Adı;Telefon;Doğum Tarihi;Sonraki Randevu;Toplam Ziyaret\n";
+      musteriler.forEach(m => {
+        let visitCount = gecmisIslemler.filter(g => (g.musteriId && g.musteriId === m.id) || (m.tel && g.tel === m.tel)).length;
+        let ad = (m.ad || '').replace(/;/g, ' ');
+        csv += `${ad};${m.tel || ''};${m.dogum || ''};${m.sonraki || ''};${visitCount}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      link.setAttribute("href", URL.createObjectURL(blob));
+      link.setAttribute("download", `LUMIO_Rehber_${bugununTarihiStr()}.csv`);
+      document.body.appendChild(link); link.click(); document.body.removeChild(link);
+      alert(`✅ Müşteri rehberiniz hazırlandı (${musteriler.length} Müşteri).\n\nDosya telefonunuza indirildi.`);
+    }
 /* GİRİŞTE YASAL SÖZLEŞME ONAYI VE DİJİTAL İSPAT BELGESİ (AUDIT TRAIL) */
     function lisansKoduKaydet() {
       const val = document.getElementById('setupLicenseInput').value.trim();
@@ -2541,7 +3874,7 @@
 
     function whatsappModalKapat() { let waModal = document.getElementById('whatsappModal'); if (waModal) waModal.classList.add('hidden'); }
 
-    /* DİNAMİK WHATSAPP GÖNDERİCİ (9. ULUSLARARASI IBAN VE SALON ADI FALLBACK DAHİL) */
+    /* DİNAMİK WHATSAPP GÖNDERİCİ (YENİ: 9. ULUSLARARASI IBAN VE SALON ADI FALLBACK DAHİL) */
     function whatsappGonder(no) {
       whatsappModalKapat();
       const hamAd = document.getElementById('custSearch').value.trim() || "Değerli Müşterimiz";
@@ -2584,7 +3917,8 @@
 
       anindaWhatsAppAc(tel, msg);
     }
-function sekmeDegistir(sekme) {
+
+    function sekmeDegistir(sekme) {
       if (window.history && window.history.pushState) {
         window.history.pushState({ aktifSekme: sekme }, "");
       }
@@ -3363,14 +4697,13 @@ function sekmeDegistir(sekme) {
       }
     };
 
-    /* RESMİ GOOGLE GEMINI JET MOTORU (3.8 & 3.5 FLASH - 2.5 404 HATASI KALDIRILDI) */
+    /* RESMİ GOOGLE GEMINI JET MOTORU (3.8 & 3.5 FLASH - 404 KORUMALI) */
     async function geminiApiCagir(payload) {
       if (!geminiApiKey) {
         throw new Error("Lütfen Patron Paneli'nden [🔑 Gemini Anahtarı] butonuna basarak API anahtarınızı giriniz.");
       }
 
-      // Google'ın yeni API standardı gereğince 2.5 kaldırıldı, 3.8 ve 3.5'e bağlandı
-      const modeller = ['gemini-3.8-flash', 'gemini-3.5-flash-lite'];
+      const modeller = ['gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-flash-latest'];
       let sonHata = "";
 
       for (const model of modeller) {
@@ -3398,7 +4731,7 @@ function sekmeDegistir(sekme) {
 
           if (data.error) {
             sonHata = data.error.message;
-            if (data.error.code === 404 || data.error.message.includes('not found') || data.error.message.includes('no longer available')) {
+            if (data.error.code === 404 || data.error.message.includes('not found') || data.error.message.includes('not supported') || data.error.message.includes('no longer available')) {
               continue;
             } else {
               throw new Error(data.error.message);
@@ -3774,7 +5107,7 @@ function sekmeDegistir(sekme) {
       if (seciliMusteri) {
         let islemler = gecmisIslemler.filter(g => 
           (g.musteriId && g.musteriId === seciliMusteri.id) || 
-          (seciliMusteri.tel && g.tel === seciliMusteri.tel) ||
+          (seciliMusteri.tel && g.tel && g.tel === seciliMusteri.tel) ||
           turkceNormalize(g.musteriAdi) === turkceNormalize(seciliMusteri.ad)
         );
 
@@ -3801,7 +5134,7 @@ SİSTEM CANLI BİLGİLERİ:
 - İncelenen Müşteri Hafızası: ${musteriBilgiHafizasi}`;
 
       if (aktifDil === 'ru') {
-        sistemTalimati = `Ты опытный мастер салона и коллеga. Знаешь все услуги: стрижки, укладки, окрашивание, ногти. Отвечай прямо, без звездочек (**). Записи: ${randevuOzeti}. Клиент: ${musteriBilgiHafizasi}`;
+        sistemTalimati = `Ты опытный мастер салона и коллега. Знаешь все услуги: стрижки, укладки, окрашивание, ногти. Отвечай прямо, без звездочек (**). Записи: ${randevuOzeti}. Клиент: ${musteriBilgiHafizasi}`;
       } else if (aktifDil === 'en') {
         sistemTalimati = `You are an experienced salon colleague knowing all services (cuts, colors, styling, nails). Direct, friendly tone without asterisks (**). Appointments: ${randevuOzeti}. Client History: ${musteriBilgiHafizasi}`;
       } else if (aktifDil === 'de') {
