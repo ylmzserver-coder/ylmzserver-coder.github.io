@@ -1,252 +1,1473 @@
+```html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>LUMIO Terminal</title>
-<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="LUMIO"><meta name="theme-color" content="#090d16"><meta name="mobile-web-app-capable" content="yes">
-<link rel="icon" type="image/png" href="logo.png"><link rel="apple-touch-icon" href="logo.png"><link rel="manifest" href="manifest.json">
-<script>if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }</script>
-<script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script>
-tailwind.config={theme:{extend:{colors:{slate:{800:'#1e2638',900:'#121826',950:'#090d16'},brand:{dark:'#090d16',card:'#121826',gold:'#eab308',green:'#10b981',blue:'#3b82f6',red:'#ef4444'}}}}};
-</script>
-<style>
-html, body { overscroll-behavior-y: none !important; overscroll-behavior-x: none !important; -webkit-tap-highlight-color: transparent; transition: background-color 0.2s ease, color 0.2s ease; }
-.no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-.safe-pt { padding-top: max(env(safe-area-inset-top, 0px), 14px) !important; } .safe-pb { padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px) !important; }
-.scroll-touch { -webkit-overflow-scrolling: touch; }
-body.theme-light { background-color: #f8fafc !important; color: #0f172a !important; }
-body.theme-light header, body.theme-light nav, body.theme-light .bg-slate-900, body.theme-light .bg-slate-950, body.theme-light .asistan-card { background-color: #ffffff !important; border-color: #e2e8f0 !important; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important; color: #0f172a !important; }
-body.theme-light input, body.theme-light select, body.theme-light textarea { color: #0f172a !important; background-color: #f1f5f9 !important; border-color: #cbd5e1 !important; font-weight: 600 !important; }
-body.theme-light .text-white { color: #0f172a !important; }
-body.theme-light .text-slate-400, body.theme-light .text-slate-300, body.theme-light .text-slate-500 { color: #475569 !important; }
-body.theme-light .quick-date-btn, body.theme-light .bg-slate-800 { background-color: #e2e8f0 !important; color: #0f172a !important; border-color: #cbd5e1 !important; }
-body.theme-light #btnGetLastFormula { background-color: #ecfdf5 !important; color: #065f46 !important; border-color: #a7f3d0 !important; }
-body.theme-light .text-amber-400, body.theme-light .text-amber-300 { color: #b45309 !important; }
-body.theme-light #gunlukCiroKarti { background: #ffffff !important; border-color: #fef08a !important; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important; }
-body.theme-light .service-row { background-color: #f8fafc !important; border-color: #e2e8f0 !important; }
-body.theme-light #headerLicenseBadge { background-color: #e2e8f0 !important; color: #334155 !important; border-color: #cbd5e1 !important; }
-body.theme-light #cardMasterAiBanner { background: linear-gradient(135deg, #fffdf5 0%, #ffffff 50%, #fef3c7 100%) !important; border-color: #fde68a !important; box-shadow: 0 4px 14px rgba(217, 119, 6, 0.08) !important; }
-body.theme-light #cardMasterAiBanner h3 { color: #b45309 !important; } body.theme-light #cardMasterAiBanner p { color: #475569 !important; }
-.auto-expand-area { resize: none; overflow-y: hidden; min-height: 42px; line-height: 1.4; }
-.pulse-ring { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6); animation: pulseWave 1.8s infinite cubic-bezier(0.66, 0, 0, 1); }
-@keyframes pulseWave { to { box-shadow: 0 0 0 14px rgba(245, 158, 11, 0); } }
-</style>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>LUMIO Terminal</title>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="LUMIO">
+  <meta name="theme-color" content="#090d16">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+  <link rel="manifest" href="manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            slate: {
+              800: '#1e2638',
+              900: '#121826',
+              950: '#090d16',
+            },
+            brand: { dark: '#090d16', card: '#121826', gold: '#eab308', green: '#10b981', blue: '#3b82f6', red: '#ef4444' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html, body {
+      overscroll-behavior-y: none !important;
+      overscroll-behavior-x: none !important;
+      -webkit-tap-highlight-color: transparent;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    .safe-pt { padding-top: max(env(safe-area-inset-top, 0px), 14px) !important; }
+    .safe-pb { padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px) !important; }
+    .scroll-touch { -webkit-overflow-scrolling: touch; }
+
+    /* FERAHLIK VE KURUMSAL LÜKS: APPLE / FRESHA AÇIK MODU */
+    body.theme-light { 
+      background-color: #f8fafc !important; 
+      color: #0f172a !important; 
+    }
+    body.theme-light header, 
+    body.theme-light nav, 
+    body.theme-light .bg-slate-900,
+    body.theme-light .bg-slate-950,
+    body.theme-light .asistan-card {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+      color: #0f172a !important;
+    }
+    body.theme-light input, 
+    body.theme-light select, 
+    body.theme-light textarea {
+      color: #0f172a !important;
+      background-color: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      font-weight: 600 !important;
+    }
+    body.theme-light .text-white { color: #0f172a !important; }
+    body.theme-light .text-slate-400,
+    body.theme-light .text-slate-300,
+    body.theme-light .text-slate-500 { color: #475569 !important; }
+    body.theme-light .quick-date-btn,
+    body.theme-light .bg-slate-800 {
+      background-color: #e2e8f0 !important;
+      color: #0f172a !important;
+      border-color: #cbd5e1 !important;
+    }
+    body.theme-light #btnGetLastFormula {
+      background-color: #ecfdf5 !important;
+      color: #065f46 !important;
+      border-color: #a7f3d0 !important;
+    }
+    body.theme-light .text-amber-400,
+    body.theme-light .text-amber-300 { color: #b45309 !important; }
+    body.theme-light #gunlukCiroKarti {
+      background: #ffffff !important;
+      border-color: #fef08a !important;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+    }
+    body.theme-light .service-row {
+      background-color: #f8fafc !important;
+      border-color: #e2e8f0 !important;
+    }
+    body.theme-light #headerLicenseBadge {
+      background-color: #e2e8f0 !important;
+      color: #334155 !important;
+      border-color: #cbd5e1 !important;
+    }
+
+    /* MASTER AI KARTINI AYDINLIK MODDA TERTEMİZ ŞAMPANYA SARISINA ÇEVİR */
+    body.theme-light #cardMasterAiBanner {
+      background: linear-gradient(135deg, #fffdf5 0%, #ffffff 50%, #fef3c7 100%) !important;
+      border-color: #fde68a !important;
+      box-shadow: 0 4px 14px rgba(217, 119, 6, 0.08) !important;
+    }
+    body.theme-light #cardMasterAiBanner h3 { color: #b45309 !important; }
+    body.theme-light #cardMasterAiBanner p { color: #475569 !important; }
+
+    /* KENDİLİĞİNDEN METNE GÖRE UZAYAN AKILLI TEXTAREA */
+    .auto-expand-area {
+      resize: none;
+      overflow-y: hidden;
+      min-height: 42px;
+      line-height: 1.4;
+    }
+    .pulse-ring {
+      box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6);
+      animation: pulseWave 1.8s infinite cubic-bezier(0.66, 0, 0, 1);
+    }
+    @keyframes pulseWave {
+      to { box-shadow: 0 0 0 14px rgba(245, 158, 11, 0); }
+    }
+  </style>
 </head>
 <body id="appBody" class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans select-none safe-pb">
-<div id="bannerGozatModu" class="hidden px-3.5 py-2 text-xs font-bold flex items-center justify-between border-b shadow-lg bg-amber-500 text-slate-950 border-amber-400 z-50">
-<div class="flex items-center space-x-1.5 truncate mr-2"><i class="fa-solid fa-store"></i><span id="txtGozatBilgi" class="truncate font-black">Usta Dükkanındasınız</span></div>
-<button onclick="patronAsliDukkanaDon()" class="px-2.5 py-1 rounded-lg bg-slate-950 text-amber-300 text-[10px] font-black shadow active:scale-95 transition whitespace-nowrap">Kendi Dükkanıma Dön ↩</button>
-</div>
-<div id="bannerLisansUyarisi" class="hidden px-3.5 py-2 text-xs font-bold flex items-center justify-between border-b shadow-md transition">
-<div class="flex items-center space-x-2"><i class="fa-solid fa-triangle-exclamation text-sm animate-bounce" id="iconLisansUyari"></i><span id="txtLisansUyariMetin">Lisansınızın bitmesine az kaldı.</span></div>
-<button onclick="yetkiliyeLisansSorWhatsApp()" class="px-2.5 py-1 rounded-lg bg-slate-950 text-amber-300 border border-amber-500/40 text-[10px] font-black shadow active:scale-95 transition">Şimdi Yenile ➔</button>
-</div>
-<div id="licenseSetupModal" class="hidden fixed inset-0 bg-slate-950/98 z-[9999999999] flex flex-col items-center justify-center p-6 text-center">
-<h2 class="text-lg font-black text-white mb-1">LUMIO GİRİŞİ</h2><p class="text-xs text-slate-400 max-w-xs mb-5">Lütfen telefonunuzu ve şifrenizi giriniz.</p>
-<div class="w-full max-w-xs space-y-2.5">
-<input type="tel" id="setupLicenseInput" placeholder="0532 320 32 32" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-center text-white font-bold text-sm focus:outline-none focus:border-amber-400">
-<input type="password" maxlength="6" id="setupPinInput" placeholder="••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-center text-amber-400 font-black tracking-widest text-lg focus:outline-none focus:border-amber-400">
-<div class="pt-1 text-left flex items-start space-x-2"><input type="checkbox" id="chkYasalOnay" class="w-4 h-4 mt-0.5 rounded border-slate-700 text-amber-500 focus:ring-0 cursor-pointer"><label for="chkYasalOnay" class="text-[10px] text-slate-300 leading-tight cursor-pointer">Sözleşmeyi okudum, kabul ediyorum.</label></div>
-<button onclick="lisansKoduKaydet()" class="w-full bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 font-black py-3 rounded-xl shadow active:scale-95 transition text-xs mt-1" id="btnSetupSubmit">GİRİŞ YAP ✨</button>
-</div></div>
-<div id="licenseLockScreen" class="hidden fixed inset-0 bg-slate-950 z-[99999998] flex flex-col items-center justify-center p-6 text-center">
-<h2 class="text-xl font-bold text-white mb-2">ERİŞİM DURDURULDU</h2><p class="text-sm text-slate-400 max-w-xs leading-relaxed mb-6">Lisans süreniz dolmuştur.</p>
-<button onclick="yetkiliyeLisansSorWhatsApp()" class="p-3 bg-slate-900 border border-amber-500/50 rounded-xl text-xs text-amber-400 font-bold flex items-center space-x-2 shadow"><i class="fa-brands fa-whatsapp text-base"></i><span>Yetkili İle İletişime Geç</span></button>
-</div>
-<header class="bg-slate-900 border-b border-slate-800 px-3.5 pb-2.5 safe-pt sticky top-0 z-40 flex items-center justify-between shadow-lg">
-<div class="flex items-center space-x-2.5 cursor-pointer" onclick="patronPaneliAc()">
-<div class="w-9 h-9 rounded-xl bg-slate-950 border border-amber-500/40 flex items-center justify-center shadow-md p-1"><h1 class="text-sm font-black text-amber-400">LUM</h1></div>
-<div><div class="flex items-center space-x-1.5"><h1 class="text-sm font-black text-amber-400">LUMIO</h1><span id="cloudStatusBadge" class="w-2 h-2 rounded-full bg-emerald-500"></span></div><p id="headerUstaUnvan" class="text-[11px] text-slate-400 font-medium">Server YILMAZ</p></div>
-</div>
-<div class="flex items-center space-x-2">
-<select id="langSelect" onchange="diliDegistir(this.value)" class="bg-slate-950 text-amber-300 text-[10px] font-bold border border-slate-700 rounded-lg px-2 py-1 focus:outline-none"><option value="tr">🇹🇷 TR</option><option value="en">🇬🇧 EN</option><option value="de">🇩🇪 DE</option><option value="ru">🇷🇺 RU</option></select>
-<button onclick="temaDegistir()" id="themeToggleBtn" class="w-8 h-8 rounded-lg bg-slate-800 text-amber-300 border border-slate-700 flex items-center justify-center text-xs transition">☀️</button>
-</div></header>
-<nav class="bg-slate-900/95 backdrop-blur-md border-b border-slate-800 p-2 sticky top-[58px] z-30 shadow-md">
-<div class="grid grid-cols-5 gap-1 max-w-lg mx-auto">
-<button onclick="sekmeDegistir('terminal')" id="nav-terminal" class="flex flex-col items-center justify-center py-2 px-0.5 rounded-xl bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40 transition active:scale-95 shadow"><i class="fa-solid fa-scissors text-sm mb-0.5"></i><span class="text-[10px]" id="navTxtTerminal">Terminal</span></button>
-<button onclick="sekmeDegistir('agenda')" id="nav-agenda" class="flex flex-col items-center justify-center py-2 px-0.5 rounded-xl bg-slate-950 text-slate-400 font-medium border border-slate-800 transition active:scale-95"><i class="fa-solid fa-calendar-days text-sm mb-0.5"></i><span class="text-[10px]" id="navTxtAgenda">Ajandam</span></button>
-<button onclick="sekmeDegistir('history')" id="nav-history" class="flex flex-col items-center justify-center py-2 px-0.5 rounded-xl bg-slate-950 text-slate-400 font-medium border border-slate-800 transition active:scale-95"><i class="fa-solid fa-clock-rotate-left text-sm mb-0.5"></i><span class="text-[10px]" id="navTxtHistory">Geçmiş</span></button>
-<button onclick="sekmeDegistir('reminders')" id="nav-reminders" class="flex flex-col items-center justify-center py-2 px-0.5 rounded-xl bg-slate-950 text-slate-400 font-medium border border-slate-800 transition active:scale-95 relative"><i class="fa-solid fa-bell text-sm mb-0.5"></i><span class="text-[10px]" id="navTxtReminders">Alarmlar</span><span id="badgeTotalReminders" class="hidden absolute top-0.5 right-0.5 px-1 bg-rose-600 text-white rounded-full text-[8px] font-black shadow border border-rose-400 animate-pulse">0</span></button>
-<button onclick="sekmeDegistir('settings')" id="nav-settings" class="flex flex-col items-center justify-center py-2 px-0.5 rounded-xl bg-slate-950 text-slate-400 font-medium border border-slate-800 transition active:scale-95"><i class="fa-solid fa-gear text-sm mb-0.5"></i><span class="text-[10px]" id="navTxtSettings">Ayarlar</span></button>
-</div></nav>
-<main class="flex-1 p-3 max-w-lg mx-auto w-full space-y-3.5">
-<section id="tab-terminal" class="space-y-3.5">
-<div id="gunlukCiroKarti" onclick="kasamModaliAc()" class="bg-slate-900 border border-amber-500/30 rounded-2xl p-3 flex items-center justify-between shadow cursor-pointer active:scale-95 transition">
-<div class="flex items-center space-x-2.5"><div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center"><i class="fa-solid fa-wallet"></i></div><div><span class="text-[10px] text-slate-400 block font-bold uppercase" id="lblDailyFinTitle">Bugünkü Durum & Kasa</span><span id="lblDailySummaryText" class="text-xs font-black text-white">0 Randevu • 0,00 TL</span></div></div>
-<button type="button" class="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2 py-1 rounded-lg font-bold">Kasamı Gör ➔</button>
-</div>
-<div id="cardMasterAiBanner" class="bg-gradient-to-r from-amber-500/15 via-slate-900 to-amber-500/10 border border-amber-500/40 rounded-2xl p-3.5 shadow-xl flex items-center justify-between transition">
-<div class="flex items-center space-x-3"><div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 text-slate-950 flex items-center justify-center shadow-lg pulse-ring"><i class="fa-solid fa-wand-magic-sparkles"></i></div><div><div class="flex items-center space-x-1.5"><h3 class="text-xs font-black text-amber-400">LUMIO MASTER AI</h3></div><p class="text-[10px] text-slate-400 mt-0.5">Saç analizi, sesli asistan</p></div></div>
-<button onclick="lumioAiModaliAc()" class="bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 font-black px-3.5 py-2.5 rounded-xl text-xs shadow-md transition active:scale-95"><i class="fa-solid fa-microphone"></i> Aç</button>
-</div>
-<div class="asistan-card bg-slate-900 border border-amber-500/30 rounded-2xl p-3.5 shadow-lg flex items-center justify-between">
-<div class="flex items-center space-x-3"><div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-lg"><i class="fa-solid fa-calendar-plus"></i></div><div><h3 class="text-xs font-bold text-amber-400" id="lblWizardCardTitle">Akıllı Asistan</h3><p class="text-[10px] text-slate-400">Randevu sihirbazı</p></div></div>
-<button onclick="sihirbazBaslat()" class="bg-slate-950 text-amber-400 border border-slate-700 font-bold px-3.5 py-2.5 rounded-xl text-xs shadow transition active:scale-95"><i class="fa-solid fa-calendar-check"></i> Oluştur</button>
-</div>
-<div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3">
-<div class="flex justify-between items-center pb-1"><span class="text-xs font-bold text-amber-400 uppercase"><i class="fa-solid fa-user mr-1.5"></i> Müşteri Bilgisi</span>
-<div class="flex items-center space-x-1.5"><button onclick="musteriRehberiModalAc()" class="text-xs text-amber-300 bg-amber-500/20 px-2.5 py-1 rounded-lg border border-amber-500/40 font-bold"><i class="fa-solid fa-address-book"></i> Rehber</button><button onclick="yeniIslemTemizle()" class="text-xs text-slate-400 bg-slate-800 px-2 py-1 rounded-lg border border-slate-700"><i class="fa-solid fa-rotate"></i></button></div></div>
-<div class="relative"><i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400 text-sm"></i><input type="text" id="custSearch" placeholder="İsim yazın (Örn: Server)..." oninput="canliMusteriAra(this.value)" class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-sm font-semibold text-white focus:outline-none focus:border-amber-500 transition">
-<div id="searchResults" class="hidden absolute left-0 right-0 top-12 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl z-50 max-h-52 overflow-y-auto divide-y divide-slate-700 scroll-touch"></div></div>
-<div class="grid grid-cols-2 gap-2 text-xs">
-<div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800"><span class="text-slate-400 block text-[10px] mb-1 font-bold">TELEFON</span>
-<div class="flex items-center space-x-1.5"><input type="text" id="custCountryCode" value="+90" class="w-12 bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-center text-amber-400 font-bold text-xs"><input type="tel" id="custPhone" class="flex-1 bg-transparent font-bold text-white text-xs focus:outline-none"></div></div>
-<div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800"><span class="text-slate-400 block text-[10px] mb-1 font-bold">DOĞUM TARİHİ</span><input type="text" id="custBirth" placeholder="GG.AA" onblur="dogumTarihiFormatla(this)" class="bg-transparent font-bold text-white text-xs w-full focus:outline-none p-1.5"></div></div>
-</div>
-<div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3">
-<span class="text-xs font-bold text-amber-400 uppercase"><i class="fa-solid fa-calendar-check mr-1.5"></i> Zaman Detayı</span>
-<div class="grid grid-cols-2 gap-2 text-xs">
-<div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800"><span class="text-slate-400 block text-[10px]">İŞLEM TARİHİ</span><input type="text" id="visitDate" class="bg-transparent font-bold text-white w-full focus:outline-none mt-1"></div>
-<div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800"><span class="text-slate-400 block text-[10px]">RANDEVU SAATİ</span><input type="text" id="visitTime" class="bg-transparent font-bold text-white w-full focus:outline-none mt-1"></div>
-</div>
-<div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-2">
-<div class="flex justify-between items-center"><span class="text-amber-400 text-[10px] font-bold">SONRAKİ HATIRLATMA</span>
-<div class="flex space-x-1"><button onclick="hizliRandevuEkle(21)" class="quick-date-btn text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700 font-bold">+21 G</button><button onclick="hizliRandevuEkle(30)" class="quick-date-btn text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700 font-bold">+1 Ay</button></div></div>
-<input type="text" id="visitNext" placeholder="GG.AA.YYYY" onblur="randevuTarihiFormatla(this)" class="bg-transparent font-bold text-amber-300 text-xs w-full focus:outline-none">
-</div></div>
-<div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3">
-<div class="flex justify-between items-center"><span class="text-xs font-bold text-amber-400 uppercase"><i class="fa-solid fa-paintbrush mr-1.5"></i> Hizmet Masası</span><button onclick="tabloyaSatirEkle()" class="text-xs bg-amber-500/20 text-amber-400 border border-amber-500/40 px-3 py-1.5 rounded-xl font-bold"><i class="fa-solid fa-plus mr-1"></i> Ekle</button></div>
-<div id="serviceRowsContainer" class="space-y-3"></div>
-<div class="flex justify-between items-center pt-3 border-t border-slate-800 text-sm"><span class="text-slate-400 font-medium">Toplam:</span><span id="totalAmountText" class="text-xl font-black text-amber-400">0,00 TL</span></div>
-</div>
-<div class="grid grid-cols-2 gap-2.5 pt-2 pb-6">
-<button onclick="ziyaretiKaydet()" class="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg active:scale-95 transition text-sm"><i class="fa-solid fa-cloud-arrow-up mr-2"></i>KAYDET</button>
-<button onclick="whatsappModalAc()" class="bg-gradient-to-r from-green-600 to-green-500 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg active:scale-95 transition text-sm"><i class="fa-brands fa-whatsapp mr-2"></i>WHATSAPP</button>
-</div></section>
-<section id="tab-agenda" class="hidden space-y-3.5">
-<div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3"><div class="flex justify-between items-center pb-2 border-b border-slate-800"><h2 class="text-sm font-bold text-amber-400"><i class="fa-solid fa-calendar-days mr-2"></i> Ajandam</h2><button onclick="buguneGit()" class="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2.5 py-1 rounded-lg font-bold">Bugün</button></div>
-<div class="space-y-2"><div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-300" id="selectedDateText">Bugün</span><input type="date" id="calendarPicker" onchange="takvimTarihSecildi(this.value)" class="bg-slate-950 text-amber-400 text-xs font-bold border border-slate-700 rounded-lg px-2.5 py-1 focus:outline-none"></div><div id="hizliGunlerSeridi" class="grid grid-cols-7 gap-1 text-center text-xs"></div></div></div>
-<div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-2.5"><div class="flex justify-between items-center pb-2 border-b border-slate-800"><h3 class="text-xs font-bold text-amber-400 uppercase"><i class="fa-solid fa-clock mr-1.5"></i> Akış</h3></div><div id="ajandaSaatlerContainer" class="space-y-2 max-h-[520px] overflow-y-auto pr-1 scroll-touch"></div></div>
-</section>
-<section id="tab-history" class="hidden space-y-3">
-<div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3"><div class="flex justify-between items-center pb-2 border-b border-slate-800"><div><h2 class="text-sm font-bold text-amber-400"><i class="fa-solid fa-clock-rotate-left mr-2"></i> Geçmiş</h2><p id="historyCustName" class="text-xs text-slate-400 mt-0.5">Müşteri seçilmedi</p></div><button onclick="sonFormuluMasayaAktar()" class="text-xs bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 px-3 py-1.5 rounded-xl font-bold active:scale-95 transition">Sonu Al</button></div><div id="historyListContainer" class="space-y-3 text-xs scroll-touch max-h-[520px] overflow-y-auto"></div></div>
-</section>
-<section id="tab-reminders" class="hidden space-y-3">
-<div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md pb-6 space-y-3.5"><h2 class="text-sm font-bold text-amber-400 flex items-center border-b border-slate-800 pb-2 mb-2"><i class="fa-solid fa-bell mr-2"></i> Alarmlar</h2>
-<div id="bannerDoğumGünü" class="hidden bg-slate-950 border border-rose-500/30 rounded-2xl p-3 shadow-md space-y-2"><div class="flex justify-between items-center"><div class="flex items-center space-x-2 text-rose-400 font-bold text-xs"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span><span>🎂 DOĞUM GÜNÜ</span></div></div><div id="bannerBdayList" class="space-y-1.5 text-xs"></div></div>
-<div id="bannerHatırlatma" class="hidden bg-slate-950 border border-amber-500/30 rounded-2xl p-3 shadow-md space-y-2"><div class="flex justify-between items-center"><div class="flex items-center space-x-2 text-amber-400 font-bold text-xs"><span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span><span>⏰ RANDEVU VAKTİ GELENLER</span></div></div><div id="bannerRemindList" class="space-y-1.5 text-xs max-h-40 overflow-y-auto scroll-touch"></div></div>
-<div id="bannerKayipMusteri" class="hidden bg-slate-950 border border-purple-500/30 rounded-2xl p-3 shadow-md space-y-2"><div class="flex justify-between items-center"><div class="flex items-center space-x-2 text-purple-400 font-bold text-xs"><span class="w-2.5 h-2.5 rounded-full bg-purple-500 animate-pulse"></span><span>💌 ÖZLEYENLER</span></div></div><div id="bannerLostList" class="space-y-1.5 text-xs max-h-40 overflow-y-auto scroll-touch"></div></div>
-<div id="emptyRemindersMsg" class="hidden text-center p-6 text-slate-500 text-xs italic">Şu an alarm yok.</div></div>
-</section>
-<section id="tab-settings" class="hidden space-y-3.5">
-<div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-4"><h2 class="text-sm font-bold text-amber-400 pb-2 border-b border-slate-800"><i class="fa-solid fa-gear mr-2"></i> Ayarlar</h2>
-<div class="space-y-3 text-xs">
-<input type="text" id="setLisansKodu" disabled class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-amber-400 font-mono font-bold cursor-not-allowed">
-<div class="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-2"><span class="text-amber-400 block text-[10px] font-bold uppercase">🔒 ŞİFRE DEĞİŞTİR</span>
-<div class="grid grid-cols-2 gap-2"><input type="password" maxlength="6" id="setEskiSifre" placeholder="Eski" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white text-center focus:outline-none"><input type="password" maxlength="6" id="setYeniSifre" placeholder="Yeni" class="w-full bg-slate-900 border border-amber-500/40 rounded-lg p-2 text-amber-300 text-center focus:outline-none"></div>
-<button onclick="ustaKendiSifresiniGuncelle()" class="w-full bg-slate-800 text-amber-400 font-bold py-2 rounded-lg border border-slate-700">Güncelle</button></div>
-<div class="p-3 bg-slate-950 border border-slate-800 rounded-xl"><label class="text-amber-400 block text-[10px] font-bold">UZMANLIK</label><select id="setBolumTuru" onchange="bolumDegistirildi(this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-bold text-xs mt-1"></select><div id="ozelBolumKutusu" class="hidden pt-1.5"><input type="text" id="setOzelBolumAdi" class="w-full bg-slate-900 border border-amber-500/40 rounded-lg p-2 text-white font-bold text-xs"></div></div>
-<div class="p-3 bg-slate-950 border border-slate-800 rounded-xl"><label class="text-purple-400 block text-[10px] font-bold">KAYIP MÜŞTERİ UYARISI (GÜN)</label><input type="number" id="setKayipGun" value="60" class="w-full bg-slate-900 border border-purple-500/40 rounded-lg p-2 text-white text-center mt-1"></div>
-<div class="p-3 bg-slate-950 border border-slate-800 rounded-xl"><div class="flex justify-between"><span class="text-amber-400 font-bold text-xs">HİZMET LİSTENİZ</span><button onclick="yeniHizmetSatiriEkle()" class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-bold">+ Ekle</button></div><div id="ayarlarHizmetListesiContainer" class="space-y-1.5 max-h-48 overflow-y-auto pr-1 mt-2"></div></div>
-<div class="p-3 bg-slate-950 border border-slate-800 rounded-xl"><label class="text-slate-400 block text-[10px] font-bold">RANDEVU ALARMI</label><select id="setAlarmSuresi" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-amber-300 font-bold text-xs mt-1"><option value="30">30 Dakika Önce</option><option value="60" selected>1 Saat Önce</option><option value="0">Kapalı</option></select></div>
-<button type="button" onclick="yasalSozlesmeModaliAc()" class="w-full bg-slate-800 text-amber-400 font-bold px-3 py-2 rounded-lg shadow">📄 Hukuki Metinleri İncele</button>
-<button onclick="musteriRehberiniIndir()" class="w-full bg-emerald-600 text-white font-bold px-3 py-2 rounded-lg shadow"><i class="fa-solid fa-download"></i> Rehberi Yedekle</button>
-<input type="text" id="setUstaAdi" placeholder="Ad Soyad" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-bold">
-<input type="text" id="setUnvan" placeholder="Unvan" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-amber-300 font-bold">
-<input type="text" id="setSalonAdi" placeholder="Salon Adı" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-bold">
-<div class="flex space-x-1.5"><input type="text" id="setUstaCountryCode" value="+90" class="w-14 bg-slate-950 border border-slate-700 rounded-xl p-2 text-center text-amber-400 font-bold text-xs"><input type="tel" id="setUstaTel" placeholder="WhatsApp No" class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-amber-300 font-bold"></div>
-<input type="text" id="setInstagram" placeholder="Instagram Linki" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white">
-<input type="text" id="setGoogleLink" placeholder="Google Maps Linki" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white">
-<div class="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-2.5"><span class="text-amber-400 block text-[10px] font-bold">🏦 BANKA & IBAN</span>
-<input type="text" id="setBankaAdi" placeholder="Banka Adı" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-bold text-xs">
-<input type="text" id="setHesapSahibi" placeholder="Hesap Sahibi" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-bold text-xs">
-<input type="text" id="setIbanNo" placeholder="IBAN" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-amber-300 font-mono font-bold text-xs"></div>
-<div class="space-y-3 mt-4"><span class="text-amber-400 font-bold block text-xs border-b border-slate-800 pb-1">WHATSAPP ŞABLONLARI</span>
-<textarea id="tplMsg1" rows="3" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-slate-200 text-xs"></textarea>
-<textarea id="tplMsg2" rows="3" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-slate-200 text-xs"></textarea>
-<textarea id="tplMsg3" rows="3" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-slate-200 text-xs"></textarea>
-<textarea id="tplMsg4" rows="3" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-slate-200 text-xs"></textarea>
-<textarea id="tplMsg5" rows="3" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-slate-200 text-xs"></textarea>
-<textarea id="tplConfirm" rows="3" class="w-full bg-slate-950 border border-emerald-500/40 rounded-xl p-2 text-slate-200 text-xs"></textarea>
-<textarea id="tplMsg7" rows="3" class="w-full bg-slate-950 border border-indigo-500/40 rounded-xl p-2 text-slate-200 text-xs"></textarea>
-<textarea id="tplMsg9" rows="3" class="w-full bg-slate-950 border border-amber-500/40 rounded-xl p-2 text-slate-200 text-xs"></textarea></div>
-</div><button onclick="ayarlariKaydet()" class="w-full bg-amber-500 text-slate-950 font-black py-3 rounded-xl mt-2 active:scale-95 text-xs">Tüm Ayarları Kaydet</button></div>
-</section>
-</main>
-<div id="modalKasam" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[99999999] flex items-center justify-center p-3">
-<div class="bg-slate-900 border border-amber-500/50 rounded-2xl w-full p-4 space-y-3 flex flex-col max-h-[92vh]">
-<div class="flex justify-between items-center pb-2 border-b border-slate-800"><h3 class="text-sm font-bold text-amber-400">Kasam</h3><button onclick="kasaModalKapat()" class="text-slate-400">✕</button></div>
-<div class="grid grid-cols-3 gap-1.5 text-center">
-<button onclick="kasaPeriyotFiltrele('bugun')" id="btnKasaBugun" class="bg-slate-950 p-2.5 rounded-xl border border-amber-500/50"><span class="text-[9px] text-slate-400 block font-bold">Bugün</span><span id="kasaBugunTutar" class="text-xs font-black text-amber-400">0 TL</span></button>
-<button onclick="kasaPeriyotFiltrele('hafta')" id="btnKasaHafta" class="bg-slate-950 p-2.5 rounded-xl border border-emerald-500/30"><span class="text-[9px] text-slate-400 block font-bold">Hafta</span><span id="kasaHaftaTutar" class="text-xs font-black text-emerald-400">0 TL</span></button>
-<button onclick="kasaPeriyotFiltrele('ay')" id="btnKasaAy" class="bg-slate-950 p-2.5 rounded-xl border border-blue-500/30"><span class="text-[9px] text-slate-400 block font-bold">Ay</span><span id="kasaAyTutar" class="text-xs font-black text-blue-400">0 TL</span></button></div>
-<div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-2">
-<div class="flex justify-between items-center"><span class="text-[10px] text-amber-400 font-bold">HAKEDİŞ</span><input type="number" id="kasaHakedisYuzde" min="0" max="100" value="50" onchange="kasaHakedisGuncelle(this.value)" class="w-14 bg-slate-900 border border-amber-500/40 rounded-lg p-1 text-center text-amber-400 text-xs"></div>
-<div class="grid grid-cols-2 gap-2 text-center pt-0.5"><div class="bg-slate-900 p-2 rounded-lg border border-slate-800"><span class="text-[9px] text-slate-400 font-bold">Usta</span><span id="kasaUstaPayi" class="text-xs font-black text-emerald-400 block mt-0.5">0 TL</span></div><div class="bg-slate-900 p-2 rounded-lg border border-slate-800"><span class="text-[9px] text-slate-400 font-bold">Salon</span><span id="kasaSalonPayi" class="text-xs font-black text-amber-400 block mt-0.5">0 TL</span></div></div></div>
-<div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-2">
-<div class="flex justify-between items-center"><span class="text-[10px] text-amber-400 font-bold">HIZLI KASA GİRİŞİ</span><div class="flex space-x-1"><button id="btnHizliOdemeNakit" onclick="hizliOdemeTuruSec('nakit')" class="px-2 py-0.5 rounded text-[10px] font-black bg-amber-500 text-slate-950">Nakit</button><button id="btnHizliOdemeKart" onclick="hizliOdemeTuruSec('kart')" class="px-2 py-0.5 rounded text-[10px] font-black bg-slate-900 text-slate-400 border border-slate-700">Kart</button></div></div>
-<div class="flex space-x-1.5"><input type="text" id="kasaHizliIslemAd" placeholder="İşlem" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white"><input type="number" id="kasaHizliIslemUcret" placeholder="TL" class="w-20 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-amber-400 font-bold text-center"><button onclick="kasaHizliIslemEkle()" class="bg-emerald-600 text-white font-bold px-3 rounded-lg text-xs">+ Ekle</button></div></div>
-<div class="flex justify-between items-center pt-1 border-t border-slate-800"><button onclick="kasaHesabiKapat()" class="px-2 py-1 bg-slate-800 text-amber-300 border border-slate-700 rounded-lg text-[10px] font-bold">Sıfırla</button><input type="date" id="kasaTarihSecici" onchange="kasaTarihFiltrele(this.value)" class="bg-slate-950 text-amber-300 text-[11px] font-bold border border-slate-700 rounded-lg px-2 py-1"></div>
-<div class="flex justify-between items-center bg-slate-950/80 px-3 py-1.5 rounded-lg border border-slate-800"><span class="text-[11px] text-slate-400" id="kasaSeciliTarihEtiket">Dönem Toplamı:</span><span id="kasaSeciliGunToplam" class="text-sm font-black text-amber-400">0 TL</span></div>
-<div id="kasaGunlukIslemlerListesi" class="flex-1 overflow-y-auto space-y-2 pr-1 scroll-touch min-h-[180px]"></div></div></div>
-<div id="modalFisDuzenle" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[999999999] flex items-center justify-center p-4">
-<div class="bg-slate-900 border border-amber-500/50 rounded-2xl w-full p-4 space-y-3.5"><div class="flex justify-between items-center border-b border-slate-800 pb-2"><h3 class="text-xs font-bold text-amber-400">Fiş Düzenle</h3><button onclick="kasaFisDuzenleKapat()" class="text-slate-400">✕</button></div>
-<input type="hidden" id="editFisId"><div class="space-y-2 text-xs"><input type="text" id="editFisHizmet" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white"><input type="number" id="editFisUcret" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-amber-400 font-black text-sm"><div class="grid grid-cols-2 gap-2"><button type="button" id="btnEditFisNakit" onclick="editFisOdemeTuruSec('nakit')" class="p-2 rounded-xl text-xs bg-amber-500 text-slate-950 font-black">Nakit</button><button type="button" id="btnEditFisKart" onclick="editFisOdemeTuruSec('kart')" class="p-2 rounded-xl text-xs bg-slate-900 text-slate-400 border border-slate-700 font-black">Kart</button></div></div>
-<div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800"><button type="button" onclick="kasaFisDuzenleKapat()" class="bg-slate-800 text-slate-300 text-xs font-bold py-2.5 rounded-xl">Vazgeç</button><button type="button" onclick="kasaFisDuzenleKaydet()" class="bg-amber-500 text-slate-950 text-xs font-black py-2.5 rounded-xl">Güncelle</button></div></div></div>
-<div id="modalNotGenislet" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[999999999] flex items-center justify-center p-4"><div class="bg-slate-900 border border-amber-500/50 rounded-2xl w-full p-4 space-y-3 flex flex-col"><div class="flex justify-between items-center pb-2 border-b border-slate-800"><h3 class="text-xs font-bold text-amber-400">Görüntüleyici</h3><button onclick="notGenisletKapat()" class="text-slate-400">✕</button></div><textarea id="txtZoomContent" rows="8" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-slate-100"></textarea><div class="flex justify-end pt-1"><button onclick="notGenisletKaydet()" class="bg-amber-500 text-slate-950 font-black px-4 py-2 rounded-xl text-xs">Tamam</button></div></div></div>
-<div id="modalMusteriRehberi" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[9999999] flex items-center justify-center p-3"><div class="bg-slate-900 border border-amber-500/50 rounded-2xl w-full p-4 space-y-3 flex flex-col max-h-[88vh]"><div class="flex justify-between items-center pb-2 border-b border-slate-800"><h3 class="text-sm font-bold text-amber-400">Müşteri Rehberi</h3><span id="custDirectoryTotalBadge" class="text-xs bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-bold">0</span><button onclick="musteriRehberiModalKapat()" class="text-slate-400">✕</button></div><input type="text" id="custDirectorySearchInput" oninput="musteriRehberindeAra(this.value)" placeholder="Ara..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"><div id="custDirectoryList" class="flex-1 overflow-y-auto space-y-1.5 scroll-touch"></div></div></div>
-<div id="modalMusteriDuzenle" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[999999999] flex items-center justify-center p-4"><div class="bg-slate-900 border border-amber-500/50 rounded-2xl w-full p-5 space-y-3.5"><div class="flex justify-between items-center border-b border-slate-800 pb-2"><h3 class="text-xs font-bold text-amber-400">Müşteri Düzenle</h3><button onclick="musteriDuzenleKapat()" class="text-slate-400">✕</button></div><input type="hidden" id="editCustId"><div class="space-y-2 text-xs"><input type="text" id="editCustName" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white"><input type="tel" id="editCustPhone" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-amber-400"><input type="text" id="editCustBirth" onblur="dogumTarihiFormatla(this)" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white"></div><div class="grid grid-cols-2 gap-2 pt-2"><button type="button" onclick="musteriDuzenleKapat()" class="bg-slate-800 text-slate-300 text-xs font-bold py-2.5 rounded-xl">Vazgeç</button><button type="button" onclick="musteriDuzenleKaydet()" class="bg-amber-500 text-slate-950 text-xs font-black py-2.5 rounded-xl">Kaydet</button></div></div></div>
-<div id="modalRandevuOlustur" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[9999999] flex items-center justify-center p-4"><div class="bg-slate-900 border border-amber-500/50 rounded-2xl w-full p-5 space-y-4"><div class="flex justify-between items-center border-b border-slate-800 pb-2.5"><h3 class="text-sm font-bold text-amber-400">Randevu Oluştur</h3><span id="shSayacMetin" class="text-[10px] bg-slate-800 text-amber-300 px-2.5 py-0.5 rounded-md font-bold">Adım 1</span></div><div id="shKutuAdim1" class="space-y-3"><input type="text" id="shTarihInput" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-amber-300"><div class="grid grid-cols-2 gap-2"><button onclick="shTarihAta(0)" class="p-2.5 rounded-xl border border-slate-800 bg-slate-950 text-white text-xs">Bugün</button><button onclick="shTarihAta(1)" class="p-2.5 rounded-xl border border-slate-800 bg-slate-950 text-white text-xs">Yarın</button></div><input type="date" onchange="shTakvimSecildi(this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-xs text-slate-300"></div><div id="shKutuAdim2" class="space-y-3 hidden"><input type="text" id="shMusteriInput" oninput="shMusteriAra(this.value)" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white"><div class="flex space-x-1.5"><input type="text" id="shCountryCode" value="+90" class="w-14 bg-slate-950 border border-slate-700 rounded-xl p-2 text-center text-amber-400 text-xs"><input type="tel" id="shTelInput" class="flex-1 bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-amber-300"></div><div id="shMusteriSonuclari" class="space-y-1.5 max-h-28 overflow-y-auto pt-1"></div></div><div id="shKutuAdim3" class="space-y-3 hidden"><input type="text" id="shHizmetInput" value="İŞLEM" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-amber-300"><div id="shDinamikHizmetButonlari" class="grid grid-cols-2 gap-1.5 pt-1"></div><button onclick="shDigerHizmetSec()" class="w-full p-2.5 rounded-xl border border-amber-500/40 bg-amber-500/10 text-amber-300 text-xs font-bold">DİĞER YAZ</button></div><div id="shKutuAdim4" class="space-y-3 hidden"><input type="number" id="shSureInput" value="60" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-xs text-white text-center"><div class="space-y-1.5 pt-1"><button onclick="shSureAta(30)" class="w-full text-left p-2.5 bg-slate-950 border border-slate-800 text-white text-xs">30 Dk</button><button onclick="shSureAta(45)" class="w-full text-left p-2.5 bg-slate-950 border border-slate-800 text-white text-xs">45 Dk</button><button onclick="shSureAta(60)" class="w-full text-left p-2.5 bg-slate-950 border border-slate-800 text-white text-xs">60 Dk</button></div></div><div id="shKutuAdim5" class="space-y-3 hidden"><input type="text" id="shSaatInput" value="14:00" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-base text-amber-400 font-black text-center"><div class="flex gap-1.5 justify-center"><button onclick="shSaatAta('10:00')" class="px-2 py-1 bg-slate-900 text-slate-300 rounded text-xs">10:00</button><button onclick="shSaatAta('12:00')" class="px-2 py-1 bg-slate-900 text-slate-300 rounded text-xs">12:00</button><button onclick="shSaatAta('14:00')" class="px-2 py-1 bg-slate-900 text-slate-300 rounded text-xs">14:00</button></div><div class="text-[11px] text-slate-300 bg-slate-950 p-2.5 rounded-xl border border-slate-800">Müşteri: <b id="shOzetMusteri" class="text-white"></b><br>İşlem: <b id="shOzetIslem" class="text-amber-400"></b></div></div><div class="grid grid-cols-2 gap-2 pt-2"><button id="shGeriBtn" onclick="shGeriTiklandi()" class="bg-slate-800 text-slate-300 text-xs font-bold py-2.5 rounded-xl">Vazgeç</button><button id="shIleriBtn" onclick="shIleriTiklandi()" class="bg-amber-500 text-slate-950 text-xs font-black py-2.5 rounded-xl">İleri</button></div></div></div>
-<div id="cakismaModal" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[99999999] flex items-center justify-center p-4"><div class="bg-slate-900 border border-amber-500/50 rounded-2xl w-full p-5 space-y-4 text-center"><h3 class="text-sm font-bold text-amber-400">Saat Çakışması</h3><p id="cakismaBilgiMetin" class="text-xs text-slate-200"></p><div class="space-y-2"><button onclick="sihirbazCiftRandevuOnayla()" class="w-full bg-amber-600 text-white text-xs font-bold py-2.5 rounded-xl">Araya Yaz</button><button onclick="sihirbazOnerilenSaatiSec()" id="btnOnerilenSaat" class="w-full bg-slate-800 text-amber-300 text-xs font-bold py-2.5 rounded-xl">Boş Saati Seç</button><button onclick="document.getElementById('cakismaModal').classList.add('hidden')" class="w-full bg-slate-950 text-slate-400 text-xs py-2 rounded-xl">Kapat</button></div></div></div>
-<div id="bildirimAksiyonModal" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[99999999] flex items-center justify-center p-4"><div class="bg-slate-900 border border-emerald-500/50 rounded-2xl w-full p-5 space-y-3.5 text-center"><h3 class="text-sm font-bold text-emerald-400">Kaydedildi!</h3><p id="bildirimOzetMetin" class="text-xs text-slate-300"></p><div class="space-y-2 text-xs"><button onclick="bildirimAksiyonTetikle('musteri')" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-xl">Müşteriye Gönder</button><button onclick="telefonTakvimineKaydet()" class="w-full bg-amber-500 text-slate-950 font-black py-2.5 rounded-xl">Takvime Ekle</button><button onclick="bildirimModaliniKapat()" class="w-full bg-slate-950 text-slate-400 py-2 rounded-xl">Kapat</button></div></div></div>
-<div id="modalRandevuAlarmi" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[9999999999] flex items-center justify-center p-4"><div class="bg-slate-900 border-2 border-amber-500 rounded-3xl w-full p-6 text-center space-y-4 animate-bounce"><h3 class="text-base font-black text-amber-400">⏰ VAKİT GELDİ!</h3><p id="txtAlarmMesaji" class="text-xs text-white"></p><button onclick="randevuAlarmKapat()" class="w-full bg-amber-500 text-slate-950 font-black py-3 rounded-xl">TAMAM</button></div></div>
-<div id="modalLumioAi" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[9999999999] flex flex-col items-center justify-center p-3"><div class="bg-slate-900 border border-amber-500/40 rounded-3xl w-full max-w-md shadow-2xl flex flex-col overflow-hidden"><div class="flex justify-between p-4 border-b border-slate-800"><h3 class="text-sm font-black text-amber-400">MASTER AI</h3><button onclick="lumioAiModaliKapat()" class="text-slate-400">✕</button></div><div class="flex p-2.5 space-x-1.5 bg-slate-950"><button onclick="lumioAiSekme('ses')" id="aiTabBtnSes" class="ai-nav-tab flex-1 py-2 bg-amber-500 text-slate-950 rounded-lg text-[11px]">SES</button><button onclick="lumioAiSekme('istisare')" id="aiTabBtnIstisare" class="ai-nav-tab flex-1 py-2 text-slate-400 rounded-lg text-[11px]">İSTİŞARE</button><button onclick="lumioAiSekme('kamera')" id="aiTabBtnKamera" class="ai-nav-tab flex-1 py-2 text-slate-400 rounded-lg text-[11px]">KAMERA</button></div><div class="flex-1 overflow-y-auto p-4 bg-slate-900"><div id="aiTabContentSes"><button onclick="lumioAiBasKonusToggle()" class="w-24 h-24 bg-slate-800 rounded-full mx-auto block mb-4 text-amber-400 text-3xl"><i class="fa-solid fa-microphone"></i></button><p id="aiMicStatus" class="text-center text-[10px] text-slate-400">Hazır</p><div id="aiParsedCard" class="hidden mt-4 bg-emerald-950/30 p-4 rounded-xl text-[11px]"><b id="aiResMusteri" class="text-white block"></b><b id="aiResTarih" class="text-amber-400 block"></b><b id="aiResSaat" class="text-emerald-400 block"></b><b id="aiResHizmet" class="text-white block"></b><button onclick="lumioAiRandevuyuOnayla()" class="w-full bg-emerald-600 text-white mt-2 py-2 rounded-lg">Onayla</button></div></div><div id="aiTabContentIstisare" class="hidden"><textarea id="aiAskInput" class="w-full bg-slate-950 text-white p-3 rounded-xl mb-2"></textarea><button onclick="lumioAiSoruSor()" class="w-full bg-amber-500 text-slate-950 py-2 rounded-xl font-bold">Sor</button><div id="aiAdviceCard" class="hidden mt-2 p-3 bg-slate-800 rounded-xl text-[11px] text-slate-200"><p id="aiAdviceText"></p></div></div><div id="aiTabContentKamera" class="hidden"><input type="file" id="aiPhotoUpload" class="hidden" onchange="lumioAiFotoYuklendi(this)"><button onclick="document.getElementById('aiPhotoUpload').click()" class="w-full bg-slate-950 p-6 rounded-2xl text-amber-400"><i class="fa-solid fa-camera text-2xl"></i></button><div id="aiPhotoPreviewBox" class="hidden mt-3"><img id="aiPreviewImg" class="w-full h-40 object-cover rounded-xl mb-2"><button onclick="lumioAiFotoAnalizBaslat()" id="btnStartVisionScan" class="w-full bg-amber-500 text-slate-950 py-3 rounded-xl font-bold">Analiz Et</button></div><div id="aiVisionResultCard" class="hidden mt-3 p-4 bg-slate-950 rounded-xl"><span id="aiDamageBadge" class="text-red-400 text-[10px] font-black"></span><p id="aiTehisText" class="text-[11px] text-slate-300 my-2"></p><div id="aiProductPrescription"></div></div></div></div></div></div>
-<div id="patronModal" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[9999999999] flex items-center justify-center p-3"><div class="bg-slate-900 border border-amber-500/50 rounded-2xl w-full p-4 space-y-3.5 max-h-[90vh] overflow-y-auto"><div class="flex justify-between pb-2 border-b border-slate-800"><h3 class="text-sm font-black text-amber-400">Patron CRM</h3><button onclick="patronPaneliKapat()" class="text-slate-400">✕</button></div><input type="text" id="patronNewName" placeholder="Ad Soyad" class="w-full bg-slate-900 p-2 rounded-lg text-white mb-2"><input type="tel" id="patronNewPhone" placeholder="Telefon" class="w-full bg-slate-900 p-2 rounded-lg text-white mb-2"><input type="text" id="patronNewPin" placeholder="PIN" class="w-full bg-slate-900 p-2 rounded-lg text-amber-300 mb-2"><select id="patronPackageSelect" class="w-full bg-slate-900 p-2 rounded-lg text-white mb-2"><option value="90">3 Ay</option><option value="9999">Süresiz</option></select><button onclick="patronYeniLisansKaydet()" id="btnPatronCreateLicense" class="w-full bg-amber-500 text-slate-950 py-2.5 rounded-lg font-black">Lisans Ekle</button><div id="patronMasterListContainer" class="mt-4 space-y-2"></div></div></div>
-<div id="modalYasalSozlesme" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[99999999999] flex items-center justify-center p-3"><div class="bg-slate-900 border border-amber-500/50 rounded-2xl w-full p-5 space-y-4 h-[85vh] flex flex-col"><div class="flex justify-between pb-2 border-b border-slate-800"><h3 class="text-sm font-black text-amber-400">Yasal Metinler</h3><button onclick="yasalSozlesmeModaliKapat()" class="text-slate-400">✕</button></div><div class="flex-1 overflow-y-auto text-[11px] text-slate-300 space-y-4">Kullanıcı Sözleşmesi ve KVKK onayı sisteme kaydedilmiştir.</div><button onclick="yasalSozlesmeModaliKapat()" class="w-full bg-amber-500 text-slate-950 py-2.5 rounded-xl font-black">Anladım</button></div></div>
-<div id="modalYasalTutanak" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[99999999999] flex items-center justify-center p-3"><div class="bg-slate-900 border border-amber-500/50 rounded-2xl w-full p-4 space-y-3.5 h-[75vh] flex flex-col"><div class="flex justify-between pb-2 border-b border-slate-800"><h3 class="text-sm font-black text-amber-400">Tutanaklar</h3><button onclick="document.getElementById('modalYasalTutanak').classList.add('hidden')" class="text-slate-400">✕</button></div><div id="tutanakIcerikAlani" class="flex-1 overflow-y-auto"></div></div></div>
-<div id="whatsappModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-3"><div class="bg-slate-900 border border-slate-800 rounded-2xl w-full p-4 space-y-3"><div class="flex justify-between pb-2 border-b border-slate-800"><h3 class="text-sm font-bold text-green-400">WhatsApp Gönder</h3><button onclick="whatsappModalKapat()" class="text-slate-400">✕</button></div><div class="space-y-2 text-xs"><button onclick="whatsappGonder(1)" class="w-full text-left p-3 bg-slate-950 text-amber-300 rounded-xl border border-slate-800">1. Hatırlatma</button><button onclick="whatsappGonder(6)" class="w-full text-left p-3 bg-slate-950 text-emerald-400 rounded-xl border border-slate-800">6. Teyit Mesajı</button><button onclick="whatsappGonder(9)" class="w-full text-left p-3 bg-slate-950 text-blue-400 rounded-xl border border-slate-800">9. IBAN Bilgisi</button></div></div></div>
-<script>
-let aktifDil=localStorage.getItem('hair_aktif_dil')||"tr"; let aktifTema=localStorage.getItem('hair_aktif_tema')||"dark"; let aktifLisansKodu=localStorage.getItem('hair_lisans_kodu')||""; let asliPatronLisansKodu=localStorage.getItem('hair_asli_patron_lisans')||""; let seciliHizliOdemeTuru='nakit'; let shAdim=1; let shData={tarih:"",musteri:"",tel:"",hizmet:"İŞLEM",sure:60,saat:"14:00"}; let shOnerilenSaat="15:30"; let patronKayitliUstalar=[]; let uyarilanRandevular=[]; let aktifZoomHedefArea=null; let gizlenenKayipMusteriler=JSON.parse(sessionStorage.getItem('lumio_gizlenen_kayip_'+aktifLisansKodu))||[];
-let salonAyarlari=JSON.parse(localStorage.getItem('hair_kisisel_ayarlar_'+aktifLisansKodu))||{ustaAdi:"Server YILMAZ",unvan:"Kuaförünüz",salonAdi:"Ekip Kuaför",ustaCountryCode:"+90",ustaTel:"",instagram:"",googleLink:"",bolum:"kuafor",ozelBolumAdi:"",kayipGun:60,alarmSuresi:"60",hizmetler:VARSAYILAN_BOLUM_HIZMETLERI.kuafor,sablons_tr:SOZLUK.tr.sablons,sablons_en:SOZLUK.en.sablons,sablons_de:SOZLUK.de.sablons,sablons_ru:SOZLUK.ru.sablons};
-let musteriler=[], gecmisIslemler=[], randevular=[], aktifMusteri=null, lisansAktifMi=true, seciliTarihStr="", bekleyenRandevuData=null, duzenlenenRandevuId=null, aktifKasaFiltresi='bugun';
-let unsubscribeLisans=null, unsubscribeMusteriler=null, unsubscribeGecmis=null, unsubscribeRandevular=null, unsubscribeAyarlar=null;
 
-function turkceNormalize(s){return s?s.toString().replace(/İ/g,'i').replace(/I/g,'ı').toLocaleLowerCase('tr-TR').trim():"";}
-function turkceHitapIsimDuzenle(i){if(!i)return"";let t=i.trim().replace(/\s+/g,' '),k=t.split(' ');if(k.length===1)return k[0].charAt(0).toLocaleUpperCase('tr-TR')+k[0].slice(1).toLocaleLowerCase('tr-TR');let s=k.pop().toLocaleUpperCase('tr-TR'),a=k.map(x=>x.charAt(0).toLocaleUpperCase('tr-TR')+x.slice(1).toLocaleLowerCase('tr-TR')).join(' ');return a+' '+s;}
-function tamTelefonAl(k,t){let a=k?document.getElementById(k):null,b=document.getElementById(t),c=a?a.value.trim():"+90",d=b?b.value.trim():"";if(!d)return"";if(d.startsWith('+'))return d.replace(/\D/g,'');if(d.startsWith('00'))return d.substring(2).replace(/\D/g,'');let e=c.replace(/\D/g,'')||"90",f=d.replace(/\D/g,'');if(f.startsWith('0'))f=f.substring(1);return e+f;}
-function anindaWhatsAppAc(t,m){if(!t)return;window.location.href=`https://api.whatsapp.com/send/?phone=${t.replace(/\D/g,'')}&text=${encodeURIComponent(m)}`;}
-function akilliTarihDuzelt(s){if(!s)return"";let t=s.toString().trim().replace(/[\/\-\s,]/g,'.'),y=new Date().getFullYear(),r=t.replace(/\D/g,'');if(r.length===4)return r.substring(0,2)+'.'+r.substring(2,4)+'.'+y;if(r.length===8)return r.substring(0,2)+'.'+r.substring(2,4)+'.'+r.substring(4,8);let p=t.split('.');if(p.length===2)return p[0].padStart(2,'0')+'.'+p[1].padStart(2,'0')+'.'+y;if(p.length===3)return p[0].padStart(2,'0')+'.'+p[1].padStart(2,'0')+'.'+(p[2].length===2?'20'+p[2]:p[2]);return t;}
-function tarihStringToDate(s){if(!s)return null;let t=akilliTarihDuzelt(s),p=t.split('.');if(p.length!==3)return null;let g=parseInt(p[0]),a=parseInt(p[1])-1,y=parseInt(p[2]);return(isNaN(g)||isNaN(a)||isNaN(y))?null:new Date(y,a,g);}
-function randevuTarihiFormatla(e){if(e)e.value=akilliTarihDuzelt(e.value);} function dogumTarihiFormatla(e){if(!e)return;let v=e.value.replace(/\D/g,'');if(v.length===4)e.value=v.substring(0,2)+'.'+v.substring(2,4);}
-function temaDegistir(){aktifTema=(aktifTema==='dark')?'light':'dark';localStorage.setItem('hair_aktif_tema',aktifTema);temaUygula();}
-function temaUygula(){const b=document.getElementById('appBody'),t=document.getElementById('themeToggleBtn');if(aktifTema==='light'){b.classList.add('theme-light');if(t)t.innerText="🌙";}else{b.classList.remove('theme-light');if(t)t.innerText="☀️";}} temaUygula();
+  <div id="bannerGozatModu" class="hidden px-3.5 py-2 text-xs font-bold flex items-center justify-between border-b shadow-lg bg-amber-500 text-slate-950 border-amber-400 z-50">
+    <div class="flex items-center space-x-1.5 truncate mr-2">
+      <i class="fa-solid fa-store"></i>
+      <span id="txtGozatBilgi" class="truncate font-black">Usta Dükkanındasınız</span>
+    </div>
+    <button onclick="patronAsliDukkanaDon()" class="px-2.5 py-1 rounded-lg bg-slate-950 text-amber-300 text-[10px] font-black shadow active:scale-95 transition whitespace-nowrap">
+      Kendi Dükkanıma Dön ↩
+    </button>
+  </div>
 
-function aktifDilSablonlariniAl(d){const v=(SOZLUK[d]||SOZLUK.tr).sablons;let u=salonAyarlari['sablons_'+d]||{};return{msg1:u.msg1||v.msg1,msg2:u.msg2||v.msg2,msg3:u.msg3||v.msg3,msg4:u.msg4||v.msg4,msg5:u.msg5||v.msg5,confirm:u.confirm||v.confirm,msg7:u.msg7||v.msg7,msg9:u.msg9||(v.msg9||"Banka: {BANKA_ADI}\nIBAN: {IBAN_NO}")};}
-function diliDegistir(l){aktifDil=l;localStorage.setItem('hair_aktif_dil',l);const s=aktifDilSablonlariniAl(l);if(document.getElementById('tplMsg1'))document.getElementById('tplMsg1').value=s.msg1;if(document.getElementById('tplConfirm'))document.getElementById('tplConfirm').value=s.confirm;diliArayuzeUygula();bolumSecenekleriniDoldur();if(typeof ajandaSaatleriniCiz==='function')ajandaSaatleriniCiz();}
-function diliArayuzeUygula(){if(document.getElementById('langSelect'))document.getElementById('langSelect').value=aktifDil;}
-function bolumSecenekleriniDoldur(){} function bolumDegistirildi(v){} function ozelBolumAdiGuncelle(v){} function hizliOdemeTuruSec(t){seciliHizliOdemeTuru=t;}
-function ustaLisansUyariKontrol(g){const b=document.getElementById('bannerLisansUyarisi');if(!b)return;if(g<=7&&g>0){b.classList.remove('hidden');}else{b.classList.add('hidden');}}
-function ayarlarHizmetListesiniCiz(){} function hizmetGuncelle(){} function yeniHizmetSatiriEkle(){} function hizmetSil(){} function sihirbazHizmetButonlariniCiz(){}
-function bugununTarihiStr(){let d=new Date();return d.getDate().toString().padStart(2,'0')+'.'+(d.getMonth()+1).toString().padStart(2,'0')+'.'+d.getFullYear();} seciliTarihStr=bugununTarihiStr();
-function gunlukCiroGuncelle(){const el=document.getElementById('lblDailySummaryText');if(el)el.innerText=`0 Randevu • 0 TL`;}
-function kasaHakedisGuncelle(v){} function kasaHesabiKapat(){} function kasaPeriyotFiltrele(p){} function kasaTarihFiltrele(d){} function kasaListesiniCizVeHesapla(d){}
-function kasamModaliAc(){document.getElementById('modalKasam').classList.remove('hidden');} function kasaModalKapat(){document.getElementById('modalKasam').classList.add('hidden');}
-function kasaHizliIslemEkle(){} function kasaFisDuzenleModalAc(){} function kasaFisDuzenleKapat(){} function editFisOdemeTuruSec(t){} function kasaFisDuzenleKaydet(){}
-function telefonTakvimineKaydet(){} function ustaRandevuAlarmKontrol(){} 
-function autoExpandArea(e){if(!e)return;e.style.height='auto';e.style.height=e.scrollHeight+'px';} function notGenisletAc(b,t){document.getElementById('modalNotGenislet').classList.remove('hidden');} function notGenisletKapat(){document.getElementById('modalNotGenislet').classList.add('hidden');} function notGenisletKaydet(){notGenisletKapat();}
-function satirHizmetDegisti(e){} function tabloyaSatirEkle(h,f,n,u){} function tabloyuYenidenCiz(){} function toplamHesapla(){} function ziyaretiKaydet(){}
-function gecmisListesiniGuncelle(){} function gecmisIslemSil(i){} function sonFormuluMasayaAktar(){} function secilenGunuMasayaAktar(t){}
-function canliBildirimMerkeziniGuncelle(){} function kayipMusteriGizle(i){} function kayipMusteriGeriCagirMesaji(a,t){} function sihirbazBaslatMusteriyle(a,t){sihirbazBaslat();document.getElementById('shMusteriInput').value=a;}
-function dogumGunuMesajiGonder(a,t){} function takipMesajiGonder(a,t,d){} function canliMusteriAra(q){} function musteriSec(i){} function aramaKutusunuKapat(){}
-function yeniIslemTemizle(){} function musteriSilOnayli(){} function hizliRandevuEkle(g){} function musteriRehberiniIndir(){} function lisansKoduKaydet(){document.getElementById('licenseSetupModal').classList.add('hidden');} function yetkiliyeLisansSorWhatsApp(){anindaWhatsAppAc("905354049392","Lisans al");}
-function bulutVerileriniBaslat(){} function patronPaneliAc(){document.getElementById('patronModal').classList.remove('hidden');} function patronPaneliKapat(){document.getElementById('patronModal').classList.add('hidden');}
-function patronSifreGuncelle(){} function patronUstaPinGuncelle(){} function patronYeniLisansKaydet(){} function patronVerileriniYukle(){} function patronUstaSil(){} function patronKurulumMesajiGonder(){}
-function patronUstaDurumToggle(){} function patronDukkaninaGir(){} function patronAsliDukkanaDon(){} function patronGozatKontrol(){} function patronKibarOdemeMesajiGonder(){}
-function musteriRehberiSayaciGuncelle(){} function musteriRehberiModalAc(){document.getElementById('modalMusteriRehberi').classList.remove('hidden');} function musteriRehberiModalKapat(){document.getElementById('modalMusteriRehberi').classList.add('hidden');}
-function musteriRehberindeAra(q){} function musteriRehberListesiniCiz(l){} function musteriSecRehberden(i){} function ustaRehberiModalAc(){} function ustaRehberindeAra(q){} function ustaRehberListesiniCiz(l){}
-function whatsappModalAc(){document.getElementById('whatsappModal').classList.remove('hidden');} function whatsappModalKapat(){document.getElementById('whatsappModal').classList.add('hidden');} function whatsappGonder(n){} function sekmeDegistir(s){}
-function ajandaTarihSeridiOlustur(){} function ajandaTarihSec(t){} function takvimTarihSecildi(v){} function buguneGit(){} function ajandaSaatleriniCiz(){} function randevuyuMasayaAktar(i){}
-function bosSaateRandevuAc(s){} function randevuSaatBlokeEt(s){} function randevuSil(i){} function randevuDuzenle(i){} function randevuHatirlatWhatsApp(i){}
-function sihirbazBaslat(){document.getElementById('modalRandevuOlustur').classList.remove('hidden');} function sihirbazKapat(){document.getElementById('modalRandevuOlustur').classList.add('hidden');}
-function sihirbazAdimGoster(a){} function shTarihAta(o){} function shTakvimSecildi(v){} function shMusteriAra(q){} function shMusteriSecildi(a,t){} function shHizmetAta(a,s){} function shDigerHizmetSec(){} function shSureAta(s){} function shSaatAta(s){} function shGeriTiklandi(){} function shIleriTiklandi(){}
-function sihirbazRandevuKaydet(c){} function sihirbazCiftRandevuOnayla(){} function sihirbazOnerilenSaatiSec(){} function bildirimAksiyonTetikle(h){} function bildirimModaliniKapat(){}
-function ayarlariUygula(){} function ayarlariKaydet(){} function ustaKendiSifresiniGuncelle(){} function sifremiUnuttumWhatsApp(){} function patronYasalTutanaklariGor(){} function patronGeminiSifresiAyarla(){} function patronUrunListesiniCiz(){} function patronYeniUrunEklePrompt(){} function patronUrunSil(){}
-function lumioAiModaliAc(){document.getElementById('modalLumioAi').classList.remove('hidden');} function lumioAiModaliKapat(){document.getElementById('modalLumioAi').classList.add('hidden');} function lumioAiSekme(s){} function lumioAiBasKonusToggle(){} function lumioAiSokakDiliCoz(m){} function lumioAiRandevuyuOnayla(){} function lumioAiSesiSifirla(){} function lumioAiIstisareBasKonusToggle(){} function lumioAiSoruSor(){} function lumioAiCevabiSeslendir(){} function lumioAiFotoYuklendi(i){} function lumioAiFotoAnalizBaslat(){} function lumioAiWhatsAppReceteGonder(){} function yasalSozlesmeModaliAc(){document.getElementById('modalYasalSozlesme').classList.remove('hidden');} function yasalSozlesmeModaliKapat(){document.getElementById('modalYasalSozlesme').classList.add('hidden');} function musteriDuzenleKapat(){document.getElementById('modalMusteriDuzenle').classList.add('hidden');} function musteriDuzenleKaydet(){}
-</script>
+  <div id="bannerLisansUyarisi" class="hidden px-3.5 py-2 text-xs font-bold flex items-center justify-between border-b shadow-md transition">
+    <div class="flex items-center space-x-2">
+      <i class="fa-solid fa-triangle-exclamation text-sm animate-bounce" id="iconLisansUyari"></i>
+      <span id="txtLisansUyariMetin">Lisansınızın bitmesine az kaldı.</span>
+    </div>
+    <button onclick="yetkiliyeLisansSorWhatsApp()" class="px-2.5 py-1 rounded-lg bg-slate-950 text-amber-300 border border-amber-500/40 text-[10px] font-black shadow active:scale-95 transition">
+      Şimdi Yenile ➔
+    </button>
+  </div>
+
+  <div id="licenseSetupModal" class="hidden fixed inset-0 bg-slate-950/98 z-[9999999999] flex flex-col items-center justify-center p-6 text-center">
+    <div class="w-20 h-20 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center p-2 mb-4 shadow-xl">
+      <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#f59e0b" stroke-width="3"/>
+        <path d="M45,20 C55,20 65,30 65,45 C65,55 58,62 52,70 C48,75 48,82 48,82 C48,82 46,74 44,68 C40,58 35,50 35,38 C35,28 40,20 45,20 Z" fill="#f59e0b"/>
+        <circle cx="68" cy="72" r="6" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+        <circle cx="78" cy="78" r="6" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+        <line x1="65" y1="68" x2="52" y2="48" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="75" y1="74" x2="60" y2="45" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h2 class="text-lg font-black text-white mb-1" id="lblSetupTitle">LUMIO GİRİŞİ</h2>
+    <p class="text-xs text-slate-400 max-w-xs mb-5" id="lblSetupSub">Lütfen yöneticiniz tarafından tanımlanan cep telefonunuzu ve usta şifrenizi giriniz.</p>
+    
+    <div class="w-full max-w-xs space-y-2.5">
+      <div>
+        <label class="text-[10px] text-slate-400 block font-bold text-left mb-1" id="lblSetupPhone">CEP TELEFONUNUZ:</label>
+        <div class="flex items-center space-x-1.5">
+          <input type="text" id="setupCountryCode" value="+90" class="w-14 bg-slate-900 border border-slate-700 rounded-xl py-2.5 text-center text-amber-400 font-bold text-xs focus:outline-none">
+          <input type="tel" id="setupLicenseInput" placeholder="532 320 32 32" class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-center text-white font-bold text-sm focus:outline-none focus:border-amber-400">
+        </div>
+      </div>
+      <div>
+        <div class="flex justify-between items-center mb-1">
+          <label class="text-[10px] text-slate-400 block font-bold text-left" id="lblSetupPin">USTA ŞİFRENİZ:</label>
+          <button type="button" onclick="sifremiUnuttumWhatsApp()" class="text-[10px] text-amber-400 hover:text-amber-300 font-bold underline">Şifremi Unuttum?</button>
+        </div>
+        <input type="password" maxlength="6" id="setupPinInput" placeholder="••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-center text-amber-400 font-black tracking-widest text-lg focus:outline-none focus:border-amber-400">
+      </div>
+
+      <div class="pt-1 text-left flex items-start space-x-2">
+        <input type="checkbox" id="chkYasalOnay" class="w-4 h-4 mt-0.5 rounded border-slate-700 text-amber-500 focus:ring-0 cursor-pointer">
+        <label for="chkYasalOnay" class="text-[10px] text-slate-300 leading-tight cursor-pointer">
+          <a href="javascript:void(0)" onclick="yasalSozlesmeModaliAc()" class="text-amber-400 underline font-bold">Kullanıcı Sözleşmesi ve KVKK Aydınlatma Metni</a>'ni okudum, kabul ediyorum.
+        </label>
+      </div>
+
+      <button onclick="lisansKoduKaydet()" class="w-full bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 font-black py-3 rounded-xl shadow active:scale-95 transition text-xs mt-1" id="btnSetupSubmit">
+        GİRİŞ YAP VE TERMİNALİ AÇ ✨
+      </button>
+      
+      <div id="setupContactArea" class="hidden pt-2.5 border-t border-slate-800 space-y-2">
+        <p class="text-[11px] text-red-400 font-semibold" id="setupErrorMsg">Tanımsız hesap veya hatalı şifre.</p>
+        <button onclick="yetkiliyeLisansSorWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 shadow">
+          <i class="fa-brands fa-whatsapp text-sm"></i><span id="btnAskLicense">Yetkili İle İletişime Geç / Lisans Al</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="licenseLockScreen" class="hidden fixed inset-0 bg-slate-950 z-[99999998] flex flex-col items-center justify-center p-6 text-center">
+    <div onclick="patronPaneliAc()" class="w-20 h-20 bg-red-500/20 text-red-500 border border-red-500/40 rounded-full flex items-center justify-center text-3xl mb-4 animate-pulse cursor-pointer" title="Patron Girişi İçin Dokunun">
+      <i class="fa-solid fa-lock"></i>
+    </div>
+    <h2 class="text-xl font-bold text-white mb-2" id="lblLockTitle">ERİŞİM DURDURULDU</h2>
+    <p id="lockMessageText" class="text-sm text-slate-400 max-w-xs leading-relaxed mb-6">Kullanım lisans süreniz dolmuştur. Randevu ve müşteri kayıtlarınıza erişmek için lütfen yöneticinizle iletişime geçiniz.</p>
+    <button onclick="yetkiliyeLisansSorWhatsApp()" class="p-3 bg-slate-900 hover:bg-slate-800 border border-amber-500/50 rounded-xl text-xs text-amber-400 font-bold flex items-center space-x-2 shadow">
+      <i class="fa-brands fa-whatsapp text-base text-emerald-400"></i><span id="lblLockContact">Yetkili Lisans İletişim Hattı</span>
+    </button>
+  </div>
+
+  <header class="bg-slate-900 border-b border-slate-800 px-3.5 pb-2.5 safe-pt sticky top-0 z-40 flex items-center justify-between shadow-lg">
+    <div class="flex items-center space-x-2.5 cursor-pointer" onclick="patronPaneliAc()">
+      <div class="w-9 h-9 rounded-xl bg-slate-950 border border-amber-500/40 flex items-center justify-center overflow-hidden shadow-md flex-shrink-0 p-1">
+        <svg viewBox="0 0 100 100" class="w-full h-full">
+          <circle cx="50" cy="50" r="46" fill="none" stroke="#f59e0b" stroke-width="4"/>
+          <path d="M46,22 C56,22 66,31 66,45 C66,56 58,63 52,71 C48,76 48,82 48,82 C48,82 46,75 44,69 C40,59 36,51 36,39 C36,29 41,22 46,22 Z" fill="#f59e0b"/>
+          <circle cx="68" cy="72" r="6" fill="none" stroke="#f59e0b" stroke-width="3"/>
+          <circle cx="78" cy="78" r="6" fill="none" stroke="#f59e0b" stroke-width="3"/>
+          <line x1="65" y1="68" x2="52" y2="48" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+          <line x1="75" y1="74" x2="60" y2="45" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="flex items-center space-x-1.5">
+          <h1 class="text-sm font-black tracking-wide text-amber-400">LUMIO</h1>
+          <span id="cloudStatusBadge" class="w-2 h-2 rounded-full bg-emerald-500" title="Bulut Aktif"></span>
+          <span id="headerLicenseBadge" class="text-[9px] bg-slate-800 text-slate-300 px-1 py-0.5 rounded font-mono border border-slate-700">LİSANS</span>
+        </div>
+        <p id="headerUstaUnvan" class="text-[11px] text-slate-400 font-medium truncate max-w-[140px]">Server YILMAZ</p>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-2">
+      <select id="langSelect" onchange="diliDegistir(this.value)" class="bg-slate-950 text-amber-300 text-[10px] font-bold border border-slate-700 rounded-lg px-2 py-1 focus:outline-none">
+        <option value="tr">🇹🇷 TR</option>
+        <option value="en">🇬🇧 EN</option>
+        <option value="de">🇩🇪 DE</option>
+        <option value="ru">🇷🇺 RU</option>
+      </select>
+
+      <button onclick="temaDegistir()" id="themeToggleBtn" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 flex items-center justify-center text-xs transition" title="Tema Değiştir">
+        ☀️
+      </button>
+    </div>
+  </header>
+
+  <nav class="bg-slate-900/95 backdrop-blur-md border-b border-slate-800 p-2 sticky top-[58px] z-30 shadow-md">
+    <div class="grid grid-cols-5 gap-1 max-w-lg mx-auto">
+      <button onclick="sekmeDegistir('terminal')" id="nav-terminal" class="flex flex-col items-center justify-center py-2 px-0.5 rounded-xl bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40 transition active:scale-95 shadow relative">
+        <i class="fa-solid fa-scissors text-sm mb-0.5"></i><span class="text-[10px]" id="navTxtTerminal">Terminal</span>
+      </button>
+      <button onclick="sekmeDegistir('agenda')" id="nav-agenda" class="flex flex-col items-center justify-center py-2 px-0.5 rounded-xl bg-slate-950 text-slate-400 font-medium border border-slate-800 transition active:scale-95">
+        <i class="fa-solid fa-calendar-days text-sm mb-0.5"></i><span class="text-[10px]" id="navTxtAgenda">Ajandam</span>
+      </button>
+      <button onclick="sekmeDegistir('history')" id="nav-history" class="flex flex-col items-center justify-center py-2 px-0.5 rounded-xl bg-slate-950 text-slate-400 font-medium border border-slate-800 transition active:scale-95">
+        <i class="fa-solid fa-clock-rotate-left text-sm mb-0.5"></i><span class="text-[10px]" id="navTxtHistory">Geçmiş</span>
+      </button>
+      <button onclick="sekmeDegistir('reminders')" id="nav-reminders" class="flex flex-col items-center justify-center py-2 px-0.5 rounded-xl bg-slate-950 text-slate-400 font-medium border border-slate-800 transition active:scale-95 relative">
+        <i class="fa-solid fa-bell text-sm mb-0.5"></i><span class="text-[10px]" id="navTxtReminders">Hatırlatmalar</span>
+        <span id="badgeTotalReminders" class="hidden absolute top-0.5 right-0.5 px-1 bg-rose-600 text-white rounded-full text-[8px] font-black shadow border border-rose-400 animate-pulse">0</span>
+      </button>
+      <button onclick="sekmeDegistir('settings')" id="nav-settings" class="flex flex-col items-center justify-center py-2 px-0.5 rounded-xl bg-slate-950 text-slate-400 font-medium border border-slate-800 transition active:scale-95">
+        <i class="fa-solid fa-gear text-sm mb-0.5"></i><span class="text-[10px]" id="navTxtSettings">Ayarlar</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="flex-1 p-3 max-w-lg mx-auto w-full space-y-3.5">
+    
+    <!-- SEKME 1: TERMİNAL -->
+    <section id="tab-terminal" class="space-y-3.5">
+      
+      <!-- BUGÜNKÜ DURUM & KASA KARTI -->
+      <div id="gunlukCiroKarti" onclick="kasamModaliAc()" class="bg-slate-900 border border-amber-500/30 rounded-2xl p-3 flex items-center justify-between shadow cursor-pointer active:scale-95 transition">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-base">
+            <i class="fa-solid fa-wallet"></i>
+          </div>
+          <div>
+            <span class="text-[10px] text-slate-400 block font-bold uppercase tracking-wider" id="lblDailyFinTitle">Bugünkü Durum & Kasa</span>
+            <span id="lblDailySummaryText" class="text-xs font-black text-white">0 Randevu • 0,00 TL</span>
+          </div>
+        </div>
+        <button type="button" class="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2 py-1 rounded-lg font-bold" id="btnSeeFlow">
+          Kasamı Gör ➔
+        </button>
+      </div>
+
+      <!-- MASTER AI KARTI (GEMINI FLASH) -->
+      <div id="cardMasterAiBanner" class="bg-gradient-to-r from-amber-500/15 via-slate-900 to-amber-500/10 border border-amber-500/40 rounded-2xl p-3.5 shadow-xl flex items-center justify-between transition">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 text-slate-950 flex items-center justify-center text-lg shadow-lg pulse-ring">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-1.5">
+              <h3 class="text-xs font-black text-amber-400">LUMIO MASTER AI</h3>
+              <span class="text-[8px] bg-amber-500 text-slate-950 font-black px-1.5 py-0.5 rounded-full uppercase tracking-wider">Meslektaş & Danışman</span>
+            </div>
+            <p class="text-[10px] text-slate-400 leading-tight mt-0.5">Randevu dökümü, usta boya formülleri, saç analizi</p>
+          </div>
+        </div>
+        <button onclick="lumioAiModaliAc()" class="bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black px-3.5 py-2.5 rounded-xl text-xs shadow-md transition active:scale-95 flex items-center space-x-1.5 whitespace-nowrap">
+          <i class="fa-solid fa-microphone text-sm"></i> <span>Asistanı Aç</span>
+        </button>
+      </div>
+
+      <!-- AKILLI RANDEVU ASİSTANI (SİHİRBAZ) -->
+      <div class="asistan-card bg-slate-900 border border-amber-500/30 rounded-2xl p-3.5 shadow-lg flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-calendar-plus"></i>
+          </div>
+          <div>
+            <h3 class="text-xs font-bold text-amber-400" id="lblWizardCardTitle">Akıllı Randevu Asistanı</h3>
+            <p class="text-[10px] text-slate-400" id="lblWizardCardSub">Tarih, müşteri, işlem, süre ve saat planla</p>
+          </div>
+        </div>
+        <button onclick="sihirbazBaslat()" class="bg-slate-950 text-amber-400 border border-slate-700 font-bold px-3.5 py-2.5 rounded-xl text-xs shadow transition active:scale-95 flex items-center space-x-1.5">
+          <i class="fa-solid fa-calendar-check text-sm text-amber-500"></i> <span id="btnStartWizard">Randevu Oluştur</span>
+        </button>
+      </div>
+
+      <!-- MÜŞTERİ BİLGİSİ KARTI -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3">
+        <div class="flex justify-between items-center pb-1">
+          <span class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center" id="lblCustCardTitle">
+            <i class="fa-solid fa-user mr-1.5"></i> Müşteri Bilgisi
+          </span>
+          <div class="flex items-center space-x-1.5">
+            <button onclick="musteriRehberiModalAc()" id="btnCustDirectory" class="text-xs text-amber-300 hover:text-white bg-amber-500/20 px-2.5 py-1 rounded-lg border border-amber-500/40 transition font-bold flex items-center">
+              <i class="fa-solid fa-address-book mr-1"></i> <span id="lblCustDirectoryCount">0 Müşteri</span>
+            </button>
+            <button onclick="musteriSilOnayli()" class="hidden id-sil-btn text-xs text-red-400 hover:text-white bg-red-500/20 px-2 py-1 rounded-lg border border-red-500/30 transition" id="btnDeleteCustomer">
+              <i class="fa-solid fa-trash mr-1"></i> Sil
+            </button>
+            <button onclick="yeniIslemTemizle()" class="text-xs text-slate-400 hover:text-white bg-slate-800 px-2 py-1 rounded-lg border border-slate-700 transition" id="btnClearCustomer">
+              <i class="fa-solid fa-rotate mr-1"></i> Temizle
+            </button>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <div class="flex justify-between items-end px-1">
+            <span id="custLoyaltyTier" class="text-[10px] font-black text-amber-400">🥉 Yeni Müşteri</span>
+            <div class="flex items-center space-x-1.5">
+              <span id="custFrequencyText" class="text-[9px] text-slate-400 italic"></span>
+              <span id="custBadgeVisits" class="text-[10px] text-slate-300 font-bold bg-slate-800 px-2 py-0.5 rounded-md border border-slate-700">0 Ziyaret</span>
+            </div>
+          </div>
+          <div class="relative">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
+            <input type="text" id="custSearch" placeholder="İsim yazın (Örn: Server, Sayime)..." 
+                   oninput="canliMusteriAra(this.value)"
+                   class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-sm font-semibold text-white focus:outline-none focus:border-amber-500 transition">
+            <div id="searchResults" class="hidden absolute left-0 right-0 top-12 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl z-50 max-h-52 overflow-y-auto divide-y divide-slate-700 scroll-touch"></div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+          <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+            <span class="text-slate-400 block text-[10px] mb-1 font-bold" id="lblCustPhone">MÜŞTERİ TELEFONU</span>
+            <div class="flex items-center space-x-1.5">
+              <input type="text" id="custCountryCode" value="+90" class="w-14 bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-center text-amber-400 font-bold text-xs focus:outline-none">
+              <input type="tel" id="custPhone" placeholder="5354049392" onfocus="aramaKutusunuKapat()" class="flex-1 bg-transparent font-bold text-white text-xs focus:outline-none">
+            </div>
+          </div>
+          <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+            <span class="text-slate-400 block text-[10px] mb-1 font-bold" id="lblCustBirth">DOĞUM TARİHİ</span>
+            <input type="text" id="custBirth" placeholder="GG.AA" onfocus="aramaKutusunuKapat()" onblur="dogumTarihiFormatla(this)" class="bg-transparent font-bold text-white text-xs w-full focus:outline-none p-1.5">
+          </div>
+        </div>
+      </div>
+
+      <!-- RANDEVU & ZAMAN DETAYI -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3">
+        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center" id="lblTimeCardTitle">
+          <i class="fa-solid fa-calendar-check mr-1.5"></i> Randevu & Zaman Detayı
+        </span>
+
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+            <span class="text-slate-400 block text-[10px]" id="lblVisitDate">İŞLEM TARİHİ</span>
+            <input type="text" id="visitDate" placeholder="GG.AA.YYYY" onblur="randevuTarihiFormatla(this)" class="bg-transparent font-bold text-white w-full focus:outline-none mt-1">
+          </div>
+          <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+            <span class="text-slate-400 block text-[10px]" id="lblVisitTime">RANDEVU SAATİ</span>
+            <input type="text" id="visitTime" placeholder="14:00" class="bg-transparent font-bold text-white w-full focus:outline-none mt-1">
+          </div>
+        </div>
+
+        <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-amber-400 text-[10px] font-bold" id="lblNextVisit">SONRAKİ RANDEVU HATIRLATMA TARİHİ</span>
+            <div class="flex space-x-1">
+              <button onclick="hizliRandevuEkle(15)" class="quick-date-btn text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700 font-bold" id="btnQuick15">+15 G</button>
+              <button onclick="hizliRandevuEkle(21)" class="quick-date-btn text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700 font-bold" id="btnQuick21">+21 G</button>
+              <button onclick="hizliRandevuEkle(30)" class="quick-date-btn text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700 font-bold" id="btnQuick30">+1 Ay</button>
+            </div>
+          </div>
+          <input type="text" id="visitNext" placeholder="GG.AA.YYYY" onblur="randevuTarihiFormatla(this)" class="bg-transparent font-bold text-amber-300 text-xs w-full focus:outline-none">
+        </div>
+      </div>
+
+      <!-- HİZMET VE FORMÜL MASASI -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3">
+        <div class="flex justify-between items-center">
+          <span class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center" id="lblServiceCardTitle">
+            <i class="fa-solid fa-paintbrush mr-1.5"></i> Hizmet & Formül Masası
+          </span>
+          <button onclick="tabloyaSatirEkle()" class="text-xs bg-amber-500/20 text-amber-400 border border-amber-500/40 px-3 py-1.5 rounded-xl font-bold flex items-center shadow-sm" id="btnAddServiceRow">
+            <i class="fa-solid fa-plus mr-1"></i> Satır Ekle
+          </button>
+        </div>
+
+        <div id="serviceRowsContainer" class="space-y-3"></div>
+
+        <div class="flex justify-between items-center pt-3 border-t border-slate-800 text-sm">
+          <span class="text-slate-400 font-medium" id="lblTotalAmount">Toplam Tutar:</span>
+          <span id="totalAmountText" class="text-xl font-black text-amber-400">0,00 TL</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2.5 pt-2 pb-6">
+        <button onclick="ziyaretiKaydet()" class="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg flex items-center justify-center space-x-2 text-sm active:scale-95 transition">
+          <i class="fa-solid fa-cloud-arrow-up text-base"></i><span id="btnSaveVisit">İŞLEMİ KAYDET</span>
+        </button>
+        <button onclick="whatsappModalAc()" class="bg-gradient-to-r from-green-600 to-green-500 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg flex items-center justify-center space-x-2 text-sm active:scale-95 transition">
+          <i class="fa-brands fa-whatsapp text-lg"></i><span>WHATSAPP</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SEKME 2: AJANDAM (30 DAKİKA SLOTLU & "↳ DEVAM" MOTORLU) -->
+    <section id="tab-agenda" class="hidden space-y-3.5">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3">
+        <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+          <h2 class="text-sm font-bold text-amber-400 flex items-center" id="lblAgendaTitle"><i class="fa-solid fa-calendar-days mr-2"></i> Kişisel Randevu Ajandam</h2>
+          <button onclick="buguneGit()" class="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2.5 py-1 rounded-lg font-bold" id="btnBackToday">Bugün'e Dön</button>
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold text-slate-300" id="selectedDateText">Bugün</span>
+            <input type="date" id="calendarPicker" onchange="takvimTarihSecildi(this.value)" class="bg-slate-950 text-amber-400 text-xs font-bold border border-slate-700 rounded-lg px-2.5 py-1 focus:outline-none">
+          </div>
+          <!-- 7 GÜNLÜK İLERİYE DÖNÜK ŞERİT -->
+          <div id="hizliGunlerSeridi" class="grid grid-cols-7 gap-1 text-center text-xs"></div>
+        </div>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-2.5">
+        <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+          <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center" id="lblDailyFlowTitle">
+            <i class="fa-solid fa-clock mr-1.5"></i> Günlük Randevu Akışı
+          </h3>
+          <span class="text-[10px] text-slate-400" id="lblRemindTip">🔔 Hatırlat ile tek tık WhatsApp</span>
+        </div>
+        <div id="ajandaSaatlerContainer" class="space-y-2 max-h-[520px] overflow-y-auto pr-1 scroll-touch"></div>
+      </div>
+    </section>
+
+    <!-- SEKME 3: GEÇMİŞ -->
+    <section id="tab-history" class="hidden space-y-3">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3">
+        <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+          <div>
+            <h2 class="text-sm font-bold text-amber-400 flex items-center" id="lblHistoryTitle"><i class="fa-solid fa-clock-rotate-left mr-2"></i> Müşteri Formül Geçmişi</h2>
+            <p id="historyCustName" class="text-xs text-slate-400 mt-0.5">Müşteri seçilmedi</p>
+          </div>
+          <button onclick="sonFormuluMasayaAktar()" class="text-xs btn-emerald-contrast bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 px-3 py-1.5 rounded-xl font-bold active:scale-95 transition" id="btnGetLastFormula">En Son Formülü Al</button>
+        </div>
+        <div id="historyListContainer" class="space-y-3 text-xs scroll-touch max-h-[520px] overflow-y-auto"></div>
+      </div>
+    </section>
+
+    <!-- SEKME 4: YENİ HATIRLATMALAR VE ALARMLAR -->
+    <section id="tab-reminders" class="hidden space-y-3">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md pb-6 space-y-3.5">
+        <h2 class="text-sm font-bold text-amber-400 flex items-center border-b border-slate-800 pb-2 mb-2" id="lblRemindersMainTitle">
+          <i class="fa-solid fa-bell mr-2"></i> Tüm Hatırlatmalar ve Alarmlar
+        </h2>
+
+        <!-- BANNER 1: DOĞUM GÜNLERİ -->
+        <div id="bannerDoğumGünü" class="hidden bg-slate-950 border border-rose-500/30 rounded-2xl p-3 shadow-md space-y-2">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-2 text-rose-400 font-bold text-xs">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
+              <span id="lblBdayBannerTitle">🎂 BUGÜN DOĞUM GÜNÜ OLANLAR</span>
+            </div>
+            <span id="bannerBdayTextCount" class="text-[10px] bg-rose-500/20 text-rose-300 border border-rose-500/30 px-2 py-0.5 rounded-full font-bold">0 Kişi</span>
+          </div>
+          <div id="bannerBdayList" class="space-y-1.5 text-xs"></div>
+        </div>
+
+        <!-- BANNER 2: 3 GÜN KURALI -->
+        <div id="bannerHatırlatma" class="hidden bg-slate-950 border border-amber-500/30 rounded-2xl p-3 shadow-md space-y-2">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-2 text-amber-400 font-bold text-xs">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
+              <span id="lblRemindBannerTitle">⏰ RANDEVU VAKTİ GELENLER (3 GÜN KURALI)</span>
+            </div>
+            <span id="bannerRemindTextCount" class="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full font-bold">0 Kişi</span>
+          </div>
+          <p class="text-[10px] text-slate-400 leading-tight" id="lblRemindBannerSub">Gelecek randevu planlama zamanı gelen müşterilerinize 1. Şablon ile tek tıkla hatırlatma gönderin:</p>
+          <div id="bannerRemindList" class="space-y-1.5 text-xs max-h-40 overflow-y-auto scroll-touch pr-1"></div>
+        </div>
+
+        <!-- BANNER 3: KAYIP MÜŞTERİ ALARMI -->
+        <div id="bannerKayipMusteri" class="hidden bg-slate-950 border border-purple-500/30 rounded-2xl p-3 shadow-md space-y-2">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-2 text-purple-400 font-bold text-xs">
+              <span class="w-2.5 h-2.5 rounded-full bg-purple-500 animate-pulse"></span>
+              <span id="lblLostBannerTitle">💌 SİZİ ÖZLEYENLER</span>
+            </div>
+            <span id="bannerLostTextCount" class="text-[10px] bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-full font-bold">0 Kişi</span>
+          </div>
+          <p class="text-[10px] text-slate-400 leading-tight" id="lblLostBannerSub">Belirlenen süredir salona uğramayan müşterilerinize 7. Şablon ile tek tıkla özel davet gönderin:</p>
+          <div id="bannerLostList" class="space-y-1.5 text-xs max-h-40 overflow-y-auto scroll-touch pr-1"></div>
+        </div>
+
+        <div id="emptyRemindersMsg" class="hidden text-center p-6 text-slate-500 text-xs italic">
+          Şu an bekleyen hiçbir hatırlatma veya alarm bulunmuyor.
+        </div>
+      </div>
+    </section>
+
+    <!-- SEKME 5: AYARLAR -->
+    <section id="tab-settings" class="hidden space-y-3.5">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-4">
+        <h2 class="text-sm font-bold text-amber-400 flex items-center pb-2 border-b border-slate-800">
+          <i class="fa-solid fa-gear mr-2"></i> <span id="lblSettingsHeading">Profil, Hizmetler & Mesaj Ayarları</span>
+        </h2>
+
+        <div class="space-y-3 text-xs">
+          <div>
+            <label class="text-slate-400 block text-[10px] mb-1 font-bold" id="lblLicenseKeyTitle">LİSANS KODUNUZ</label>
+            <input type="text" id="setLisansKodu" disabled class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-amber-400 font-mono font-bold cursor-not-allowed">
+          </div>
+
+          <!-- YÜZDE YÜZ ÇEVİRİ DESTEKLİ ŞİFRE DEĞİŞTİRME ALANI -->
+          <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+            <span class="text-amber-400 block text-[10px] font-bold uppercase tracking-wider" id="lblPwdChangeTitle">🔒 GİRİŞ ŞİFRENİZİ DEĞİŞTİRİN</span>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-[9px] text-slate-400 block font-bold mb-0.5" id="lblPwdOld">ESKİ ŞİFRE:</label>
+                <input type="password" maxlength="6" id="setEskiSifre" placeholder="••••••" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-mono text-center focus:outline-none">
+              </div>
+              <div>
+                <label class="text-[9px] text-slate-400 block font-bold mb-0.5" id="lblPwdNew">YENİ ŞİFRE (6 HANE):</label>
+                <input type="password" maxlength="6" id="setYeniSifre" placeholder="••••••" class="w-full bg-slate-900 border border-amber-500/40 rounded-lg p-2 text-amber-300 font-mono text-center focus:outline-none">
+              </div>
+            </div>
+            <button onclick="ustaKendiSifresiniGuncelle()" class="w-full bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold py-2 rounded-lg border border-slate-700 text-xs shadow transition active:scale-95" id="btnPwdUpdate">
+              Şifremi Güncelle
+            </button>
+          </div>
+
+          <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+            <label class="text-amber-400 block text-[10px] font-bold uppercase tracking-wider" id="lblDeptTitle">UZMANLIK ALANINIZ / BÖLÜMÜNÜZ</label>
+            <select id="setBolumTuru" onchange="bolumDegistirildi(this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-bold text-xs focus:outline-none"></select>
+            <div id="ozelBolumKutusu" class="hidden pt-1.5">
+              <input type="text" id="setOzelBolumAdi" placeholder="Örn: Dövme Stüdyosu, Masaj & Spa..." oninput="ozelBolumAdiGuncelle(this.value)" class="w-full bg-slate-900 border border-amber-500/40 rounded-lg p-2 text-white font-bold text-xs focus:outline-none">
+            </div>
+          </div>
+
+          <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-1.5">
+            <label class="text-purple-400 block text-[10px] font-bold uppercase tracking-wider" id="lblLostDaysTitle">⏰ KAYIP MÜŞTERİ UYARI SÜRESİ (Kaç gün gelmeyince listelensin?)</label>
+            <div class="flex items-center space-x-2">
+              <input type="number" id="setKayipGun" value="60" min="5" max="365" class="w-24 bg-slate-900 border border-purple-500/40 rounded-lg p-2 text-white font-black text-xs text-center focus:outline-none">
+              <span class="text-xs text-slate-400" id="lblLostDaysUnit">Gün</span>
+            </div>
+          </div>
+
+          <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-2.5">
+            <div class="flex justify-between items-center border-b border-slate-900 pb-1.5">
+              <span class="text-amber-400 font-bold text-xs" id="lblServiceListTitle">HİZMET LİSTENİZ (Sihirbazda Çıkacak Butonlar)</span>
+              <button onclick="yeniHizmetSatiriEkle()" class="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded font-bold" id="btnAddNewService">+ Yeni Hizmet</button>
+            </div>
+            <div id="ayarlarHizmetListesiContainer" class="space-y-1.5 max-h-48 overflow-y-auto pr-1 scroll-touch"></div>
+          </div>
+
+          <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-1.5">
+            <label class="text-slate-400 block text-[10px] font-bold" id="lblAlarmTitle">USTA RANDEVU ALARMI (Ne kadar önce uyarılsın?)</label>
+            <select id="setAlarmSuresi" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-amber-300 font-bold text-xs focus:outline-none">
+              <option value="15">⏱️ 15 Dakika Önce</option>
+              <option value="30">⏱️ 30 Dakika Önce</option>
+              <option value="60" selected>⏱️ 1 Saat (60 Dk) Önce</option>
+              <option value="1440">📅 1 Gün (24 Saat) Önce</option>
+              <option value="0">❌ Alarm Kapalı</option>
+            </select>
+          </div>
+
+          <!-- YENİ: YASAL ONAY TUTANAKLARI BUTONU -->
+          <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-between">
+            <div>
+              <span class="text-amber-400 font-bold block text-xs">📄 Hukuki Sözleşmeler & Gizlilik</span>
+              <p class="text-[10px] text-slate-400">Kullanıcı lisans sözleşmesi, KVKK aydınlatma ve yapay zeka açık rıza metinleri.</p>
+            </div>
+            <button type="button" onclick="yasalSozlesmeModaliAc()" class="bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold px-3 py-2 rounded-lg text-xs whitespace-nowrap shadow active:scale-95 transition">
+              Metinleri İncele
+            </button>
+          </div>
+
+          <div class="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center justify-between">
+            <div>
+              <span class="text-emerald-400 font-bold block text-xs" id="lblBackupTitle">Müşteri Rehberimi Yedekle</span>
+              <p class="text-[10px] text-slate-400" id="lblBackupSub">Tüm müşteri listenizi ve telefonları telefonunuza dosya olarak indirir.</p>
+            </div>
+            <button onclick="musteriRehberiniIndir()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-2 rounded-lg text-xs whitespace-nowrap shadow active:scale-95 transition" id="btnDownloadBackup">
+              <i class="fa-solid fa-download mr-1"></i> İndir
+            </button>
+          </div>
+
+          <div>
+            <label class="text-slate-400 block text-[10px] mb-1 font-bold" id="lblMasterNameTitle">USTA ADI VE SOYADI ({USTA_ADI})</label>
+            <input type="text" id="setUstaAdi" placeholder="Örn: Server YILMAZ" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-bold focus:outline-none">
+          </div>
+
+          <div>
+            <label class="text-slate-400 block text-[10px] mb-1 font-bold" id="lblMasterTitleTag">MESAJ UNVANINIZ / MESLEĞİNİZ ({UNVAN})</label>
+            <input type="text" id="setUnvan" placeholder="Örn: Kuaförünüz, Tırnak Uzmanınız..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-amber-300 font-bold focus:outline-none">
+          </div>
+
+          <div>
+            <label class="text-slate-400 block text-[10px] mb-1 font-bold" id="lblSalonNameTitle">SALON / MARKA ADI ({SALON_ADI})</label>
+            <input type="text" id="setSalonAdi" value="Ekip Kuaför" placeholder="Ekip Kuaför" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-bold focus:outline-none">
+          </div>
+
+          <div>
+            <label class="text-slate-400 block text-[10px] mb-1 font-bold" id="lblMasterPhoneTitle">USTA WHATSAPP BİLDİRİM NUMARASI</label>
+            <div class="flex space-x-1.5">
+              <input type="text" id="setUstaCountryCode" value="+90" class="w-14 bg-slate-950 border border-slate-700 rounded-xl p-2 text-center text-amber-400 font-bold text-xs">
+              <input type="tel" id="setUstaTel" placeholder="5354049392" class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-amber-300 font-bold focus:outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="text-slate-400 block text-[10px] mb-1 font-bold" id="lblIgTitle">INSTAGRAM ADRESİ / LİNKİ ({INSTAGRAM_LINK})</label>
+            <input type="text" id="setInstagram" placeholder="instagram.com/hesabiniz" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none">
+          </div>
+
+          <div>
+            <label class="text-slate-400 block text-[10px] mb-1 font-bold" id="lblGoogleTitle">GOOGLE 5 YILDIZ PUANLAMA LİNKİ ({GOOGLE_LINK})</label>
+            <input type="text" id="setGoogleLink" placeholder="https://g.page/r/..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none">
+          </div>
+
+          <!-- YENİ EKLENEN: BANKA VE IBAN AYARLARI -->
+          <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-2.5">
+            <span class="text-amber-400 block text-[10px] font-bold uppercase tracking-wider">🏦 ULUSLARARASI BANKA & ÖDEME BİLGİLERİ</span>
+            <p class="text-[9px] text-slate-400 leading-tight">Müşteriye tek tıkla WhatsApp üzerinden gönderilecek banka ve hesap detayları (TR IBAN, Kaspi QR/Tel, Sberbank/SBP, DE IBAN uyumlu):</p>
+            
+            <div>
+              <label class="text-[9px] text-slate-400 block font-bold mb-0.5">BANKA / ÖDEME KURULUŞU ({BANKA_ADI}):</label>
+              <input type="text" id="setBankaAdi" placeholder="Örn: Garanti BBVA, Kaspi Bank, Sberbank, Deutsche Bank..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-bold text-xs focus:outline-none">
+            </div>
+
+            <div>
+              <label class="text-[9px] text-slate-400 block font-bold mb-0.5">HESAP SAHİBİ ADI SOYADI ({HESAP_SAHIBI}):</label>
+              <input type="text" id="setHesapSahibi" placeholder="Örn: Server YILMAZ" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-bold text-xs focus:outline-none">
+            </div>
+
+            <div>
+              <label class="text-[9px] text-slate-400 block font-bold mb-0.5">IBAN / HESAP / KART / SBP NUMARASI ({IBAN_NO}):</label>
+              <input type="text" id="setIbanNo" placeholder="Örn: TR56 0006... veya Kaspi Tel: +7..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-amber-300 font-mono font-bold text-xs focus:outline-none">
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-800 space-y-3">
+          <div>
+            <span class="text-amber-400 font-bold block text-xs" id="lblTplHeader">MÜŞTERİ WHATSAPP ŞABLONLARI</span>
+            <p class="text-[10px] text-slate-400" id="lblTplSub">Değişkenler: {MUSTERI_ADI}, {TARIH}, {SAAT}, {HIZMET}, {USTA_ADI}, {UNVAN}, {SALON_ADI}, {GOOGLE_LINK}, {INSTAGRAM_LINK}, {BANKA_ADI}, {HESAP_SAHIBI}, {IBAN_NO}</p>
+          </div>
+
+          <div class="space-y-3 text-xs">
+            <div>
+              <label class="text-amber-300 block text-[10px] font-bold mb-1" id="lblTpl1">1. Randevu Hatırlatma (Takip Amaçlı / 3 Gün Kuralı)</label>
+              <textarea id="tplMsg1" rows="5" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 text-xs focus:outline-none leading-relaxed"></textarea>
+            </div>
+            <div>
+              <label class="text-pink-400 block text-[10px] font-bold mb-1" id="lblTpl2">2. Doğum Günü Kutlaması (Hediyeli)</label>
+              <textarea id="tplMsg2" rows="5" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 text-xs focus:outline-none leading-relaxed"></textarea>
+            </div>
+            <div>
+              <label class="text-blue-400 block text-[10px] font-bold mb-1" id="lblTpl3">3. Google 5 Yıldız Değerlendirme</label>
+              <textarea id="tplMsg3" rows="5" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 text-xs focus:outline-none leading-relaxed"></textarea>
+            </div>
+            <div>
+              <label class="text-purple-400 block text-[10px] font-bold mb-1" id="lblTpl4">4. Memnuniyet Anketi & Instagram Daveti</label>
+              <textarea id="tplMsg4" rows="5" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 text-xs focus:outline-none leading-relaxed"></textarea>
+            </div>
+            <div>
+              <label class="text-amber-400 block text-[10px] font-bold mb-1" id="lblTpl5">5. Sosyal Medya / Instagram Daveti (Genel)</label>
+              <textarea id="tplMsg5" rows="5" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 text-xs focus:outline-none leading-relaxed"></textarea>
+            </div>
+            <div>
+              <label class="text-emerald-400 block text-[10px] font-bold mb-1" id="lblTpl6">6. Anlık Randevu Teyit Şablonu</label>
+              <textarea id="tplConfirm" rows="5" class="w-full bg-slate-950 border border-emerald-500/40 rounded-xl p-2.5 text-slate-200 text-xs focus:outline-none leading-relaxed"></textarea>
+            </div>
+            <div>
+              <label class="text-indigo-400 block text-[10px] font-bold mb-1" id="lblTpl7">7. Sizi Özledik / Geri Çağırma (Elit Kahve İkramlı)</label>
+              <textarea id="tplMsg7" rows="5" class="w-full bg-slate-950 border border-indigo-500/40 rounded-xl p-2.5 text-slate-200 text-xs focus:outline-none leading-relaxed"></textarea>
+            </div>
+            <!-- YENİ EKLENEN: BANKA VE IBAN ŞABLONU (NO 9) -->
+            <div>
+              <label class="text-amber-400 block text-[10px] font-bold mb-1" id="lblTpl9">9. Uluslararası Banka / IBAN & Ödeme Bilgisi Gönderme</label>
+              <textarea id="tplMsg9" rows="5" class="w-full bg-slate-950 border border-amber-500/40 rounded-xl p-2.5 text-slate-200 text-xs focus:outline-none leading-relaxed"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="ayarlariKaydet()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 rounded-xl shadow transition mt-2 active:scale-95 text-xs" id="btnSaveSettings">
+          Tüm Ayarları ve Şablonları Kaydet
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- YENİ MODAL: GELİŞMİŞ KASAM (HAKEDİŞ MOTORLU) -->
+  <div id="modalKasam" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[99999999] flex items-center justify-center p-3">
+    <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col max-h-[92vh]">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-wallet text-amber-400 text-base"></i>
+          <h3 class="text-sm font-bold text-amber-400" id="lblKasamHeader">Kasam & Ciro Yönetim Merkezi</h3>
+        </div>
+        <button onclick="kasaModalKapat()" class="text-slate-400 hover:text-white text-base p-1">✕</button>
+      </div>
+
+      <div class="grid grid-cols-3 gap-1.5 text-center">
+        <button onclick="kasaPeriyotFiltrele('bugun')" id="btnKasaBugun" class="bg-slate-950 hover:bg-slate-800 p-2.5 rounded-xl border border-amber-500/50 transition active:scale-95 shadow">
+          <span class="text-[9px] text-slate-400 block font-bold uppercase" id="lblKasaToday">Bugün</span>
+          <span id="kasaBugunTutar" class="text-xs font-black text-amber-400 block mt-0.5">0,00 TL</span>
+        </button>
+        <button onclick="kasaPeriyotFiltrele('hafta')" id="btnKasaHafta" class="bg-slate-950 hover:bg-slate-800 p-2.5 rounded-xl border border-emerald-500/30 transition active:scale-95">
+          <span class="text-[9px] text-slate-400 block font-bold uppercase" id="lblKasaWeek">Bu Hafta</span>
+          <span id="kasaHaftaTutar" class="text-xs font-black text-emerald-400 block mt-0.5">0,00 TL</span>
+        </button>
+        <button onclick="kasaPeriyotFiltrele('ay')" id="btnKasaAy" class="bg-slate-950 hover:bg-slate-800 p-2.5 rounded-xl border border-blue-500/30 transition active:scale-95">
+          <span class="text-[9px] text-slate-400 block font-bold uppercase" id="lblKasaMonth">Bu Ay</span>
+          <span id="kasaAyTutar" class="text-xs font-black text-blue-400 block mt-0.5">0,00 TL</span>
+        </button>
+      </div>
+
+      <!-- YENİ: USTA HAKEDİŞ YÜZDESİ KUTUSU -->
+      <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-2">
+        <div class="flex justify-between items-center">
+          <span class="text-[10px] text-amber-400 font-bold block uppercase tracking-wider">💰 HAKEDİŞ & PAYLAŞIM MOTORU</span>
+          <div class="flex items-center space-x-1.5">
+            <label class="text-[10px] text-slate-400 font-bold" id="lblHakedisYuzde">Usta Payı (%):</label>
+            <input type="number" id="kasaHakedisYuzde" min="0" max="100" value="50" onchange="kasaHakedisGuncelle(this.value)" class="w-14 bg-slate-900 border border-amber-500/40 rounded-lg p-1 text-center text-amber-400 font-black text-xs focus:outline-none">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-center pt-0.5">
+          <div class="bg-slate-900 p-2 rounded-lg border border-slate-800">
+            <span class="text-[9px] text-slate-400 block font-bold uppercase" id="lblUstaPayTitle">💰 Ustanın Hakedişi</span>
+            <span id="kasaUstaPayi" class="text-xs font-black text-emerald-400 block mt-0.5">0,00 TL</span>
+          </div>
+          <div class="bg-slate-900 p-2 rounded-lg border border-slate-800">
+            <span class="text-[9px] text-slate-400 block font-bold uppercase" id="lblSalonPayTitle">🏢 Salona Kalan Pay</span>
+            <span id="kasaSalonPayi" class="text-xs font-black text-amber-400 block mt-0.5">0,00 TL</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-2">
+        <div class="flex justify-between items-center">
+          <span class="text-[10px] text-amber-400 font-bold block uppercase tracking-wider" id="lblKasaQuickTitle">⚡ HIZLI KASA GİRİŞİ (HIZLI FİŞ)</span>
+          <div class="flex space-x-1">
+            <button type="button" id="btnHizliOdemeNakit" onclick="hizliOdemeTuruSec('nakit')" class="px-2 py-0.5 rounded text-[10px] font-black bg-amber-500 text-slate-950 shadow">💵 Nakit</button>
+            <button type="button" id="btnHizliOdemeKart" onclick="hizliOdemeTuruSec('kart')" class="px-2 py-0.5 rounded text-[10px] font-black bg-slate-900 text-slate-400 border border-slate-700">💳 Kart</button>
+          </div>
+        </div>
+        <div class="flex space-x-1.5">
+          <input type="text" id="kasaHizliIslemAd" placeholder="İşlem (Örn: Fön...)" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
+          <input type="number" id="kasaHizliIslemUcret" placeholder="TL" class="w-20 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-amber-400 font-bold text-center focus:outline-none">
+          <button onclick="kasaHizliIslemEkle()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs shadow active:scale-95 transition whitespace-nowrap" id="btnAddToCash">
+            + Ekle
+          </button>
+        </div>
+      </div>
+
+      <!-- YENİ: KASA HESABI KAPAT VE SIFIRLA BUTONU -->
+      <div class="flex justify-between items-center pt-1 border-t border-slate-800">
+        <span class="text-xs font-bold text-white flex items-center" id="lblDailyBreakdownTitle">
+          <i class="fa-solid fa-receipt mr-1 text-amber-400"></i> Fiş Dökümü:
+        </span>
+        <div class="flex items-center space-x-2">
+          <button onclick="kasaHesabiKapat()" class="px-2 py-1 bg-slate-800 text-amber-300 border border-slate-700 rounded-lg text-[10px] font-bold hover:bg-slate-700 transition flex items-center" title="Mevcut Sayacı Sıfırla">
+            <i class="fa-solid fa-rotate-left mr-1"></i> Hesabı Kapat / Sıfırla
+          </button>
+          <input type="date" id="kasaTarihSecici" onchange="kasaTarihFiltrele(this.value)" class="bg-slate-950 text-amber-300 text-[11px] font-bold border border-slate-700 rounded-lg px-2 py-1 focus:outline-none">
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center bg-slate-950/80 px-3 py-1.5 rounded-lg border border-slate-800">
+        <span class="text-[11px] text-slate-400" id="kasaSeciliTarihEtiket">Seçili Dönem Toplamı:</span>
+        <span id="kasaSeciliGunToplam" class="text-sm font-black text-amber-400">0,00 TL</span>
+      </div>
+
+      <div id="kasaGunlukIslemlerListesi" class="flex-1 overflow-y-auto space-y-2 pr-1 scroll-touch min-h-[180px] max-h-[46vh]"></div>
+    </div>
+  </div>
+
+  <!-- YENİ MODAL: FİŞ DÜZENLEME PENCERESİ -->
+  <div id="modalFisDuzenle" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[999999999] flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-sm w-full p-4 space-y-3.5 shadow-2xl">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-pen-to-square text-amber-400 text-sm"></i>
+          <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider">İşlem & Fiş Düzenle</h3>
+        </div>
+        <button onclick="kasaFisDuzenleKapat()" class="text-slate-400 hover:text-white text-base">✕</button>
+      </div>
+
+      <input type="hidden" id="editFisId">
+
+      <div class="space-y-2 text-xs">
+        <div>
+          <label class="text-[10px] text-slate-400 block font-bold mb-1">İŞLEM / HİZMET ADI:</label>
+          <input type="text" id="editFisHizmet" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white font-bold focus:outline-none focus:border-amber-400">
+        </div>
+        <div>
+          <label class="text-[10px] text-slate-400 block font-bold mb-1">ÜCRET (TL):</label>
+          <input type="number" id="editFisUcret" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-amber-400 font-black text-sm focus:outline-none focus:border-amber-400">
+        </div>
+        <div>
+          <label class="text-[10px] text-slate-400 block font-bold mb-1">ÖDEME TÜRÜ:</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button type="button" id="btnEditFisNakit" onclick="editFisOdemeTuruSec('nakit')" class="p-2 rounded-xl text-xs font-black bg-amber-500 text-slate-950 shadow">💵 Nakit</button>
+            <button type="button" id="btnEditFisKart" onclick="editFisOdemeTuruSec('kart')" class="p-2 rounded-xl text-xs font-black bg-slate-900 text-slate-400 border border-slate-700">💳 Kart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800">
+        <button type="button" onclick="kasaFisDuzenleKapat()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold py-2.5 rounded-xl transition">Vazgeç</button>
+        <button type="button" onclick="kasaFisDuzenleKaydet()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black py-2.5 rounded-xl shadow active:scale-95 transition">Güncelle 👍</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalNotGenislet" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[999999999] flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center" id="lblZoomModalTitle">
+          <i class="fa-solid fa-maximize mr-1.5"></i> Detaylı Formül / Not Görüntüleyici
+        </h3>
+        <button onclick="notGenisletKapat()" class="text-slate-400 hover:text-white text-base">✕</button>
+      </div>
+      <textarea id="txtZoomContent" rows="8" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 font-medium focus:outline-none focus:border-amber-400 leading-relaxed"></textarea>
+      <div class="flex justify-end space-x-2 pt-1">
+        <button onclick="notGenisletKaydet()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-4 py-2 rounded-xl text-xs shadow active:scale-95 transition">
+          Tamam / Güncelle 👍
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalMusteriRehberi" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[9999999] flex items-center justify-center p-3">
+    <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col max-h-[88vh]">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-address-book text-amber-400 text-base"></i>
+          <h3 class="text-sm font-bold text-amber-400" id="lblCustDirectoryTitle">Müşteri Rehberi</h3>
+        </div>
+        <span id="custDirectoryTotalBadge" class="text-xs bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-bold">0 Müşteri</span>
+        <button onclick="musteriRehberiModalKapat()" class="text-slate-400 hover:text-white text-base">✕</button>
+      </div>
+
+      <div class="relative">
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+        <input type="text" id="custDirectorySearchInput" oninput="musteriRehberindeAra(this.value)" placeholder="Ad, Soyad veya Telefon ile ara..." class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-8 pr-3 py-2 text-xs text-white font-bold focus:outline-none focus:border-amber-400">
+      </div>
+
+      <div id="custDirectoryList" class="flex-1 overflow-y-auto space-y-1.5 pr-1 scroll-touch"></div>
+    </div>
+  </div>
+
+  <!-- YENİ: YASAL SÖZLEŞMELER (KVKK & KULLANICI ŞARTLARI) -->
+  <div id="modalYasalSozlesme" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[99999999999] flex items-center justify-center p-3">
+    <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-md w-full p-5 space-y-4 shadow-2xl flex flex-col h-[85vh]">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+        <h3 class="text-sm font-black text-amber-400 flex items-center"><i class="fa-solid fa-scale-balanced mr-2"></i> Yasal Metinler & Şartlar</h3>
+        <button onclick="yasalSozlesmeModaliKapat()" class="text-slate-400 hover:text-white text-base px-2">✕</button>
+      </div>
+      
+      <div class="flex-1 overflow-y-auto pr-2 scroll-touch text-[11px] text-slate-300 space-y-4 leading-relaxed font-medium">
+        <div>
+          <h4 class="font-bold text-amber-400 text-xs mb-1">1. Kullanıcı Lisans Sözleşmesi</h4>
+          <p>LUMIO Terminal Uygulaması, kullanıcılarına saç analizi, randevu takip ve müşteri yönetimi sunan kapalı devre bir bulut yazılımıdır. Lisans kodunuzu üçüncü şahıslarla paylaşamazsınız. Sistem, girdiğiniz müşteri verilerini tamamen güvenli Firebase Firestore veritabanlarında saklamaktadır.</p>
+        </div>
+        <div>
+          <h4 class="font-bold text-amber-400 text-xs mb-1">2. KVKK Aydınlatma Metni</h4>
+          <p>Müşteri rehberine kaydettiğiniz ad, telefon, doğum tarihi ve geçmiş işlem formülleri doğrudan sizin yönetiminizdedir. 6698 Sayılı Kişisel Verilerin Korunması Kanunu gereği müşterilerinizin verilerinin yasal sorumluluğu işletmenize (Lisans Sahibine) aittir.</p>
+        </div>
+        <div>
+          <h4 class="font-bold text-amber-400 text-xs mb-1">3. Yapay Zeka (AI) Kullanım Rızası</h4>
+          <p>Sisteme entegre Google Gemini Master AI modülü, yüklenen saç/cihaz görsellerini analiz etmek için bulut üzerinden çalışır. Bu görseller AI motorunun eğitilmesi amacıyla saklanmaz ve 3. şahıslarla paylaşılmaz. Tıbbi veya kesin bir teşhis niteliği taşımaz, sadece usta için bir tavsiye motorudur.</p>
+        </div>
+      </div>
+
+      <div class="pt-2 border-t border-slate-800">
+        <button onclick="yasalSozlesmeModaliKapat()" class="w-full bg-amber-500 text-slate-950 font-black py-2.5 rounded-xl shadow active:scale-95 transition text-xs">Okudum, Anladım 👍</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalUstaRehberi" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[9999999999] flex items-center justify-center p-3">
+    <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col max-h-[88vh]">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-users-gear text-amber-400 text-base"></i>
+          <h3 class="text-sm font-black text-amber-400">Lisanslı Ustalar Rehberi</h3>
+        </div>
+        <span id="ustaDirectoryTotalBadge" class="text-xs bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-bold">0 Usta</span>
+        <button onclick="document.getElementById('modalUstaRehberi').classList.add('hidden')" class="text-slate-400 hover:text-white text-base">✕</button>
+      </div>
+
+      <div class="relative">
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+        <input type="text" id="ustaDirectorySearchInput" oninput="ustaRehberindeAra(this.value)" placeholder="Usta Adı, Soyadı veya Telefon ile ara..." class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-8 pr-3 py-2 text-xs text-white font-bold focus:outline-none focus:border-amber-400">
+      </div>
+
+      <div id="ustaDirectoryList" class="flex-1 overflow-y-auto space-y-1.5 pr-1 scroll-touch"></div>
+    </div>
+  </div>
+
+  <!-- YENİ EKLENEN: MÜŞTERİ BİLGİ DÜZENLEME (KALEM) MODALI -->
+  <div id="modalMusteriDuzenle" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[999999999] flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-sm w-full p-5 space-y-3.5 shadow-2xl">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-user-pen text-amber-400 text-sm"></i>
+          <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider">Müşteri Bilgilerini Düzenle</h3>
+        </div>
+        <button onclick="musteriDuzenleKapat()" class="text-slate-400 hover:text-white text-base">✕</button>
+      </div>
+      
+      <input type="hidden" id="editCustId">
+
+      <div class="space-y-2 text-xs">
+        <div>
+          <label class="text-[10px] text-slate-400 block font-bold mb-1">MÜŞTERİ ADI VE SOYADI:</label>
+          <input type="text" id="editCustName" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white font-bold focus:outline-none focus:border-amber-400">
+        </div>
+        <div>
+          <label class="text-[10px] text-slate-400 block font-bold mb-1">TELEFON NUMARASI:</label>
+          <input type="tel" id="editCustPhone" placeholder="0532 320 32 32" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-amber-400 font-bold focus:outline-none focus:border-amber-400">
+        </div>
+        <div>
+          <label class="text-[10px] text-slate-400 block font-bold mb-1">DOĞUM TARİHİ (GG.AA):</label>
+          <input type="text" id="editCustBirth" placeholder="GG.AA" onblur="dogumTarihiFormatla(this)" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white font-bold focus:outline-none focus:border-amber-400">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800">
+        <button type="button" onclick="musteriDuzenleKapat()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold py-2.5 rounded-xl transition">Vazgeç</button>
+        <button type="button" onclick="musteriDuzenleKaydet()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black py-2.5 rounded-xl shadow active:scale-95 transition">Kaydet 👍</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalRandevuOlustur" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[9999999] flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-2.5">
+        <div class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+          <h3 class="text-sm font-bold text-amber-400" id="shHeaderTitle">Randevu Oluştur</h3>
+        </div>
+        <span id="shSayacMetin" class="text-[10px] bg-slate-800 text-amber-300 px-2.5 py-0.5 rounded-md font-bold">Adım 1/5</span>
+      </div>
+
+      <div id="shKutuAdim1" class="space-y-3">
+        <h4 class="text-xs font-bold text-white" id="shStep1Title">1. Randevu hangi gün olacak?</h4>
+        <div class="space-y-2">
+          <label class="text-[10px] text-slate-400 block font-bold" id="shStep1Sub">TARİHİ YAZIN VEYA SEÇİN:</label>
+          <input type="text" id="shTarihInput" placeholder="GG.AA.YYYY" onblur="randevuTarihiFormatla(this)" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-amber-300 font-bold focus:outline-none focus:border-amber-500">
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <button type="button" onclick="shTarihAta(0)" class="p-2.5 rounded-xl border border-slate-800 bg-slate-950 text-white hover:border-amber-500 text-xs font-bold transition" id="shBtnToday">📅 Bugün</button>
+            <button type="button" onclick="shTarihAta(1)" class="p-2.5 rounded-xl border border-slate-800 bg-slate-950 text-white hover:border-amber-500 text-xs font-bold transition" id="shBtnTomorrow">📅 Yarın</button>
+          </div>
+          <div class="pt-1">
+            <span class="text-[10px] text-slate-500 block mb-1" id="shLblCalendarSelect">Takvimden Seçmek İsterseniz:</span>
+            <input type="date" onchange="shTakvimSecildi(this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-xs text-slate-300 font-bold focus:outline-none">
+          </div>
+        </div>
+      </div>
+
+      <div id="shKutuAdim2" class="space-y-3 hidden">
+        <h4 class="text-xs font-bold text-white" id="shStep2Title">2. Müşterimizin Adı ve Telefonu nedir?</h4>
+        <div class="space-y-2">
+          <label class="text-[10px] text-slate-400 block font-bold" id="shStep2Sub">MÜŞTERİ ADI SOYADI:</label>
+          <input type="text" id="shMusteriInput" placeholder="Ad Soyad yazın (Örn: Sayime Yılmaz)..." oninput="shMusteriAra(this.value)" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white font-bold focus:outline-none focus:border-amber-500">
+          
+          <label class="text-[10px] text-slate-400 block font-bold pt-1" id="shLblPhone">TELEFON NUMARASI:</label>
+          <div class="flex items-center space-x-1.5">
+            <input type="text" id="shCountryCode" value="+90" class="w-14 bg-slate-950 border border-slate-700 rounded-xl p-2 text-center text-amber-400 font-bold text-xs focus:outline-none">
+            <input type="tel" id="shTelInput" placeholder="5354049392" class="flex-1 bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-amber-300 font-bold focus:outline-none">
+          </div>
+          <div id="shMusteriSonuclari" class="space-y-1.5 max-h-28 overflow-y-auto pt-1 scroll-touch"></div>
+        </div>
+      </div>
+
+      <div id="shKutuAdim3" class="space-y-3 hidden">
+        <h4 class="text-xs font-bold text-white" id="shStep3Title">3. Yapılacak işlem / hizmet nedir?</h4>
+        <div class="space-y-2">
+          <label class="text-[10px] text-slate-400 block font-bold" id="shStep3Sub">SEÇİN VEYA KENDİNİZ YAZIN:</label>
+          <input type="text" id="shHizmetInput" value="İŞLEM" placeholder="İşlem adı yazın..." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-amber-300 font-bold focus:outline-none">
+          <div id="shDinamikHizmetButonlari" class="grid grid-cols-2 sm:grid-cols-3 gap-1.5 pt-1"></div>
+          <button type="button" onclick="shDigerHizmetSec()" class="w-full p-2.5 rounded-xl border border-amber-500/40 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 text-xs font-bold flex items-center justify-center space-x-1 transition" id="shBtnOtherService">
+            <i class="fa-solid fa-pen-to-square"></i><span>DİĞER / ÖZEL İŞLEM YAZ</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="shKutuAdim4" class="space-y-3 hidden">
+        <h4 class="text-xs font-bold text-white" id="shStep4Title">4. Bu işlem için ne kadar vakit ayıralım?</h4>
+        <div class="space-y-2">
+          <label class="text-[10px] text-slate-400 block font-bold" id="shStep4Sub">SÜRE SEÇİN VEYA DAKİKA GİRİN:</label>
+          <input type="number" id="shSureInput" value="60" placeholder="Dakika (Örn: 60)" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-xs text-white font-bold focus:outline-none text-center">
+          <div class="space-y-1.5 pt-1">
+            <button type="button" onclick="shSureAta(30)" class="w-full text-left p-2.5 rounded-xl border border-slate-800 bg-slate-950 hover:border-amber-500 flex justify-between items-center text-xs font-bold">
+              <span>⏱️ 30 Dakika</span><span class="text-amber-400">30 Dk</span>
+            </button>
+            <button type="button" onclick="shSureAta(45)" class="w-full text-left p-2.5 rounded-xl border border-slate-800 bg-slate-950 hover:border-amber-500 flex justify-between items-center text-xs font-bold">
+              <span>⏱️ 45 Dakika</span><span class="text-amber-400">45 Dk</span>
+            </button>
+            <button type="button" onclick="shSureAta(60)" class="w-full text-left p-2.5 rounded-xl border border-slate-800 bg-slate-950 hover:border-amber-500 flex justify-between items-center text-xs font-bold">
+              <span>⏱️ 1 Saat (60 Dk)</span><span class="text-amber-400">60 Dk</span>
+            </button>
+            <button type="button" onclick="shSureAta(90)" class="w-full text-left p-2.5 rounded-xl border border-slate-800 bg-slate-950 hover:border-amber-500 flex justify-between items-center text-xs font-bold">
+              <span>⏱️ 1.5 Saat (90 Dk)</span><span class="text-amber-400">90 Dk</span>
+            </button>
+            <button type="button" onclick="shSureAta(120)" class="w-full text-left p-2.5 rounded-xl border border-slate-800 bg-slate-950 hover:border-amber-500 flex justify-between items-center text-xs font-bold">
+              <span>⏱️ 2 Saat (120 Dk)</span><span class="text-amber-400">120 Dk</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="shKutuAdim5" class="space-y-3 hidden">
+        <h4 class="text-xs font-bold text-white" id="shStep5Title">5. Randevu saat kaçta başlasın?</h4>
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
+          <label class="text-[10px] text-slate-400 block font-bold" id="shStep5Sub">BAŞLANGIÇ SAATİNİ GİRİN:</label>
+          <input type="text" id="shSaatInput" value="14:00" placeholder="14:00" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-base text-amber-400 font-black focus:outline-none text-center">
+          <div class="flex flex-wrap gap-1.5 justify-center pt-1">
+            <button type="button" onclick="shSaatAta('10:00')" class="px-2 py-1 bg-slate-900 text-slate-300 rounded text-xs border border-slate-800">10:00</button>
+            <button type="button" onclick="shSaatAta('12:00')" class="px-2 py-1 bg-slate-900 text-slate-300 rounded text-xs border border-slate-800">12:00</button>
+            <button type="button" onclick="shSaatAta('14:00')" class="px-2 py-1 bg-slate-900 text-slate-300 rounded text-xs border border-slate-800">14:00</button>
+            <button type="button" onclick="shSaatAta('16:00')" class="px-2 py-1 bg-slate-900 text-slate-300 rounded text-xs border border-slate-800">16:00</button>
+            <button type="button" onclick="shSaatAta('18:00')" class="px-2 py-1 bg-slate-900 text-slate-300 rounded text-xs border border-slate-800">18:00</button>
+          </div>
+        </div>
+        <div class="text-[11px] text-slate-300 bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 space-y-1">
+          <div><span class="text-slate-500" id="shSummaryCust">Müşteri:</span> <b id="shOzetMusteri" class="text-white">-</b></div>
+          <div><span class="text-slate-500" id="shSummaryService">İşlem & Süre:</span> <b id="shOzetIslem" class="text-amber-400">-</b></div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800">
+        <button type="button" id="shGeriBtn" onclick="shGeriTiklandi()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold py-2.5 rounded-xl transition">Vazgeç</button>
+        <button type="button" id="shIleriBtn" onclick="shIleriTiklandi()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black py-2.5 rounded-xl shadow active:scale-95 transition">İleri ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="cakismaModal" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[99999999] flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl text-center">
+      <div class="w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl mx-auto"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <h3 class="text-sm font-bold text-amber-400" id="lblConflictTitle">Saat Çakışması Uyarısı</h3>
+      <p id="cakismaBilgiMetin" class="text-xs text-slate-200 leading-relaxed"></p>
+      <div class="space-y-2 pt-2">
+        <button onclick="sihirbazCiftRandevuOnayla()" class="w-full bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold py-2.5 rounded-xl shadow active:scale-95" id="btnConfirmDoubleBooking">Evet, Araya Yaz (Aynı Saate Ekle)</button>
+        <button onclick="sihirbazOnerilenSaatiSec()" id="btnOnerilenSaat" class="w-full bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-bold py-2.5 rounded-xl border border-slate-700">En Yakın Boş Saati Seç</button>
+        <button onclick="document.getElementById('cakismaModal').classList.add('hidden')" class="w-full bg-slate-950 text-slate-400 text-xs py-2 rounded-xl" id="btnChooseAnotherTime">Başka Saat Seçeceğim</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="bildirimAksiyonModal" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[99999999] flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-emerald-500/50 rounded-2xl max-w-sm w-full p-5 space-y-3.5 shadow-2xl text-center">
+      <div class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl mx-auto"><i class="fa-solid fa-circle-check"></i></div>
+      <h3 class="text-sm font-bold text-emerald-400" id="lblBookingSuccessTitle">Randevu Başarıyla Kaydedildi!</h3>
+      <p id="bildirimOzetMetin" class="text-xs text-slate-300 leading-relaxed"></p>
+      <div class="space-y-2 pt-1 text-xs">
+        <button onclick="bildirimAksiyonTetikle('musteri')" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl shadow active:scale-95 flex items-center justify-center space-x-2" id="btnSendClientConfirm">
+          <i class="fa-brands fa-whatsapp text-base"></i><span>Müşteriye Teyit Gönder (Şablon 6)</span>
+        </button>
+        <button onclick="telefonTakvimineKaydet()" class="w-full bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 font-black py-2.5 rounded-xl shadow active:scale-95 flex items-center justify-center space-x-2" id="btnAddCalendarAlarm">
+          <i class="fa-solid fa-calendar-plus text-base"></i><span>📅 Telefon Alarmına / Takvimine Ekle</span>
+        </button>
+        <button onclick="bildirimAksiyonTetikle('usta')" id="btnUstaBildirim" class="w-full bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold py-2 rounded-xl border border-slate-700 flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-bell"></i><span>Kendi Numarama WhatsApp Bildir</span>
+        </button>
+        <button onclick="bildirimModaliniKapat()" class="w-full bg-slate-950 text-slate-400 py-2 rounded-xl" id="btnCloseNotificationModal">Kapat</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalRandevuAlarmi" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[9999999999] flex items-center justify-center p-4">
+    <div class="bg-slate-900 border-2 border-amber-500 rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl animate-bounce">
+      <div class="w-16 h-16 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-3xl mx-auto border border-amber-500/50">
+        <i class="fa-solid fa-bell"></i>
+      </div>
+      <div>
+        <h3 class="text-base font-black text-amber-400">⏰ RANDEVU VAKTİ YAKLAŞTI!</h3>
+        <p id="txtAlarmMesaji" class="text-xs text-white mt-1 leading-relaxed font-semibold"></p>
+      </div>
+      <button onclick="randevuAlarmKapat()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 rounded-xl shadow-lg active:scale-95 text-xs transition">
+        TAMAM, ANLADIM 👍
+      </button>
+    </div>
+  </div>
+
+  <!-- YENİ EKLENEN: LUMIO MASTER AI (GEMINI) PENCERESİ -->
+  <div id="modalLumioAi" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[9999999999] flex flex-col items-center justify-end sm:justify-center p-3 sm:p-6 pb-0 sm:pb-6 transition-all duration-300">
+    <div class="bg-slate-900 border border-amber-500/40 rounded-t-3xl sm:rounded-3xl w-full max-w-md h-[88vh] sm:h-auto sm:max-h-[90vh] shadow-2xl flex flex-col overflow-hidden relative">
+      
+      <div class="flex justify-between items-center p-4 border-b border-slate-800 shrink-0 bg-slate-900 z-10 shadow-sm">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-amber-300 text-slate-950 flex items-center justify-center shadow-lg"><i class="fa-solid fa-wand-magic-sparkles text-sm"></i></div>
+          <div>
+            <h3 class="text-sm font-black text-amber-400 tracking-wide">LUMIO MASTER AI</h3>
+            <span class="text-[9px] text-slate-400 font-medium">Saç Teşhis & Randevu Asistanı</span>
+          </div>
+        </div>
+        <button onclick="lumioAiModaliKapat()" class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-red-500/20 hover:border-red-500/40 border border-slate-700 flex items-center justify-center transition">✕</button>
+      </div>
+
+      <div class="flex justify-center p-2.5 space-x-1.5 shrink-0 bg-slate-950 border-b border-slate-800">
+        <button id="aiTabBtnSes" onclick="lumioAiSekme('ses')" class="ai-nav-tab flex-1 py-2 rounded-lg bg-amber-500 text-slate-950 shadow font-black text-[11px] transition">🎙️ SESLİ KAYIT</button>
+        <button id="aiTabBtnIstisare" onclick="lumioAiSekme('istisare')" class="ai-nav-tab flex-1 py-2 rounded-lg text-slate-400 hover:text-amber-500 text-[11px] font-bold transition">🧠 İSTİŞARE</button>
+        <button id="aiTabBtnKamera" onclick="lumioAiSekme('kamera')" class="ai-nav-tab flex-1 py-2 rounded-lg text-slate-400 hover:text-amber-500 text-[11px] font-bold transition">📸 ANALİZ YAP</button>
+      </div>
+
+      <div class="flex-1 overflow-y-auto p-4 scroll-touch bg-slate-900 relative">
+        <!-- SEKME 1: SESLİ KOMUTLA RANDEVU YAZMA -->
+        <div id="aiTabContentSes" class="space-y-4">
+          <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 text-center shadow-inner relative overflow-hidden">
+            <div class="absolute inset-0 bg-amber-500/5 opacity-50"></div>
+            <p class="text-[11px] text-slate-300 font-medium relative z-10 leading-relaxed">
+              Örnek Komut:<br><b class="text-amber-400">"Yarın saat 14'e Server Bey için saç kesimi yaz."</b>
+            </p>
+          </div>
+          
+          <div class="flex justify-center py-6">
+            <button id="aiMicBtn" onclick="lumioAiBasKonusToggle()" class="w-24 h-24 rounded-full bg-gradient-to-t from-slate-800 to-slate-700 border-4 border-slate-600 shadow-[0_0_30px_rgba(0,0,0,0.5)] flex flex-col items-center justify-center transition active:scale-95 group relative">
+              <div class="absolute inset-0 rounded-full border-2 border-amber-500/0 group-hover:border-amber-500/50 transition duration-300"></div>
+              <i class="fa-solid fa-microphone text-3xl text-amber-400 group-hover:scale-110 transition duration-300 drop-shadow-md"></i>
+            </button>
+          </div>
+          <p id="aiMicStatus" class="text-center text-[10px] text-slate-400 font-bold uppercase tracking-wider animate-pulse">Hazır. Konuşmak için dokunun.</p>
+
+          <div id="aiTranscriptCard" class="hidden bg-slate-800/50 border border-slate-700 p-3 rounded-xl text-center">
+            <span class="text-[10px] text-slate-400 block mb-1">Algılanan Ses:</span>
+            <p id="aiTranscriptText" class="text-xs text-amber-300 font-mono italic">...</p>
+          </div>
+
+          <div id="aiParsedCard" class="hidden bg-emerald-950/30 border border-emerald-500/30 rounded-xl p-4 shadow-lg">
+            <h4 class="text-xs font-black text-emerald-400 mb-3 flex items-center border-b border-emerald-500/20 pb-2"><i class="fa-solid fa-robot mr-2"></i> Randevu Çözümlendi</h4>
+            <div class="grid grid-cols-2 gap-2 text-[11px]">
+              <div class="bg-slate-900 p-2 rounded-lg border border-slate-700/50"><span class="text-slate-500 block text-[9px]">MÜŞTERİ</span><b id="aiResMusteri" class="text-white"></b></div>
+              <div class="bg-slate-900 p-2 rounded-lg border border-slate-700/50"><span class="text-slate-500 block text-[9px]">TARİH</span><b id="aiResTarih" class="text-amber-400 font-mono"></b></div>
+              <div class="bg-slate-900 p-2 rounded-lg border border-slate-700/50"><span class="text-slate-500 block text-[9px]">SAAT</span><b id="aiResSaat" class="text-emerald-400 font-mono text-sm"></b></div>
+              <div class="bg-slate-900 p-2 rounded-lg border border-slate-700/50"><span class="text-slate-500 block text-[9px]">İŞLEM</span><b id="aiResHizmet" class="text-white"></b></div>
+            </div>
+            <div class="flex space-x-2 mt-3 pt-3 border-t border-emerald-500/20">
+              <button onclick="lumioAiSesiSifirla()" class="flex-1 bg-slate-800 text-slate-300 font-bold py-2.5 rounded-lg text-[10px]">İptal</button>
+              <button onclick="lumioAiRandevuyuOnayla()" class="flex-1 bg-emerald-600 text-white font-black py-2.5 rounded-lg text-[10px] shadow">Onayla & Kaydet 👍</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEKME 2: İSTİŞARE VE DANIŞMANLIK (GEMINI TEXT) -->
+        <div id="aiTabContentIstisare" class="hidden space-y-4 h-full flex flex-col">
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 shadow-inner flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-full bg-slate-900 border border-amber-500/30 flex items-center justify-center text-amber-500"><i class="fa-solid fa-user-tie"></i></div>
+            <div class="flex-1">
+              <span class="text-[10px] text-slate-400 block font-bold" id="aiActiveCustBadge">👤 Müşteri Seçilmedi</span>
+              <button onclick="lumioAiRehberdenMusteriSec()" class="text-[9px] text-amber-500 underline font-semibold mt-0.5">Rehberden Seç</button>
+            </div>
+          </div>
+
+          <div class="relative">
+            <textarea id="aiAskInput" rows="3" placeholder="Yapay zekaya formül, karışım veya müşteri yönetimi hakkında soru sor..." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 pl-3 pr-10 text-xs text-white focus:border-amber-400 focus:outline-none resize-none leading-relaxed"></textarea>
+            <button onclick="lumioAiIstisareBasKonusToggle()" class="absolute right-2 top-2 w-8 h-8 rounded-full bg-slate-800 text-amber-400 hover:bg-slate-700 flex items-center justify-center transition">
+              <i class="fa-solid fa-microphone"></i>
+            </button>
+          </div>
+          
+          <button onclick="lumioAiSoruSor()" class="w-full bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 font-black py-3 rounded-xl shadow text-xs active:scale-95 transition flex items-center justify-center space-x-1.5">
+            <i class="fa-solid fa-paper-plane"></i> <span>Soru Sor</span>
+          </button>
+
+          <div id="aiAdviceCard" class="hidden flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 shadow-lg overflow-y-auto">
+            <div class="flex justify-between items-center mb-2 border-b border-slate-700 pb-2">
+              <span class="text-xs font-bold text-amber-400"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Yapay Zeka Yanıtı</span>
+              <button onclick="lumioAiCevabiSeslendir()" class="text-[10px] bg-slate-900 text-slate-300 px-2.5 py-1 rounded border border-slate-700 hover:bg-slate-700 flex items-center transition"><i class="fa-solid fa-volume-high mr-1.5"></i>Sesli Oku</button>
+            </div>
+            <p id="aiAdviceText" class="text-[11px] text-slate-200 leading-loose"></p>
+          </div>
+        </div>
+
+        <!-- SEKME 3: FOTOĞRAFLI SAÇ / CİLT ANALİZİ (GEMINI VISION) -->
+        <div id="aiTabContentKamera" class="hidden space-y-4">
+          <div class="bg-slate-950 border border-dashed border-slate-700 rounded-2xl p-6 text-center cursor-pointer hover:border-amber-500/50 transition relative group" onclick="document.getElementById('aiPhotoUpload').click()">
+            <input type="file" id="aiPhotoUpload" accept="image/*" class="hidden" onchange="lumioAiFotoYuklendi(this)">
+            <div class="w-14 h-14 mx-auto bg-slate-900 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition duration-300 border border-slate-800">
+              <i class="fa-solid fa-camera text-2xl text-amber-400"></i>
+            </div>
+            <p class="text-xs font-bold text-slate-300 mb-1">Müşterinin saç fotoğrafını yükle</p>
+            <p class="text-[10px] text-slate-500">Kamera ile çekin veya galeriden seçin.</p>
+          </div>
+
+          <div id="aiPhotoPreviewBox" class="hidden space-y-3">
+            <div class="w-full h-40 bg-slate-950 rounded-xl border border-slate-800 overflow-hidden shadow-inner relative">
+              <img id="aiPreviewImg" src="" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
+            </div>
+            <button onclick="lumioAiFotoAnalizBaslat()" id="btnStartVisionScan" class="w-full bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 font-black py-3.5 rounded-xl shadow-lg active:scale-95 transition text-xs flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-microchip"></i> <span>BİLİMSEL HASAR ANALİZİ YAP</span>
+            </button>
+          </div>
+
+          <div id="aiVisionResultCard" class="hidden bg-slate-950 border border-amber-500/40 rounded-xl p-4 shadow-lg space-y-3 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-16 h-16 bg-amber-500/10 rounded-bl-full border-b border-l border-amber-500/20"></div>
+            <div class="flex justify-between items-start border-b border-slate-800 pb-2 relative z-10">
+              <div>
+                <h4 class="text-xs font-black text-amber-400 tracking-wider">TEŞHİS & REÇETE</h4>
+                <p class="text-[9px] text-slate-400 mt-0.5">Sisteme kayıtlı mağaza ürünleriyle eşleşti.</p>
+              </div>
+              <span id="aiDamageBadge" class="bg-red-500/20 text-red-400 text-[10px] font-black px-2.5 py-1 rounded border border-red-500/30">Hasar: %0</span>
+            </div>
+            <div class="space-y-2 relative z-10">
+              <p id="aiTehisText" class="text-[11px] text-slate-300 leading-relaxed italic border-l-2 border-amber-500/50 pl-2"></p>
+              <div class="pt-2">
+                <span class="text-[10px] text-slate-400 font-bold block mb-2 uppercase">Ustanın Reçetesi (Önerilen Ürünler):</span>
+                <div id="aiProductPrescription" class="space-y-2"></div>
+              </div>
+            </div>
+            <button onclick="lumioAiWhatsAppReceteGonder()" class="w-full mt-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-lg text-xs shadow active:scale-95 transition flex items-center justify-center space-x-1.5 relative z-10">
+              <i class="fa-brands fa-whatsapp text-sm"></i> <span>Reçeteyi Müşteriye Gönder</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="patronModal" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[9999999999] flex items-center justify-center p-3">
+    <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-sm w-full p-4 space-y-3.5 shadow-2xl max-h-[90vh] overflow-y-auto scroll-touch">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+        <div class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
+          <h3 class="text-sm font-black text-amber-400">Patron Yönetim Merkezi (CRM)</h3>
+        </div>
+        <button onclick="patronPaneliKapat()" class="text-slate-400 hover:text-white text-base">✕</button>
+      </div>
+
+      <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2 text-xs">
+        <span class="text-[11px] font-bold text-amber-400 block border-b border-slate-900 pb-1">➕ YENİ USTA LİSANSI EKLE</span>
+        <div>
+          <label class="text-[10px] text-slate-400 block font-bold mb-0.5">USTA ADI VE SOYADI:</label>
+          <input type="text" id="patronNewName" placeholder="Örn: Ahmet YILMAZ" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-bold focus:outline-none">
+        </div>
+        <div>
+          <label class="text-[10px] text-slate-400 block font-bold mb-0.5">TELEFON NUMARASI:</label>
+          <input type="tel" id="patronNewPhone" placeholder="0532 320 32 32" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-bold focus:outline-none">
+        </div>
+        <div>
+          <label class="text-[10px] text-slate-400 block font-bold mb-0.5">USTA GİRİŞ ŞİFRESİ (PIN):</label>
+          <input type="text" maxlength="6" id="patronNewPin" placeholder="123456" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-amber-300 font-mono font-black text-center focus:outline-none">
+        </div>
+        <div>
+          <label class="text-[10px] text-slate-400 block font-bold mb-0.5">ABONELİK PAKET SÜRESİ:</label>
+          <select id="patronPackageSelect" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-bold focus:outline-none">
+            <option value="30">1 Aylık (+30 Gün)</option>
+            <option value="90" selected>3 Aylık (+90 Gün)</option>
+            <option value="180">6 Aylık (+180 Gün)</option>
+            <option value="365">1 Yıllık (+365 Gün)</option>
+            <option value="9999">Süresiz (Ömür Boyu)</option>
+          </select>
+        </div>
+        <button onclick="patronYeniLisansKaydet()" class="w-full bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 font-black py-2.5 rounded-lg shadow active:scale-95 transition mt-1" id="btnPatronCreateLicense">
+          LİSANSI OLUŞTUR VE AKTİF ET ✨
+        </button>
+      </div>
+
+      <!-- YENİ: YASAL ONAY TUTANAKLARINI GÖRÜNTÜLEME BUTONU -->
+      <button onclick="patronYasalTutanaklariGor()" class="w-full bg-slate-950 text-amber-300 font-bold py-2 rounded-lg border border-slate-700 shadow active:scale-95 transition text-[11px] flex items-center justify-center space-x-2">
+        <i class="fa-solid fa-file-contract"></i><span>Elektronik Yasal Onay Tutanakları</span>
+      </button>
+
+      <!-- YENİ: GEMINI API ANAHTARI VE ÜRÜN YÖNETİM BUTONLARI -->
+      <div class="grid grid-cols-2 gap-2 text-xs">
+        <button onclick="patronGeminiSifresiAyarla()" class="w-full bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold py-2.5 rounded-lg border border-slate-700 shadow active:scale-95 transition flex items-center justify-center space-x-1.5">
+          <i class="fa-solid fa-key"></i><span>Gemini API Key</span>
+        </button>
+        <button onclick="patronYeniUrunEklePrompt()" class="w-full bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold py-2.5 rounded-lg border border-slate-700 shadow active:scale-95 transition flex items-center justify-center space-x-1.5">
+          <i class="fa-solid fa-box"></i><span>Ürün/Link Ekle</span>
+        </button>
+      </div>
+
+      <div id="patronExpiryAlarmArea" class="hidden bg-gradient-to-r from-amber-950/60 to-slate-950 p-2.5 rounded-xl border border-amber-500/40 space-y-1.5 text-xs">
+        <div class="flex justify-between items-center">
+          <span class="text-[10px] font-black text-amber-400 flex items-center"><i class="fa-solid fa-bell mr-1"></i> YENİLEME VAKTİ GELENLER (7 GÜN KALDI)</span>
+          <span id="patronExpCountBadge" class="text-[9px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded font-bold">0</span>
+        </div>
+        <div id="patronExpiryList" class="space-y-1 max-h-32 overflow-y-auto scroll-touch"></div>
+      </div>
+
+      <div class="space-y-1.5 text-xs">
+        <div onclick="ustaRehberiModalAc()" class="flex justify-between items-center p-2 rounded-xl bg-slate-950 hover:bg-slate-800 cursor-pointer border border-slate-800 transition shadow" title="Tüm Usta Listesini Aç ve Ara">
+          <span class="text-slate-300 font-bold text-[11px] flex items-center"><i class="fa-solid fa-users mr-1.5 text-amber-400"></i> TÜM KAYITLI USTALAR (Arama Yap)</span>
+          <span id="patronTotalMastersCount" class="text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-md font-black">0 Usta ➔</span>
+        </div>
+        <div id="patronMasterListContainer" class="space-y-1.5 max-h-44 overflow-y-auto scroll-touch pr-1"></div>
+      </div>
+
+      <div class="pt-2 border-t border-slate-800 text-xs space-y-1.5">
+        <label class="text-[10px] text-slate-400 block font-bold">GİZLİ PATRON ŞİFRESİNİ GÜNCELLE:</label>
+        <div class="flex space-x-1.5">
+          <input type="text" id="patronNewPinInput" placeholder="Yeni Şifre..." class="flex-1 bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-white font-bold text-center focus:outline-none">
+          <button onclick="patronSifreGuncelle()" class="bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold px-3 py-1.5 rounded-lg border border-slate-700" id="btnSavePatronPin">Kaydet</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- YENİ MODAL: PATRON İÇİN YASAL ONAY TUTANAKLARI (AUDIT LOGS) -->
+  <div id="modalYasalTutanak" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[99999999999] flex items-center justify-center p-3">
+    <div class="bg-slate-900 border border-amber-500/50 rounded-2xl max-w-sm w-full p-4 space-y-3.5 shadow-2xl flex flex-col h-[75vh]">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-800 shrink-0">
+        <h3 class="text-sm font-black text-amber-400 flex items-center"><i class="fa-solid fa-scale-balanced mr-1.5"></i> Elektronik Onay Tutanakları</h3>
+        <button onclick="document.getElementById('modalYasalTutanak').classList.add('hidden')" class="text-slate-400 hover:text-white text-base">✕</button>
+      </div>
+      <div id="tutanakIcerikAlani" class="flex-1 overflow-y-auto pr-1 scroll-touch space-y-2"></div>
+    </div>
+  </div>
+
+  <div id="whatsappModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-3">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-4 space-y-3 shadow-2xl">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+        <h3 class="text-sm font-bold text-green-400" id="lblWhatsAppModalTitle">WhatsApp Mesajı Gönder</h3>
+        <button onclick="whatsappModalKapat()" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+      <div class="space-y-2 text-xs">
+        <button onclick="whatsappGonder(1)" class="w-full text-left p-3 rounded-xl bg-slate-950 text-amber-300 font-bold border border-slate-800 hover:border-slate-700" id="waBtn1">1. Randevu Hatırlatma (Takip Amaçlı)</button>
+        <button onclick="whatsappGonder(2)" class="w-full text-left p-3 rounded-xl bg-slate-950 text-pink-400 font-bold border border-slate-800 hover:border-slate-700" id="waBtn2">2. Doğum Günü Kutlaması (Hediyeli)</button>
+        <button onclick="whatsappGonder(3)" class="w-full text-left p-3 rounded-xl bg-slate-950 text-blue-400 font-bold border border-slate-800 hover:border-slate-700" id="waBtn3">3. Google 5 Yıldız Değerlendirme</button>
+        <button onclick="whatsappGonder(4)" class="w-full text-left p-3 rounded-xl bg-slate-950 text-purple-400 font-bold border border-slate-800 hover:border-slate-700" id="waBtn4">4. Memnuniyet Anketi & Instagram</button>
+        <button onclick="whatsappGonder(5)" class="w-full text-left p-3 rounded-xl bg-slate-950 text-amber-400 font-bold border border-slate-800 hover:border-slate-700" id="waBtn5">5. Sosyal Medya / Instagram Daveti</button>
+        <button onclick="whatsappGonder(7)" class="w-full text-left p-3 rounded-xl bg-slate-950 text-indigo-400 font-bold border border-slate-800 hover:border-slate-700" id="waBtn7">7. Sizi Özledik / Geri Çağırma (Elit Kahve İkramlı)</button>
+        <button onclick="whatsappGonder(9)" class="w-full text-left p-3 rounded-xl bg-slate-950 text-emerald-400 font-bold border border-slate-800 hover:border-slate-700" id="waBtn9">9. Banka IBAN / Ödeme Bilgileri</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Patron Elektronik Yasal Onay Görüntüleme
+    function patronYasalTutanaklariGor() {
+      const container = document.getElementById('tutanakIcerikAlani');
+      if (!container) return;
+      container.innerHTML = `<div class="p-3 text-center text-slate-400">Taranıyor...</div>`;
+      document.getElementById('modalYasalTutanak').classList.remove('hidden');
+      modalGeriTusuKaydi('modalYasalTutanak');
+
+      db.collection('sistem').doc('lisanslar').collection('aktifler').get().then(snapshot => {
+        let html = `<div class="font-bold text-amber-400 text-xs border-b border-slate-800 pb-2 mb-2">⚖️ ONAYLANMIŞ TUTANAKLAR LİSTESİ</div>`;
+        let count = 0;
+        snapshot.forEach(doc => {
+          let u = doc.data();
+          let yo = u.yasalOnay;
+          if (yo && yo.onaylandi) {
+            count++;
+            html += `
+              <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800 space-y-1 mb-2">
+                <div class="font-bold text-white text-xs">${u.ad || 'Usta'} (${u.tel})</div>
+                <div class="text-amber-400 text-[10px]">✅ ${yo.sozlesmeKodu}</div>
+                <div class="text-slate-400 text-[10px]">📅 ${yo.onayTarihi} - ${yo.onaySaati}</div>
+              </div>
+            `;
+          }
+        });
+        if (count === 0) html += `<div class="text-slate-400 text-xs p-3 text-center">Kayıtlı onay tutanağı yok.</div>`;
+        container.innerHTML = html;
+      });
+    }
+
+    // AI İçin Gemini Şifre Kaydı
+    function patronGeminiSifresiAyarla() {
+      let girilen = prompt("Gemini API anahtarınızı giriniz:", geminiApiKey);
+      if (!girilen) return;
+      geminiApiKey = girilen.trim();
+      localStorage.setItem('lumio_gemini_api_key', geminiApiKey);
+      alert("✅ Yapay zeka anahtarı başarıyla kaydedildi!");
+    }
+
+    // AI İçin Reçete/Ürün Yönetimi
+    function patronUrunListesiniCiz() {
+      let alan = document.getElementById('patronUrunYonetimAlani');
+      if (alan) alan.remove();
+      const patronModalKutu = document.querySelector('#patronModal > div');
+      if (!patronModalKutu) return;
+
+      alan = document.createElement('div');
+      alan.id = 'patronUrunYonetimAlani';
+      alan.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2.5 text-xs mt-2";
+      alan.innerHTML = `
+        <div class="flex justify-between items-center border-b border-slate-900 pb-1.5">
+          <span class="text-amber-400 font-bold flex items-center text-xs">🛍️ AI ÜRÜNLERİ & LİNKLER</span>
+        </div>
+        <div id="patronUrunlerContainer" class="space-y-1.5 max-h-40 overflow-y-auto scroll-touch"></div>
+      `;
+      patronModalKutu.appendChild(alan);
+
+      const container = document.getElementById('patronUrunlerContainer');
+      if (!container) return;
+
+      container.innerHTML = patronUrunListesi.map((u, idx) => `
+        <div class="bg-slate-900 p-2 rounded-lg border border-slate-800 flex justify-between items-start text-[11px] gap-2">
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-white truncate">${u.ad}</div>
+            <div class="text-[9px] text-amber-400">${u.platform}</div>
+          </div>
+          <button onclick="patronUrunSil(${idx})" class="text-slate-500 hover:text-red-400 p-1 text-xs">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function patronYeniUrunEklePrompt() {
+      let ad = prompt("Kozmetik Ürün Adı:");
+      if (!ad) return;
+      let link = prompt("Satın Alma / İnceleme Linki:");
+      if (!link) return;
+
+      patronUrunListesi.push({
+        id: "u_" + Date.now(),
+        ad: ad.trim(),
+        platform: "Tavsiye Ürün",
+        link: link.trim(),
+        kullanim: "Genel bakım.",
+        kategori: "genel"
+      });
+
+      localStorage.setItem('lumio_patron_urunler', JSON.stringify(patronUrunListesi));
+      patronUrunListesiniCiz();
+    }
+
+    function patronUrunSil(idx) {
+      if (!confirm("Bu ürün AI tavsiye listesinden silinsin mi?")) return;
+      patronUrunListesi.splice(idx, 1);
+      localStorage.setItem('lumio_patron_urunler', JSON.stringify(patronUrunListesi));
+      patronUrunListesiniCiz();
+    }
+  </script>
 </body>
 </html>
