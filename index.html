@@ -1535,7 +1535,16 @@
 
     /* KUSURSUZ TEMA YÖNETİM MOTORU (SÜT BEYAZI SABİTLEYİCİ) */
     function temaDegistir() {
-      aktifTema = (aktifTema === 'dark') ? 'light' : 'dark';
+      const root = document.documentElement;
+      if (root.classList.contains('dark')) {
+        aktifTema = 'light';
+        root.classList.remove('dark');
+        root.classList.add('light');
+      } else {
+        aktifTema = 'dark';
+        root.classList.remove('light');
+        root.classList.add('dark');
+      }
       localStorage.setItem('hair_aktif_tema', aktifTema);
       temaUygula();
     }
