@@ -64,48 +64,12 @@
     /* ==========================================================================
        LUMIO PROFESYONEL RENK & TEMA MOTORU
        ========================================================================== */
-    :root, html.dark {
-      color-scheme: dark !important;
-      --bg-page: #090d16;
-      --bg-card: #111726;
-      --bg-sub: #1b2234;
-      --bg-input: #090d16;
-      --border-color: #1e293b;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --text-accent: #f59e0b;
-      --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.4);
-    }
-
-    /* CHROME ANDROID ZORAKİ KARARTMASINI KIRAN "ONLY LIGHT" KESİN KALKAN */
-    html.light,
-    html.light body,
-    html.light * {
-      color-scheme: only light !important;
-    }
-
-    html.light {
-      --bg-page: #f8fafc !important;      /* Süt beyazı pürüzsüz sayfa */
-      --bg-card: #ffffff !important;      /* Bembeyaz kartlar */
-      --bg-sub: #f1f5f9 !important;       /* Hafif kontrast kemik zemin */
-      --bg-input: #ffffff !important;     /* Beyaz giriş kutusu */
-      --border-color: #cbd5e1 !important; /* Net açık gri sınırlar */
-      --text-main: #0f172a !important;    /* Okunabilir koyu siyah/lacivert yazı */
-      --text-muted: #64748b !important;   /* Gri yardımcı metin */
-      --text-accent: #b45309 !important;  /* Gündüz modunda parlamayan bal tonu */
-      --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
-    }
-
-    /* ÇEKİRDEK SIFIRLAMA VE TAŞMA KORUMASI */
-    html, body {
-      background-color: var(--bg-page) !important;
-      color: var(--text-main) !important;
+  html, body {
       overscroll-behavior-y: none !important;
       overscroll-behavior-x: none !important;
       -webkit-tap-highlight-color: transparent;
-      transition: background-color 0.25s ease, color 0.25s ease;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
-
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     
@@ -113,80 +77,65 @@
     .safe-pb { padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px) !important; }
     .scroll-touch { -webkit-overflow-scrolling: touch; }
 
-    /* DİNAMİK TEMA SINIFLARI */
-    .app-card {
-      background-color: var(--bg-card) !important;
-      border-color: var(--border-color) !important;
-      box-shadow: var(--shadow-card) !important;
+    /* FERAHLIK VE KURUMSAL LÜKS: APPLE / FRESHA AÇIK MODU */
+    body.theme-light { 
+      background-color: #f8fafc !important; 
+      color: #0f172a !important; 
     }
-
-    .app-sub-card {
-      background-color: var(--bg-sub) !important;
-      border-color: var(--border-color) !important;
-    }
-
-    .app-input {
-      background-color: var(--bg-input) !important;
-      border-color: var(--border-color) !important;
-      color: var(--text-main) !important;
-    }
-
-    /* AYDINLIK MOD İÇİN ÖZEL SABİTLEME KALKANLARI */
-    html.light body {
-      background-color: #f8fafc !important;
-      color: #0f172a !important;
-    }
-
-    html.light header,
-    html.light nav,
-    html.light .app-card,
-    html.light .asistan-card,
-    html.light #gunlukCiroKarti {
+    body.theme-light header, 
+    body.theme-light nav, 
+    body.theme-light .bg-slate-900,
+    body.theme-light .bg-slate-950 {
       background-color: #ffffff !important;
-      border-color: #cbd5e1 !important;
-      color: #0f172a !important;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
-    }
-
-    html.light .app-sub-card,
-    html.light .bday-row,
-    html.light .remind-row {
-      background-color: #f1f5f9 !important;
       border-color: #e2e8f0 !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
       color: #0f172a !important;
     }
-
-    html.light .app-input,
-    html.light input,
-    html.light select,
-    html.light textarea {
-      background-color: #ffffff !important;
+    body.theme-light input, 
+    body.theme-light select, 
+    body.theme-light textarea {
+      color: #0f172a !important;
+      background-color: #f1f5f9 !important;
       border-color: #cbd5e1 !important;
+      font-weight: 600 !important;
+    }
+    body.theme-light .text-white { color: #0f172a !important; }
+    body.theme-light .text-slate-400,
+    body.theme-light .text-slate-300,
+    body.theme-light .text-slate-500 { color: #475569 !important; }
+    body.theme-light .quick-date-btn,
+    body.theme-light .bg-slate-800 {
+      background-color: #e2e8f0 !important;
       color: #0f172a !important;
+      border-color: #cbd5e1 !important;
+    }
+    body.theme-light #btnGetLastFormula {
+      background-color: #ecfdf5 !important;
+      color: #065f46 !important;
+      border-color: #a7f3d0 !important;
+    }
+    body.theme-light .text-amber-400,
+    body.theme-light .text-amber-300 { color: #b45309 !important; }
+    body.theme-light #gunlukCiroKarti {
+      background: #ffffff !important;
+      border-color: #fef08a !important;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+    }
+    body.theme-light .asistan-card {
+      background: #ffffff !important;
+      border-color: #fde047 !important;
+    }
+    body.theme-light .service-row {
+      background-color: #f8fafc !important;
+      border-color: #e2e8f0 !important;
+    }
+    body.theme-light #headerLicenseBadge {
+      background-color: #e2e8f0 !important;
+      color: #334155 !important;
+      border-color: #cbd5e1 !important;
     }
 
-    /* Koyu moddan kalan inatçı beyaz yazıları gündüz modunda siyaha çevir */
-    html.light .text-white,
-    html.light [class*="text-slate-100"],
-    html.light [class*="text-slate-200"] {
-      color: #0f172a !important;
-    }
-    
-    html.light [class*="text-slate-300"],
-    html.light [class*="text-slate-400"] {
-      color: #475569 !important;
-    }
-
-    /* MASTER AI KARTINI AYDINLIK MODDA TERTEMİZ ŞAMPANYA SARISINA ÇEVİR */
-    html.light #cardMasterAiBanner {
-      background: linear-gradient(135deg, #fffdf5 0%, #ffffff 50%, #fef3c7 100%) !important;
-      border-color: #fde68a !important;
-      box-shadow: 0 4px 14px rgba(217, 119, 6, 0.08) !important;
-    }
-    html.light #cardMasterAiBanner h3 { color: #b45309 !important; }
-    html.light #cardMasterAiBanner p { color: #475569 !important; }
-
-    /* YARDIMCI GÖRSEL BİLEŞENLER */
+    /* KENDİLİĞİNDEN METNE GÖRE UZAYAN AKILLI TEXTAREA */
     .auto-expand-area {
       resize: none;
       overflow-y: hidden;
