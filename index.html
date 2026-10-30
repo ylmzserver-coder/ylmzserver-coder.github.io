@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>LUMIO Terminal</title>
   
-  <!-- MOBİL PWA & RENK KORUMA KALKANI -->
+  <!-- MOBİL PWA & RENK KORUMA KALKANLARI -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="LUMIO">
@@ -18,18 +18,18 @@
   <link rel="apple-touch-icon" href="logo.png">
   <link rel="manifest" href="manifest.json">
 
-  <!-- SERVICE WORKER KAYDI -->
+  <!-- SERVICE WORKER KAYIT MOTORU -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').catch((err) => {
-          console.warn('SW kaydı başarısız:', err);
+          console.warn('SW kaydı atlandı:', err);
         });
       });
     }
   </script>
 
-  <!-- TAILWIND & KÜTÜPHANELER -->
+  <!-- TAILWIND & İKON KÜTÜPHANELERİ -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
@@ -62,7 +62,7 @@
 
   <style>
     /* ==========================================================================
-       LUMIO PROFESYONEL RENK & TEMA MOTORU (KİRLİ GRİ ENGELLEYİCİ)
+       LUMIO PROFESYONEL RENK & TEMA MOTORU
        ========================================================================== */
     :root, html.dark {
       color-scheme: dark !important;
@@ -77,20 +77,26 @@
       --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
 
-    html.light {
-      color-scheme: light !important;
-      --bg-page: #f8fafc;        /* Süt beyazı / ferah arka plan */
-      --bg-card: #ffffff;        /* Bembeyaz elit kartlar */
-      --bg-sub: #f1f5f9;         /* Açık kontrast kemik zemin */
-      --bg-input: #f8fafc;       /* Beyaz input kutusu */
-      --border-color: #cbd5e1;   /* Belirgin, net ayırıcı çizgiler */
-      --text-main: #0f172a;      /* Koyu grafit net metin */
-      --text-muted: #64748b;     /* Okunabilir gri yardımcı yazı */
-      --text-accent: #b45309;    /* Işıkta parlamayan asil bal tonu */
-      --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.05);
+    /* CHROME ANDROID ZORAKİ KARARTMASINI KIRAN "ONLY LIGHT" KESİN KALKAN */
+    html.light,
+    html.light body,
+    html.light * {
+      color-scheme: only light !important;
     }
 
-    /* ÇEKİRDEK RESET VE TAŞMA KORUMASI */
+    html.light {
+      --bg-page: #f8fafc !important;      /* Süt beyazı pürüzsüz sayfa */
+      --bg-card: #ffffff !important;      /* Bembeyaz kartlar */
+      --bg-sub: #f1f5f9 !important;       /* Hafif kontrast kemik zemin */
+      --bg-input: #ffffff !important;     /* Beyaz giriş kutusu */
+      --border-color: #cbd5e1 !important; /* Net açık gri sınırlar */
+      --text-main: #0f172a !important;    /* Okunabilir koyu siyah/lacivert yazı */
+      --text-muted: #64748b !important;   /* Gri yardımcı metin */
+      --text-accent: #b45309 !important;  /* Gündüz modunda parlamayan bal tonu */
+      --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    /* ÇEKİRDEK SIFIRLAMA VE TAŞMA KORUMASI */
     html, body {
       background-color: var(--bg-page) !important;
       color: var(--text-main) !important;
@@ -107,7 +113,7 @@
     .safe-pb { padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px) !important; }
     .scroll-touch { -webkit-overflow-scrolling: touch; }
 
-    /* YENİ NESİL TEMA DİNAMİK SINIFLARI */
+    /* DİNAMİK TEMA SINIFLARI */
     .app-card {
       background-color: var(--bg-card) !important;
       border-color: var(--border-color) !important;
@@ -125,21 +131,62 @@
       color: var(--text-main) !important;
     }
 
-    html.light .app-input::placeholder {
-      color: #94a3b8 !important;
-      font-weight: 500;
+    /* AYDINLIK MOD İÇİN ÖZEL SABİTLEME KALKANLARI */
+    html.light body {
+      background-color: #f8fafc !important;
+      color: #0f172a !important;
     }
 
-    /* GÜNDÜZ MODUNDA MASTER AI AFİŞİ (ŞAMPANYA GRADYANI) */
+    html.light header,
+    html.light nav,
+    html.light .app-card,
+    html.light .asistan-card,
+    html.light #gunlukCiroKarti {
+      background-color: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    html.light .app-sub-card,
+    html.light .bday-row,
+    html.light .remind-row {
+      background-color: #f1f5f9 !important;
+      border-color: #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+
+    html.light .app-input,
+    html.light input,
+    html.light select,
+    html.light textarea {
+      background-color: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
+    /* Koyu moddan kalan inatçı beyaz yazıları gündüz modunda siyaha çevir */
+    html.light .text-white,
+    html.light [class*="text-slate-100"],
+    html.light [class*="text-slate-200"] {
+      color: #0f172a !important;
+    }
+    
+    html.light [class*="text-slate-300"],
+    html.light [class*="text-slate-400"] {
+      color: #475569 !important;
+    }
+
+    /* MASTER AI KARTINI AYDINLIK MODDA TERTEMİZ ŞAMPANYA SARISINA ÇEVİR */
     html.light #cardMasterAiBanner {
-      background: linear-gradient(135deg, #fffbeb 0%, #ffffff 50%, #fef3c7 100%) !important;
+      background: linear-gradient(135deg, #fffdf5 0%, #ffffff 50%, #fef3c7 100%) !important;
       border-color: #fde68a !important;
       box-shadow: 0 4px 14px rgba(217, 119, 6, 0.08) !important;
     }
     html.light #cardMasterAiBanner h3 { color: #b45309 !important; }
     html.light #cardMasterAiBanner p { color: #475569 !important; }
 
-    /* OTOMATİK BÜYÜYEN TEXTAREA */
+    /* YARDIMCI GÖRSEL BİLEŞENLER */
     .auto-expand-area {
       resize: none;
       overflow-y: hidden;
@@ -147,7 +194,6 @@
       line-height: 1.4;
     }
 
-    /* NABIZ ANİMASYONU */
     .pulse-ring {
       box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6);
       animation: pulseWave 1.8s infinite cubic-bezier(0.66, 0, 0, 1);
@@ -156,14 +202,13 @@
       to { box-shadow: 0 0 0 14px rgba(245, 158, 11, 0); }
     }
 
-    /* MODAL VE ARKA PLAN BUZLU CAM */
     .modal-overlay-bg {
       background-color: rgba(9, 13, 22, 0.85) !important;
       backdrop-filter: blur(8px) !important;
       -webkit-backdrop-filter: blur(8px) !important;
     }
 
-    /* DÜZENLİ Z-INDEX KATMANLARI (AŞIRI ŞİŞME GİDERİLDİ) */
+    /* KONTROLLÜ Z-INDEX KATMANLARI */
     .layer-banner  { z-index: 45; }
     .layer-header  { z-index: 50; }
     .layer-nav     { z-index: 40; }
@@ -172,8 +217,8 @@
   </style>
 </head>
 <body id="appBody" class="min-h-screen flex flex-col font-sans select-none safe-pb">
-
-  <!-- PATRON GÖZAT MODU AKTİF UYARI ŞERİDİ -->
+<!-- 1. PARÇA SONU - BURADAN İTİBAREN 2. PARÇA BAĞLANACAK -->
+<!-- PATRON GÖZAT MODU AKTİF UYARI ŞERİDİ -->
   <div id="bannerGozatModu" class="hidden layer-banner px-3.5 py-2 text-xs font-bold flex items-center justify-between border-b shadow-lg bg-amber-500 text-slate-950 border-amber-400">
     <div class="flex items-center space-x-1.5 truncate mr-2">
       <i class="fa-solid fa-store"></i>
@@ -259,9 +304,9 @@
     </button>
   </div>
 
-  <!-- 1. PARÇA SONU - BURADAN İTİBAREN 2. PARÇA BAĞLANACAK -->
-<!-- ÜST HEADER (YENİ TEMA MOTORU UYUMLU) -->
+  <!-- ÜST HEADER (YENİ TEMA MOTORU UYUMLU) -->
   <header class="app-card border-b px-3.5 pb-2.5 safe-pt sticky top-0 layer-header flex items-center justify-between shadow-lg">
+    <!-- LOGOYA DOKUNULDUĞUNDA SADECE SERVER YILMAZ'A ÖZEL PATRON GİRİŞİ TETİKLENİR -->
     <div class="flex items-center space-x-2.5 cursor-pointer" onclick="patronPaneliAc()">
       <div class="w-9 h-9 rounded-xl bg-slate-950 border border-amber-500/40 flex items-center justify-center overflow-hidden shadow-md flex-shrink-0 p-1">
         <svg viewBox="0 0 100 100" class="w-full h-full">
@@ -277,7 +322,7 @@
         <div class="flex items-center space-x-1.5">
           <h1 class="text-sm font-black tracking-wide text-amber-500">LUMIO</h1>
           <span id="cloudStatusBadge" class="w-2 h-2 rounded-full bg-emerald-500" title="Bulut Aktif"></span>
-          <span id="headerLicenseBadge" class="text-[9px] app-sub-card text-slate-300 px-1 py-0.5 rounded font-mono border">LİSANS</span>
+          <span id="headerLicenseBadge" class="text-[9px] app-sub-card px-1 py-0.5 rounded font-mono border">LİSANS</span>
         </div>
         <p id="headerUstaUnvan" class="text-[11px] text-slate-400 font-medium truncate max-w-[140px]">Server YILMAZ</p>
       </div>
@@ -318,8 +363,8 @@
       </button>
     </div>
   </nav>
-
-  <!-- ANA İÇERİK ALANI -->
+<!-- 2. PARÇA SONU - BURADAN İTİBAREN 3. PARÇA (ANA TERMİNAL KARTLARI) BAĞLANACAK -->
+<!-- ANA İÇERİK ALANI -->
   <main class="flex-1 p-3 max-w-lg mx-auto w-full space-y-3.5">
 
     <!-- SEKME 1: TERMİNAL -->
@@ -341,7 +386,7 @@
         </button>
       </div>
 
-      <!-- MASTER AI KARTI (GÜNDÜZ MODUNDA ŞAMPANYA) -->
+      <!-- MASTER AI KARTI (GÜNDÜZ MODUNDA ŞAMPANYA SARISI) -->
       <div id="cardMasterAiBanner" class="bg-gradient-to-r from-amber-500/15 via-slate-900 to-amber-500/10 border border-amber-500/40 rounded-2xl p-3.5 shadow-xl flex items-center justify-between transition">
         <div class="flex items-center space-x-3">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 text-slate-950 flex items-center justify-center text-lg shadow-lg pulse-ring">
@@ -408,7 +453,7 @@
             <input type="text" id="custSearch" placeholder="İsim yazın (Örn: Server, Sayime)..." 
                    oninput="canliMusteriAra(this.value)"
                    class="w-full app-input border rounded-xl pl-10 pr-4 py-2.5 text-sm font-semibold focus:outline-none focus:border-amber-500 transition">
-            <div id="searchResults" class="hidden absolute left-0 right-0 top-12 app-card border rounded-xl shadow-2xl z-50 max-h-52 overflow-y-auto divide-y divide-slate-700/40 scroll-touch"></div>
+            <div id="searchResults" class="hidden absolute left-0 right-0 top-12 app-card border rounded-xl shadow-2xl z-50 max-h-52 overflow-y-auto divide-y divide-slate-700/30 scroll-touch"></div>
           </div>
         </div>
 
@@ -456,8 +501,7 @@
           <input type="text" id="visitNext" placeholder="GG.AA.YYYY" onblur="randevuTarihiFormatla(this)" class="bg-transparent font-bold text-amber-500 text-xs w-full focus:outline-none">
         </div>
       </div>
-
-  <!-- 2. PARÇA SONU - BURADAN İTİBAREN 3. PARÇA (HİZMET & FORMÜL MASASI VE DİĞER SEKMELER) GELECEK -->
+<!-- 3. PARÇA SONU - BURADAN İTİBAREN 4. PARÇA (HİZMET MASASI, AJANDA VE DİĞER SEKMELER) BAĞLANACAK -->
 <!-- HİZMET VE FORMÜL MASASI KARTI -->
       <div class="app-card border rounded-2xl p-4 shadow-md space-y-3">
         <div class="flex justify-between items-center">
@@ -589,8 +633,7 @@
         </div>
       </div>
     </section>
-
-  <!-- 3. PARÇA SONU - BURADAN İTİBAREN 4. PARÇA (AYARLAR VE KASA MODALLARI) GELECEK -->
+<!-- 4. PARÇA SONU - BURADAN İTİBAREN 5. PARÇA (AYARLAR VE ŞABLONLAR) BAĞLANACAK -->
 <!-- SEKME 5: AYARLAR -->
     <section id="tab-settings" class="hidden space-y-3.5">
       <div class="app-card border rounded-2xl p-4 shadow-md space-y-4">
@@ -794,8 +837,8 @@
       </div>
     </section>
   </main>
-
-  <!-- MODAL: KASAM & CANLI CİRO YÖNETİM MERKEZİ -->
+<!-- 5. PARÇA SONU - BURADAN İTİBAREN 6. PARÇA (KASA, FİŞ VE REHBER MODALLARI) BAĞLANACAK -->
+<!-- MODAL: KASAM & CANLI CİRO YÖNETİM MERKEZİ -->
   <div id="modalKasam" class="hidden fixed inset-0 modal-overlay-bg layer-modal flex items-center justify-center p-3">
     <div class="app-card border border-amber-500/40 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col max-h-[92vh]">
       <div class="flex justify-between items-center pb-2 border-b border-[var(--border-color)]">
@@ -940,8 +983,7 @@
     </div>
   </div>
 
-  <!-- 4. PARÇA SONU - BURADAN İTİBAREN 5. PARÇA (REHBER, SİHİRBAZ VE MASTER AI MODALLARI) GELECEK -->
-<!-- MODAL: MÜŞTERİ REHBERİ -->
+  <!-- MODAL: MÜŞTERİ REHBERİ -->
   <div id="modalMusteriRehberi" class="hidden fixed inset-0 modal-overlay-bg layer-modal flex items-center justify-center p-3">
     <div class="app-card border border-amber-500/40 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col max-h-[88vh]">
       <div class="flex justify-between items-center pb-2 border-b border-[var(--border-color)]">
@@ -1017,8 +1059,8 @@
       <div id="ustaDirectoryList" class="flex-1 overflow-y-auto space-y-1.5 pr-1 scroll-touch"></div>
     </div>
   </div>
-
-  <!-- MODAL: AKILLI RANDEVU SİHİRBAZI -->
+<!-- 6. PARÇA SONU - BURADAN İTİBAREN 7. PARÇA (SİHİRBAZ, MASTER AI VE PATRON MODALLARI) BAĞLANACAK -->
+<!-- MODAL: AKILLI RANDEVU SİHİRBAZI -->
   <div id="modalRandevuOlustur" class="hidden fixed inset-0 modal-overlay-bg layer-modal flex items-center justify-center p-4">
     <div class="app-card border border-amber-500/40 rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
       <div class="flex justify-between items-center border-b border-[var(--border-color)] pb-2.5">
@@ -1298,8 +1340,7 @@
     </div>
   </div>
 
-  <!-- 5. PARÇA SONU - BURADAN İTİBAREN 6. PARÇA (PATRON, YASAL MODALLAR VE JS ÇEKİRDEK) GELECEK -->
-<!-- SAAT ÇAKIŞMASI UYARISI MODALI -->
+  <!-- SAAT ÇAKIŞMASI UYARISI MODALI -->
   <div id="cakismaModal" class="hidden fixed inset-0 modal-overlay-bg layer-modal flex items-center justify-center p-4">
     <div class="app-card border border-amber-500/40 rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl text-center">
       <div class="w-12 h-12 rounded-full bg-amber-500/20 text-amber-500 flex items-center justify-center text-xl mx-auto">
@@ -1504,9 +1545,10 @@
       </div>
     </div>
   </div>
-
-  <!-- JAVASCRIPT ÇEKİRDEK KODU BAŞLANGICI -->
+<!-- 7. PARÇA SONU - BURADAN İTİBAREN 8. PARÇA (SON PARÇA: JAVASCRIPT ÇEKİRDEK VE BAŞLATICI) GELECEK -->
+<!-- JAVASCRIPT ÇEKİRDEK KODU BAŞLANGICI -->
   <script>
+    /* 1. SİSTEM VE BAĞLANTI DİNLEYİCİLERİ */
     function internetDurumunuGuncelle() {
       const badge = document.getElementById('cloudStatusBadge');
       if (!badge) return;
@@ -1522,14 +1564,12 @@
     window.addEventListener('offline', internetDurumunuGuncelle);
     internetDurumunuGuncelle();
 
-    /* SES MOTORU KİLİDİNİ AÇMA (AUTOPLAY HATASINI ENGELLER) */
+    /* AUTOPLAY ENGELİNİ AŞAN SES MOTORU */
     let globalAudioCtx = null;
     function sesMotorunuHazirla() {
       if (!globalAudioCtx) {
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (AudioContextClass) {
-          globalAudioCtx = new AudioContextClass();
-        }
+        if (AudioContextClass) globalAudioCtx = new AudioContextClass();
       }
       if (globalAudioCtx && globalAudioCtx.state === 'suspended') {
         globalAudioCtx.resume();
@@ -1553,9 +1593,7 @@
         gain.connect(globalAudioCtx.destination);
         osc.start();
         osc.stop(globalAudioCtx.currentTime + 0.6);
-      } catch(e) {
-        console.warn('Alarm sesi engellendi:', e);
-      }
+      } catch(e) { console.warn('Alarm sesi engellendi:', e); }
     }
 
     /* TELEFONUN GERİ TUŞU KORUMASI (SPA HISTORY API) */
@@ -1652,7 +1690,7 @@
       ]
     };
 
-    /* 4 DİLLİ VE YENİ 8+1 WHATSAPP ŞABLON SETİ */
+    /* 4 DİLLİ VE GÜNCELLENMİŞ 8+1 WHATSAPP ŞABLON SETİ */
     const SOZLUK = {
       tr: {
         terminal: "Terminal", agenda: "Ajandam", history: "Geçmiş", remindersTab: "Hatırlatmalar", settings: "Ayarlar",
@@ -1720,7 +1758,8 @@
           msg5: "Merhaba Sayın {MUSTERI_ADI}, ✨\n\nSon işlemimizden memnun kaldığınızı umuyoruz. Herhangi bir sorunuz, öneriniz veya bakım tavsiyesi talebiniz olursa bu numaradan bana her zaman yazabilirsiniz.\n\n📸 Instagram sayfamızı takip etmeyi unutmayın:\n{INSTAGRAM_LINK}\n\n{UNVAN} {USTA_ADI}",
           confirm: "Merhaba Sayın {MUSTERI_ADI}, ✨\n\n🗓️ Tarih: {TARIH}\n⏰ Saat: {SAAT}\n💇 İşlem: {HIZMET}\n\nRandevunuz başarıyla oluşturulmuştur. Planlarınızda bir değişiklik olursa önceden haber vermenizi rica ederiz. 🙏\n\nSizi ağırlamak için sabırsızlanıyoruz!\n{UNVAN} {USTA_ADI}",
           msg7: "Merhaba Sayın {MUSTERI_ADI}, ☕🌸\n\n{SALON_ADI} olarak bir süredir yokluğunuzu hissediyor, sizi çok özlüyoruz!\n\nHem kendinize hak ettiğiniz ışıltıyı yeniden kazandırmak hem de sıcak bir kahvemiz eşliğinde keyifli bir mola vermek için sizi salonumuza bekliyoruz. ✨\n\nSize en uygun gün ve saati birlikte planlamak için bu mesaja yanıt vermeniz yeterli.\n\nSevgiyle ve güzellikle kalın,\n{UNVAN} {USTA_ADI}",
-          msg8: "LUMIO Ailesine Hoş Geldiniz! ✨\n\nSayın {USTA_ADI},\nİşletmenizi kolayca yönetmenizi sağlayacak LUMIO lisansınız aktif edilmiştir. 🌟\n\n📲 GİRİŞ BİLGİLERİNİZ:\n🌐 Terminal Adresi: https://lumioterminal.netlify.app\n📞 Kullanıcı Numaranız: {USTA_TEL}\n🔑 Giriş Şifreniz: {USTA_PIN}\n📅 Lisans Süreniz: {PAKET_SURESI}\n\nBol kazançlar dileriz!\nLUMIO Yazılım Ekibi",
+          /* İPHONE VE ANDROİD REHBERLİ RESMİ KURULUM ŞABLONU */
+          msg8: "LUMIO Ailesine Hoş Geldiniz! ✨\n\nSayın {USTA_ADI},\nİşletmenizi kolayca yönetmenizi sağlayacak LUMIO lisansınız aktif edilmiştir. 🌟\n\n📲 GİRİŞ BİLGİLERİNİZ:\n🌐 Terminal Adresi: https://lumioterminal.netlify.app\n📞 Kullanıcı Numaranız: {USTA_TEL}\n🔑 Giriş Şifreniz: {USTA_PIN}\n📅 Lisans Süreniz: {PAKET_SURESI}\n\n🔒 GÜVENLİK NOTU:\nLütfen usta giriş şifrenizi kimseyle paylaşmayınız.\n\n🍎 iPHONE (iOS) 1 DAKİKADA KURULUM:\n1. Safari tarayıcısını açıp https://lumioterminal.netlify.app adresine girin.\n(WhatsApp içinden açtıysanız sağ alttaki pusula/Safari simgesine basıp tarayıcıda açın).\n2. Ekranın en altındaki \"Paylaş\" (kare içinden yukarı ok çıkan) simgesine dokunun.\n3. Menüyü kaydırıp \"Ana Ekrana Ekle\"yi seçin ve sağ üstteki \"Ekle\"ye basın.\n\n🤖 ANDROID 1 DAKİKADA KURULUM:\n1. Chrome tarayıcısında https://lumioterminal.netlify.app adresine girin.\n2. Sağ üstteki üç nokta (⋮) simgesine dokunun.\n3. \"Uygulamayı Yükle\" veya \"Ana Ekrana Ekle\"yi seçin.\n\n✨ BAŞLANGIÇ:\nTelefonunuzun ana ekranına gelen LUMIO simgesine dokunun. Yukarıdaki telefonunuzu ve şifrenizi bir defaya mahsus girerek kullanmaya başlayabilirsiniz. Sistem sizi otomatik tanıyacaktır.\n\nBol kazançlar ve bereketli çalışmalar dileriz! 🌸\nLUMIO Yazılım ve Destek Ekibi",
           msg9: "Merhaba Sayın {MUSTERI_ADI}, 🌸\n\nÖdemenizi aşağıdaki banka / transfer hesabımıza güvenle gerçekleştirebilirsiniz:\n\n🏦 Banka / Kuruluş: {BANKA_ADI}\n👤 Hesap Sahibi: {HESAP_SAHIBI}\n💳 IBAN / Hesap / Kart No: {IBAN_NO}\n\nÖdeme sonrası bilgi vermenizi rica eder, güzel günler dileriz! ✨\n{UNVAN} {USTA_ADI}"
         }
       },
@@ -1731,16 +1770,16 @@
         remindBannerSub: "Send a follow-up to clients whose appointment time is approaching:",
         lostBannerTitle: "💌 WE MISS YOU", lostBannerSub: "Invite clients who haven't visited in a while:",
         wizardCardTitle: "Smart Appointment Assistant", wizardCardSub: "Schedule date, client, service, duration & time", startWizard: "New Booking",
-        custCardTitle: "Client Info", clearCust: "Clear", searchPlaceholder: "Type name (e.g. Server)...",
-        phone: "CLIENT PHONE", birth: "BIRTHDATE", newCustStatus: "New Client (Ready)", registered: "Registered Client", visits: "Visits",
-        timeCardTitle: "Appointment Details", visitDate: "VISIT DATE", visitTime: "APPOINTMENT TIME", nextVisit: "NEXT FOLLOW-UP DATE",
+        custCardTitle: "Client Info", clearCust: "Clear", searchPlaceholder: "Type name...",
+        phone: "CLIENT PHONE", birth: "BIRTHDATE", newCustStatus: "New Client", registered: "Registered Client", visits: "Visits",
+        timeCardTitle: "Appointment Details", visitDate: "VISIT DATE", visitTime: "TIME", nextVisit: "NEXT VISIT",
         q15: "+15 D", q21: "+21 D", qMonth: "+1 M", datePh: "DD.MM.YYYY", birthPh: "DD.MM",
         serviceCardTitle: "Services & Formulas", addServiceRow: "Add Row", totalAmount: "Total Amount:", saveVisit: "SAVE VISIT",
-        agendaTitle: "Personal Appointment Agenda", backToday: "Back to Today", dailyFlowTitle: "Daily Appointment Flow", remindTip: "🔔 1-Click WhatsApp",
-        historyTitle: "Client Formula History", lastFormula: "Get Last Formula",
+        agendaTitle: "Appointment Agenda", backToday: "Today", dailyFlowTitle: "Daily Flow", remindTip: "🔔 WhatsApp",
+        historyTitle: "Formula History", lastFormula: "Get Last Formula",
         noCustHistory: "No client selected", noHistoryRecords: "No past records found.",
-        settingsHeading: "Profile & Settings", saveSettings: "Save All Settings",
-        step1: "1. Which day?", step2: "2. Name & Phone?", step3: "3. Service?", step4: "4. Duration?", step5: "5. Start time?",
+        settingsHeading: "Settings", saveSettings: "Save Settings",
+        step1: "1. Day?", step2: "2. Name & Phone?", step3: "3. Service?", step4: "4. Duration?", step5: "5. Time?",
         celebrate: "Wish", remind: "Remind", edit: "Edit", book: "Book", noPhone: "No Number", availableSlot: "Available Slot", cont: "↳ Cont.",
         daysLeft: "Days Left", today: "Today!", tomorrow: "Tomorrow!", clients: "Clients",
         daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -1752,7 +1791,7 @@
         lostDaysTitle: "⏰ DORMANT CLIENT ALARM (Days)", lostDaysUnit: "Days",
         serviceListTitle: "SERVICES LIST", addNewService: "+ New Service",
         alarmTitle: "APPOINTMENT REMINDER ALARM", backupTitle: "Backup Contacts",
-        backupSub: "Downloads your contacts as CSV.", downloadBackup: "Download",
+        backupSub: "Downloads contacts as CSV.", downloadBackup: "Download",
         masterNameTitle: "SPECIALIST NAME ({USTA_ADI})", masterTitleTag: "TITLE ({UNVAN})",
         salonNameTitle: "SALON NAME ({SALON_ADI})", masterPhoneTitle: "YOUR WHATSAPP NUMBER",
         tplHeader: "WHATSAPP TEMPLATES", tplSub: "Tags: {MUSTERI_ADI}, {TARIH}, {SAAT}, {HIZMET}, {USTA_ADI}, {UNVAN}, {SALON_ADI}, {GOOGLE_LINK}, {INSTAGRAM_LINK}, {BANKA_ADI}, {HESAP_SAHIBI}, {IBAN_NO}",
@@ -1760,12 +1799,8 @@
         tpl4Title: "4. Instagram Invite", tpl5Title: "5. Feedback Survey", tpl6Title: "6. Instant Confirmation",
         tpl7Title: "7. Win-Back Template", tpl9Title: "9. Bank / IBAN Info",
         custDirectoryTitle: "Client Directory", custDirectoryBtn: "Clients",
-        departments: {
-          kuafor: "💇 Hair Salon", tirnak: "💅 Nail Art", agda: "✨ Waxing", makyaj: "💄 Makeup", berber: "✂️ Barber", ozel: "⭐ Custom"
-        },
-        unvanMap: {
-          kuafor: "Your Hairstylist", tirnak: "Your Nail Artist", agda: "Your Specialist", makyaj: "Your Artist", berber: "Your Barber", ozel: "Your Specialist"
-        },
+        departments: { kuafor: "💇 Hair Salon", tirnak: "💅 Nail Art", agda: "✨ Waxing", makyaj: "💄 Makeup", berber: "✂️ Barber", ozel: "⭐ Custom" },
+        unvanMap: { kuafor: "Your Hairstylist", tirnak: "Your Nail Artist", agda: "Your Specialist", makyaj: "Your Artist", berber: "Your Barber", ozel: "Your Specialist" },
         sablons: {
           msg1: "📅 Hello {MUSTERI_ADI},\n\nWe would love to remind you to book your upcoming visit 🌸\n\n⏰ Target: {TARIH}\n💇 Specialist: {USTA_ADI}\n\nReply to secure your slot! ✨\n{UNVAN} {USTA_ADI}",
           msg2: "Happy Birthday {MUSTERI_ADI}! 🎂🎉\n\nA special gift awaits you at {SALON_ADI}!\n\nWarmly,\n{UNVAN} {USTA_ADI}",
@@ -1790,7 +1825,7 @@
         timeCardTitle: "Termindetails", visitDate: "DATUM", visitTime: "UHRZEIT", nextVisit: "NÄCHSTER TERMIN",
         q15: "+15 T", q21: "+21 T", qMonth: "+1 M", datePh: "TT.MM.JJJJ", birthPh: "TT.MM",
         serviceCardTitle: "Dienste & Formeln", addServiceRow: "Zeile Hinzufügen", totalAmount: "Gesamt:", saveVisit: "SPEICHERN",
-        agendaTitle: "Terminkalender", backToday: "Zu Heute", dailyFlowTitle: "Tagesablauf", remindTip: "🔔 WhatsApp Erinnerung",
+        agendaTitle: "Terminkalender", backToday: "Zu Heute", dailyFlowTitle: "Tagesablauf", remindTip: "🔔 WhatsApp",
         historyTitle: "Formel-Historie", lastFormula: "Letzte Formel",
         noCustHistory: "Kein Kunde gewählt", noHistoryRecords: "Keine Einträge.",
         settingsHeading: "Einstellungen", saveSettings: "Speichern",
@@ -1814,12 +1849,8 @@
         tpl4Title: "4. Instagram Einladung", tpl5Title: "5. Feedback", tpl6Title: "6. Terminbestätigung",
         tpl7Title: "7. Wir vermissen Sie", tpl9Title: "9. Bankdaten",
         custDirectoryTitle: "Kundenverzeichnis", custDirectoryBtn: "Kunden",
-        departments: {
-          kuafor: "💇 Friseur", tirnak: "💅 Nageldesign", agda: "✨ Enthaarung", makyaj: "💄 Make-up", berber: "✂️ Barber", ozel: "⭐ Spezial"
-        },
-        unvanMap: {
-          kuafor: "Ihr Friseur", tirnak: "Ihr Nagelspezialist", agda: "Ihre Kosmetikerin", makyaj: "Ihre Artistin", berber: "Ihr Barbier", ozel: "Ihr Spezialist"
-        },
+        departments: { kuafor: "💇 Friseur", tirnak: "💅 Nageldesign", agda: "✨ Enthaarung", makyaj: "💄 Make-up", berber: "✂️ Barber", ozel: "⭐ Spezial" },
+        unvanMap: { kuafor: "Ihr Friseur", tirnak: "Ihr Nagelspezialist", agda: "Ihre Kosmetikerin", makyaj: "Ihre Artistin", berber: "Ihr Barbier", ozel: "Ihr Spezialist" },
         sablons: {
           msg1: "📅 Hallo {MUSTERI_ADI},\n\nerinnern Sie sich an Ihren nächsten Termin 🌸\n\n⏰ Datum: {TARIH}\n{UNVAN} {USTA_ADI}",
           msg2: "Alles Gute zum Geburtstag {MUSTERI_ADI}! 🎂🎉\n\nIhr Team von {SALON_ADI}",
@@ -1848,7 +1879,7 @@
         historyTitle: "История формул", lastFormula: "Последняя формула",
         noCustHistory: "Клиент не выбран", noHistoryRecords: "Нет записей.",
         settingsHeading: "Настройки", saveSettings: "Сохранить",
-        step1: "1. Какой день?", step2: "2. Имя и тел?", step3: "3. Услуга?", step4: "4. Время?", step5: "5. Во сколько?",
+        step1: "1. Какой день?", step2: "2. Имя и тел?", step3: "3. Услуga?", step4: "4. Время?", step5: "5. Во сколько?",
         celebrate: "Поздравить", remind: "Напомнить", edit: "Изменить", book: "Записать", noPhone: "Без тел.", availableSlot: "Свободно", cont: "↳ Прод.",
         daysLeft: "дн. осталось", today: "Сегодня!", tomorrow: "Завтра!", clients: "Клиентов",
         daysOfWeek: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
@@ -1868,12 +1899,8 @@
         tpl4Title: "4. Instagram", tpl5Title: "5. Опрос", tpl6Title: "6. Подтверждение",
         tpl7Title: "7. Приглашение на кофе", tpl9Title: "9. Банковские реквизиты",
         custDirectoryTitle: "Справочник клиентов", custDirectoryBtn: "Клиенты",
-        departments: {
-          kuafor: "💇 Парикмахер", tirnak: "💅 Маникюр", agda: "✨ Депиляция", makyaj: "💄 Макияж", berber: "✂️ Барбер", ozel: "⭐ Другое"
-        },
-        unvanMap: {
-          kuafor: "Ваш парикмахер", tirnak: "Ваш мастер маникюра", agda: "Ваш специалист", makyaj: "Ваш визажист", berber: "Ваш барбер", ozel: "Ваш специалист"
-        },
+        departments: { kuafor: "💇 Парикмахер", tirnak: "💅 Маникюр", agda: "✨ Депиляция", makyaj: "💄 Макияж", berber: "✂️ Барбер", ozel: "⭐ Другое" },
+        unvanMap: { kuafor: "Ваш парикмахер", tirnak: "Ваш мастер маникюра", agda: "Ваш специалист", makyaj: "Ваш визажист", berber: "Ваш барбер", ozel: "Ваш специалист" },
         sablons: {
           msg1: "📅 Здравствуйте, {MUSTERI_ADI}!\n\nНапоминаем о записи 🌸\n⏰ Дата: {TARIH}\n{UNVAN} {USTA_ADI}",
           msg2: "С днем рождения, {MUSTERI_ADI}! 🎂🎉\nПодарок ждет вас в {SALON_ADI}!",
@@ -1889,6 +1916,7 @@
     };
 
     /* GLOBAL DEĞİŞKENLER */
+    const ANA_PATRON_TEL = "905354049392"; // Sadece Server YILMAZ'a özel patron kimliği
     let aktifDil = localStorage.getItem('hair_aktif_dil') || "tr";
     let aktifTema = localStorage.getItem('hair_aktif_tema') || "dark";
     let aktifLisansKodu = localStorage.getItem('hair_lisans_kodu') || "";
@@ -1899,7 +1927,6 @@
     let shData = { tarih: "", musteri: "", tel: "", hizmet: "İŞLEM", sure: 60, saat: "14:00" };
     let shOnerilenSaat = "15:30";
     let patronKayitliUstalar = [];
-    
     let uyarilanRandevular = []; 
     let aktifZoomHedefArea = null;
 
@@ -2000,7 +2027,7 @@
       if (!str) return "";
       let s = str.toString().trim();
 
-      // 1. Durum: ISO Formati (YYYY-MM-DD) takvimden geliyorsa doğrudan GG.AA.YYYY yap
+      // 1. Durum: ISO Formatı (YYYY-MM-DD) takvimden geliyorsa doğrudan GG.AA.YYYY yap
       if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
         let [y, m, d] = s.split('-');
         return `${d}.${m}.${y}`;
@@ -2052,7 +2079,7 @@
       if (v.length === 4) el.value = v.substring(0, 2) + '.' + v.substring(2, 4);
     }
 
-    /* KUSURSUZ TEMA YÖNETİM MOTORU */
+    /* KUSURSUZ TEMA YÖNETİM MOTORU (SÜT BEYAZI SABİTLEYİCİ) */
     function temaDegistir() {
       aktifTema = (aktifTema === 'dark') ? 'light' : 'dark';
       localStorage.setItem('hair_aktif_tema', aktifTema);
@@ -2070,7 +2097,7 @@
         root.classList.add('light');
         if (btn) btn.innerText = "🌙";
         if (metaTheme) metaTheme.setAttribute('content', '#f8fafc');
-        if (metaScheme) metaScheme.setAttribute('content', 'light');
+        if (metaScheme) metaScheme.setAttribute('content', 'only light'); // Chrome Android zoraki karartmasını durdurur
       } else {
         root.classList.remove('light');
         root.classList.add('dark');
@@ -2144,8 +2171,7 @@
       }
     }
 
-  <!-- 6. PARÇA SONU - BURADAN İTİBAREN 7. PARÇA (SON PARÇA: İŞ MANTIĞI, JET MOTORU VE BAŞLATICI) GELECEK -->
-function bolumDegistirildi(yeniBolum) {
+    function bolumDegistirildi(yeniBolum) {
       salonAyarlari.bolum = yeniBolum;
       salonAyarlari.hizmetler = VARSAYILAN_BOLUM_HIZMETLERI[yeniBolum] || VARSAYILAN_BOLUM_HIZMETLERI.kuafor;
       
@@ -2351,8 +2377,8 @@ function bolumDegistirildi(yeniBolum) {
       return d.getDate().toString().padStart(2, '0') + '.' + (d.getMonth() + 1).toString().padStart(2, '0') + '.' + d.getFullYear();
     }
     seciliTarihStr = bugununTarihiStr();
-
-    /* KASA & CİRO MOTORU */
+    // 8-A BİTTİ - HEMEN ARDINDAN 8-B GELECEK
+/* KASA & CİRO MOTORU */
     function kasaHakedisGuncelle(val) {
       let yuzde = parseInt(val);
       if (isNaN(yuzde) || yuzde < 0) yuzde = 0;
@@ -3533,35 +3559,45 @@ function bolumDegistirildi(yeniBolum) {
         gunlukCiroGuncelle();
       });
     }
-
-  // 7-A BİTTİ - HEMEN ARDINDAN 7-B GELECEK
-/* GÜVENLİ PATRON PANELİ VE YÖNETİM */
+    // 8-B BİTTİ - HEMEN ARDINDAN 8-C (SON FİNAL PARÇASI) GELECEK
+/* SADECE SERVER YILMAZ'A ÖZEL ÇİFT KADEMELİ ULTRA GÜVENLİ PATRON GİRİŞİ */
     function patronPaneliAc() {
-      let girilen = prompt("Yönetici Güvenlik PIN Kodunu Giriniz:");
-      if (!girilen) return;
+      // 1. KADEME: Yalnızca Server YILMAZ hesabında mı kontrolü
+      let suAnkiLisans = aktifLisansKodu || localStorage.getItem('hair_lisans_kodu') || "";
+      let asilPatron = localStorage.getItem('hair_asli_patron_lisans') || "";
 
-      db.collection('sistem').doc('yonetim').get().then(doc => {
-        let dogruMu = false;
-        if (doc.exists && doc.data().adminPin) {
-          dogruMu = (girilen.trim() === doc.data().adminPin.toString());
-        } else {
-          dogruMu = (girilen.trim().toUpperCase() === "LUMIOADMIN");
+      if (suAnkiLisans !== ANA_PATRON_TEL && asilPatron !== ANA_PATRON_TEL) {
+        alert("⛔ YETKİSİZ ERİŞİM!\n\nPatron Yönetim Merkezi yalnızca sistem kurucusu ve yöneticisi Server YILMAZ'a özeldir. Bu cihazdan erişim yetkiniz bulunmamaktadır.");
+        return;
+      }
+
+      // 2. KADEME: Özel şifre doğrulaması
+      let girilenPin = prompt("Server Bey, Yönetici Güvenlik Şifrenizi Giriniz:");
+      if (!girilenPin) return;
+
+      db.collection('sistem').doc('lisanslar').collection('aktifler').doc(ANA_PATRON_TEL).get().then(doc => {
+        let pinDogruMu = false;
+        if (doc.exists) {
+          const data = doc.data();
+          if (data.pin && data.pin.toString() === girilenPin.trim()) pinDogruMu = true;
         }
+        // Yedek anahtar
+        if (girilenPin.trim() === "701041") pinDogruMu = true;
 
-        if (dogruMu) {
+        if (pinDogruMu) {
           document.getElementById('patronModal').classList.remove('hidden'); 
           modalGeriTusuKaydi('patronModal');
           patronVerileriniYukle();
         } else {
-          alert("❌ Hatalı Güvenlik PIN Kodu!");
+          alert("❌ Hatalı Güvenlik Şifresi!");
         }
-      }).catch(() => {
-        if (girilen.trim().toUpperCase() === "LUMIOADMIN") {
+      }).catch(err => {
+        if (girilenPin.trim() === "701041") {
           document.getElementById('patronModal').classList.remove('hidden'); 
           modalGeriTusuKaydi('patronModal');
           patronVerileriniYukle();
         } else {
-          alert("❌ Güvenlik doğrulaması başarısız!");
+          alert("Güvenlik hatası: " + err.message);
         }
       });
     }
@@ -3572,9 +3608,9 @@ function bolumDegistirildi(yeniBolum) {
       let yeniPin = document.getElementById('patronNewPinInput').value.trim();
       if (!yeniPin || yeniPin.length < 4) { alert("Lütfen en az 4 karakterli şifre girin."); return; }
       
-      db.collection('sistem').doc('yonetim').set({ adminPin: yeniPin }, { merge: true }).then(() => {
+      db.collection('sistem').doc('lisanslar').collection('aktifler').doc(ANA_PATRON_TEL).update({ pin: yeniPin }).then(() => {
         document.getElementById('patronNewPinInput').value = "";
-        alert("✅ Patron şifresi güncellendi: " + yeniPin);
+        alert("✅ Patron şifreniz güncellendi: " + yeniPin);
       });
     }
 
@@ -3687,10 +3723,18 @@ function bolumDegistirildi(yeniBolum) {
       });
     }
 
+    /* İPHONE VE ANDROİD REHBERLİ RESMİ KURULUM BİLGİSİ GÖNDERME */
     function patronKurulumMesajiGonder(tel, ad, pin, paketGun) {
-      let sureMetni = paketGun >= 9999 ? "Süresiz" : `${paketGun} Gün`;
-      const s = aktifDilSablonlariniAl(aktifDil);
-      let msg = s.msg8.replace(/{USTA_ADI}/g, ad).replace(/{USTA_TEL}/g, tel).replace(/{USTA_PIN}/g, pin).replace(/{PAKET_SURESI}/g, sureMetni);
+      let sureMetni = parseInt(paketGun) >= 9999 ? "Süresiz" : `${paketGun} Gün`;
+      const hitapAd = turkceHitapIsimDuzenle(ad);
+      const s = aktifDilSablonlariniAl('tr');
+      
+      let msg = s.msg8
+        .replace(/{USTA_ADI}/g, hitapAd)
+        .replace(/{USTA_TEL}/g, tel)
+        .replace(/{USTA_PIN}/g, pin)
+        .replace(/{PAKET_SURESI}/g, sureMetni);
+
       anindaWhatsAppAc(tel, msg);
     }
 
