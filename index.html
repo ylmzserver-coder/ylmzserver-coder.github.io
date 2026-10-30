@@ -78,6 +78,7 @@
       --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
     }
 
+
     html.light {
       color-scheme: light !important;
       --bg-page: #f1f5f9 !important;
@@ -154,10 +155,23 @@
     .layer-nav { z-index: 40; }
     .layer-modal { z-index: 100; }
     .layer-highest { z-index: 200; }
-</style>
+
+<style>
+.layer-highest { z-index: 200; }
+  </style>
+
+  <script>
+    const kaydedilenTema = localStorage.getItem('hair_aktif_tema') || 'dark';
+    if (kaydedilenTema === 'light') {
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
 </head>
 <body id="appBody" class="min-h-screen flex flex-col font-sans select-none safe-pb">
-<!-- 1. PARÇA SONU - BURADAN İTİBAREN 2. PARÇA BAĞLANACAK -->
+
+  <!-- 1. PARÇA SONU - BURADAN İTİBAREN 2. PARÇA BAĞLANACAK -->
 <!-- PATRON GÖZAT MODU AKTİF UYARI ŞERİDİ -->
   <div id="bannerGozatModu" class="hidden layer-banner px-3.5 py-2 text-xs font-bold flex items-center justify-between border-b shadow-lg bg-amber-500 text-slate-950 border-amber-400">
     <div class="flex items-center space-x-1.5 truncate mr-2">
