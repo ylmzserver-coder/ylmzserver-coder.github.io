@@ -1550,19 +1550,17 @@
     /* KUSURSUZ TEMA YÖNETİM MOTORU (SÜT BEYAZI SABİTLEYİCİ) */
     function temaDegistir() {
       const root = document.documentElement;
-      const btn = document.getElementById('themeToggleBtn');
-      
       if (root.classList.contains('light')) {
         root.classList.remove('light');
         root.classList.add('dark');
         localStorage.setItem('hair_aktif_tema', 'dark');
-        if (btn) btn.innerText = "☀️";
       } else {
         root.classList.remove('dark');
         root.classList.add('light');
         localStorage.setItem('hair_aktif_tema', 'light');
-        if (btn) btn.innerText = "🌙";
       }
+      location.reload();
+    }
       
       if (typeof temaUygula === 'function') {
         temaUygula();
