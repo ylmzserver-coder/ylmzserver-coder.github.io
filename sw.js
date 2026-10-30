@@ -1,5 +1,5 @@
-/* LUMIO AI Terminal - Service Worker & Banka Tipi Bildirim Motoru (V7) */
-const CACHE_NAME = 'lumio-ai-cache-v7';
+/* LUMIO AI Terminal - Service Worker & Banka Tipi Bildirim Motoru (V8) */
+const CACHE_NAME = 'lumio-ai-cache-v8';
 const OFFLINE_URLS = [
   './',
   './index.html',
@@ -18,7 +18,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// 2. AKTİF ETME (Eski önbellekleri temizle ve kontrolü devral)
+// 2. AKTİF ETME (Eski v7 ve önceki önbellekleri temizle ve kontrolü devral)
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -31,9 +31,8 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. ÇEVRİMDIŞI ÇALIŞMA (FETCH MOTORU - Network First, Cache Fallback)
+// 3. ÇEVRİMDIŞI ÇALIŞMA (Network First, Cache Fallback + Güvenli Put)
 self.addEventListener('fetch', (event) => {
-  // Sadece GET isteklerini ve yerel kaynakları yakala (Firestore ve Gemini API'lerini engelleme)
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
 
@@ -45,15 +44,15 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(event.request)
       .then((networkResponse) => {
-        // Ağdan başarıyla gelirse önbelleği güncelle
         if (networkResponse && networkResponse.status === 200) {
           const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
+          caches.open(CACHE_NAME)
+            .then((cache) => cache.put(event.request, responseToCache))
+            .catch((err) => console.warn('Önbellek yazma korundu:', err));
         }
         return networkResponse;
       })
       .catch(() => {
-        // İnternet yoksa önbellekten sun
         return caches.match(event.request).then((cachedResponse) => {
           if (cachedResponse) return cachedResponse;
           if (event.request.mode === 'navigate') {
@@ -100,12 +99,11 @@ self.addEventListener('push', (event) => {
   );
 });
 
-// 5. BİLDİRİM BUTONLARINA BASILDIĞINDA
+// 5. BİLDİRİM TIKLANDIĞINDA
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
   if (event.action === 'ertele') {
-    // Service Worker uykuya dalacağı için istemci pencerelerine sinyal gönderiyoruz
     event.waitUntil(
       self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
         if (clientList.length > 0) {
@@ -115,7 +113,6 @@ self.addEventListener('notificationclick', (event) => {
       })
     );
   } else {
-    // Uygulamayı öne getir veya aç
     event.waitUntil(
       self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
         for (const client of clientList) {
