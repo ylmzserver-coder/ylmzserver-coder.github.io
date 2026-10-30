@@ -1550,23 +1550,25 @@
     }
 
     function temaUygula() {
-      const root = document.documentElement;
+      const body = document.getElementById('appBody');
       const btn = document.getElementById('themeToggleBtn');
-      const metaTheme = document.getElementById('themeColorMeta');
-      const metaScheme = document.getElementById('colorSchemeMeta');
-      
       if (aktifTema === 'light') {
-        root.classList.remove('dark');
-        root.classList.add('light');
+        body.classList.add('theme-light');
         if (btn) btn.innerText = "🌙";
-        if (metaTheme) metaTheme.setAttribute('content', '#f8fafc');
-        if (metaScheme) metaScheme.setAttribute('content', 'only light'); // Chrome Android zoraki karartmasını durdurur
       } else {
-        root.classList.remove('light');
-        root.classList.add('dark');
+        body.classList.remove('theme-light');
         if (btn) btn.innerText = "☀️";
-        if (metaTheme) metaTheme.setAttribute('content', '#090d16');
-        if (metaScheme) metaScheme.setAttribute('content', 'dark');
+      }
+    }
+   function temaUygula() {
+      const body = document.getElementById('appBody');
+      const btn = document.getElementById('themeToggleBtn');
+      if (aktifTema === 'light') {
+        body.classList.add('theme-light');
+        if (btn) btn.innerText = "🌙";
+      } else {
+        body.classList.remove('theme-light');
+        if (btn) btn.innerText = "☀️";
       }
     }
     temaUygula();
