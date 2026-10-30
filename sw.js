@@ -1,10 +1,24 @@
-/* LUMIO AI Terminal - Service Worker & Banka Tipi Web Push Motoru (V6) */
-const CACHE_NAME = 'lumio-ai-cache-v6';
+/* LUMIO AI Terminal - Service Worker & Banka Tipi Bildirim Motoru (V7) */
+const CACHE_NAME = 'lumio-ai-cache-v7';
+const OFFLINE_URLS = [
+  './',
+  './index.html',
+  './manifest.json',
+  './logo.png'
+];
 
-self.addEventListener('install', () => {
-  self.skipWaiting();
+// 1. KURULUM (Statik çekirdek dosyaları önbelleğe al)
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(OFFLINE_URLS).catch((err) => {
+        console.warn('Statik önbellekleme atlandı:', err);
+      });
+    }).then(() => self.skipWaiting())
+  );
 });
 
+// 2. AKTİF ETME (Eski önbellekleri temizle ve kontrolü devral)
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -17,7 +31,40 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-/* BANKA BİLDİRİMİ GİBİ KİLİT EKRANINA FIRLATMA + ERTELEME MOTORU */
+// 3. ÇEVRİMDIŞI ÇALIŞMA (FETCH MOTORU - Network First, Cache Fallback)
+self.addEventListener('fetch', (event) => {
+  // Sadece GET isteklerini ve yerel kaynakları yakala (Firestore ve Gemini API'lerini engelleme)
+  if (event.request.method !== 'GET') return;
+  const url = new URL(event.request.url);
+
+  // Dış API veya Google isteklerini doğrudan internete bırak
+  if (!url.origin.includes(self.location.origin) && !url.hostname.includes('cdnjs') && !url.hostname.includes('gstatic')) {
+    return;
+  }
+
+  event.respondWith(
+    fetch(event.request)
+      .then((networkResponse) => {
+        // Ağdan başarıyla gelirse önbelleği güncelle
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        // İnternet yoksa önbellekten sun
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) return cachedResponse;
+          if (event.request.mode === 'navigate') {
+            return caches.match('./index.html');
+          }
+        });
+      })
+  );
+});
+
+// 4. BANKA TİPİ KİLİT EKRANI PUSH BİLDİRİMİ
 self.addEventListener('push', (event) => {
   let data = {
     title: '⏰ LUMIO: Randevu Vakti Yaklaştı!',
@@ -38,12 +85,12 @@ self.addEventListener('push', (event) => {
     body: data.body,
     icon: data.icon || 'logo.png',
     badge: data.badge || 'logo.png',
-    vibrate: [400, 200, 400, 200, 400], // Belirgin titreşim
+    vibrate: [400, 200, 400, 200, 400],
     tag: 'lumio-randevu-alarm',
     renotify: true,
-    requireInteraction: true, // Usta dokunana kadar ekranda asılı kalsın
+    requireInteraction: true,
     actions: [
-      { action: 'tamam', title: 'Tamam 👍' },
+      { action: 'tamam', title: 'Aç 👍' },
       { action: 'ertele', title: '10 Dk Ertele ⏱️' }
     ]
   };
@@ -53,31 +100,33 @@ self.addEventListener('push', (event) => {
   );
 });
 
-/* BİLDİRİM BUTONLARINA BASILDIĞINDA (ERTELE / TAMAM) */
+// 5. BİLDİRİM BUTONLARINA BASILDIĞINDA
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
   if (event.action === 'ertele') {
-    // 10 dakika sonra tekrar ekrana fırlat
-    setTimeout(() => {
-      self.registration.showNotification('⏰ ERTELENEN RANDEVU!', {
-        body: '10 dakika önce ertelediğiniz randevu vakti geldi!',
-        icon: 'logo.png',
-        badge: 'logo.png',
-        vibrate: [400, 200, 400],
-        requireInteraction: true
-      });
-    }, 10 * 60 * 1000);
-  } else {
-    // Tamam'a basıldıysa veya bildirime dokunulduysa uygulamayı öne getir
+    // Service Worker uykuya dalacağı için istemci pencerelerine sinyal gönderiyoruz
     event.waitUntil(
-      clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+        if (clientList.length > 0) {
+          clientList[0].postMessage({ type: 'ERTELE_ALARM', dakika: 10 });
+          return clientList[0].focus();
+        }
+      })
+    );
+  } else {
+    // Uygulamayı öne getir veya aç
+    event.waitUntil(
+      self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
         for (const client of clientList) {
-          if (client.url.includes('index.html') && 'focus' in client) {
+          const clientUrl = new URL(client.url);
+          if ((clientUrl.pathname.endsWith('index.html') || clientUrl.pathname.endsWith('/')) && 'focus' in client) {
             return client.focus();
           }
         }
-        if (clients.openWindow) return clients.openWindow('./index.html');
+        if (self.clients.openWindow) {
+          return self.clients.openWindow('./index.html');
+        }
       })
     );
   }
