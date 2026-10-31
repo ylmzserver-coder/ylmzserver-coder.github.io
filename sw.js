@@ -1,5 +1,5 @@
-/* LUMIO AI Terminal - Service Worker & Banka Tipi Bildirim Motoru (V8) */
-const CACHE_NAME = 'lumio-ai-cache-v8';
+/* LUMIO AI Terminal - Service Worker & Banka Tipi Bildirim Motoru (V9) */
+const CACHE_NAME = 'lumio-ai-cache-v9';
 const OFFLINE_URLS = [
   './',
   './index.html',
@@ -7,7 +7,7 @@ const OFFLINE_URLS = [
   './logo.png'
 ];
 
-// 1. KURULUM (Statik çekirdek dosyaları önbelleğe al)
+// 1. KURULUM
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -18,7 +18,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// 2. AKTİF ETME (Eski v7 ve önceki önbellekleri temizle ve kontrolü devral)
+// 2. AKTİF ETME (Eski v8 ve önceki önbellekleri temizle ve kontrolü devral)
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -31,12 +31,11 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. ÇEVRİMDIŞI ÇALIŞMA (Network First, Cache Fallback + Güvenli Put)
+// 3. ÇEVRİMDIŞI ÇALIŞMA
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
 
-  // Dış API veya Google isteklerini doğrudan internete bırak
   if (!url.origin.includes(self.location.origin) && !url.hostname.includes('cdnjs') && !url.hostname.includes('gstatic')) {
     return;
   }
