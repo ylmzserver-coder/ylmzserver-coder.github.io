@@ -2504,7 +2504,31 @@ function canliMusteriAra(query) {
     function yetkiliyeLisansSorWhatsApp() {
       anindaWhatsAppAc("905354049392", "Merhaba, LUMIO uygulamasını kullanmak için lisans satın almak / yenilemek istiyorum.");
     }
+function ayarlariUygula() {
+      const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = (v !== undefined) ? v : ""; };
+      setVal('setLisansKodu', aktifLisansKodu);
+      setVal('setUstaAdi', salonAyarlari.ustaAdi || "Server YILMAZ");
+      setVal('setUnvan', salonAyarlari.unvan || "Kuaförünüz");
+      setVal('setSalonAdi', salonAyarlari.salonAdi || "Ekip Kuaför");
+      setVal('setUstaCountryCode', salonAyarlari.ustaCountryCode || "+90");
+      setVal('setUstaTel', salonAyarlari.ustaTel || "");
+      setVal('setInstagram', salonAyarlari.instagram || "");
+      setVal('setGoogleLink', salonAyarlari.googleLink || "");
+      setVal('setBankaAdi', salonAyarlari.bankaAdi || "");
+      setVal('setHesapSahibi', salonAyarlari.hesapSahibi || "");
+      setVal('setIbanNo', salonAyarlari.ibanNo || "");
+      setVal('setUstaYuzde', ustaYuzdeOrani);
+      setVal('setKayipGun', salonAyarlari.kayipGun || 60);
+      setVal('setAlarmSuresi', salonAyarlari.alarmSuresi || "60");
 
+      const hUnvan = document.getElementById('headerUstaUnvan');
+      if (hUnvan) hUnvan.innerText = salonAyarlari.ustaAdi || "Server YILMAZ";
+
+      bolumSecenekleriniDoldur(); 
+      ayarlarHizmetListesiniCiz(); 
+      sihirbazHizmetButonlariniCiz(); 
+      diliDegistir(aktifDil);
+    }
     function bulutVerileriniBaslat() {
       if (!aktifLisansKodu) { document.getElementById('licenseSetupModal').classList.remove('hidden'); return; }
 
