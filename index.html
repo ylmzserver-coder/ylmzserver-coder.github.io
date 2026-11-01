@@ -1,4 +1,3 @@
-<!-- --- PARÇA 1 / 7: index.html (Head, Meta ve CSS Başlangıç) --- -->
 <!DOCTYPE html>
 <html lang="tr" id="htmlRoot">
 <head>
@@ -51,7 +50,6 @@
     @keyframes pulseWave { to { box-shadow: 0 0 0 14px rgba(217, 119, 6, 0); } }
   </style>
 </head>
-<!-- --- PARÇA 2 / 7: index.html (Body Başlangıcı, Bannerlar ve Header) --- -->
 <body id="appBody" class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans select-none safe-pb">
 
   <!-- PATRON GÖZAT MODU ŞERİDİ -->
@@ -192,7 +190,7 @@
       </button>
     </div>
   </nav>
-<!-- --- PARÇA 3 / 7: index.html (Terminal Sekmesi ve Müşteri Masası) --- -->
+
   <main class="flex-1 p-3 max-w-lg mx-auto w-full space-y-3.5">
     <!-- SEKME 1: TERMİNAL -->
     <section id="tab-terminal" class="space-y-3.5">
@@ -345,7 +343,7 @@
         </button>
       </div>
     </section>
-<!-- --- PARÇA 4 / 7: index.html (Ajandam, Geçmiş, Hatırlatmalar, Ayarlar Sekmeleri) --- -->
+
     <!-- SEKME 2: AJANDAM -->
     <section id="tab-agenda" class="hidden space-y-3.5">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3">
@@ -637,7 +635,7 @@
         </button>
       </div>
     </section>
-<!-- --- PARÇA 5 / 7: index.html (Modaller: Kasam, Fiş Düzenle, Not Genişlet, Müşteri Rehberi, Randevu Sihirbazı) --- -->
+
   <!-- MODAL: KASAM & CİRO (POS KESİNTİSİ, HAKEDİŞ VE HESAP SIFIRLAMA DESTEKLİ) -->
   <div id="modalKasam" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[99999999] flex items-center justify-center p-3">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col max-h-[92vh]">
@@ -962,7 +960,7 @@
       </div>
     </div>
   </div>
-<!-- --- PARÇA 6 / 7: index.html (Modaller: Lumio AI, Çakışma, Patron CRM ve Diğerleri) --- -->
+
   <!-- MODAL: LUMIO MASTER AI & SESLİ İSTİŞARE MERKEZİ (AGENT ÖZELLİKLİ) -->
   <div id="modalLumioAi" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[9999990] flex items-center justify-center p-3">
     <div class="ai-modal-box bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col max-h-[92vh]">
@@ -1278,7 +1276,7 @@
       </div>
     </div>
   </div>
-// --- PARÇA 7A / 8: JavaScript Motoru (Temel Fonksiyonlar & Kasa) ---
+
     function internetDurumunuGuncelle() {
       const b = document.getElementById('cloudStatusBadge');
       if (!b) return;
@@ -1690,7 +1688,7 @@
       setT('lblMasterNameTitle', d.masterNameTitle); setT('lblMasterTitleTag', d.masterTitleTag); setT('lblSalonNameTitle', d.salonNameTitle);
       setT('lblMasterPhoneTitle', d.masterPhoneTitle); setT('lblTplHeader', d.tplHeader); setT('lblCustDirectoryTitle', d.custDirectoryTitle);
     }
-// --- PARÇA 7B / 8: JavaScript Motoru (Devamı ve AI Agent Motoru) ---
+
     function ustaLisansUyariKontrol(kalanGun) {
       const banner = document.getElementById('bannerLisansUyarisi'), txt = document.getElementById('txtLisansUyariMetin');
       if (!banner) return;
