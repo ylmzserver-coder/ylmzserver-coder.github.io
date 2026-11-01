@@ -57,7 +57,7 @@
     .safe-pb { padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px) !important; }
     .scroll-touch { -webkit-overflow-scrolling: touch; }
 
-    /* TELEFONDA ZORLA BEYAZ YAPAN AYDINLIK MOD */
+    /* TELEFONDA ZORLA BEYAZ YAPAN GARANTİ AYDINLIK MOD */
     html.theme-light,
     body.theme-light { 
       background-color: #f8fafc !important; 
@@ -154,7 +154,7 @@
     </button>
   </div>
 
-  <!-- LİSANS KURULUM & YASAL SÖZLEŞME MODALI -->
+  <!-- LİSANS KURULUM & YASAL SÖZLEŞME MODALI (ULUSLARARASI TELEFON DESTEKLİ) -->
   <div id="licenseSetupModal" class="hidden fixed inset-0 bg-slate-950/98 z-[9999999999] flex flex-col items-center justify-center p-6 text-center">
     <div class="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center p-2 mb-4 shadow-xl">
       <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow">
@@ -167,12 +167,12 @@
       </svg>
     </div>
     <h2 class="text-base font-black text-white mb-1" id="lblSetupTitle">LUMIO GİRİŞİ</h2>
-    <p class="text-[11px] text-slate-400 max-w-xs mb-4" id="lblSetupSub">Lütfen yöneticiniz tarafından tanımlanan cep telefonunuzu ve şifrenizi giriniz.</p>
+    <p class="text-[11px] text-slate-400 max-w-xs mb-4" id="lblSetupSub">Lütfen yöneticiniz tarafından tanımlanan telefon numaranızı ve şifrenizi giriniz.</p>
     
     <div class="w-full max-w-xs space-y-2.5">
       <div>
-        <label class="text-[10px] text-slate-400 block font-bold text-left mb-1" id="lblSetupPhone">CEP TELEFONUNUZ:</label>
-        <input type="tel" id="setupLicenseInput" placeholder="0532 320 32 32" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-center text-white font-bold text-sm focus:outline-none focus:border-amber-400">
+        <label class="text-[10px] text-slate-400 block font-bold text-left mb-1" id="lblSetupPhone">TELEFON NUMARANIZ (ÜLKE KODUYLA):</label>
+        <input type="tel" id="setupLicenseInput" placeholder="Örn: 905354049392 veya 77011234567" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-center text-white font-bold text-sm focus:outline-none focus:border-amber-400 font-mono">
       </div>
       <div>
         <div class="flex justify-between items-center mb-1">
@@ -290,7 +290,7 @@
         </button>
       </div>
 
-      <!-- BİRLEŞTİRİLMİŞ ÇİFT İŞLEVLİ LUMIO MASTER AI KARTI (Gereksiz 2. Kart Kaldırıldı!) -->
+      <!-- ÇİFT İŞLEVLİ LUMIO MASTER AI KARTI (Ferah Arayüz) -->
       <div class="bg-slate-900 border border-amber-500/40 rounded-2xl p-3 shadow-lg flex items-center justify-between gap-2">
         <div onclick="sihirbazBaslat()" class="flex items-center space-x-2.5 cursor-pointer flex-1 min-w-0 active:scale-95 transition" title="Randevu Oluşturmak İçin Dokunun">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500/20 to-amber-500/10 text-amber-400 border border-amber-500/40 flex items-center justify-center text-base shrink-0 shadow">
@@ -556,7 +556,7 @@
             </div>
           </div>
 
-          <!-- İSTEK 2: FİNANS, HAKEDİŞ VE POS KOMİSYON AYARLARI -->
+          <!-- FİNANS & POS KOMİSYON AYARLARI -->
           <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-3">
             <span class="text-amber-400 block text-[10px] font-bold uppercase tracking-wider">💰 HAKEDİŞ VE POS KOMİSYON AYARI</span>
             
@@ -623,7 +623,7 @@
             </button>
           </div>
 
-          <!-- KİMLİK & SALON BİLGİLERİ (İSTEK 4: KOLTUK KİRALAYAN AYRIMLI) -->
+          <!-- KİMLİK & SALON BİLGİLERİ (KOLTUK KİRALAYAN AYRIMLI) -->
           <div>
             <label class="text-slate-400 block text-[10px] mb-1 font-bold" id="lblMasterNameTitle">USTA ADI VE SOYADI ({USTA_ADI})</label>
             <input type="text" id="setUstaAdi" placeholder="Örn: Server YILMAZ" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-bold focus:outline-none">
@@ -639,7 +639,7 @@
               <label class="text-slate-400 block text-[10px] font-bold" id="lblSalonNameTitle">SALON / MARKA ADI ({SALON_ADI})</label>
               <span class="text-[9px] text-amber-400 italic font-semibold">Koltuk kiralıyorsanız boş bırakın</span>
             </div>
-            <input type="text" id="setSalonAdi" placeholder="Boş bırakılırsa mesajlar adınızla gider" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-bold focus:outline-none">
+            <input type="text" id="setSalonAdi" placeholder="Boş bırakılırsa mesajlar şahsınız adına gider" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-bold focus:outline-none">
           </div>
 
           <div>
@@ -702,7 +702,6 @@
               <label class="text-purple-400 block text-[10px] font-bold mb-1">4. Memnuniyet Anketi</label>
               <textarea id="tplMsg4" rows="4" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-slate-200 text-xs focus:outline-none leading-relaxed"></textarea>
             </div>
-            <!-- İSTEK 5: GÜÇLENDİRİLMİŞ ÇEKİLİŞ VE ETKİLEŞİM ŞABLONU -->
             <div>
               <label class="text-amber-400 block text-[10px] font-bold mb-1">5. Instagram Daveti (Çekiliş & Yorum Şartlı)</label>
               <textarea id="tplMsg5" rows="4" class="w-full bg-slate-950 border border-amber-500/40 rounded-xl p-2.5 text-slate-200 text-xs focus:outline-none leading-relaxed"></textarea>
@@ -728,7 +727,7 @@
       </div>
     </section>
   </main>
-<!-- MODAL: KASAM & CİRO (İSTEK 2: POS KESİNTİSİ & NET HAKEDİŞ HESAPLAMALI) -->
+<!-- MODAL: KASAM & CİRO (POS KESİNTİSİ & NET HAKEDİŞ HESAPLAMALI) -->
   <div id="modalKasam" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[99999999] flex items-center justify-center p-3">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-4 space-y-3 shadow-2xl flex flex-col max-h-[92vh]">
       <div class="flex justify-between items-center pb-2 border-b border-slate-800">
@@ -755,7 +754,7 @@
         </button>
       </div>
 
-      <!-- İSTEK 2: POS KESİNTİSİ, NET CİRO & USTA HAKEDİŞİ AYRIŞTIRMA KARTI -->
+      <!-- POS KESİNTİSİ, NET CİRO & USTA HAKEDİŞİ AYRIŞTIRMA KARTI -->
       <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-2">
         <div class="flex justify-between items-center text-[10px] pb-1 border-b border-slate-800/80">
           <span class="font-bold text-amber-400 uppercase tracking-wider flex items-center">
@@ -1307,7 +1306,7 @@
       <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2 text-xs">
         <span class="text-[10px] font-bold text-amber-400 block border-b border-slate-800 pb-1">➕ YENİ USTA LİSANSI</span>
         <input type="text" id="patronNewName" placeholder="Usta Adı Soyadı" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-bold text-xs focus:outline-none">
-        <input type="tel" id="patronNewPhone" placeholder="0532 320 32 32" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-bold text-xs focus:outline-none">
+        <input type="tel" id="patronNewPhone" placeholder="Örn: 905323203232 veya 49151123456" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-bold text-xs focus:outline-none">
         <input type="text" maxlength="6" id="patronNewPin" placeholder="PIN: 123456" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-amber-300 font-mono font-black text-center text-xs focus:outline-none">
         <select id="patronPackageSelect" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-bold text-xs focus:outline-none">
           <option value="30">1 Aylık (+30 Gün)</option>
@@ -1333,7 +1332,7 @@
         <div id="patronMasterListContainer" class="space-y-1 max-h-40 overflow-y-auto scroll-touch pr-1"></div>
       </div>
 
-      <!-- Sabit Hedefli Ürün Yönetim Bölgesi (Hata 13 Düzeltildi) -->
+      <!-- Sabit Hedefli Ürün Yönetim Bölgesi -->
       <div id="patronUrunYonetimAlani" class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-2 text-xs"></div>
 
       <div class="pt-2 border-t border-slate-800 text-xs space-y-1.5">
@@ -1580,7 +1579,7 @@
           msg9: "Merhaba Sayın {MUSTERI_ADI}, 🌸\n\nÖdemenizi aşağıdaki banka / transfer hesabımıza güvenle gerçekleştirebilirsiniz:\n\n🏦 Banka: {BANKA_ADI}\n👤 Hesap Sahibi: {HESAP_SAHIBI}\n💳 IBAN / Hesap / Kart No: {IBAN_NO}\n\nÖdeme sonrası bilgi vermenizi rica eder, güzel günler dileriz! ✨\n{UNVAN} {USTA_ADI}"
         }
       },
-      en: {
+en: {
         terminal: "Terminal", agenda: "My Agenda", history: "History", remindersTab: "Reminders", settings: "Settings",
         dailyFinTitle: "Today's Status & Cash", seeFlow: "View Cash ➔", bookingUnit: "Bookings",
         remindersMainTitle: "All Reminders & Alarms", bdayBannerTitle: "🎂 BIRTHDAYS TODAY", remindBannerTitle: "⏰ UPCOMING APPOINTMENTS",
@@ -1678,7 +1677,8 @@
         }
       }
     };
-/* GLOBAL DEĞİŞKENLER */
+
+    /* GLOBAL DEĞİŞKENLER */
     let aktifDil = localStorage.getItem('hair_aktif_dil') || "tr";
     let aktifTema = localStorage.getItem('hair_aktif_tema') || "dark";
     let aktifLisansKodu = localStorage.getItem('hair_lisans_kodu') || "";
@@ -1748,7 +1748,7 @@
     }
     temaUygula();
 
-    /* DÖNÜŞTÜRÜCÜ & GÜVENLİ FORMATLAYICILAR (HATA 11 VE 12 DÜZELTİLDİ) */
+    /* DÖNÜŞTÜRÜCÜ & GÜVENLİ FORMATLAYICILAR */
     function turkceNormalize(str) {
       if (!str) return "";
       return str.toString().replace(/İ/g, 'i').replace(/I/g, 'ı').toLocaleLowerCase('tr-TR').trim();
@@ -1778,15 +1778,23 @@
       return adlar + ' ' + soyad;
     }
 
+    /* ULUSLARARASI TELEFON TEMİZLEYİCİ */
     function tamTelefonAl(ulkeKoduId, telId) {
       const kodEl = ulkeKoduId ? document.getElementById(ulkeKoduId) : null;
       const telEl = document.getElementById(telId);
-      let kod = kodEl ? kodEl.value.trim() : "+90", num = telEl ? telEl.value.trim() : "";
+      let kod = kodEl ? kodEl.value.trim() : "+90";
+      let num = telEl ? telEl.value.trim() : "";
       if (!num) return "";
+
       if (num.startsWith('+')) return num.replace(/\D/g, '');
       if (num.startsWith('00')) return num.substring(2).replace(/\D/g, '');
-      let temizKod = kod.replace(/\D/g, '') || "90", temizNum = num.replace(/\D/g, '');
+
+      let temizKod = kod.replace(/\D/g, '');
+      let temizNum = num.replace(/\D/g, '');
+
       if (temizNum.startsWith('0')) temizNum = temizNum.substring(1);
+      if (temizNum.startsWith(temizKod)) return temizNum;
+
       return temizKod + temizNum;
     }
 
@@ -1797,11 +1805,10 @@
       else window.open(apiUrl, '_blank');
     }
 
-    /* AKILLI TARİH MOTORU (HATA 6 DÜZELTİLDİ: YYYY-MM-DD ÇÖKMESİ ÖNLENDİ) */
+    /* AKILLI TARİH MOTORU (HTML5 HATA KORUMASI) */
     function akilliTarihDuzelt(str) {
       if (!str) return "";
       let s = str.toString().trim();
-      // HTML5 input type="date" formatı (YYYY-MM-DD)
       if (s.includes('-')) {
         let parts = s.split('-');
         if (parts.length === 3 && parts[0].length === 4) {
@@ -1830,8 +1837,7 @@
       let d = parseInt(p[0], 10), m = parseInt(p[1], 10) - 1, y = parseInt(p[2], 10);
       return (isNaN(d) || isNaN(m) || isNaN(y)) ? null : new Date(y, m, d);
     }
-
-    function randevuTarihiFormatla(el) { if (el) el.value = akilliTarihDuzelt(el.value); }
+function randevuTarihiFormatla(el) { if (el) el.value = akilliTarihDuzelt(el.value); }
     function dogumTarihiFormatla(el) {
       if (!el) return;
       let v = el.value.replace(/\D/g, '');
@@ -1946,7 +1952,7 @@
     seciliTarihStr = bugununTarihiStr();
 
     /* ==========================================================================
-       İSTEK 2: POS KOMİSYON DÜŞÜMLÜ KASA VE NET HAKEDİŞ HESAPLAMA MOTORU
+       NET KASA, HAKEDİŞ VE POS KOMİSYON MOTORU
        ========================================================================== */
     function kasaYuzdesiDegisti(val) {
       let y = parseInt(val) || 50;
@@ -2072,7 +2078,6 @@
         if (f.odemeTuru === 'kart') kartToplam += uc; else nakitToplam += uc;
       });
 
-      // İSTEK 2: NET HESAPLAMA MATEMATİĞİ
       let posKesintiTutari = (kartToplam * posYuzdeOrani) / 100;
       let netKartCiro = kartToplam - posKesintiTutari;
       let toplamNetCiro = nakitToplam + netKartCiro;
@@ -2207,486 +2212,9 @@
     }
     setInterval(ustaRandevuAlarmKontrol, 25000);
 
-    function autoExpandArea(el) { if (!el) return; el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
-
-    function notGenisletAc(btnEl, baslik) {
-      const row = btnEl.closest('.service-row'); if (!row) return;
-      const target = row.querySelector('.service-formula'); if (!target) return;
-      aktifZoomHedefArea = target;
-      document.getElementById('lblZoomModalTitle').innerText = baslik || "Detaylı Görüntüleyici";
-      document.getElementById('txtZoomContent').value = target.value;
-      document.getElementById('modalNotGenislet').classList.remove('hidden');
-      modalGeriTusuKaydi('modalNotGenislet');
-      setTimeout(() => document.getElementById('txtZoomContent').focus(), 150);
-    }
-    function notGenisletKapat() { document.getElementById('modalNotGenislet').classList.add('hidden'); aktifZoomHedefArea = null; }
-    function notGenisletKaydet() {
-      if (aktifZoomHedefArea) { aktifZoomHedefArea.value = document.getElementById('txtZoomContent').value; autoExpandArea(aktifZoomHedefArea); }
-      notGenisletKapat();
-    }
-
-    function satirHizmetDegisti(selectEl) {
-      const row = selectEl.closest('.service-row'); if (!row) return;
-      const liste = salonAyarlari.hizmetler || VARSAYILAN_BOLUM_HIZMETLERI.kuafor;
-      const bul = liste.find(x => x.ad === selectEl.value);
-      const prc = row.querySelector('.service-price');
-      if (bul && prc) { prc.value = bul.ucret || 0; toplamHesapla(); }
-    }
-
-    function tabloyaSatirEkle(hizmetVal = "", formulVal = "", notVal = "", ucretVal = "") {
-      const container = document.getElementById('serviceRowsContainer');
-      const div = document.createElement('div');
-      div.className = "service-row bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-1.5 relative shadow-sm";
-      const d = SOZLUK[aktifDil] || SOZLUK.tr, liste = salonAyarlari.hizmetler || VARSAYILAN_BOLUM_HIZMETLERI.kuafor;
-      if (!hizmetVal && liste.length > 0) hizmetVal = liste[0].ad;
-      if (ucretVal === "" || ucretVal === undefined) { const bul = liste.find(h => h.ad === hizmetVal); if (bul) ucretVal = bul.ucret || 0; }
-      const opts = liste.map(h => `<option value="${h.ad}" ${h.ad === hizmetVal ? 'selected' : ''}>${h.ad}</option>`).join('');
-
-      div.innerHTML = `
-        <div class="flex justify-between items-center pb-1 border-b border-slate-800">
-          <span class="text-[9px] font-bold text-amber-400 row-title">${d.rowTitle}</span>
-          <button type="button" onclick="this.closest('.service-row').remove(); toplamHesapla();" class="text-slate-500 hover:text-red-400 text-xs px-1 row-remove-btn">${d.remove}</button>
-        </div>
-        <div>
-          <label class="text-[9px] text-slate-400 block font-semibold mb-0.5 lbl-s1">${d.s1}</label>
-          <select onchange="satirHizmetDegisti(this)" class="service-name w-full bg-slate-900 text-white text-xs p-1.5 rounded-lg border border-slate-700 font-bold focus:outline-none">${opts}</select>
-        </div>
-        <div>
-          <div class="flex justify-between items-center mb-0.5">
-            <label class="text-[9px] text-slate-400 block font-semibold lbl-s2">${d.s2}</label>
-            <button type="button" onclick="notGenisletAc(this, '${d.s2}')" class="text-[9px] text-amber-400 hover:text-white font-bold flex items-center">
-              <i class="fa-solid fa-maximize mr-1"></i> <span class="lbl-zoom-btn">${d.zoomBtn || 'Büyüt'}</span>
-            </button>
-          </div>
-          <textarea oninput="autoExpandArea(this)" placeholder="${d.sFormulaPh}" class="service-formula auto-expand-area w-full bg-slate-900 text-slate-200 text-xs p-1.5 rounded-lg border border-slate-700 focus:outline-none leading-relaxed">${formulVal}</textarea>
-        </div>
-        <div class="grid grid-cols-3 gap-1.5">
-          <div class="col-span-2">
-            <label class="text-[9px] text-slate-400 block font-semibold mb-0.5 lbl-s3">${d.s3}</label>
-            <textarea oninput="autoExpandArea(this)" placeholder="${d.sNotesPh}" class="service-notes auto-expand-area w-full bg-slate-900 text-slate-200 text-xs p-1.5 rounded-lg border border-slate-700 focus:outline-none leading-relaxed">${notVal}</textarea>
-          </div>
-          <div>
-            <label class="text-[9px] text-slate-400 block font-semibold mb-0.5 lbl-s4">${d.s4} (${d.curr})</label>
-            <input type="text" value="${ucretVal}" placeholder="0" oninput="toplamHesapla()" class="service-price w-full bg-slate-900 text-amber-300 font-black text-xs p-1.5 rounded-lg border border-slate-700 text-right focus:outline-none">
-          </div>
-        </div>`;
-      container.appendChild(div);
-      setTimeout(() => div.querySelectorAll('.auto-expand-area').forEach(ta => autoExpandArea(ta)), 50);
-      toplamHesapla();
-    }
-
-    function tabloyuYenidenCiz() {
-      const d = SOZLUK[aktifDil] || SOZLUK.tr;
-      document.querySelectorAll('.service-row').forEach(row => {
-        let t = row.querySelector('.row-title'); if (t) t.innerText = d.rowTitle;
-        let rm = row.querySelector('.row-remove-btn'); if (rm) rm.innerText = d.remove;
-        let l1 = row.querySelector('.lbl-s1'); if (l1) l1.innerText = d.s1;
-        let l2 = row.querySelector('.lbl-s2'); if (l2) l2.innerText = d.s2;
-        let l3 = row.querySelector('.lbl-s3'); if (l3) l3.innerText = d.s3;
-        let l4 = row.querySelector('.lbl-s4'); if (l4) l4.innerText = `${d.s4} (${d.curr})`;
-        let f = row.querySelector('.service-formula'); if (f) f.placeholder = d.sFormulaPh;
-        let n = row.querySelector('.service-notes'); if (n) n.placeholder = d.sNotesPh;
-        let zb = row.querySelector('.lbl-zoom-btn'); if (zb) zb.innerText = d.zoomBtn || 'Büyüt';
-      });
-      toplamHesapla();
-    }
-
-    function toplamHesapla() {
-      let total = 0;
-      document.querySelectorAll('.service-price').forEach(inp => {
-        total += guvenliSayiAl(inp.value);
-      });
-      const d = SOZLUK[aktifDil] || SOZLUK.tr;
-      document.getElementById('totalAmountText').innerText = total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' ' + d.curr;
-    }
-
-    function ziyaretiKaydet() {
-      let hamAd = document.getElementById('custSearch').value.trim();
-      const tamTel = tamTelefonAl('custCountryCode', 'custPhone');
-      if (!hamAd) { alert("Müşteri adı zorunludur!"); return; }
-      const duzenliAd = turkceHitapIsimDuzenle(hamAd);
-      document.getElementById('custSearch').value = duzenliAd;
-      const rows = document.querySelectorAll('#serviceRowsContainer .service-row');
-      if (rows.length === 0) { alert("Lütfen en az bir hizmet ekleyin!"); return; }
-
-      const rawT = document.getElementById('visitDate').value || bugununTarihiStr();
-      const tarih = akilliTarihDuzelt(rawT), sonraki = akilliTarihDuzelt(document.getElementById('visitNext').value);
-      let musteriDocId = (aktifMusteri && aktifMusteri.id) ? aktifMusteri.id : (tamTel ? ('tel_' + tamTel) : ('m_' + Date.now()));
-
-      db.collection('ustalar').doc(aktifLisansKodu).collection('musteriler').doc(musteriDocId).set({
-        ad: duzenliAd, tel: tamTel, dogum: document.getElementById('custBirth').value,
-        sonraki: sonraki, sonZiyaret: tarih, usta: salonAyarlari.ustaAdi, guncellemeZamani: firebase.firestore.FieldValue.serverTimestamp()
-      }, { merge: true });
-
-      rows.forEach(r => {
-        let fVal = r.querySelector('.service-formula') ? r.querySelector('.service-formula').value.trim() : "";
-        let nVal = r.querySelector('.service-notes') ? r.querySelector('.service-notes').value.trim() : "";
-        let uVal = guvenliSayiAl(r.querySelector('.service-price') ? r.querySelector('.service-price').value : 0);
-        db.collection('ustalar').doc(aktifLisansKodu).collection('gecmis').add({
-          musteriId: musteriDocId, isHizliFis: false, tel: tamTel, musteriAdi: duzenliAd, tarih: tarih,
-          hizmet: r.querySelector('.service-name').value, formul: fVal, not: nVal, odemeTuru: 'nakit',
-          usta: salonAyarlari.ustaAdi, ucret: uVal, zaman: firebase.firestore.FieldValue.serverTimestamp()
-        });
-      });
-
-      alert("İşlem buluta kaydedildi! ☁️");
-      if (confirm("Yeni müşteriye geçmek için masa temizlensin mi?")) yeniIslemTemizle();
-    }
-
-    function gecmisListesiniGuncelle() {
-      const container = document.getElementById('historyListContainer'), title = document.getElementById('historyCustName'), d = SOZLUK[aktifDil] || SOZLUK.tr;
-      if (!container) return;
-      if (!aktifMusteri) {
-        if (title) title.innerText = d.noCustHistory || "Müşteri seçilmedi";
-        container.innerHTML = `<div class="text-slate-400 p-4 text-center text-xs">${d.noCustHistory || "Müşteri seçilmedi."}</div>`;
-        return;
-      }
-      if (title) title.innerText = turkceHitapIsimDuzenle(aktifMusteri.ad) + " - " + d.history;
-      const islemler = gecmisIslemler.filter(g => {
-        if (g.isHizliFis === true || g.musteriAdi === 'Hızlı Kasa İşlemi') return false;
-        if (g.musteriId && g.musteriId === aktifMusteri.id) return true;
-        if (aktifMusteri.tel && g.tel && g.tel === aktifMusteri.tel) return true;
-        if (!g.tel && !aktifMusteri.tel && turkceNormalize(g.musteriAdi) === turkceNormalize(aktifMusteri.ad)) return true;
-        return false;
-      });
-
-      if (islemler.length === 0) {
-        container.innerHTML = `<div class="text-slate-400 p-4 text-center text-xs">${d.noHistoryRecords || "Geçmiş işlem bulunamadı."}</div>`;
-        return;
-      }
-
-      let gruplar = {};
-      islemler.forEach((g, idx) => { if (!gruplar[g.tarih]) gruplar[g.tarih] = []; gruplar[g.tarih].push({ ...g, idx }); });
-      let html = "";
-      for (const [tarih, list] of Object.entries(gruplar)) {
-        html += `
-          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
-              <span class="text-amber-400 font-bold text-xs">📅 ${tarih}</span>
-              <button onclick="secilenGunuMasayaAktar('${tarih}')" class="text-[10px] bg-amber-500/15 text-amber-300 px-2 py-0.5 rounded font-bold">Bu Günü Al</button>
-            </div>
-            ${list.map(it => `
-              <div class="text-[11px] space-y-1 bg-slate-900 p-2 rounded-lg border border-slate-800 relative">
-                <div class="flex justify-between items-center font-bold text-white">
-                  <span>${it.hizmet}</span>
-                  <div class="flex items-center space-x-1.5">
-                    <span class="text-amber-400">${it.ucret || 0} TL</span>
-                    <button onclick="gecmisIslemSil('${it.id}')" class="text-slate-500 hover:text-red-400 text-xs px-1" title="Sil"><i class="fa-solid fa-trash"></i></button>
-                  </div>
-                </div>
-                ${it.formul ? `<div class="text-slate-200 leading-relaxed bg-slate-950 p-1.5 rounded border border-slate-800"><b class="text-amber-400">Formül:</b> ${it.formul}</div>` : ''}
-                ${it.not ? `<div class="text-slate-400 leading-relaxed"><b class="text-slate-500">Not:</b> ${it.not}</div>` : ''}
-              </div>`).join('')}
-          </div>`;
-      }
-      container.innerHTML = html;
-    }
-
-    function gecmisIslemSil(docId) {
-      if (!confirm("Bu geçmiş işlemi silmek istediğinize emin misiniz? Kasanızdan da otomatik düşülecektir.")) return;
-      db.collection('ustalar').doc(aktifLisansKodu).collection('gecmis').doc(docId).delete().then(() => {
-        gecmisListesiniGuncelle(); gunlukCiroGuncelle();
-      });
-    }
-
-    function sonFormuluMasayaAktar() {
-      if (!aktifMusteri) { alert("Önce müşteri seçin."); return; }
-      const islemler = gecmisIslemler.filter(g => (!g.isHizliFis) && ((g.musteriId && g.musteriId === aktifMusteri.id) || (aktifMusteri.tel && g.tel === aktifMusteri.tel)));
-      if (islemler.length === 0) { alert("Geçmiş formül bulunamadı."); return; }
-      secilenGunuMasayaAktar(islemler[0].tarih);
-    }
-
-    function secilenGunuMasayaAktar(tarih) {
-      if (!aktifMusteri) return;
-      const son = gecmisIslemler.filter(g => g.tarih === tarih && (!g.isHizliFis));
-      document.getElementById('serviceRowsContainer').innerHTML = "";
-      son.forEach(it => tabloyaSatirEkle(it.hizmet, it.formul, it.not, it.ucret));
-      sekmeDegistir('terminal');
-    }
-
-    /* BİLDİRİM VE HATIRLATMA MERKEZİ */
-    function canliBildirimMerkeziniGuncelle() {
-      const d = SOZLUK[aktifDil] || SOZLUK.tr, bugun = new Date();
-      const gunAy = bugun.getDate().toString().padStart(2, '0') + '.' + (bugun.getMonth() + 1).toString().padStart(2, '0');
-      const bugunMs = new Date(bugun.getFullYear(), bugun.getMonth(), bugun.getDate()).getTime();
-
-      const doganlar = musteriler.filter(m => m.dogum && m.dogum.startsWith(gunAy));
-      const bdayB = document.getElementById('bannerDoğumGünü'), bdayL = document.getElementById('bannerBdayList');
-      if (doganlar.length > 0) {
-        if (bdayB) bdayB.classList.remove('hidden');
-        if (document.getElementById('bannerBdayTextCount')) document.getElementById('bannerBdayTextCount').innerText = `${doganlar.length}`;
-        if (bdayL) bdayL.innerHTML = doganlar.map(m => `
-          <div class="bg-slate-900 p-2 rounded-xl border border-slate-800 flex justify-between items-center transition">
-            <div class="cursor-pointer" onclick="sihirbazBaslatMusteriyle('${m.ad}', '${m.tel || ''}')">
-              <span class="font-bold text-white text-xs hover:text-amber-400">${turkceHitapIsimDuzenle(m.ad)}</span>
-              <span class="text-[9px] text-amber-400 font-mono ml-2">${m.tel || d.noPhone}</span>
-            </div>
-            <div class="flex items-center space-x-1">
-              <button onclick="sihirbazBaslatMusteriyle('${m.ad}', '${m.tel || ''}')" class="bg-amber-500 text-slate-950 font-bold px-2 py-0.5 rounded text-[10px]">📅 ${d.book}</button>
-              <button onclick="dogumGunuMesajiGonder('${m.ad}', '${m.tel || ''}')" class="bg-slate-800 text-amber-300 font-bold px-2 py-0.5 rounded text-[10px] flex items-center space-x-1"><i class="fa-brands fa-whatsapp text-emerald-400"></i><span>${d.celebrate}</span></button>
-            </div>
-          </div>`).join('');
-      } else if (bdayB) bdayB.classList.add('hidden');
-
-      const remindB = document.getElementById('bannerHatırlatma'), remindL = document.getElementById('bannerRemindList'), hatirlat = [];
-      musteriler.forEach(m => {
-        if (!m.sonraki) return;
-        let p = akilliTarihDuzelt(m.sonraki).split('.');
-        if (p.length === 3) {
-          let fark = Math.ceil((new Date(parseInt(p[2]), parseInt(p[1]) - 1, parseInt(p[0])).getTime() - bugunMs) / 86400000);
-          if (fark >= 0 && fark <= 3) hatirlat.push({ ...m, kalanGun: fark, planTarih: akilliTarihDuzelt(m.sonraki) });
-        }
-      });
-
-      if (hatirlat.length > 0) {
-        if (remindB) remindB.classList.remove('hidden');
-        if (document.getElementById('bannerRemindTextCount')) document.getElementById('bannerRemindTextCount').innerText = `${hatirlat.length}`;
-        if (remindL) remindL.innerHTML = hatirlat.map(m => `
-          <div class="bg-slate-900 p-2 rounded-xl border border-slate-800 flex justify-between items-center transition">
-            <div class="cursor-pointer flex-1 mr-2" onclick="sihirbazBaslatMusteriyle('${m.ad}', '${m.tel || ''}')">
-              <span class="font-bold text-white text-xs hover:text-amber-400">${turkceHitapIsimDuzenle(m.ad)}</span>
-              <div class="text-[9px] text-amber-400 font-medium">${m.planTarih} (${m.kalanGun === 0 ? d.today : (m.kalanGun === 1 ? d.tomorrow : m.kalanGun + ' ' + d.daysLeft)})</div>
-            </div>
-            <div class="flex items-center space-x-1">
-              <button onclick="sihirbazBaslatMusteriyle('${m.ad}', '${m.tel || ''}')" class="bg-slate-800 text-amber-300 font-bold px-2 py-0.5 rounded text-[10px]">📅</button>
-              <button onclick="takipMesajiGonder('${m.ad}', '${m.tel || ''}', '${m.planTarih}')" class="bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded text-[10px] flex items-center space-x-1"><i class="fa-brands fa-whatsapp text-xs"></i><span>${d.remind}</span></button>
-            </div>
-          </div>`).join('');
-      } else if (remindB) remindB.classList.add('hidden');
-
-      const lostB = document.getElementById('bannerKayipMusteri'), lostL = document.getElementById('bannerLostList'), esik = parseInt(salonAyarlari.kayipGun) || 60, kayip = [];
-      musteriler.forEach(m => {
-        let k = m.id || m.tel; if (gizlenenKayipMusteriler.includes(k)) return;
-        let sTarih = m.sonZiyaret || m.sonraki;
-        if (!sTarih) { let cg = gecmisIslemler.filter(g => (g.musteriId && g.musteriId === m.id) || (m.tel && g.tel === m.tel)); if (cg.length > 0) sTarih = cg[0].tarih; }
-        if (!sTarih) return;
-        let dObj = tarihStringToDate(sTarih);
-        if (dObj) {
-          let gGun = Math.floor((bugunMs - dObj.getTime()) / 86400000);
-          if (gGun >= esik) kayip.push({ ...m, gGun, sonIslemTarihi: akilliTarihDuzelt(sTarih) });
-        }
-      });
-
-      if (kayip.length > 0) {
-        if (lostB) lostB.classList.remove('hidden');
-        if (document.getElementById('bannerLostTextCount')) document.getElementById('bannerLostTextCount').innerText = `${kayip.length}`;
-        if (lostL) lostL.innerHTML = kayip.map(m => `
-          <div class="bg-slate-900 p-2 rounded-xl border border-slate-800 flex justify-between items-center transition">
-            <div class="cursor-pointer flex-1 mr-2" onclick="sihirbazBaslatMusteriyle('${m.ad}', '${m.tel || ''}')">
-              <span class="font-bold text-white text-xs hover:text-amber-300">${turkceHitapIsimDuzenle(m.ad)}</span>
-              <div class="text-[9px] text-amber-400 font-medium">Son: <b>${m.sonIslemTarihi}</b> (${m.gGun} Gün)</div>
-            </div>
-            <div class="flex items-center space-x-1">
-              <button onclick="kayipMusteriGeriCagirMesaji('${m.ad}', '${m.tel || ''}')" class="bg-slate-800 text-amber-300 font-bold px-2 py-1 rounded-lg text-[10px] flex items-center space-x-1"><i class="fa-brands fa-whatsapp text-emerald-400"></i><span>Davet</span></button>
-              <button onclick="kayipMusteriGizle('${m.id || m.tel}')" class="p-1 bg-slate-950 text-slate-400 rounded-lg text-xs">✕</button>
-            </div>
-          </div>`).join('');
-      } else if (lostB) lostB.classList.add('hidden');
-
-      const total = doganlar.length + hatirlat.length + kayip.length;
-      const bTot = document.getElementById('badgeTotalReminders'), eMsg = document.getElementById('emptyRemindersMsg');
-      if (bTot) { bTot.innerText = total; bTot.classList.toggle('hidden', total === 0); }
-      if (eMsg) eMsg.classList.toggle('hidden', total > 0);
-    }
-
-    function kayipMusteriGizle(id) {
-      if (!gizlenenKayipMusteriler.includes(id)) {
-        gizlenenKayipMusteriler.push(id);
-        sessionStorage.setItem('lumio_gizlenen_kayip_' + aktifLisansKodu, JSON.stringify(gizlenenKayipMusteriler));
-        canliBildirimMerkeziniGuncelle();
-      }
-    }
-
-    function kayipMusteriGeriCagirMesaji(ad, tel) {
-      if (!tel) tel = prompt(`Sayın ${turkceHitapIsimDuzenle(ad)} için WhatsApp no giriniz:`);
-      if (!tel) return;
-      const hitap = turkceHitapIsimDuzenle(ad), u = salonAyarlari.ustaAdi || "Server YILMAZ";
-      const unvan = salonAyarlari.unvan || (SOZLUK[aktifDil] || SOZLUK.tr).unvanMap.kuafor;
-      let sAdi = (salonAyarlari.salonAdi && salonAyarlari.salonAdi.trim()) ? salonAyarlari.salonAdi : `${unvan} ${u}`;
-      const msg = aktifDilSablonlariniAl(aktifDil).msg7.replace(/{MUSTERI_ADI}/g, hitap).replace(/{SALON_ADI}/g, sAdi).replace(/{USTA_ADI}/g, u).replace(/{UNVAN}/g, unvan);
-      anindaWhatsAppAc(tel, msg);
-    }
-
-    function sihirbazBaslatMusteriyle(ad, tel) { sihirbazBaslat(); shMusteriSecildi(ad, tel); }
-
-    function dogumGunuMesajiGonder(ad, tel) {
-      if (!tel) { alert("Müşterinin kayıtlı telefonu yok."); return; }
-      const hitap = turkceHitapIsimDuzenle(ad), u = salonAyarlari.ustaAdi || "Server YILMAZ";
-      const unvan = salonAyarlari.unvan || (SOZLUK[aktifDil] || SOZLUK.tr).unvanMap.kuafor;
-      let sAdi = (salonAyarlari.salonAdi && salonAyarlari.salonAdi.trim()) ? salonAyarlari.salonAdi : `${unvan} ${u}`;
-      const msg = aktifDilSablonlariniAl(aktifDil).msg2.replace(/{MUSTERI_ADI}/g, hitap).replace(/{SALON_ADI}/g, sAdi).replace(/{USTA_ADI}/g, u).replace(/{UNVAN}/g, unvan);
-      anindaWhatsAppAc(tel, msg);
-    }
-
-    function takipMesajiGonder(ad, tel, tarih) {
-      if (!tel) { alert("Müşterinin telefon numarası kayıtlı değil."); return; }
-      const hitap = turkceHitapIsimDuzenle(ad), u = salonAyarlari.ustaAdi || "Server YILMAZ";
-      const unvan = salonAyarlari.unvan || (SOZLUK[aktifDil] || SOZLUK.tr).unvanMap.kuafor;
-      let sAdi = (salonAyarlari.salonAdi && salonAyarlari.salonAdi.trim()) ? salonAyarlari.salonAdi : `${unvan} ${u}`;
-      const msg = aktifDilSablonlariniAl(aktifDil).msg1.replace(/{MUSTERI_ADI}/g, hitap).replace(/{TARIH}/g, tarih).replace(/{SALON_ADI}/g, sAdi).replace(/{USTA_ADI}/g, u).replace(/{UNVAN}/g, unvan);
-      anindaWhatsAppAc(tel, msg);
-    }
-
-    function canliMusteriAra(query) {
-      const res = document.getElementById('searchResults');
-      if (!query || query.trim().length < 1) { if (res) res.classList.add('hidden'); let sil = document.querySelector('.id-sil-btn'); if (sil) sil.classList.add('hidden'); return; }
-      const qN = turkceNormalize(query), qT = query.replace(/\D/g, '');
-      const bul = musteriler.filter(m => turkceNormalize(m.ad).includes(qN) || (qT.length > 1 && (m.tel || '').replace(/\D/g, '').includes(qT)));
-      if (bul.length === 0) {
-        res.innerHTML = `<div class="p-2.5 text-slate-400 text-xs italic text-center">'${query}' kayıtlı değil.<br><span class="text-amber-400 font-bold">Yeni müşteri olarak kaydedebilirsiniz.</span></div>`;
-        res.classList.remove('hidden');
-      } else {
-        res.innerHTML = bul.map(m => `<div onclick="musteriSec('${m.id}')" class="p-2.5 hover:bg-slate-800 cursor-pointer flex justify-between items-center transition border-b border-slate-800"><div><span class="font-bold text-white block text-xs">${turkceHitapIsimDuzenle(m.ad)}</span><span class="text-[10px] text-slate-400 font-mono">${m.tel || 'Numarasız'}</span></div><span class="text-[9px] text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded">Seç ➔</span></div>`).join('');
-        res.classList.remove('hidden');
-      }
-    }
-
-    function musteriSec(id) {
-      aktifMusteri = musteriler.find(m => m.id == id); aramaKutusunuKapat(); if (!aktifMusteri) return;
-      document.getElementById('custSearch').value = turkceHitapIsimDuzenle(aktifMusteri.ad);
-      let t = aktifMusteri.tel || "";
-      if (t.startsWith('90')) { document.getElementById('custCountryCode').value = "+90"; document.getElementById('custPhone').value = t.substring(2); }
-      else if (t.length > 5) { document.getElementById('custCountryCode').value = "+" + t.substring(0, 2); document.getElementById('custPhone').value = t.substring(2); }
-      else { document.getElementById('custCountryCode').value = "+90"; document.getElementById('custPhone').value = t; }
-
-      document.getElementById('custBirth').value = aktifMusteri.dogum || "";
-      document.getElementById('visitNext').value = akilliTarihDuzelt(aktifMusteri.sonraki || "");
-      let silBtn = document.querySelector('.id-sil-btn'); if (silBtn) silBtn.classList.remove('hidden');
-
-      const d = SOZLUK[aktifDil] || SOZLUK.tr;
-      const custIslemler = gecmisIslemler.filter(g => (!g.isHizliFis) && ((g.musteriId && g.musteriId === aktifMusteri.id) || (aktifMusteri.tel && g.tel === aktifMusteri.tel)));
-      let c = custIslemler.length, tier = "🥉 " + d.newCustStatus;
-      if (c >= 3 && c <= 5) tier = "🥈 Düzenli Müşteri"; else if (c >= 6) tier = "👑 VIP Sadık Müşteri";
-      if (document.getElementById('custLoyaltyTier')) document.getElementById('custLoyaltyTier').innerText = tier;
-      if (document.getElementById('custBadgeVisits')) document.getElementById('custBadgeVisits').innerText = `${c} ${d.visits}`;
-      gecmisListesiniGuncelle();
-    }
-
-    function aramaKutusunuKapat() { let res = document.getElementById('searchResults'); if (res) res.classList.add('hidden'); }
-
-    function yeniIslemTemizle() {
-      aktifMusteri = null;
-      if (document.getElementById('custSearch')) document.getElementById('custSearch').value = "";
-      if (document.getElementById('custCountryCode')) document.getElementById('custCountryCode').value = "+90";
-      if (document.getElementById('custPhone')) document.getElementById('custPhone').value = "";
-      if (document.getElementById('custBirth')) document.getElementById('custBirth').value = "";
-      if (document.getElementById('visitNext')) document.getElementById('visitNext').value = "";
-      if (document.getElementById('visitDate')) document.getElementById('visitDate').value = bugununTarihiStr();
-      if (document.getElementById('visitTime')) document.getElementById('visitTime').value = "14:00";
-      let silBtn = document.querySelector('.id-sil-btn'); if (silBtn) silBtn.classList.add('hidden');
-      const d = SOZLUK[aktifDil] || SOZLUK.tr;
-      if (document.getElementById('custLoyaltyTier')) document.getElementById('custLoyaltyTier').innerText = "🥉 " + d.newCustStatus;
-      if (document.getElementById('custBadgeVisits')) document.getElementById('custBadgeVisits').innerText = `0 ${d.visits}`;
-      let sc = document.getElementById('serviceRowsContainer'); if (sc) sc.innerHTML = "";
-      toplamHesapla(); gecmisListesiniGuncelle();
-    }
-
-    function musteriRehberiSayaciGuncelle() {
-      const top = musteriler ? musteriler.length : 0, d = SOZLUK[aktifDil] || SOZLUK.tr;
-      const bTxt = document.getElementById('lblCustDirectoryCount'); if (bTxt) bTxt.innerText = `${top} ${d.custDirectoryBtn || 'Müşteri'}`;
-      const bdg = document.getElementById('custDirectoryTotalBadge'); if (bdg) bdg.innerText = `${top} ${d.custDirectoryBtn || 'Müşteri'}`;
-    }
-
-    function musteriRehberiModalAc() {
-      document.getElementById('modalMusteriRehberi').classList.remove('hidden');
-      modalGeriTusuKaydi('modalMusteriRehberi');
-      document.getElementById('custDirectorySearchInput').value = "";
-      musteriRehberListesiniCiz(musteriler);
-      setTimeout(() => document.getElementById('custDirectorySearchInput').focus(), 150);
-    }
-    function musteriRehberiModalKapat() { document.getElementById('modalMusteriRehberi').classList.add('hidden'); }
-
-    function musteriRehberindeAra(q) {
-      if (!q || q.trim().length === 0) { musteriRehberListesiniCiz(musteriler); return; }
-      const qN = turkceNormalize(q), qT = q.replace(/\D/g, '');
-      const bul = musteriler.filter(m => turkceNormalize(m.ad).includes(qN) || (qT.length > 1 && (m.tel || '').replace(/\D/g, '').includes(qT)));
-      musteriRehberListesiniCiz(bul);
-    }
-
-    function musteriRehberListesiniCiz(liste) {
-      const c = document.getElementById('custDirectoryList');
-      if (!c) return;
-      if (!liste || liste.length === 0) { c.innerHTML = `<div class="p-4 text-center text-slate-400 text-xs italic">Kayıtlı müşteri bulunamadı.</div>`; return; }
-      const lim = Math.min(liste.length, 300);
-      let html = "";
-      for (let i = 0; i < lim; i++) {
-        let m = liste[i], dAd = turkceHitapIsimDuzenle(m.ad), tel = m.tel ? (m.tel.startsWith('90') ? '+' + m.tel : m.tel) : 'Numarasız';
-        html += `
-          <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 flex justify-between items-center text-xs hover:border-amber-500/30 transition gap-2">
-            <div class="cursor-pointer flex-1 min-w-0" onclick="musteriSecRehberden('${m.id}')">
-              <span class="font-bold text-white block text-xs truncate">${dAd}</span>
-              <span class="text-[10px] text-amber-400 font-mono">${tel}</span>
-            </div>
-            <div class="flex items-center space-x-1.5 shrink-0">
-              <button onclick="musteriDuzenleModalAc('${m.id}')" class="bg-slate-900 hover:bg-slate-800 text-amber-300 font-bold px-2 py-1 rounded-lg text-[10px] border border-slate-700"><i class="fa-solid fa-pen mr-1"></i> Düzenle</button>
-              <button onclick="musteriSecRehberden('${m.id}')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-2.5 py-1 rounded-lg text-[10px]">Seç ➔</button>
-            </div>
-          </div>`;
-      }
-      c.innerHTML = html;
-    }
-
-    function musteriSecRehberden(id) { musteriSec(id); musteriRehberiModalKapat(); }
-
-    function musteriDuzenleModalAc(id) {
-      const m = musteriler.find(x => x.id === id); if (!m) return;
-      document.getElementById('editCustId').value = m.id;
-      document.getElementById('editCustName').value = m.ad || "";
-      let tel = m.tel || ""; if (tel.startsWith('90')) tel = tel.substring(2);
-      document.getElementById('editCustPhone').value = tel;
-      document.getElementById('editCustBirth').value = m.dogum || "";
-      document.getElementById('modalMusteriDuzenle').classList.remove('hidden');
-      modalGeriTusuKaydi('modalMusteriDuzenle');
-    }
-    function musteriDuzenleKapat() { document.getElementById('modalMusteriDuzenle').classList.add('hidden'); }
-
-    function musteriDuzenleKaydet() {
-      const id = document.getElementById('editCustId').value, ad = document.getElementById('editCustName').value.trim();
-      const telHam = document.getElementById('editCustPhone').value.trim(), dogum = document.getElementById('editCustBirth').value.trim();
-      if (!ad) { alert("Müşteri adı boş bırakılamaz!"); return; }
-      let tel = telHam.replace(/\D/g, ''); if (tel.startsWith('0')) tel = tel.substring(1); if (tel.length === 10) tel = '90' + tel;
-      const duzenli = turkceHitapIsimDuzenle(ad);
-
-      db.collection('ustalar').doc(aktifLisansKodu).collection('musteriler').doc(id).update({
-        ad: duzenli, tel: tel, dogum: dogum, guncellemeZamani: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        alert("✅ Müşteri güncellendi!"); musteriDuzenleKapat();
-        if (aktifMusteri && aktifMusteri.id === id) { aktifMusteri.ad = duzenli; aktifMusteri.tel = tel; aktifMusteri.dogum = dogum; musteriSec(id); }
-      }).catch(err => alert("Hata: " + err.message));
-    }
-
-    function yasalSozlesmeModaliAc() { document.getElementById('modalYasalSozlesme').classList.remove('hidden'); modalGeriTusuKaydi('modalYasalSozlesme'); }
-    function yasalSozlesmeModaliKapat() { document.getElementById('modalYasalSozlesme').classList.add('hidden'); }
-
-    function musteriSilOnayli() {
-      if (!aktifMusteri) return;
-      if (confirm(`'${aktifMusteri.ad}' rehberden silinsin mi? (Geçmiş cironuz korunur.)`)) {
-        db.collection('ustalar').doc(aktifLisansKodu).collection('musteriler').doc(aktifMusteri.id).delete().then(() => {
-          alert("Müşteri silindi."); yeniIslemTemizle();
-        });
-      }
-    }
-
-    function hizliRandevuEkle(g) {
-      const d = new Date(); d.setDate(d.getDate() + g);
-      document.getElementById('visitNext').value = d.getDate().toString().padStart(2, '0') + '.' + (d.getMonth() + 1).toString().padStart(2, '0') + '.' + d.getFullYear();
-    }
-
-    function musteriRehberiniIndir() {
-      if (!musteriler || musteriler.length === 0) { alert("Kayıtlı müşteri bulunamadı."); return; }
-      let csv = "\uFEFFMüşteri Adı;Telefon;Doğum Tarihi;Sonraki Randevu;Toplam Ziyaret\n";
-      musteriler.forEach(m => {
-        let vc = gecmisIslemler.filter(g => (g.musteriId && g.musteriId === m.id) || (m.tel && g.tel === m.tel)).length;
-        csv += `${(m.ad || '').replace(/;/g, ' ')};${m.tel || ''};${m.dogum || ''};${m.sonraki || ''};${vc}\n`;
-      });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
-      link.download = `LUMIO_Rehber_${bugununTarihiStr()}.csv`;
-      document.body.appendChild(link); link.click(); document.body.removeChild(link);
-      alert(`✅ Müşteri rehberi telefonunuza indirildi (${musteriler.length} Müşteri).`);
-    }
-
-    /* GİRİŞ VE SÖZLEŞME ONAYI */
+    /* ==========================================================================
+       GİRİŞ VE ULUSLARARASI KÜRESEL LİSANS BAĞLAYICI (MÜŞTERİLERİ GETİREN KOD)
+       ========================================================================== */
     function lisansKoduKaydet() {
       const val = document.getElementById('setupLicenseInput').value.trim();
       const pinVal = document.getElementById('setupPinInput').value.trim();
@@ -2695,55 +2223,67 @@
       if (!val) { alert("Lütfen telefon numaranızı girin."); return; }
       if (!pinVal || pinVal.length < 4) { alert("Lütfen usta şifrenizi girin."); return; }
       if (chkYasal && !chkYasal.checked) {
-        alert("Lütfen devam etmeden önce Kullanıcı Sözleşmesi ve KVKK Aydınlatma Metni'ni onaylayınız.");
+        alert("Lütfen Kullanıcı Sözleşmesi ve KVKK / Aydınlatma Metni'ni onaylayınız.");
         return;
       }
 
+      // Uluslararası ham numara temizliği
       let temizKod = val.replace(/\D/g, '');
-      if (temizKod.startsWith('0')) temizKod = temizKod.substring(1);
-      if (temizKod.length === 10) temizKod = '90' + temizKod;
+      if (temizKod.startsWith('00')) temizKod = temizKod.substring(2);
 
       const btn = document.getElementById('btnSetupSubmit');
       btn.innerText = "Doğrulanıyor..."; btn.disabled = true;
 
+      // Hem ham girilen kodla hem olası yerel varyasyonla uluslararası arama
       db.collection('sistem').doc('lisanslar').collection('aktifler').doc(temizKod).get().then(doc => {
         btn.innerText = "GİRİŞ YAP VE TERMİNALİ AÇ ✨"; btn.disabled = false;
-        if (!doc.exists) { 
-          document.getElementById('setupContactArea').classList.remove('hidden'); 
-          document.getElementById('setupErrorMsg').innerText = "❌ Tanımsız Hesap! Bu telefon numarasına ait bir lisans bulunamadı."; 
-          return; 
+        
+        if (!doc.exists) {
+          // Eğer bulunamadıysa, Türkiye sıfırsız halini yedek olarak dene (Örn: 0532 yerine 532)
+          let altDene = temizKod.startsWith('0') ? temizKod.substring(1) : ('0' + temizKod);
+          db.collection('sistem').doc('lisanslar').collection('aktifler').doc(altDene).get().then(doc2 => {
+            if (doc2.exists) {
+              islemiTamamla(doc2.id, doc2.data());
+            } else {
+              document.getElementById('setupContactArea').classList.remove('hidden'); 
+              document.getElementById('setupErrorMsg').innerText = "❌ Tanımsız Hesap! Bu telefon numarasına ait bir lisans bulunamadı.";
+            }
+          });
+          return;
         }
 
-        const data = doc.data();
-        let simdiMs = Date.now(), bitisMs = data.bitisMs || (simdiMs + 864000000);
-        if (data.pin && data.pin.toString() !== pinVal.toString()) { 
-          document.getElementById('setupContactArea').classList.remove('hidden'); 
-          document.getElementById('setupErrorMsg').innerText = "❌ Hatalı Şifre! Lütfen yöneticinizin verdiği şifreyi girin."; 
-          return; 
-        }
-        if (data.durum !== 'AKTIF' || simdiMs > bitisMs) { 
-          document.getElementById('setupContactArea').classList.remove('hidden'); 
-          document.getElementById('setupErrorMsg').innerText = "🔒 Bu lisans askıya alınmıştır veya kullanım süresi dolmuştur."; 
-          return; 
-        }
+        islemiTamamla(doc.id, doc.data());
 
-        const auditLog = {
-          sozlesmeKodu: "LUMIO-SOZLESME-V1-2026",
-          onaylandi: true,
-          onayTarihi: bugununTarihiStr(),
-          onaySaati: new Date().toLocaleTimeString('tr-TR'),
-          zamanMs: simdiMs,
-          cihazBilgisi: navigator.userAgent || "Bilinmeyen Cihaz",
-          kabulEdilenMaddeler: ["Kullanici_Lisans_Sozlesmesi_EULA", "KVKK_Aydinlatma_Metni", "Yapay_Zeka_Gorsel_Acik_Riza"]
-        };
+        function islemiTamamla(hedefId, data) {
+          let simdiMs = Date.now(), bitisMs = data.bitisMs || (simdiMs + 864000000);
+          if (data.pin && data.pin.toString() !== pinVal.toString()) { 
+            document.getElementById('setupContactArea').classList.remove('hidden'); 
+            document.getElementById('setupErrorMsg').innerText = "❌ Hatalı Şifre! Lütfen yöneticinizin verdiği şifreyi girin."; 
+            return; 
+          }
+          if (data.durum !== 'AKTIF' || simdiMs > bitisMs) { 
+            document.getElementById('setupContactArea').classList.remove('hidden'); 
+            document.getElementById('setupErrorMsg').innerText = "🔒 Bu lisans askıya alınmıştır veya kullanım süresi dolmuştur."; 
+            return; 
+          }
 
-        db.collection('sistem').doc('lisanslar').collection('aktifler').doc(temizKod).set({ yasalOnay: auditLog }, { merge: true });
-        aktifLisansKodu = temizKod;
-        localStorage.setItem('hair_lisans_kodu', aktifLisansKodu);
-        localStorage.setItem('lumio_sozlesme_onayli_' + aktifLisansKodu, 'EVET');
-        document.getElementById('licenseSetupModal').classList.add('hidden');
-        bulutVerileriniBaslat();
-        alert(`Hoş geldiniz Sayın ${data.ad || 'Usta'}! LUMIO terminaliniz açıldı.`);
+          const auditLog = {
+            sozlesmeKodu: "LUMIO-SOZLESME-GLOBAL-V1",
+            onaylandi: true,
+            onayTarihi: bugununTarihiStr(),
+            onaySaati: new Date().toLocaleTimeString(),
+            zamanMs: simdiMs,
+            cihazBilgisi: navigator.userAgent || "Bilinmeyen Cihaz"
+          };
+
+          db.collection('sistem').doc('lisanslar').collection('aktifler').doc(hedefId).set({ yasalOnay: auditLog }, { merge: true });
+          aktifLisansKodu = hedefId;
+          localStorage.setItem('hair_lisans_kodu', aktifLisansKodu);
+          localStorage.setItem('lumio_sozlesme_onayli_' + aktifLisansKodu, 'EVET');
+          document.getElementById('licenseSetupModal').classList.add('hidden');
+          bulutVerileriniBaslat();
+          alert(`Hoş geldiniz Sayın ${data.ad || 'Usta'}! LUMIO terminaliniz açıldı.`);
+        }
       }).catch(err => { 
         btn.innerText = "GİRİŞ YAP VE TERMİNALİ AÇ ✨"; btn.disabled = false; 
         alert("Bağlantı hatası: " + err.message); 
@@ -2754,32 +2294,39 @@
       anindaWhatsAppAc("905354049392", "Merhaba, LUMIO uygulamasını kullanmak için lisans satın almak / yenilemek istiyorum.");
     }
 
-    /* MÜŞTERİLERİ ANINDA GERİ GETİREN GARANTİLİ ÇİFT HATLI BULUT BAŞLATICI */
+    /* BULUT VERİTABANI: MÜŞTERİLERİ ANINDA DÖKEN MOTOR (ESKİ KAYITLARI BULUR) */
     function bulutVerileriniBaslat() {
-      if (!aktifLisansKodu) { document.getElementById('licenseSetupModal').classList.remove('hidden'); return; }
+      if (!aktifLisansKodu) { 
+        document.getElementById('licenseSetupModal').classList.remove('hidden'); 
+        return; 
+      }
 
       let sozlesmeOnay = localStorage.getItem('lumio_sozlesme_onayli_' + aktifLisansKodu);
       if (!sozlesmeOnay) {
         document.getElementById('licenseSetupModal').classList.remove('hidden');
-        document.getElementById('setupLicenseInput').value = aktifLisansKodu.startsWith('90') ? aktifLisansKodu.substring(2) : aktifLisansKodu;
+        document.getElementById('setupLicenseInput').value = aktifLisansKodu;
         return;
       }
-
-      let saltKod = aktifLisansKodu.replace(/\D/g, '');
-      if (saltKod.startsWith('0')) saltKod = saltKod.substring(1);
-      let kod90 = saltKod.startsWith('90') ? saltKod : ('90' + saltKod);
 
       ayarlariUygula();
       ajandaTarihSeridiOlustur();
       ajandaSaatleriniCiz();
 
-      // Müşterileri hem 90'lı hem 90'sız koleksiyonda bulan akıllı dinleyici
-      function musterileriDinle(hedefKod) {
+      // Müşterileri tüm yollardan arayıp eksiksiz getiren dinleyici
+      function musterileriDinle(hedefDocId) {
         if (unsubscribeMusteriler) unsubscribeMusteriler();
-        unsubscribeMusteriler = db.collection('ustalar').doc(hedefKod).collection('musteriler').onSnapshot((snapshot) => {
-          if (snapshot.empty && hedefKod === kod90) {
-            musterileriDinle(saltKod.startsWith('90') ? saltKod.substring(2) : saltKod);
-            return;
+        unsubscribeMusteriler = db.collection('ustalar').doc(hedefDocId).collection('musteriler').onSnapshot((snapshot) => {
+          if (snapshot.empty) {
+            // Eğer müşteriler o ID'de yoksa eski '90' ile başlayan Türkiye varyasyonlarına bak
+            let alternatif = hedefDocId.startsWith('90') ? hedefDocId.substring(2) : ('90' + hedefDocId);
+            db.collection('ustalar').doc(alternatif).collection('musteriler').limit(1).get().then(altSnap => {
+              if (!altSnap.empty) {
+                aktifLisansKodu = alternatif;
+                localStorage.setItem('hair_lisans_kodu', alternatif);
+                musterileriDinle(alternatif); // Doğru veritabanını bulduk, orayı dinle
+                return;
+              }
+            });
           }
           musteriler = [];
           snapshot.forEach(d => musteriler.push({ id: d.id, ...d.data() }));
@@ -2791,30 +2338,23 @@
 
       musterileriDinle(aktifLisansKodu);
 
-      // Lisans Kontrolü
+      // Lisans Durumu Kontrolü
       if (unsubscribeLisans) unsubscribeLisans();
-      unsubscribeLisans = db.collection('sistem').doc('lisanslar').collection('aktifler').doc(kod90).onSnapshot((doc) => {
-        if (!doc.exists) {
-          db.collection('sistem').doc('lisanslar').collection('aktifler').doc(saltKod).get().then(altDoc => {
-            if (altDoc.exists) lisansVerisiIsle(altDoc.data());
-          });
-          return;
+      unsubscribeLisans = db.collection('sistem').doc('lisanslar').collection('aktifler').doc(aktifLisansKodu).onSnapshot((doc) => {
+        if (doc.exists) {
+          const v = doc.data();
+          let simdiMs = Date.now(), bitisMs = v.bitisMs || (simdiMs + 864000000);
+          let kalanGun = Math.ceil((bitisMs - simdiMs) / 86400000);
+          lisansAktifMi = (v.durum === 'AKTIF') && (simdiMs <= bitisMs);
+          ustaLisansUyariKontrol(kalanGun);
+          if (!lisansAktifMi) { 
+            document.getElementById('licenseLockScreen').classList.remove('hidden'); 
+            if (v.mesaj) document.getElementById('lockMessageText').innerText = v.mesaj; 
+          } else { 
+            document.getElementById('licenseLockScreen').classList.add('hidden'); 
+          }
         }
-        lisansVerisiIsle(doc.data());
       });
-
-      function lisansVerisiIsle(v) {
-        let simdiMs = Date.now(), bitisMs = v.bitisMs || (simdiMs + 864000000);
-        let kalanGun = Math.ceil((bitisMs - simdiMs) / 86400000);
-        lisansAktifMi = (v.durum === 'AKTIF') && (simdiMs <= bitisMs);
-        ustaLisansUyariKontrol(kalanGun);
-        if (!lisansAktifMi) { 
-          document.getElementById('licenseLockScreen').classList.remove('hidden'); 
-          if (v.mesaj) document.getElementById('lockMessageText').innerText = v.mesaj; 
-        } else { 
-          document.getElementById('licenseLockScreen').classList.add('hidden'); 
-        }
-      }
 
       // Ayarlar Dinleyicisi
       if (unsubscribeAyarlar) unsubscribeAyarlar();
@@ -2877,18 +2417,21 @@
       }).catch(err => alert("Hata: " + err.message));
     }
 
+    // ULUSLARARASI TELEFON FORMATINDA LİSANS TANIMLAMA
     function patronYeniLisansKaydet() {
       let ad = document.getElementById('patronNewName').value.trim();
       let tel = document.getElementById('patronNewPhone').value.trim().replace(/\D/g, '');
       let pin = document.getElementById('patronNewPin').value.trim();
       let paketGun = parseInt(document.getElementById('patronPackageSelect').value) || 90;
 
-      if (!ad || !tel || tel.length < 7 || !pin || pin.length < 4) { alert("Lütfen bilgileri eksiksiz doldurun."); return; }
-      if (tel.startsWith('0')) tel = tel.substring(1);
-      if (tel.length === 10) tel = '90' + tel;
+      if (!ad || !tel || tel.length < 7 || !pin || pin.length < 4) { 
+        alert("Lütfen bilgileri eksiksiz doldurun (Telefon ülke koduyla girilmelidir)."); return; 
+      }
+
+      if (tel.startsWith('00')) tel = tel.substring(2);
 
       let simdiMs = Date.now(), bitisMs = simdiMs + (paketGun * 86400000);
-      let bitisStr = new Date(bitisMs).toLocaleDateString('tr-TR');
+      let bitisStr = new Date(bitisMs).toLocaleDateString();
       const btn = document.getElementById('btnPatronCreateLicense'); btn.innerText = "Kaydediliyor..."; btn.disabled = true;
 
       db.collection('sistem').doc('lisanslar').collection('aktifler').doc(tel).set({
@@ -2896,7 +2439,7 @@
       }).then(() => {
         btn.innerText = "LİSANSI OLUŞTUR ✨"; btn.disabled = false;
         document.getElementById('patronNewName').value = ""; document.getElementById('patronNewPhone').value = ""; document.getElementById('patronNewPin').value = "";
-        alert(`🎉 Lisans tanımlandı!\n\nUsta: ${turkceHitapIsimDuzenle(ad)}\nTel: ${tel}\nŞifre: ${pin}\nBitiş: ${bitisStr}`);
+        alert(`🎉 Uluslararası Lisans Tanımlandı!\n\nUsta: ${turkceHitapIsimDuzenle(ad)}\nTel: +${tel}\nPIN: ${pin}\nBitiş: ${bitisStr}`);
         patronVerileriniYukle();
       }).catch(err => { btn.innerText = "LİSANSI OLUŞTUR ✨"; btn.disabled = false; alert("Hata: " + err.message); });
     }
@@ -2921,7 +2464,7 @@
               <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 flex justify-between items-center text-[11px]">
                 <div>
                   <span class="font-bold text-white block">${u.ad || 'İsimsiz Usta'}</span>
-                  <span class="text-[10px] text-slate-400 font-mono">${u.tel} (PIN: ${u.pin || '123456'})</span>
+                  <span class="text-[10px] text-slate-400 font-mono">+${u.tel} (PIN: ${u.pin || '123456'})</span>
                   <div class="text-[9px] text-amber-300">Bitiş: ${u.bitisTarih || '-'} (${kalan > 0 ? kalan + ' Gün' : 'Bitti'})</div>
                 </div>
                 <div class="flex items-center space-x-1">
@@ -2958,12 +2501,12 @@
       });
     }
 
-    /* İSTEK 3: GELİŞMİŞ PWA KURULUM REHBERLİ WHATSAPP BİLGİLENDİRME MESAJI */
+    /* İSTEK 3: GELİŞMİŞ 1 DAKİKALIK PWA KURULUM REHBERİ */
     function patronKurulumMesajiGonder(tel, ad, pin, paketGun) {
       let sureMetni = paketGun >= 9999 ? "Süresiz (Ömür Boyu)" : `${paketGun} Gün`;
       let guncelDomain = window.location.origin || "https://ylmzserver-coder.github.io";
       
-      let msg = `🌟 LUMIO AI Terminal Ailesine Hoş Geldiniz! ✨\n\nSayın ${ad},\nİşletmenizi yapay zekayla yöneteceğiniz LUMIO lisansınız aktif edilmiştir.\n\n📲 GİRİŞ BİLGİLERİNİZ:\n🌐 Terminal: ${guncelDomain}\n📞 Kullanıcı No: ${tel}\n🔑 Giriş PIN: ${pin}\n📅 Lisans Süreniz: ${sureMetni}\n\n━━━━━━━━━━━━━━━━━━━━\n📲 1 DAKİKADA TELEFONA UYGULAMA KURULUMU:\n\n🍏 iPhone (iOS):\n1. Linki Safari tarayıcısında açın.\n2. Alttaki "Paylaş" butonuna basın (kare içinden yukarı ok).\n3. "Ana Ekrana Ekle" seçeneğine dokunun. ✅\n\n🤖 Android:\n1. Linki Google Chrome ile açın.\n2. Sağ üstteki 3 noktaya dokunun.\n3. "Uygulamayı Yükle" veya "Ana Ekrana Ekle" deyin. ✅\n━━━━━━━━━━━━━━━━━━━━\n\nBol kazançlar dileriz!\nLUMIO Yazılım & Destek Ekibi`;
+      let msg = `🌟 LUMIO AI Terminal Ailesine Hoş Geldiniz! ✨\n\nSayın ${ad},\nİşletmenizi yapay zekayla yöneteceğiniz akıllı lisansınız aktif edilmiştir.\n\n📲 GİRİŞ BİLGİLERİNİZ:\n🌐 Terminal: ${guncelDomain}\n📞 Kullanıcı No: ${tel}\n🔑 Giriş PIN: ${pin}\n📅 Lisans Süreniz: ${sureMetni}\n\n━━━━━━━━━━━━━━━━━━━━\n📲 1 DAKİKADA TELEFONA UYGULAMA KURULUMU:\n\n🍏 iPhone (iOS):\n1. Linki Safari tarayıcısında açın.\n2. Alttaki "Paylaş" butonuna basın (kare içinden yukarı ok).\n3. "Ana Ekrana Ekle" seçeneğine dokunun. ✅\n\n🤖 Android:\n1. Linki Google Chrome ile açın.\n2. Sağ üstteki 3 noktaya dokunun.\n3. "Uygulamayı Yükle" veya "Ana Ekrana Ekle" deyin. ✅\n━━━━━━━━━━━━━━━━━━━━\n\nBol kazançlar dileriz!\nLUMIO Yazılım & Destek Ekibi`;
       anindaWhatsAppAc(tel, msg);
     }
 
@@ -3019,7 +2562,7 @@
             cnt++;
             html += `
               <div class="bg-slate-900 p-2 rounded-lg border border-slate-800 space-y-1 mb-2">
-                <div class="text-white font-bold text-xs">${u.ad || 'Usta'} (${u.tel})</div>
+                <div class="text-white font-bold text-xs">${u.ad || 'Usta'} (+${u.tel})</div>
                 <div class="text-amber-400 text-[10px]">✅ ONAY: ${yo.sozlesmeKodu}</div>
                 <div class="text-slate-400 text-[10px]">📅 ${yo.onayTarihi} - ${yo.onaySaati}</div>
                 <div class="text-slate-500 text-[9px] break-all leading-tight">📱 ${yo.cihazBilgisi}</div>
@@ -3053,7 +2596,7 @@
         let aktif = (u.durum === 'AKTIF') && kalan > 0;
         return `
           <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
-            <div><span class="font-bold text-white block">${u.ad || 'Usta'}</span><span class="text-[10px] text-slate-400 font-mono">${u.tel} (PIN: ${u.pin || '123456'})</span></div>
+            <div><span class="font-bold text-white block">${u.ad || 'Usta'}</span><span class="text-[10px] text-slate-400 font-mono">+${u.tel} (PIN: ${u.pin || '123456'})</span></div>
             <div class="flex items-center space-x-1">
               <button onclick="patronUstaPinGuncelle('${u.id}', '${u.ad}')" class="px-2 py-1 bg-amber-500 text-slate-950 rounded-lg text-[10px] font-black">🔑</button>
               <button onclick="patronDukkaninaGir('${u.tel}', '${u.ad}')" class="px-2 py-1 bg-slate-800 text-slate-300 rounded-lg text-[10px]">Gözat</button>
@@ -3063,7 +2606,7 @@
       }).join('');
     }
 
-    /* İSTEK 4: KOLTUK KİRALAYAN / SALON SAHİBİ AYRIMLI AKILLI WHATSAPP MOTORU */
+    /* İSTEK 4: KOLTUK KİRALAYAN / SALON SAHİBİ AYRIMLI WHATSAPP MOTORU */
     function whatsappModalAc() {
       let tel = tamTelefonAl('custCountryCode', 'custPhone');
       if (!tel) { alert("Önce bir müşteri seçiniz ya da geçerli telefon giriniz."); return; }
@@ -3082,7 +2625,7 @@
       let uAdi = salonAyarlari.ustaAdi || "Server YILMAZ";
       let unvan = salonAyarlari.unvan || (SOZLUK[aktifDil] || SOZLUK.tr).unvanMap.kuafor;
       
-      // İSTEK 4: Salon adı boşsa usta adıyla akıllıca uyarla
+      // Salon adı boşsa mesajları otomatik olarak usta adına dönüştür
       let sAdi = "";
       if (salonAyarlari.salonAdi && salonAyarlari.salonAdi.trim()) {
         sAdi = salonAyarlari.salonAdi.trim();
@@ -3120,8 +2663,7 @@
 
       anindaWhatsAppAc(tel, msg);
     }
-
-    function sekmeDegistir(sekme) {
+function sekmeDegistir(sekme) {
       if (window.history && window.history.pushState) window.history.pushState({ aktifSekme: sekme }, "");
       ['terminal', 'agenda', 'history', 'reminders', 'settings'].forEach(s => {
         let tEl = document.getElementById('tab-' + s), nEl = document.getElementById('nav-' + s);
@@ -3138,442 +2680,10 @@
       if (sekme === 'terminal') gunlukCiroGuncelle();
       if (sekme === 'reminders') canliBildirimMerkeziniGuncelle();
     }
-/* 24 SAATLİK AJANDA & SLOT ÇİZİMİ */
-    function ajandaTarihSeridiOlustur() {
-      const serit = document.getElementById('hizliGunlerSeridi');
-      if (!serit) return;
-      const d = SOZLUK[aktifDil] || SOZLUK.tr, dGunler = d.daysOfWeek || ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'];
-      let html = "", bugun = new Date();
-      for (let i = 0; i < 7; i++) {
-        let cur = new Date(); cur.setDate(bugun.getDate() + i);
-        let dStr = cur.getDate().toString().padStart(2, '0') + '.' + (cur.getMonth() + 1).toString().padStart(2, '0') + '.' + cur.getFullYear();
-        let seciliMi = (dStr === seciliTarihStr);
-        html += `
-          <button type="button" onclick="ajandaTarihSec('${dStr}')" class="p-1.5 rounded-xl border flex flex-col items-center transition active:scale-95 ${seciliMi ? 'bg-amber-500 text-slate-950 font-black border-amber-400 shadow' : 'bg-slate-950 text-slate-400 border-slate-800 font-bold'}">
-            <span class="text-[8px] uppercase">${i === 0 ? d.today : dGunler[cur.getDay()]}</span>
-            <span class="text-xs">${cur.getDate()}</span>
-          </button>`;
-      }
-      serit.innerHTML = html;
-    }
-
-    function ajandaTarihSec(tarihStr) {
-      seciliTarihStr = tarihStr;
-      const seciliText = document.getElementById('selectedDateText'), d = SOZLUK[aktifDil] || SOZLUK.tr;
-      if (seciliText) seciliText.innerText = (tarihStr === bugununTarihiStr()) ? d.today : tarihStr;
-      ajandaTarihSeridiOlustur(); ajandaSaatleriniCiz();
-    }
-
-    function takvimTarihSecildi(isoVal) {
-      if (!isoVal) return;
-      ajandaTarihSec(akilliTarihDuzelt(isoVal));
-    }
-
-    function buguneGit() {
-      const pkr = document.getElementById('calendarPicker'); if (pkr) pkr.value = "";
-      ajandaTarihSec(bugununTarihiStr());
-    }
-
-    function ajandaSaatleriniCiz() {
-      const container = document.getElementById('ajandaSaatlerContainer');
-      if (!container) return;
-      const d = SOZLUK[aktifDil] || SOZLUK.tr, gunRand = randevular.filter(r => akilliTarihDuzelt(r.tarih) === seciliTarihStr);
-      
-      const slotlar = [];
-      for (let h = 0; h <= 23; h++) {
-        slotlar.push(`${h.toString().padStart(2, '0')}:00`);
-        slotlar.push(`${h.toString().padStart(2, '0')}:30`);
-      }
-
-      container.innerHTML = slotlar.map(slotSaat => {
-        const [sH, sM] = slotSaat.split(':').map(Number), slotDk = (sH * 60) + sM;
-        const baslayanlar = gunRand.filter(r => r.saat === slotSaat);
-        const devamEdenler = gunRand.filter(r => {
-          if (!r.saat || r.blokMu) return false;
-          const [rH, rM] = r.saat.split(':').map(Number), rBas = (rH * 60) + rM, rBit = rBas + (parseInt(r.sure) || 60);
-          return (slotDk > rBas && slotDk < rBit);
-        });
-
-        if (baslayanlar.length > 0) {
-          return baslayanlar.map(r => {
-            if (r.blokMu) {
-              return `
-                <div class="bg-slate-950 p-2 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
-                  <div class="flex items-center space-x-2"><span class="font-mono font-black text-amber-400 text-xs">${r.saat}</span><span class="text-slate-300 font-bold">⛔ ${r.musteriAdi || 'Mola / Bloke'}</span></div>
-                  <button onclick="randevuSil('${r.id}')" class="text-slate-500 hover:text-red-400 p-1 text-xs">✕</button>
-                </div>`;
-            }
-            return `
-              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 hover:border-amber-500/40 transition flex justify-between items-center text-xs shadow-sm gap-2">
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center space-x-2"><span class="font-mono font-black text-amber-400 text-xs">${r.saat}</span><span class="font-bold text-white truncate">${turkceHitapIsimDuzenle(r.musteriAdi)}</span></div>
-                  <div class="text-[10px] text-slate-400 mt-0.5 truncate"><b class="text-amber-300">${r.hizmet}</b> • ${r.sure || 60} Dk • ${r.tel || d.noPhone}</div>
-                </div>
-                <div class="flex items-center space-x-1 shrink-0">
-                  <button onclick="randevuyuMasayaAktar('${r.id}')" class="bg-amber-500/15 text-amber-300 hover:bg-amber-500 hover:text-slate-950 font-bold px-2 py-1 rounded-lg text-[10px] border border-amber-500/30"><i class="fa-solid fa-scissors"></i> İşlem</button>
-                  <button onclick="randevuHatirlatWhatsApp('${r.id}')" class="bg-slate-800 text-amber-300 font-bold px-2 py-1 rounded-lg text-[10px] border border-slate-700"><i class="fa-brands fa-whatsapp text-xs text-emerald-400"></i> ${d.remind}</button>
-                  <button onclick="randevuDuzenle('${r.id}')" class="p-1 bg-slate-800 text-amber-300 rounded-lg text-xs"><i class="fa-solid fa-pen"></i></button>
-                  <button onclick="randevuSil('${r.id}')" class="p-1 bg-slate-800 text-slate-500 hover:text-red-400 rounded-lg text-xs"><i class="fa-solid fa-trash"></i></button>
-                </div>
-              </div>`;
-          }).join('');
-        }
-
-        if (devamEdenler.length > 0) {
-          return devamEdenler.map(devam => `
-            <div class="bg-slate-950/60 p-2 rounded-xl border border-dashed border-amber-500/20 flex justify-between items-center text-xs">
-              <div class="flex items-center space-x-2"><span class="font-mono text-slate-500 text-xs">${slotSaat}</span><span class="text-amber-400/90 font-bold text-[10px]">${d.cont || '↳ Devam'}: <b>${turkceHitapIsimDuzenle(devam.musteriAdi)}</b> (${devam.hizmet})</span></div>
-              <span class="text-[8px] bg-amber-500/10 text-amber-400 px-1.5 py-0.5 rounded font-bold">Dolu</span>
-            </div>`).join('');
-        }
-
-        return `
-          <div class="bg-slate-950/30 p-2 rounded-xl border border-slate-800 flex justify-between items-center text-xs hover:border-slate-700 transition">
-            <span class="font-mono font-bold text-slate-500 text-xs">${slotSaat}</span>
-            <div class="flex items-center space-x-2">
-              <button onclick="bosSaateRandevuAc('${slotSaat}')" class="text-[10px] text-slate-400 hover:text-amber-400 font-medium transition flex items-center space-x-1"><i class="fa-solid fa-plus text-[9px]"></i><span>${d.availableSlot || 'Müsait Boş Saat'}</span></button>
-              <button onclick="randevuSaatBlokeEt('${slotSaat}')" class="text-[9px] text-slate-600 hover:text-amber-400 px-1 rounded border border-slate-800">Mola</button>
-            </div>
-          </div>`;
-      }).join('');
-    }
-
-    function randevuyuMasayaAktar(id) {
-      const r = randevular.find(x => x.id === id);
-      if (!r) return;
-      yeniIslemTemizle();
-      document.getElementById('custSearch').value = turkceHitapIsimDuzenle(r.musteriAdi);
-      let t = r.tel || "";
-      if (t.startsWith('90')) { document.getElementById('custCountryCode').value = "+90"; document.getElementById('custPhone').value = t.substring(2); }
-      else if (t.length > 5) { document.getElementById('custCountryCode').value = "+" + t.substring(0, 2); document.getElementById('custPhone').value = t.substring(2); }
-      else { document.getElementById('custCountryCode').value = "+90"; document.getElementById('custPhone').value = t; }
-
-      document.getElementById('visitDate').value = akilliTarihDuzelt(r.tarih) || bugununTarihiStr();
-      document.getElementById('visitTime').value = r.saat || "14:00";
-      document.getElementById('serviceRowsContainer').innerHTML = "";
-      tabloyaSatirEkle(r.hizmet);
-
-      const eslesen = musteriler.find(m => (m.tel && m.tel === r.tel) || turkceNormalize(m.ad) === turkceNormalize(r.musteriAdi));
-      if (eslesen) musteriSec(eslesen.id);
-      sekmeDegistir('terminal');
-    }
-
-    function bosSaateRandevuAc(saat) {
-      sihirbazBaslat(); shData.tarih = seciliTarihStr; shData.saat = saat;
-      document.getElementById('shTarihInput').value = seciliTarihStr;
-      document.getElementById('shSaatInput').value = saat;
-      sihirbazAdimGoster(2);
-    }
-
-    function randevuSaatBlokeEt(saat) {
-      db.collection('ustalar').doc(aktifLisansKodu).collection('randevular').add({
-        tarih: seciliTarihStr, saat: saat, musteriAdi: "MOLA / BLOKE", hizmet: "BLOKE", sure: 30, blokMu: true, zaman: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    }
-
-    function randevuSil(id) {
-      if (!confirm("Randevu silinsin mi?")) return;
-      db.collection('ustalar').doc(aktifLisansKodu).collection('randevular').doc(id).delete();
-    }
-
-    function randevuDuzenle(id) {
-      const r = randevular.find(x => x.id === id);
-      if (!r) return;
-      duzenlenenRandevuId = id; sihirbazBaslat();
-      shData = { tarih: akilliTarihDuzelt(r.tarih), musteri: r.musteriAdi || "", tel: r.tel || "", hizmet: r.hizmet || "İŞLEM", sure: r.sure || 60, saat: r.saat || "14:00" };
-      document.getElementById('shTarihInput').value = shData.tarih;
-      document.getElementById('shMusteriInput').value = shData.musteri;
-      document.getElementById('shHizmetInput').value = shData.hizmet;
-      document.getElementById('shSureInput').value = shData.sure;
-      document.getElementById('shSaatInput').value = shData.saat;
-      let t = shData.tel || "";
-      document.getElementById('shCountryCode').value = "+90";
-      document.getElementById('shTelInput').value = t.startsWith('90') ? t.substring(2) : t;
-      sihirbazAdimGoster(2);
-    }
-
-    function randevuHatirlatWhatsApp(id) {
-      const r = randevular.find(x => x.id === id);
-      if (!r || !r.tel) { alert("Telefon kayıtlı değil."); return; }
-      const hitap = turkceHitapIsimDuzenle(r.musteriAdi), u = salonAyarlari.ustaAdi || "Server YILMAZ";
-      const unvan = salonAyarlari.unvan || (SOZLUK[aktifDil] || SOZLUK.tr).unvanMap.kuafor;
-      let sAdi = (salonAyarlari.salonAdi && salonAyarlari.salonAdi.trim()) ? salonAyarlari.salonAdi : `${unvan} ${u}`;
-      let msg = aktifDilSablonlariniAl(aktifDil).confirm.replace(/{MUSTERI_ADI}/g, hitap).replace(/{TARIH}/g, r.tarih).replace(/{SAAT}/g, r.saat).replace(/{HIZMET}/g, r.hizmet).replace(/{SALON_ADI}/g, sAdi).replace(/{USTA_ADI}/g, u).replace(/{UNVAN}/g, unvan);
-      anindaWhatsAppAc(r.tel, msg);
-    }
-
-    /* AKILLI RANDEVU SİHİRBAZI */
-    function sihirbazBaslat() {
-      shAdim = 1;
-      shData = { tarih: bugununTarihiStr(), musteri: "", tel: "", hizmet: (salonAyarlari.hizmetler && salonAyarlari.hizmetler.length > 0) ? salonAyarlari.hizmetler[0].ad : "İŞLEM", sure: 60, saat: "14:00" };
-      document.getElementById('shTarihInput').value = shData.tarih;
-      document.getElementById('shMusteriInput').value = "";
-      document.getElementById('shCountryCode').value = "+90";
-      document.getElementById('shTelInput').value = "";
-      document.getElementById('shHizmetInput').value = shData.hizmet;
-      document.getElementById('shSureInput').value = 60;
-      document.getElementById('shSaatInput').value = "14:00";
-      const rk = document.getElementById('shMusteriSonuclari'); if (rk) rk.innerHTML = "";
-      sihirbazHizmetButonlariniCiz(); sihirbazAdimGoster(1);
-      document.getElementById('modalRandevuOlustur').classList.remove('hidden');
-      modalGeriTusuKaydi('modalRandevuOlustur');
-    }
-    function sihirbazKapat() { document.getElementById('modalRandevuOlustur').classList.add('hidden'); }
-
-    function sihirbazAdimGoster(adim) {
-      shAdim = adim;
-      for (let i = 1; i <= 5; i++) {
-        const k = document.getElementById('shKutuAdim' + i);
-        if (k) k.classList.toggle('hidden', i !== adim);
-      }
-      const sayac = document.getElementById('shSayacMetin'); if (sayac) sayac.innerText = `Adım ${adim}/5`;
-      const gBtn = document.getElementById('shGeriBtn'), iBtn = document.getElementById('shIleriBtn');
-      if (gBtn) gBtn.innerText = (adim === 1) ? "Vazgeç" : "⬅ Geri";
-      if (iBtn) iBtn.innerText = (adim === 5) ? "Randevuyu Kaydet ✨" : "İleri ➔";
-      if (adim === 5) {
-        document.getElementById('shOzetMusteri').innerText = `${turkceHitapIsimDuzenle(shData.musteri) || 'Müşteri'} (${shData.tel || 'Numarasız'})`;
-        document.getElementById('shOzetIslem').innerText = `${shData.hizmet} • ${shData.sure} Dk`;
-      }
-    }
-
-    function shTarihAta(offsetGun) {
-      const d = new Date(); d.setDate(d.getDate() + offsetGun);
-      const str = d.getDate().toString().padStart(2, '0') + '.' + (d.getMonth() + 1).toString().padStart(2, '0') + '.' + d.getFullYear();
-      document.getElementById('shTarihInput').value = str; shData.tarih = str;
-    }
-    function shTakvimSecildi(isoVal) {
-      if (!isoVal) return;
-      const str = akilliTarihDuzelt(isoVal);
-      document.getElementById('shTarihInput').value = str; shData.tarih = str;
-    }
-
-    function shMusteriAra(q) {
-      const knt = document.getElementById('shMusteriSonuclari');
-      if (!knt) return;
-      if (!q || q.trim().length < 1) { knt.innerHTML = ""; return; }
-      const qN = turkceNormalize(q), qT = q.replace(/\D/g, '');
-      const bul = musteriler.filter(m => turkceNormalize(m.ad).includes(qN) || (qT.length > 1 && (m.tel || '').replace(/\D/g, '').includes(qT)));
-      if (bul.length === 0) knt.innerHTML = `<div class="p-2 text-slate-500 text-[11px] italic">Kayıtlı müşteri bulunamadı. Yeni müşteri olarak yazılacak.</div>`;
-      else knt.innerHTML = bul.slice(0, 4).map(m => `
-        <div onclick="shMusteriSecildi('${m.ad}', '${m.tel || ''}')" class="p-2 bg-slate-900 hover:bg-slate-800 rounded-lg border border-slate-800 cursor-pointer flex justify-between items-center text-xs">
-          <span class="font-bold text-white">${turkceHitapIsimDuzenle(m.ad)}</span><span class="text-[10px] text-amber-400 font-mono">${m.tel || 'Numarasız'}</span>
-        </div>`).join('');
-    }
-
-    function shMusteriSecildi(ad, tel) {
-      shData.musteri = turkceHitapIsimDuzenle(ad);
-      document.getElementById('shMusteriInput').value = shData.musteri;
-      let t = tel || "";
-      document.getElementById('shCountryCode').value = "+90";
-      document.getElementById('shTelInput').value = t.startsWith('90') ? t.substring(2) : t;
-      shData.tel = tamTelefonAl('shCountryCode', 'shTelInput');
-      const k = document.getElementById('shMusteriSonuclari'); if (k) k.innerHTML = "";
-    }
-
-    function shHizmetAta(ad, sure) {
-      shData.hizmet = ad; shData.sure = parseInt(sure) || 60;
-      document.getElementById('shHizmetInput').value = ad;
-      document.getElementById('shSureInput').value = shData.sure;
-      shIleriTiklandi();
-    }
-    function shDigerHizmetSec() {
-      const ad = prompt("Lütfen yapılacak işlemi yazınız:");
-      if (!ad || !ad.trim()) return;
-      shData.hizmet = ad.trim().toLocaleUpperCase('tr-TR');
-      document.getElementById('shHizmetInput').value = shData.hizmet;
-      shIleriTiklandi();
-    }
-    function shSureAta(sureDk) {
-      shData.sure = parseInt(sureDk) || 60;
-      document.getElementById('shSureInput').value = shData.sure;
-      shIleriTiklandi();
-    }
-    function shSaatAta(saatStr) { shData.saat = saatStr; document.getElementById('shSaatInput').value = saatStr; }
-
-    function shGeriTiklandi() { if (shAdim === 1) sihirbazKapat(); else sihirbazAdimGoster(shAdim - 1); }
-
-    function shIleriTiklandi() {
-      if (shAdim === 1) {
-        let t = akilliTarihDuzelt(document.getElementById('shTarihInput').value);
-        if (!t) { alert("Geçerli bir tarih giriniz!"); return; }
-        shData.tarih = t; sihirbazAdimGoster(2);
-      } else if (shAdim === 2) {
-        let m = document.getElementById('shMusteriInput').value.trim();
-        if (!m) { alert("Müşteri adı giriniz!"); return; }
-        shData.musteri = turkceHitapIsimDuzenle(m);
-        shData.tel = tamTelefonAl('shCountryCode', 'shTelInput');
-        sihirbazAdimGoster(3);
-      } else if (shAdim === 3) {
-        let h = document.getElementById('shHizmetInput').value.trim();
-        if (!h) { alert("İşlem seçin veya yazın!"); return; }
-        shData.hizmet = h; sihirbazAdimGoster(4);
-      } else if (shAdim === 4) {
-        shData.sure = parseInt(document.getElementById('shSureInput').value) || 60;
-        sihirbazAdimGoster(5);
-      } else if (shAdim === 5) {
-        let st = document.getElementById('shSaatInput').value.trim();
-        if (!st || !st.includes(':')) { alert("Geçerli saat giriniz (Örn: 14:00)!"); return; }
-        shData.saat = st; sihirbazRandevuKaydet(false);
-      }
-    }
-
-    function sihirbazRandevuKaydet(ciftOnay = false) {
-      const [h, m] = shData.saat.split(':').map(Number);
-      const yeniBas = (h * 60) + m, yeniBit = yeniBas + (parseInt(shData.sure) || 60), hedefTarih = akilliTarihDuzelt(shData.tarih);
-
-      if (!ciftOnay) {
-        const cakisan = randevular.find(r => {
-          if (akilliTarihDuzelt(r.tarih) !== hedefTarih || !r.saat || r.blokMu) return false;
-          if (duzenlenenRandevuId && r.id === duzenlenenRandevuId) return false;
-          const [rH, rM] = r.saat.split(':').map(Number), rBas = (rH * 60) + rM, rBit = rBas + (parseInt(r.sure) || 60);
-          return (yeniBas < rBit && yeniBit > rBas);
-        });
-
-        if (cakisan) {
-          const cakisanAd = turkceHitapIsimDuzenle(cakisan.musteriAdi);
-          const [cH, cM] = cakisan.saat.split(':').map(Number), oneriBas = (cH * 60) + cM + (parseInt(cakisan.sure) || 60);
-          shOnerilenSaat = `${Math.floor(oneriBas / 60).toString().padStart(2, '0')}:${(oneriBas % 60).toString().padStart(2, '0')}`;
-          document.getElementById('cakismaBilgiMetin').innerHTML = `Seçtiğiniz <b>${shData.saat}</b> saatinde zaten <b>${cakisanAd}</b> randevusu var.<br>Araya mı yazalım, yoksa <b>${shOnerilenSaat}</b> saatini mi seçersiniz?`;
-          document.getElementById('btnOnerilenSaat').innerText = `En Yakın Boş Saat (${shOnerilenSaat})`;
-          document.getElementById('cakismaModal').classList.remove('hidden');
-          modalGeriTusuKaydi('cakismaModal');
-          return;
-        }
-      }
-
-      bekleyenRandevuData = {
-        musteriAdi: shData.musteri, tel: shData.tel, tarih: hedefTarih, saat: shData.saat,
-        sure: shData.sure, hizmet: shData.hizmet, usta: salonAyarlari.ustaAdi, blokMu: false, olusturmaMs: Date.now()
-      };
-
-      const randRef = duzenlenenRandevuId
-        ? db.collection('ustalar').doc(aktifLisansKodu).collection('randevular').doc(duzenlenenRandevuId)
-        : db.collection('ustalar').doc(aktifLisansKodu).collection('randevular').doc();
-
-      randRef.set(bekleyenRandevuData, { merge: true }).then(() => {
-        if (shData.musteri) {
-          let mDocId = shData.tel ? ('tel_' + shData.tel) : ('m_' + Date.now());
-          db.collection('ustalar').doc(aktifLisansKodu).collection('musteriler').doc(mDocId).set({
-            ad: shData.musteri, tel: shData.tel, sonZiyaret: hedefTarih, usta: salonAyarlari.ustaAdi, guncellemeZamani: firebase.firestore.FieldValue.serverTimestamp()
-          }, { merge: true });
-        }
-        sihirbazKapat(); document.getElementById('cakismaModal').classList.add('hidden'); duzenlenenRandevuId = null;
-        document.getElementById('bildirimOzetMetin').innerHTML = `<b>${shData.musteri}</b><br>📅 ${hedefTarih} • Saat: <b>${shData.saat}</b><br>💇 ${shData.hizmet} (${shData.sure} Dk)`;
-        document.getElementById('bildirimAksiyonModal').classList.remove('hidden');
-        modalGeriTusuKaydi('bildirimAksiyonModal');
-      }).catch(err => alert("Kayıt hatası: " + err.message));
-    }
-
-    function sihirbazCiftRandevuOnayla() { document.getElementById('cakismaModal').classList.add('hidden'); sihirbazRandevuKaydet(true); }
-    function sihirbazOnerilenSaatiSec() { shData.saat = shOnerilenSaat; document.getElementById('shSaatInput').value = shOnerilenSaat; document.getElementById('cakismaModal').classList.add('hidden'); sihirbazRandevuKaydet(false); }
-
-    function bildirimAksiyonTetikle(hedef) {
-      if (!bekleyenRandevuData) return;
-      const hitap = turkceHitapIsimDuzenle(bekleyenRandevuData.musteriAdi), u = salonAyarlari.ustaAdi || "Server YILMAZ";
-      const unvan = salonAyarlari.unvan || (SOZLUK[aktifDil] || SOZLUK.tr).unvanMap.kuafor;
-      let sAdi = (salonAyarlari.salonAdi && salonAyarlari.salonAdi.trim()) ? salonAyarlari.salonAdi : `${unvan} ${u}`;
-      let msg = aktifDilSablonlariniAl(aktifDil).confirm.replace(/{MUSTERI_ADI}/g, hitap).replace(/{TARIH}/g, bekleyenRandevuData.tarih).replace(/{SAAT}/g, bekleyenRandevuData.saat).replace(/{HIZMET}/g, bekleyenRandevuData.hizmet).replace(/{SALON_ADI}/g, sAdi).replace(/{USTA_ADI}/g, u).replace(/{UNVAN}/g, unvan);
-
-      if (hedef === 'musteri') {
-        if (!bekleyenRandevuData.tel) { alert("Müşterinin telefon numarası girilmemiş."); return; }
-        anindaWhatsAppAc(bekleyenRandevuData.tel, msg);
-      } else if (hedef === 'usta') {
-        const ustaTel = tamTelefonAl('setUstaCountryCode', 'setUstaTel') || salonAyarlari.ustaTel;
-        if (!ustaTel) { alert("Ayarlardan bildirim numaranızı kaydetmelisiniz."); return; }
-        let ozet = `🔔 YENİ RANDEVU!\n\nMüşteri: ${hitap}\nTel: ${bekleyenRandevuData.tel || 'Numarasız'}\nTarih: ${bekleyenRandevuData.tarih}\nSaat: ${bekleyenRandevuData.saat}\nİşlem: ${bekleyenRandevuData.hizmet} (${bekleyenRandevuData.sure} Dk)\n\nLUMIO Terminal`;
-        anindaWhatsAppAc(ustaTel, ozet);
-      }
-    }
-    function bildirimModaliniKapat() { document.getElementById('bildirimAksiyonModal').classList.add('hidden'); bekleyenRandevuData = null; }
-
-    function ayarlariUygula() {
-      const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = (v !== undefined) ? v : ""; };
-      setVal('setLisansKodu', aktifLisansKodu);
-      setVal('setUstaAdi', salonAyarlari.ustaAdi || "Server YILMAZ");
-      setVal('setUnvan', salonAyarlari.unvan || "Kuaförünüz");
-      setVal('setSalonAdi', salonAyarlari.salonAdi || "");
-      setVal('setUstaCountryCode', salonAyarlari.ustaCountryCode || "+90");
-      setVal('setUstaTel', salonAyarlari.ustaTel || "");
-      setVal('setInstagram', salonAyarlari.instagram || "");
-      setVal('setGoogleLink', salonAyarlari.googleLink || "");
-      setVal('setBankaAdi', salonAyarlari.bankaAdi || "");
-      setVal('setHesapSahibi', salonAyarlari.hesapSahibi || "");
-      setVal('setIbanNo', salonAyarlari.ibanNo || "");
-      setVal('setUstaYuzde', ustaYuzdeOrani);
-      setVal('setPosYuzde', posYuzdeOrani);
-      setVal('setKayipGun', salonAyarlari.kayipGun || 60);
-      setVal('setAlarmSuresi', salonAyarlari.alarmSuresi || "60");
-
-      const hUnvan = document.getElementById('headerUstaUnvan');
-      if (hUnvan) hUnvan.innerText = salonAyarlari.ustaAdi || "Server YILMAZ";
-
-      bolumSecenekleriniDoldur();
-      ayarlarHizmetListesiniCiz();
-      sihirbazHizmetButonlariniCiz();
-      diliDegistir(aktifDil);
-    }
-
-    function ayarlariKaydet() {
-      salonAyarlari.ustaAdi = document.getElementById('setUstaAdi').value.trim() || "Server YILMAZ";
-      salonAyarlari.unvan = document.getElementById('setUnvan').value.trim() || "Kuaförünüz";
-      salonAyarlari.salonAdi = document.getElementById('setSalonAdi').value.trim();
-      salonAyarlari.ustaCountryCode = document.getElementById('setUstaCountryCode').value.trim() || "+90";
-      salonAyarlari.ustaTel = document.getElementById('setUstaTel').value.trim();
-      salonAyarlari.instagram = document.getElementById('setInstagram').value.trim();
-      salonAyarlari.googleLink = document.getElementById('setGoogleLink').value.trim();
-      salonAyarlari.bankaAdi = document.getElementById('setBankaAdi').value.trim();
-      salonAyarlari.hesapSahibi = document.getElementById('setHesapSahibi').value.trim();
-      salonAyarlari.ibanNo = document.getElementById('setIbanNo').value.trim();
-      
-      salonAyarlari.ustaYuzde = parseInt(document.getElementById('setUstaYuzde').value) || 50;
-      salonAyarlari.posYuzde = parseInt(document.getElementById('setPosYuzde').value) || 20;
-      ustaYuzdeOrani = salonAyarlari.ustaYuzde;
-      posYuzdeOrani = salonAyarlari.posYuzde;
-
-      localStorage.setItem('lumio_usta_yuzde_' + aktifLisansKodu, ustaYuzdeOrani);
-      localStorage.setItem('lumio_pos_yuzde_' + aktifLisansKodu, posYuzdeOrani);
-
-      salonAyarlari.kayipGun = parseInt(document.getElementById('setKayipGun').value) || 60;
-      salonAyarlari.alarmSuresi = document.getElementById('setAlarmSuresi').value || "60";
-      salonAyarlari.bolum = document.getElementById('setBolumTuru').value || "kuafor";
-      salonAyarlari.ozelBolumAdi = document.getElementById('setOzelBolumAdi').value.trim();
-
-      if (!salonAyarlari['sablons_' + aktifDil]) salonAyarlari['sablons_' + aktifDil] = {};
-      let mapIds = { msg1: 'tplMsg1', msg2: 'tplMsg2', msg3: 'tplMsg3', msg4: 'tplMsg4', msg5: 'tplMsg5', confirm: 'tplConfirm', msg7: 'tplMsg7', msg9: 'tplMsg9' };
-      for (let [k, id] of Object.entries(mapIds)) {
-        let el = document.getElementById(id);
-        if (el) salonAyarlari['sablons_' + aktifDil][k] = el.value;
-      }
-
-      localStorage.setItem('hair_kisisel_ayarlar_' + aktifLisansKodu, JSON.stringify(salonAyarlari));
-      db.collection('ustalar').doc(aktifLisansKodu).collection('ayarlar').doc('profil').set(salonAyarlari, { merge: true })
-        .then(() => { alert("✅ Tüm ayarlar ve şablonlar kaydedildi!"); ayarlariUygula(); gunlukCiroGuncelle(); })
-        .catch(err => alert("Hata: " + err.message));
-    }
-
-    function ustaKendiSifresiniGuncelle() {
-      const eski = document.getElementById('setEskiSifre').value.trim(), yeni = document.getElementById('setYeniSifre').value.trim();
-      if (!eski || eski.length < 4 || !yeni || yeni.length < 4) { alert("Şifreler en az 4 haneli olmalıdır."); return; }
-      let sorgu = (aktifLisansKodu.length === 10 && !aktifLisansKodu.startsWith('90')) ? ('90' + aktifLisansKodu) : aktifLisansKodu;
-      const btn = document.getElementById('btnPwdUpdate'); btn.innerText = "Doğrulanıyor..."; btn.disabled = true;
-
-      db.collection('sistem').doc('lisanslar').collection('aktifler').doc(sorgu).get().then(doc => {
-        btn.innerText = "Şifremi Güncelle"; btn.disabled = false;
-        if (!doc.exists) { alert("Lisans bulunamadı."); return; }
-        if (doc.data().pin && doc.data().pin.toString() !== eski.toString()) { alert("❌ Eski şifre hatalı!"); return; }
-        db.collection('sistem').doc('lisanslar').collection('aktifler').doc(sorgu).update({ pin: yeni }).then(() => {
-          document.getElementById('setEskiSifre').value = ""; document.getElementById('setYeniSifre').value = "";
-          alert("🎉 Şifreniz başarıyla güncellendi: " + yeni);
-        });
-      }).catch(err => { btn.innerText = "Şifremi Güncelle"; btn.disabled = false; alert("Hata: " + err.message); });
-    }
-
-    function sifremiUnuttumWhatsApp() {
-      anindaWhatsAppAc("905354049392", "Merhaba LUMIO Destek, usta giriş şifremi unuttum. Yardımcı olabilir misiniz?");
-    }
 
     /* ==========================================================================
        İSTEK 1: LUMIO MASTER AI OTONOM AJAN & FUNCTION CALLING MOTORU
+       (Gemini 1.5/2.0 Flash Destekli)
        ========================================================================== */
     let aiRecognition = null;
     let aiDinliyorMu = false;
@@ -3596,10 +2706,9 @@
       de: { langCode: "de-DE", micReady: "Bereit.", micListening: "🔴 Ich höre zu...", noCust: "Kein Kunde gewählt ➔", voiceBtnText: "Vorlesen" }
     };
 
-    /* HATA 1 DÜZELTİLDİ: RESMİ GEMINI 1.5 FLASH / 2.0 FLASH MOTORU */
     async function geminiApiCagir(payload) {
       if (!geminiApiKey) {
-        throw new Error("Lütfen Patron Paneli'nden [🔑 Gemini Key] butonuna basarak Google API anahtarınızı giriniz.");
+        throw new Error("Lütfen Patron Paneli'nden [🔑 Gemini 1.5/2.0 Key] butonuna basarak Google API anahtarınızı giriniz.");
       }
 
       const modeller = ['gemini-1.5-flash', 'gemini-2.0-flash'];
@@ -3785,39 +2894,77 @@
       } catch (err) { alert("Mikrofon hatası: " + err.message); }
     }
 
-    /* İSTEK 1: GELİŞMİŞ OTONOM AJAN (ACTION DISPATCHER) */
+    /* OTONOM AJAN MOTORU (KASA, MÜŞTERİ, RANDEVU) */
     async function lumioAiAjanKomutCoz(metin) {
       if (!metin) return;
       let raw = metin.trim();
+      let kucuk = raw.toLocaleLowerCase('tr-TR');
 
-      const sohbetKelimeleri = ["selam", "naber", "nasılsın", "kolay gelsin", "yoğun mu", "randevuları dök", "kimler var", "kimi çağıralım", "gelmeyen"];
-      let sohbetMi = sohbetKelimeleri.some(s => raw.toLocaleLowerCase('tr-TR').includes(s));
-      if (sohbetMi && !raw.includes("ödedi") && !raw.includes("TL") && !raw.includes("yaz") && !raw.includes("kaydet")) {
-        lumioAiSekme('istisare');
-        document.getElementById('aiAskInput').value = metin;
-        lumioAiSoruSor();
-        return;
-      }
+      // ÖNCE YEREL KASA & PARA KONTROLÜ
+      let paraVarMi = kucuk.match(/(\d+[\d\s.,]*)\s*(tl|lira|bin|yüz)?/i);
+      let odemeVarMi = kucuk.includes("ödedi") || kucuk.includes("verdi") || kucuk.includes("çekti") || kucuk.includes("nakit") || kucuk.includes("kart");
 
-      let promptAjan = `Sen kuaför ve güzellik salonu asistanı bir yapay zeka ajanısın.
-Ustanın şu komutunu analiz et: "${raw}"
-Bugünün Tarihi: ${bugununTarihiStr()}
+      if (paraVarMi && odemeVarMi) {
+        let rakam = guvenliSayiAl(paraVarMi[1]);
+        if (kucuk.includes("bin") && rakam < 100) rakam = rakam * 1000;
+        let odemeTuru = (kucuk.includes("kart") || kucuk.includes("pos") || kucuk.includes("kredi")) ? "kart" : "nakit";
 
-Ustanın niyetine göre YALNIZCA şu 3 JSON formatından birini döndür (başka hiçbir metin ekleme):
-1. Kasa Ödemesi: { "action": "KASA_EKLE", "musteri": "İsim", "islem": "Genel Hizmet", "ucret": 3000, "tur": "kart" }
-2. Yeni Müşteri: { "action": "MUSTERI_EKLE", "musteri": "İsim", "tel": "5321234567" }
-3. Randevu Yazma: { "action": "RANDEVU_YAZ", "musteri": "İsim", "tarih": "GG.AA.YYYY", "saat": "16:00", "hizmet": "DİP BOYA", "sure": 90 }`;
+        let kelimeler = raw.split(/[\s,.'"]+/).filter(w => w.length > 2 && isNaN(w));
+        let isim = "Kasa Müşterisi";
+        for (let k of kelimeler) {
+          let kn = turkceNormalize(k);
+          if (["ödedi", "nakit", "kart", "çekti", "verdi", "bugün", "lira", "hanım", "bey", "abla"].includes(kn)) continue;
+          let mBul = musteriler.find(m => turkceNormalize(m.ad).includes(kn));
+          if (mBul) { isim = mBul.ad; break; } else { isim = k; break; }
+        }
 
-      try {
-        let sonuc = await geminiApiCagir({
-          contents: [{ parts: [{ text: promptAjan }] }]
-        });
-        sonuc = sonuc.replace(/```json/g, '').replace(/```/g, '').trim();
-        aiParsedAction = JSON.parse(sonuc);
+        aiParsedAction = { action: "KASA_EKLE", musteri: turkceHitapIsimDuzenle(isim), islem: "Genel Hizmet", ucret: rakam, tur: odemeTuru };
         lumioAiAjanKartiniGoster(aiParsedAction);
-      } catch (e) {
-        lumioAiYerelSokakDiliCoz(raw);
+        return; 
       }
+
+      // GEMINI API KEY VARSA DERİN ZEKA KULLAN
+      if (geminiApiKey) {
+        let promptAjan = `Sen kuaför asistanısın. Ustanın komutu: "${raw}". Bugün: ${bugununTarihiStr()}.
+Yalnızca şu JSON formatlarından birini üret:
+Kasa için: {"action": "KASA_EKLE", "musteri": "...", "islem": "...", "ucret": 2000, "tur": "nakit" veya "kart"}
+Müşteri için: {"action": "MUSTERI_EKLE", "musteri": "...", "tel": "..."}
+Randevu için: {"action": "RANDEVU_YAZ", "musteri": "...", "tarih": "GG.AA.YYYY", "saat": "14:00", "hizmet": "DİP BOYA", "sure": 60}`;
+
+        try {
+          let sonuc = await geminiApiCagir({ contents: [{ parts: [{ text: promptAjan }] }] });
+          sonuc = sonuc.replace(/```json/g, '').replace(/```/g, '').trim();
+          aiParsedAction = JSON.parse(sonuc);
+          lumioAiAjanKartiniGoster(aiParsedAction);
+          return;
+        } catch (e) {
+          console.warn("Gemini hatası, yerel motora geçildi:", e);
+        }
+      }
+
+      // YEDEK RANDEVU MOTORU
+      let targetDate = new Date();
+      if (kucuk.includes("yarın")) targetDate.setDate(targetDate.getDate() + 1);
+      let tarihStr = targetDate.getDate().toString().padStart(2, '0') + '.' + (targetDate.getMonth() + 1).toString().padStart(2, '0') + '.' + targetDate.getFullYear();
+
+      let saatStr = "14:00";
+      let digitMatch = kucuk.match(/(\b[0-2]?[0-9])[:.]([0-5][0-9]\b)/);
+      if (digitMatch) saatStr = digitMatch[1].padStart(2, '0') + ':' + digitMatch[2];
+
+      let isim = "Müşteri";
+      let kelimeler = raw.split(/[\s,.'"]+/).filter(w => w.length > 2);
+      for (let k of kelimeler) {
+        let m = musteriler.find(x => turkceNormalize(x.ad).includes(turkceNormalize(k)));
+        if (m) { isim = m.ad; break; }
+      }
+
+      aiParsedAction = {
+        action: "RANDEVU_YAZ",
+        musteri: turkceHitapIsimDuzenle(isim), tel: "", tarih: tarihStr, saat: saatStr,
+        hizmet: kucuk.includes("fön") ? "FÖN" : (kucuk.includes("kesim") ? "KESİM" : "DİP BOYA"),
+        sure: 60
+      };
+      lumioAiAjanKartiniGoster(aiParsedAction);
     }
 
     function lumioAiAjanKartiniGoster(actionData) {
@@ -3856,35 +3003,6 @@ Ustanın niyetine göre YALNIZCA şu 3 JSON formatından birini döndür (başka
       }
     }
 
-    function lumioAiYerelSokakDiliCoz(metin) {
-      let raw = metin.toLocaleLowerCase('tr-TR').trim();
-      let targetDate = new Date();
-      if (raw.includes("yarın")) targetDate.setDate(targetDate.getDate() + 1);
-      let tarihStr = targetDate.getDate().toString().padStart(2, '0') + '.' + (targetDate.getMonth() + 1).toString().padStart(2, '0') + '.' + targetDate.getFullYear();
-
-      let saatStr = "14:00";
-      let digitMatch = raw.match(/(\b[0-2]?[0-9])[:.]([0-5][0-9]\b)/);
-      if (digitMatch) saatStr = digitMatch[1].padStart(2, '0') + ':' + digitMatch[2];
-
-      let isim = "Değerli Müşteri";
-      let kelimeler = raw.split(/[\s,.'"]+/).filter(w => w.length > 2);
-      for (let k of kelimeler) {
-        let m = musteriler.find(x => turkceNormalize(x.ad).includes(turkceNormalize(k)));
-        if (m) { isim = m.ad; break; }
-      }
-
-      aiParsedAction = {
-        action: "RANDEVU_YAZ",
-        musteri: turkceHitapIsimDuzenle(isim),
-        tel: "",
-        tarih: tarihStr,
-        saat: saatStr,
-        hizmet: "DİP BOYA",
-        sure: 60
-      };
-      lumioAiAjanKartiniGoster(aiParsedAction);
-    }
-
     function lumioAiRandevuyuOnayla() {
       if (!aiParsedAction) return;
 
@@ -3907,8 +3025,6 @@ Ustanın niyetine göre YALNIZCA şu 3 JSON formatından birini döndür (başka
         });
       } else if (aiParsedAction.action === 'MUSTERI_EKLE') {
         let temizTel = (aiParsedAction.tel || "").replace(/\D/g, '');
-        if (temizTel.startsWith('0')) temizTel = temizTel.substring(1);
-        if (temizTel.length === 10) temizTel = '90' + temizTel;
         let mId = temizTel ? ('tel_' + temizTel) : ('m_' + Date.now());
 
         db.collection('ustalar').doc(aktifLisansKodu).collection('musteriler').doc(mId).set({
@@ -3956,62 +3072,19 @@ Ustanın niyetine göre YALNIZCA şu 3 JSON formatından birini döndür (başka
       adviceCard.classList.remove('hidden');
       adviceText.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-amber-400"></i> Düşünüyorum ustam...`;
 
-      const bugunMs = new Date().setHours(0,0,0,0);
-      const bugunStr = bugununTarihiStr();
-      const bugunRand = randevular.filter(r => akilliTarihDuzelt(r.tarih) === bugunStr && !r.blokMu);
-      let randevuOzeti = (bugunRand.length === 0) 
-        ? "Bugün hiç randevu yok, dükkan tamamen müsait." 
-        : `Bugün toplam ${bugunRand.length} randevu var: ` + bugunRand.map(r => `${r.saat} ${turkceHitapIsimDuzenle(r.musteriAdi)} (${r.hizmet})`).join(", ");
-
-      let cagrilacaklarMetni = "";
-      if (soru.toLowerCase().includes("çağır") || soru.toLowerCase().includes("gelmeyen") || soru.toLowerCase().includes("kim var")) {
-        let adaylar = [];
-        musteriler.forEach(m => {
-          let sonTarihStr = m.sonZiyaret || m.sonraki;
-          if (!sonTarihStr) {
-            let cg = gecmisIslemler.filter(g => (g.musteriId && g.musteriId === m.id) || (m.tel && g.tel === m.tel));
-            if (cg.length > 0) sonTarihStr = cg[0].tarih;
-          }
-          if (sonTarihStr) {
-            let dObj = tarihStringToDate(sonTarihStr);
-            if (dObj) {
-              let gunFarki = Math.floor((bugunMs - dObj.getTime()) / 86400000);
-              if (gunFarki >= 25 && gunFarki <= 90) {
-                adaylar.push({ ad: turkceHitapIsimDuzenle(m.ad), tel: m.tel || 'Numarasız', gun: gunFarki, son: akilliTarihDuzelt(sonTarihStr) });
-              }
-            }
-          }
-        });
-        if (adaylar.length > 0) {
-          cagrilacaklarMetni = "Sistemdeki 1 ay ve üzeri (25 gün ve üstü) gelmeyen müşteri listesi: " + adaylar.map(a => `${a.ad} (Son: ${a.son}, ${a.gun} gün önce)`).join(" | ");
-        } else {
-          cagrilacaklarMetni = "Rehberde son işleminin üzerinden 25-30 gün geçen kimse bulunmuyor, herkes taze gelmiş.";
-        }
-      }
-
       let seciliMusteri = aktifMusteri;
       let musteriHafizasi = "Koltukta belirli bir müşteri seçili değil.";
 
       if (seciliMusteri) {
-        let islemler = gecmisIslemler.filter(g => (g.musteriId && g.musteriId === seciliMusteri.id) || (seciliMusteri.tel && g.tel === seciliMusteri.tel) || turkceNormalize(g.musteriAdi) === turkceNormalize(seciliMusteri.ad));
+        let islemler = gecmisIslemler.filter(g => (g.musteriId && g.musteriId === seciliMusteri.id) || (seciliMusteri.tel && g.tel === seciliMusteri.tel));
         if (islemler.length > 0) {
-          musteriHafizasi = `Müşteri: ${turkceHitapIsimDuzenle(seciliMusteri.ad)}. Geçmiş Ziyaretler: ` + islemler.slice(0, 4).map(i => `[Tarih: ${i.tarih}, İşlem: ${i.hizmet}${i.formul ? ', Formül: ' + i.formul : ''}${i.not ? ', Not: ' + i.not : ''}]`).join(" | ");
+          musteriHafizasi = `Müşteri: ${turkceHitapIsimDuzenle(seciliMusteri.ad)}. Geçmiş Ziyaretler: ` + islemler.slice(0, 4).map(i => `[Tarih: ${i.tarih}, İşlem: ${i.hizmet}${i.formul ? ', Formül: ' + i.formul : ''}]`).join(" | ");
         }
       }
 
-      let sistemTalimati = `Sen salonda tezgâh başında ustanın yanında duran kıdemli ve usta bir salon danışmanısın. Salondaki her işleme tamamen hâkimsin.
-ÖNEMLİ KURALLAR:
-1. Kesinlikle tiyatro replikleri (dükkan temizliği, malzeme sayımı, çay koydum vb.) yapmak YASAKTIR.
-2. ASLA yıldız (**), diyez (#) veya markdown liste işareti kullanma. Düz ve akıcı konuş.
-3. Usta 'randevuları dök', 'dükkan yoğun mu' dediğinde canlı ajandayı saat saat dök.
-4. Usta 'en son ne yaptık' dediğinde, müşterinin geçmişindeki EN SON işlemi söyle.
-5. Usta 'kimi çağıralım' veya 'gelmeyenler kim' dediğinde gerçek müşteri listesini dikkate alarak net isimler ver.
-6. Yanıtların samimi, saygılı ve profesyonel usta diliyle olsun.
-
-BUGÜNKÜ CANLI VERİLER:
-- Günün Randevuları: ${randevuOzeti}
-- Geri Çağırma Analizi: ${cagrilacaklarMetni}
-- Müşteri Hafızası: ${musteriHafizasi}`;
+      let sistemTalimati = `Sen salonda ustanın yanında duran kıdemli bir meslektaş ve coloristsin. 
+Tiyatro veya yapmacık laflar etme. Boya numaraları (7.34, 8.1), formüller, açıcı volümleri ve saç riskleri hakkında dürüst meslektaş yorumu yap.
+Müşteri Hafızası: ${musteriHafizasi}`;
 
       try {
         const cevap = await geminiApiCagir({
@@ -4068,7 +3141,7 @@ BUGÜNKÜ CANLI VERİLER:
       reader.readAsDataURL(file);
     }
 
-    /* YENİ: FOTOĞRAFLI SAÇ İSTİŞARE & YAPILABİLİRLİK ANALİZÖRÜ */
+    /* İSTEK 1.5: YENİ FOTOĞRAFLI SAÇ İSTİŞARE & YAPILABİLİRLİK ANALİZÖRÜ */
     async function lumioAiFotoAnalizBaslat() {
       if (!aiSeciliFotoDataUrl) return;
 
@@ -4135,7 +3208,7 @@ Kullanabileceğin salon ürünleri: ${urunlerMetni}`;
     }
 
     function lumioAiWhatsAppReceteGonder() {
-      let tel = aktifMusteri ? aktifMusteri.tel : prompt("Müşteri WhatsApp numarasını giriniz:");
+      let tel = aktifMusteri ? aktifMusteri.tel : prompt("Müşteri WhatsApp numarasını giriniz (Ülke koduyla):");
       if (!tel) { alert("Telefon numarası bulunamadı."); return; }
       let mAd = aktifMusteri ? turkceHitapIsimDuzenle(aktifMusteri.ad) : "Değerli Müşterimiz";
       let uAdi = salonAyarlari.ustaAdi || "Server YILMAZ";
@@ -4144,49 +3217,6 @@ Kullanabileceğin salon ürünleri: ${urunlerMetni}`;
       let urunMetinleri = patronUrunListesi.slice(0, 2).map((u, i) => `\n${i+1}. ${u.ad}\n💡 Neden: ${u.kullanim}\n🛒 Satın Alma: ${u.link}`).join('\n');
       let msg = `Sayın ${mAd}, 🌸\n\n${sAdi} salonumuzda yapılan saç analiziniz ve size özel hazırlanan bakım protokolünüz:\n\n🧴 SİZE ÖZEL REÇETE EDİLEN EVDE BAKIM PROTOKOLÜ:\n${urunMetinleri}\n\nIşıltılı günler dileriz! ✨\n${uAdi} • ${sAdi}`;
       anindaWhatsAppAc(tel, msg);
-    }
-
-    function patronGeminiSifresiAyarla() {
-      let girilen = prompt("Google AI Studio'dan aldığınız Gemini API anahtarınızı yapıştırınız:", geminiApiKey);
-      if (girilen === null) return;
-      girilen = girilen.trim();
-      if (!girilen) { alert("API Anahtarı boş bırakılamaz!"); return; }
-      geminiApiKey = girilen;
-      localStorage.setItem('lumio_gemini_api_key', girilen);
-      alert("🎉 Google Gemini 1.5/2.0 Yapay Zeka Anahtarınız kaydedildi! Otonom asistan ve saç danışmanı aktif.");
-    }
-
-    function patronUrunListesiniCiz() {
-      const c = document.getElementById('patronUrunYonetimAlani');
-      if (!c) return;
-      c.innerHTML = `
-        <div class="flex justify-between items-center border-b border-slate-800 pb-1">
-          <span class="text-amber-400 font-bold flex items-center text-[10px]"><i class="fa-solid fa-boxes-stacked mr-1"></i> ÜRÜN & PAZARYERİ LİNKLERİ</span>
-          <button onclick="patronYeniUrunEklePrompt()" class="text-[9px] bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded">+ Ürün Ekle</button>
-        </div>
-        <div id="patronUrunlerContainer" class="space-y-1 max-h-36 overflow-y-auto scroll-touch">
-          ${patronUrunListesi.map((u, idx) => `
-            <div class="bg-slate-900 p-1.5 rounded-lg border border-slate-800 flex justify-between items-start text-[10px] gap-2">
-              <div class="flex-1 min-w-0"><div class="font-bold text-white truncate">${u.ad}</div><div class="text-[8px] text-amber-400">${u.platform} • <span class="text-slate-400 font-mono truncate">${u.link}</span></div></div>
-              <button onclick="patronUrunSil(${idx})" class="text-slate-500 hover:text-red-400 p-1 text-xs">✕</button>
-            </div>`).join('')}
-        </div>`;
-    }
-
-    function patronYeniUrunEklePrompt() {
-      let ad = prompt("Ürün Adı:"), platform = prompt("Mağaza (Trendyol vb.):", "Trendyol"), link = prompt("Satın Alma Linki:");
-      if (!ad || !link) return;
-      let kullanim = prompt("Kullanım & Gerekçe:", "Haftada 2 kez uygulanır."), kat = prompt("Kategori (dogal/boyali/hasarli):", "hasarli");
-      patronUrunListesi.push({ id: "u_" + Date.now(), ad: ad.trim(), platform: platform || "Mağaza", link: link.trim(), kullanim: kullanim || "Bakım.", kategori: kat || "hasarli" });
-      localStorage.setItem('lumio_patron_urunler', JSON.stringify(patronUrunListesi));
-      alert("✅ Yeni ürün eklendi!"); patronUrunListesiniCiz();
-    }
-
-    function patronUrunSil(idx) {
-      if (!confirm("Ürün silinsin mi?")) return;
-      patronUrunListesi.splice(idx, 1);
-      localStorage.setItem('lumio_patron_urunler', JSON.stringify(patronUrunListesi));
-      patronUrunListesiniCiz();
     }
 
     /* İLK BAŞLATMA VE ÇEKİRDEK ÇALIŞTIRICI */
