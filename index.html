@@ -331,7 +331,10 @@
 
         <div class="space-y-1">
           <div class="flex justify-between items-end px-1">
-            <span id="custLoyaltyTier" class="text-[10px] font-black text-amber-400">🥉 Yeni Müşteri</span>
+            <div class="flex items-center space-x-2">
+              <span id="custLoyaltyTier" class="text-[10px] font-black text-amber-400">🥉 Yeni Müşteri</span>
+              <span id="custFirstRecordBadge" class="hidden text-[9px] text-slate-400 font-mono bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800"></span>
+            </div>
             <div class="flex items-center space-x-1.5">
               <span id="custFrequencyText" class="text-[9px] text-slate-400 italic"></span>
               <span id="custBadgeVisits" class="text-[10px] text-slate-300 font-bold bg-slate-800 px-2 py-0.5 rounded-md border border-slate-700">0 Ziyaret</span>
@@ -896,7 +899,7 @@
     </div>
   </div>
 
-  <!-- MODAL: MÜŞTERİ BİLGİSİ DÜZENLEME -->
+  <!-- MODAL: MÜŞTERİ BİLGİSİ DÜZENLEME (İLK KAYIT TARİHİ DESTEKLİ) -->
   <div id="modalMusteriDuzenle" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[99999999] flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-4 space-y-3 shadow-2xl">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -913,9 +916,15 @@
           <label class="text-[10px] text-slate-400 block font-bold mb-0.5">TELEFON NUMARASI:</label>
           <input type="tel" id="editCustPhone" placeholder="5323203232" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-amber-300 font-bold focus:outline-none">
         </div>
-        <div>
-          <label class="text-[10px] text-slate-400 block font-bold mb-0.5">DOĞUM TARİHİ (GG.AA):</label>
-          <input type="text" id="editCustBirth" placeholder="GG.AA" onblur="dogumTarihiFormatla(this)" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-white font-bold focus:outline-none">
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-[10px] text-slate-400 block font-bold mb-0.5">DOĞUM TARİHİ (GG.AA):</label>
+            <input type="text" id="editCustBirth" placeholder="GG.AA" onblur="dogumTarihiFormatla(this)" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2 text-white font-bold focus:outline-none">
+          </div>
+          <div>
+            <label class="text-[10px] text-amber-400 block font-bold mb-0.5">İLK KAYIT TARİHİ:</label>
+            <input type="text" id="editCustFirstDate" placeholder="GG.AA.YYYY" onblur="randevuTarihiFormatla(this)" class="w-full bg-slate-950 border border-amber-500/40 rounded-xl p-2 text-amber-300 font-bold focus:outline-none">
+          </div>
         </div>
       </div>
       <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800">
@@ -1134,7 +1143,7 @@
         <div class="ai-sub-card bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-center space-y-2.5">
           <p class="text-[11px] text-slate-300 leading-relaxed">
             Dükkan diliyle konuşun, AI terminale doğrudan işlesin:<br>
-            <span class="text-amber-400 italic font-semibold">"Asiye kartla 3000 ödedi"</span> veya <span class="text-emerald-400 italic font-semibold">"Yarın 16'da Ayşe'ye röfle yaz"</span>
+            <span class="text-amber-400 italic font-semibold">"Asiye kartla 3000 ödedi"</span> veya <span class="text-emerald-400 italic font-semibold">"Bugünkü randevularımı çıkar bakayım"</span>
           </p>
 
           <div class="flex justify-center py-1">
@@ -1383,6 +1392,31 @@ function internetDurumunuGuncelle() {
     window.addEventListener('online', internetDurumunuGuncelle);
     window.addEventListener('offline', internetDurumunuGuncelle);
     internetDurumunuGuncelle();
+
+    /* UYGULAMA KAPALIYKEN / KİLİTLİ EKRANDA BİLDİRİM & SİSTEM ALARMI MOTORU */
+    if ('Notification' in window && Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+      Notification.requestPermission();
+    }
+
+    function sistemBildirimiGonder(baslik, mesaj) {
+      if ('Notification' in window && Notification.permission === 'granted') {
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+          navigator.serviceWorker.ready.then(reg => {
+            reg.showNotification(baslik, {
+              body: mesaj,
+              icon: 'logo.png',
+              badge: 'logo.png',
+              vibrate: [500, 250, 500, 250, 500],
+              tag: 'lumio-randevu-alarm',
+              renotify: true,
+              requireInteraction: true
+            });
+          });
+        } else {
+          new Notification(baslik, { body: mesaj, icon: 'logo.png' });
+        }
+      }
+    }
 
     /* Service Worker Alarm Erteleme Dinleyicisi */
     if ('serviceWorker' in navigator) {
@@ -1952,7 +1986,6 @@ function internetDurumunuGuncelle() {
       const btn = document.getElementById('btnSetupSubmit');
       btn.innerText = "Doğrulanıyor..."; btn.disabled = true;
 
-      // Hem ham girilen kodla hem olası varyasyonla uluslararası arama
       db.collection('sistem').doc('lisanslar').collection('aktifler').doc(temizKod).get().then(doc => {
         btn.innerText = "GİRİŞ YAP VE TERMİNALİ AÇ ✨"; btn.disabled = false;
         
@@ -2076,6 +2109,7 @@ function internetDurumunuGuncelle() {
           snapshot.forEach(d => randevular.push({ id: d.id, ...d.data() }));
           ajandaSaatleriniCiz();
           gunlukCiroGuncelle();
+          ustaRandevuAlarmKontrol();
         });
       }
 
@@ -2101,7 +2135,7 @@ function internetDurumunuGuncelle() {
     }
 /* ==========================================================================
        KASAM, NET CİRO VE BANKA POS KOMİSYON MOTORU
-       ========================================================================= */
+       ========================================================================== */
     function kasaYuzdesiDegisti(val) {
       let y = parseInt(val) || 50;
       if (y < 0) y = 0; if (y > 100) y = 100;
@@ -2331,7 +2365,7 @@ function internetDurumunuGuncelle() {
       });
     }
 
-    /* USTA RANDEVU ALARM KONTROLÜ */
+    /* USTA RANDEVU ALARM KONTROLÜ (SİSTEM ALARMI DESTEKLİ) */
     function ustaRandevuAlarmKontrol() {
       const alarmDk = parseInt(salonAyarlari.alarmSuresi) || 0;
       if (alarmDk === 0) return;
@@ -2345,14 +2379,11 @@ function internetDurumunuGuncelle() {
           uyarilanRandevular.push(r.id);
           let msg = `Saat ${r.saat} için ${turkceHitapIsimDuzenle(r.musteriAdi)} (${r.hizmet}) randevunuza ${fark} dakika kaldı!`;
           alarmSesiCal();
-          if (navigator.vibrate) navigator.vibrate([400, 200, 400]);
-          if ('Notification' in window && Notification.permission === 'granted') {
-            new Notification("⏰ LUMIO Alarmı", { body: msg, icon: "logo.png" });
-          } else {
-            document.getElementById('txtAlarmMesaji').innerText = msg;
-            document.getElementById('modalRandevuAlarmi').classList.remove('hidden');
-            modalGeriTusuKaydi('modalRandevuAlarmi');
-          }
+          sistemBildirimiGonder("⏰ LUMIO Randevu Alarmı", msg);
+          
+          document.getElementById('txtAlarmMesaji').innerText = msg;
+          document.getElementById('modalRandevuAlarmi').classList.remove('hidden');
+          modalGeriTusuKaydi('modalRandevuAlarmi');
         }
       });
     }
@@ -2451,6 +2482,7 @@ function internetDurumunuGuncelle() {
       document.getElementById('totalAmountText').innerText = total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' ' + d.curr;
     }
 
+    /* MÜŞTERİ KAYDET (İLK KAYIT TARİHİ KORUMALI) */
     function ziyaretiKaydet() {
       let hamAd = document.getElementById('custSearch').value.trim();
       const tamTel = tamTelefonAl('custCountryCode', 'custPhone');
@@ -2464,8 +2496,11 @@ function internetDurumunuGuncelle() {
       const tarih = akilliTarihDuzelt(rawT), sonraki = akilliTarihDuzelt(document.getElementById('visitNext').value);
       let musteriDocId = (aktifMusteri && aktifMusteri.id) ? aktifMusteri.id : (tamTel ? ('tel_' + tamTel) : ('m_' + Date.now()));
 
+      let ilkKayit = (aktifMusteri && aktifMusteri.ilkKayitTarihi) ? aktifMusteri.ilkKayitTarihi : tarih;
+
       db.collection('ustalar').doc(aktifLisansKodu).collection('musteriler').doc(musteriDocId).set({
         ad: duzenliAd, tel: tamTel, dogum: document.getElementById('custBirth').value,
+        ilkKayitTarihi: ilkKayit,
         sonraki: sonraki, sonZiyaret: tarih, usta: salonAyarlari.ustaAdi, guncellemeZamani: firebase.firestore.FieldValue.serverTimestamp()
       }, { merge: true });
 
@@ -2703,6 +2738,14 @@ function internetDurumunuGuncelle() {
       document.getElementById('visitNext').value = akilliTarihDuzelt(aktifMusteri.sonraki || "");
       let silBtn = document.querySelector('.id-sil-btn'); if (silBtn) silBtn.classList.remove('hidden');
 
+      // İlk Kayıt Tarihi Rozeti
+      const fDateBadge = document.getElementById('custFirstRecordBadge');
+      if (fDateBadge) {
+        let fTarih = aktifMusteri.ilkKayitTarihi || aktifMusteri.sonZiyaret || '-';
+        fDateBadge.innerText = `📅 İlk Kayıt: ${fTarih}`;
+        fDateBadge.classList.remove('hidden');
+      }
+
       const d = SOZLUK[aktifDil] || SOZLUK.tr;
       const custIslemler = gecmisIslemler.filter(g => (!g.isHizliFis) && ((g.musteriId && g.musteriId === aktifMusteri.id) || (aktifMusteri.tel && g.tel === aktifMusteri.tel)));
       let c = custIslemler.length, tier = "🥉 " + d.newCustStatus;
@@ -2724,6 +2767,8 @@ function internetDurumunuGuncelle() {
       if (document.getElementById('visitDate')) document.getElementById('visitDate').value = bugununTarihiStr();
       if (document.getElementById('visitTime')) document.getElementById('visitTime').value = "14:00";
       let silBtn = document.querySelector('.id-sil-btn'); if (silBtn) silBtn.classList.add('hidden');
+      let fDateBadge = document.getElementById('custFirstRecordBadge'); if (fDateBadge) fDateBadge.classList.add('hidden');
+
       const d = SOZLUK[aktifDil] || SOZLUK.tr;
       if (document.getElementById('custLoyaltyTier')) document.getElementById('custLoyaltyTier').innerText = "🥉 " + d.newCustStatus;
       if (document.getElementById('custBadgeVisits')) document.getElementById('custBadgeVisits').innerText = `0 ${d.visits}`;
@@ -2753,6 +2798,7 @@ function internetDurumunuGuncelle() {
       musteriRehberListesiniCiz(bul);
     }
 
+    /* MÜŞTERİ LİSTESİ ÇİZİMİ (İLK KAYIT TARİHİ GÖRÜNÜR) */
     function musteriRehberListesiniCiz(liste) {
       const c = document.getElementById('custDirectoryList');
       if (!c) return;
@@ -2761,11 +2807,15 @@ function internetDurumunuGuncelle() {
       let html = "";
       for (let i = 0; i < lim; i++) {
         let m = liste[i], dAd = turkceHitapIsimDuzenle(m.ad), tel = m.tel ? (m.tel.startsWith('90') ? '+' + m.tel : m.tel) : 'Numarasız';
+        let ilkT = m.ilkKayitTarihi || m.sonZiyaret || '-';
         html += `
           <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 flex justify-between items-center text-xs hover:border-amber-500/30 transition gap-2">
             <div class="cursor-pointer flex-1 min-w-0" onclick="musteriSecRehberden('${m.id}')">
               <span class="font-bold text-white block text-xs truncate">${dAd}</span>
-              <span class="text-[10px] text-amber-400 font-mono">${tel}</span>
+              <div class="flex items-center space-x-2 mt-0.5">
+                <span class="text-[10px] text-amber-400 font-mono">${tel}</span>
+                <span class="text-[9px] text-slate-400 bg-slate-900 px-1.5 py-0.2 rounded border border-slate-800">📅 İlk: ${ilkT}</span>
+              </div>
             </div>
             <div class="flex items-center space-x-1.5 shrink-0">
               <button onclick="musteriDuzenleModalAc('${m.id}')" class="bg-slate-900 hover:bg-slate-800 text-amber-300 font-bold px-2 py-1 rounded-lg text-[10px] border border-slate-700"><i class="fa-solid fa-pen mr-1"></i> Düzenle</button>
@@ -2785,6 +2835,7 @@ function internetDurumunuGuncelle() {
       let tel = m.tel || ""; if (tel.startsWith('90')) tel = tel.substring(2);
       document.getElementById('editCustPhone').value = tel;
       document.getElementById('editCustBirth').value = m.dogum || "";
+      document.getElementById('editCustFirstDate').value = m.ilkKayitTarihi || m.sonZiyaret || "";
       document.getElementById('modalMusteriDuzenle').classList.remove('hidden');
       modalGeriTusuKaydi('modalMusteriDuzenle');
     }
@@ -2793,15 +2844,19 @@ function internetDurumunuGuncelle() {
     function musteriDuzenleKaydet() {
       const id = document.getElementById('editCustId').value, ad = document.getElementById('editCustName').value.trim();
       const telHam = document.getElementById('editCustPhone').value.trim(), dogum = document.getElementById('editCustBirth').value.trim();
+      const ilkKayit = document.getElementById('editCustFirstDate').value.trim();
       if (!ad) { alert("Müşteri adı boş bırakılamaz!"); return; }
       let tel = telHam.replace(/\D/g, ''); if (tel.startsWith('0')) tel = tel.substring(1);
       const duzenli = turkceHitapIsimDuzenle(ad);
 
       db.collection('ustalar').doc(aktifLisansKodu).collection('musteriler').doc(id).update({
-        ad: duzenli, tel: tel, dogum: dogum, guncellemeZamani: firebase.firestore.FieldValue.serverTimestamp()
+        ad: duzenli, tel: tel, dogum: dogum, ilkKayitTarihi: ilkKayit, guncellemeZamani: firebase.firestore.FieldValue.serverTimestamp()
       }).then(() => {
         alert("✅ Müşteri güncellendi!"); musteriDuzenleKapat();
-        if (aktifMusteri && aktifMusteri.id === id) { aktifMusteri.ad = duzenli; aktifMusteri.tel = tel; aktifMusteri.dogum = dogum; musteriSec(id); }
+        if (aktifMusteri && aktifMusteri.id === id) { 
+          aktifMusteri.ad = duzenli; aktifMusteri.tel = tel; aktifMusteri.dogum = dogum; aktifMusteri.ilkKayitTarihi = ilkKayit;
+          musteriSec(id); 
+        }
       }).catch(err => alert("Hata: " + err.message));
     }
 
@@ -2824,10 +2879,10 @@ function internetDurumunuGuncelle() {
 
     function musteriRehberiniIndir() {
       if (!musteriler || musteriler.length === 0) { alert("Kayıtlı müşteri bulunamadı."); return; }
-      let csv = "\uFEFFMüşteri Adı;Telefon;Doğum Tarihi;Sonraki Randevu;Toplam Ziyaret\n";
+      let csv = "\uFEFFMüşteri Adı;Telefon;Doğum Tarihi;İlk Kayıt Tarihi;Sonraki Randevu;Toplam Ziyaret\n";
       musteriler.forEach(m => {
         let vc = gecmisIslemler.filter(g => (g.musteriId && g.musteriId === m.id) || (m.tel && g.tel === m.tel)).length;
-        csv += `${(m.ad || '').replace(/;/g, ' ')};${m.tel || ''};${m.dogum || ''};${m.sonraki || ''};${vc}\n`;
+        csv += `${(m.ad || '').replace(/;/g, ' ')};${m.tel || ''};${m.dogum || ''};${m.ilkKayitTarihi || ''};${m.sonraki || ''};${vc}\n`;
       });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
@@ -3044,12 +3099,13 @@ function internetDurumunuGuncelle() {
             <div class="flex items-center space-x-1">
               <button onclick="patronUstaPinGuncelle('${u.id}', '${u.ad}')" class="px-2 py-1 bg-amber-500 text-slate-950 rounded-lg text-[10px] font-black">🔑</button>
               <button onclick="patronDukkaninaGir('${u.tel}', '${u.ad}')" class="px-2 py-1 bg-slate-800 text-slate-300 rounded-lg text-[10px]">Gözat</button>
-              <button onclick="patronUstaDurumToggle('${u.id}', '${u.durum}')" class="px-2 py-1 rounded-lg text-[10px] font-bold ${aktif ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-400'}">${aktif ? 'AKTİF' : 'PASİF'}</button>
+              <button onclick="patronUstaDurumToggle('${u.id}', '${u.durum}')" class="px-2 py-1 rounded-lg text-[10px] ${aktif ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-400'}">${aktif ? 'AKTİF' : 'PASİF'}</button>
             </div>
           </div>`;
       }).join('');
     }
 
+    /* WHATSAPP MESAJ MOTORU */
     function whatsappModalAc() {
       let tel = tamTelefonAl('custCountryCode', 'custPhone');
       if (!tel) { alert("Önce bir müşteri seçiniz ya da geçerli telefon giriniz."); return; }
@@ -3584,7 +3640,7 @@ function internetDurumunuGuncelle() {
     }
 
     /* ==========================================================================
-       LUMIO MASTER AI (GEMINI 1.5/2.0 FLASH - SALON JARGONLU OTONOM AJAN)
+       LUMIO MASTER AI (GEMINI 1.5/2.0 FLASH - 404 VE NİYET HATASI DÜZELTİLMİŞ)
        ========================================================================== */
     let aiRecognition = null;
     let aiDinliyorMu = false;
@@ -3607,13 +3663,14 @@ function internetDurumunuGuncelle() {
       de: { langCode: "de-DE", micReady: "Bereit.", micListening: "🔴 Ich höre zu...", noCust: "Kein Kunde gewählt ➔", voiceBtnText: "Vorlesen" }
     };
 
-    /* GERÇEK VE RESMİ GOOGLE GEMINI MODELLERİ */
+    /* RESMİ GOOGLE GEMINI 1.5 FLASH / 2.0 FLASH ÇAĞIRICI (404 HATASI GİDERİLDİ) */
     async function geminiApiCagir(payload) {
       if (!geminiApiKey) {
         throw new Error("Lütfen Patron Paneli'nden [🔑 Gemini 1.5/2.0 Key] butonuna basarak Google API anahtarınızı giriniz.");
       }
 
-      const modeller = ['gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-1.5-pro'];
+      // Canlı, hatasız ve resmi Google API modelleri
+      const modeller = ['gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash-latest'];
       let sonHata = "";
 
       for (const model of modeller) {
@@ -3796,15 +3853,47 @@ function internetDurumunuGuncelle() {
       } catch (err) { alert("Mikrofon hatası: " + err.message); }
     }
 
-    /* SALON VE SOKAK JARGONUNU ANLAYAN OTONOM İŞLEM MOTORU */
+    /* AKILLI NİYET VE SOKAK JARGONU ÇÖZÜCÜ (1. HATAYI KÖKTEN ÇÖZEN BÖLÜM) */
     async function lumioAiAjanKomutCoz(metin) {
       if (!metin) return;
       let raw = metin.trim();
       let kucuk = raw.toLocaleLowerCase('tr-TR');
 
+      // 1. DÜZELTME: SORGU KONTROLÜ (AJANDA / MÜŞTERİ BİLGİSİ İSTENDİĞİNDE ASLA YENİ RANDEVU AÇMA!)
+      const sorguKelimeleri = [
+        "randevularımı çıkar", "randevuları dök", "bugün kim var", "kimler gelecek", 
+        "programım ne", "ajandam", "dükkan yoğun mu", "kim var bugün", "öğleden sonra kim var",
+        "kaçar randevu var", "saat kaçta kim var"
+      ];
+      let sorguMu = sorguKelimeleri.some(s => kucuk.includes(s));
+
+      if (sorguMu) {
+        lumioAiModaliKapat();
+        sekmeDegistir('agenda');
+        
+        let bugunStr = bugununTarihiStr();
+        let bugunRand = randevular.filter(r => akilliTarihDuzelt(r.tarih) === bugunStr && !r.blokMu);
+        
+        let sesliMetin = "";
+        if (bugunRand.length === 0) {
+          sesliMetin = "Bugün hiç randevunuz bulunmuyor ustam, dükkan tamamen müsait.";
+        } else {
+          sesliMetin = `Bugün toplam ${bugunRand.length} randevunuz var: ` + bugunRand.map(r => `Saat ${r.saat}'te ${turkceHitapIsimDuzenle(r.musteriAdi)} için ${r.hizmet}`).join(", ");
+        }
+
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utter = new SpeechSynthesisUtterance(sesliMetin);
+          utter.lang = 'tr-TR';
+          window.speechSynthesis.speak(utter);
+        }
+        return;
+      }
+
+      // 2. GEMINI OTONOM AJAN MOTORU (EYLEMLER İÇİN)
       if (geminiApiKey) {
-        let promptAjan = `Sen profesyonel bir kuaför salonunun akıllı ve otonom kalfası/yöneticisisin.
-Usta sokak ve kuaför salonu jargonuyla konuşur (örn: 'dip çak', 'fön çek', '3 kağıt çekti', 'edip oraya', 'kartla ödedi', 'Fatma ablaya 60 gram 7.1 girdik 1500 yaz').
+        let promptAjan = `Sen kuaför salonunun akıllı ve otonom kalfası/yöneticisisin.
+Usta dükkan jargonuyla konuşur (örn: 'dip çak', 'fön çek', '3 kağıt çekti', 'kartla ödedi', 'Fatma ablaya 60 gram 7.1 girdik 1500 yaz').
 Ustanın Konuşması: "${raw}"
 Bugünün Tarihi: ${bugununTarihiStr()}
 
@@ -3813,10 +3902,10 @@ Bu konuşmayı incele ve YALNIZCA geçerli bir JSON objesi üret. Asla selamlama
 Format 1 (KASA FİŞİ İSE):
 {"action": "KASA_EKLE", "musteri": "Asiye", "islem": "Genel Hizmet", "ucret": 3000, "tur": "nakit" veya "kart"}
 
-Format 2 (MÜŞTERİ KAYDI VEYA YAPILAN İŞLEM/FORMÜL İSE):
+Format 2 (MÜŞTERİ KAYDI VEYA FORMÜL İSE):
 {"action": "MUSTERI_ISLEM_KAYDET", "musteri": "Fatma", "tel": "", "hizmet": "DİP BOYA", "formul": "60 gr 7.1", "ucret": 1500, "tur": "kart" veya "nakit"}
 
-Format 3 (RANDEVU İSE):
+Format 3 (YENİ RANDEVU İSE):
 {"action": "RANDEVU_YAZ", "musteri": "Ayşe", "tarih": "GG.AA.YYYY", "saat": "16:00", "hizmet": "RÖFLE", "sure": 120}`;
 
         try {
@@ -3826,11 +3915,11 @@ Format 3 (RANDEVU İSE):
           lumioAiAjanKartiniGoster(aiParsedAction);
           return;
         } catch (e) {
-          console.warn("Gemini ajanı çözemedi, yerel jargona geçiliyor:", e);
+          console.warn("Gemini ajanı yerel yedeğe devredildi:", e);
         }
       }
 
-      // YEDEK YEREL JARGON ÇÖZÜCÜ
+      // 3. YEREL YEDEK KASA & RANDEVU AYRIŞTIRICISI
       let paraMatch = kucuk.match(/(\d+[\d\s.,]*)\s*(tl|lira|kağıt|bin|yüz)?/i);
       let odemeVarMi = kucuk.includes("ödedi") || kucuk.includes("verdi") || kucuk.includes("çekti") || kucuk.includes("nakit") || kucuk.includes("kart");
 
@@ -3853,7 +3942,7 @@ Format 3 (RANDEVU İSE):
         return; 
       }
 
-      // Randevu Çözümü
+      // Yerel Randevu Çözümü
       let targetDate = new Date();
       if (kucuk.includes("yarın")) targetDate.setDate(targetDate.getDate() + 1);
       let tarihStr = targetDate.getDate().toString().padStart(2, '0') + '.' + (targetDate.getMonth() + 1).toString().padStart(2, '0') + '.' + targetDate.getFullYear();
@@ -3940,14 +4029,16 @@ Format 3 (RANDEVU İSE):
       } else if (aiParsedAction.action === 'MUSTERI_ISLEM_KAYDET') {
         let mId = aiParsedAction.tel ? ('tel_' + aiParsedAction.tel) : ('m_' + Date.now());
         let ad = turkceHitapIsimDuzenle(aiParsedAction.musteri);
+        let bugunT = bugununTarihiStr();
 
         db.collection('ustalar').doc(aktifLisansKodu).collection('musteriler').doc(mId).set({
-          ad: ad, tel: aiParsedAction.tel || "", sonZiyaret: bugununTarihiStr(),
+          ad: ad, tel: aiParsedAction.tel || "", sonZiyaret: bugunT,
+          ilkKayitTarihi: bugunT,
           usta: salonAyarlari.ustaAdi, guncellemeZamani: firebase.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
 
         db.collection('ustalar').doc(aktifLisansKodu).collection('gecmis').add({
-          musteriId: mId, musteriAdi: ad, tel: aiParsedAction.tel || "", tarih: bugununTarihiStr(),
+          musteriId: mId, musteriAdi: ad, tel: aiParsedAction.tel || "", tarih: bugunT,
           hizmet: (aiParsedAction.hizmet || "İŞLEM").toUpperCase(),
           formul: aiParsedAction.formul || "", not: "AI Sesli Kayıt",
           odemeTuru: aiParsedAction.tur || "nakit", usta: salonAyarlari.ustaAdi,
@@ -4059,7 +4150,7 @@ Müşteri Hafızası: ${musteriHafizasi}`;
       reader.readAsDataURL(file);
     }
 
-    /* FOTOĞRAFLI SAÇ İSTİŞARE & YAPILABİLİRLİK DANIŞMANI */
+    /* FOTOĞRAFLI SAÇ İSTİŞARE & YAPILABİLİRLİK DANIŞMANI (404 HATASI GİDERİLDİ) */
     async function lumioAiFotoAnalizBaslat() {
       if (!aiSeciliFotoDataUrl) return;
 
