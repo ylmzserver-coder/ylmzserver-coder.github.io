@@ -1,5 +1,5 @@
-/* LUMIO AI Terminal - Service Worker & Banka Tipi Bildirim Motoru (V9) */
-const CACHE_NAME = 'lumio-ai-cache-v9';
+/* LUMIO AI Terminal - Service Worker & Banka Tipi Bildirim Motoru (V10) */
+const CACHE_NAME = 'lumio-ai-cache-v10';
 const OFFLINE_URLS = [
   './',
   './index.html',
@@ -18,7 +18,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// 2. AKTİF ETME (Eski v8 ve önceki önbellekleri temizle ve kontrolü devral)
+// 2. AKTİF ETME (Eski bozuk önbellekleri temizler ve yeni kodu anında devreye alır)
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -31,12 +31,18 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. ÇEVRİMDIŞI ÇALIŞMA
+// 3. ÇEVRİMDIŞI ÇALIŞMA (Tailwind, FontAwesome ve Google CDN Destekli)
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
 
-  if (!url.origin.includes(self.location.origin) && !url.hostname.includes('cdnjs') && !url.hostname.includes('gstatic')) {
+  // Kendi domainimiz veya kullandığımız CDN'ler dışındakileri önbelleğe alma
+  if (
+    !url.origin.includes(self.location.origin) && 
+    !url.hostname.includes('cdnjs') && 
+    !url.hostname.includes('gstatic') &&
+    !url.hostname.includes('tailwindcss.com')
+  ) {
     return;
   }
 
