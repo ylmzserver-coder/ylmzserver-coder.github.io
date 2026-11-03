@@ -2208,7 +2208,7 @@ function aktifDilSablonlariniAl(dil) {
       });
     }
 
-    /* KİLİTLİ EKRANDA ÇALAN SİSTEM ALARMI */
+    /* KİLİTLİ EKRANDA ÇALAN SİSTEM ALARMI (ANDROID SAFE TRY/CATCH İLE) */
     function ustaRandevuAlarmKontrol() {
       const alarmDk = parseInt(salonAyarlari.alarmSuresi) || 0;
       if (alarmDk === 0) return;
@@ -2223,8 +2223,21 @@ function aktifDilSablonlariniAl(dil) {
           let msg = `Saat ${r.saat} için ${turkceHitapIsimDuzenle(r.musteriAdi)} (${r.hizmet}) randevunuza ${fark} dakika kaldı!`;
           alarmSesiCal();
           if (navigator.vibrate) navigator.vibrate([400, 200, 400]);
-          if ('Notification' in window && Notification.permission === 'granted') new Notification("⏰ LUMIO", { body: msg, icon: "logo.png" });
-          else {
+          try {
+            if ('Notification' in window && Notification.permission === 'granted') {
+              if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+                navigator.serviceWorker.ready.then(reg => {
+                  reg.showNotification("⏰ LUMIO", { body: msg, icon: "logo.png" });
+                });
+              } else {
+                new Notification("⏰ LUMIO", { body: msg, icon: "logo.png" });
+              }
+            } else {
+              document.getElementById('txtAlarmMesaji').innerText = msg;
+              document.getElementById('modalRandevuAlarmi').classList.remove('hidden');
+              modalGeriTusuKaydi('modalRandevuAlarmi');
+            }
+          } catch(err) {
             document.getElementById('txtAlarmMesaji').innerText = msg;
             document.getElementById('modalRandevuAlarmi').classList.remove('hidden');
             modalGeriTusuKaydi('modalRandevuAlarmi');
@@ -2322,14 +2335,14 @@ function aktifDilSablonlariniAl(dil) {
     function toplamHesapla() {
       let total = 0;
       document.querySelectorAll('.service-price').forEach(inp => {
-        let v = inp.value.toString().trim().replace(/\./g, '').replace(',', '.');
+        let v = inp.value.toString().trim().replace(',', '.');
         total += parseFloat(v) || 0;
       });
       const d = SOZLUK[aktifDil] || SOZLUK.tr;
       document.getElementById('totalAmountText').innerText = total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' ' + d.curr;
     }
 
-    /* ZİYARETİ KAYDET (CANLI NAKİT/KART SEÇİMLİ & İLK KAYIT TARİHİ KORUMALI) */
+    /* ZİYARETİ KAYDET (İLK KAYIT TARİHİ VE SON ZİYARET GÜVENCELİ) */
     function ziyaretiKaydet() {
       let hamAd = document.getElementById('custSearch').value.trim();
       const tamTel = tamTelefonAl('custCountryCode', 'custPhone');
@@ -2344,6 +2357,7 @@ function aktifDilSablonlariniAl(dil) {
       const sonraki = akilliTarihDuzelt(document.getElementById('visitNext').value);
       let musteriDocId = (aktifMusteri && aktifMusteri.id) ? aktifMusteri.id : (tamTel ? ('tel_' + tamTel) : ('m_' + Date.now()));
 
+      // Denetim Raporu Düzeltmesi: sonZiyaret alanına gelecek tarih değil, gerçekleşen işlem tarihi (tarih) yazılır.
       let musteriPayload = {
         ad: duzenliAd, 
         tel: tamTel, 
@@ -2362,7 +2376,7 @@ function aktifDilSablonlariniAl(dil) {
       rows.forEach(r => {
         let fVal = r.querySelector('.service-formula') ? r.querySelector('.service-formula').value.trim() : "";
         let nVal = r.querySelector('.service-notes') ? r.querySelector('.service-notes').value.trim() : "";
-        let uVal = r.querySelector('.service-price') ? parseFloat(r.querySelector('.service-price').value.replace(/\./g, '').replace(',', '.')) || 0 : 0;
+        let uVal = r.querySelector('.service-price') ? parseFloat(r.querySelector('.service-price').value.replace(',', '.')) || 0 : 0;
         
         db.collection('ustalar').doc(aktifLisansKodu).collection('gecmis').add({
           musteriId: musteriDocId, 
@@ -2467,7 +2481,7 @@ function aktifDilSablonlariniAl(dil) {
       sekmeDegistir('terminal');
     }
 
-    /* CANLI BİLDİRİM MERKEZİ (3 KURAL MOTORU) */
+    /* CANLI BİLDİRİM MERKEZİ (DÜZELTİLMİŞ m.sonraki HATASI) */
     function canliBildirimMerkeziniGuncelle() {
       const d = SOZLUK[aktifDil] || SOZLUK.tr, bugun = new Date();
       const gunAy = bugun.getDate().toString().padStart(2, '0') + '.' + (bugun.getMonth() + 1).toString().padStart(2, '0');
@@ -2492,10 +2506,10 @@ function aktifDilSablonlariniAl(dil) {
           </div>`).join('');
       } else if (bdayB) bdayB.classList.add('hidden');
 
-      // KURAL 2: 3 GÜN KURALI
+      // KURAL 2: 3 GÜN KURALI (m.sonraok DÜZELTİLDİ -> m.sonraki)
       const remindB = document.getElementById('bannerHatırlatma'), remindL = document.getElementById('bannerRemindList'), hatirlat = [];
       musteriler.forEach(m => {
-        if (!m.sonraok) return;
+        if (!m.sonraki) return;
         let p = akilliTarihDuzelt(m.sonraki).split('.');
         if (p.length === 3) {
           let fark = Math.ceil((new Date(parseInt(p[2]), parseInt(p[1]) - 1, parseInt(p[0])).getTime() - bugunMs) / 86400000);
@@ -2861,7 +2875,7 @@ function aktifDilSablonlariniAl(dil) {
         }
       });
 
-      // USTA HÜCRESİ DUAL-LOOKUP (DÖNGÜSÜZ VE VERİ KAYIPSIZ)
+      // USTA HÜCRESİ DUAL-LOOKUP
       let ustaHucresiKodu = aktifLisansKodu;
       db.collection('ustalar').doc(ustaHucresiKodu).collection('musteriler').limit(1).get().then(testSnap => {
         if (testSnap.empty && ustaHucresiKodu.startsWith('90')) {
@@ -3415,7 +3429,7 @@ function aktifDilSablonlariniAl(dil) {
 
     function sihirbazKapat() { 
       document.getElementById('modalRandevuOlustur').classList.add('hidden'); 
-      duzenlenenRandevuId = null; // Denetim Raporu #4: Randevu ID kilidini temizle
+      duzenlenenRandevuId = null; 
     }
 
     function sihirbazAdimGoster(adim) {
@@ -3558,7 +3572,7 @@ function aktifDilSablonlariniAl(dil) {
         }
         sihirbazKapat(); 
         document.getElementById('cakismaModal').classList.add('hidden'); 
-        duzenlenenRandevuId = null; // Denetim Raporu #4: Randevu ID'sini başarıyla sıfırla
+        duzenlenenRandevuId = null;
         document.getElementById('bildirimOzetMetin').innerHTML = `<b>${shData.musteri}</b><br>📅 ${hedefTarih} • Saat: <b>${shData.saat}</b><br>💇 ${shData.hizmet} (${shData.sure} Dk)`;
         document.getElementById('bildirimAksiyonModal').classList.remove('hidden');
         modalGeriTusuKaydi('bildirimAksiyonModal');
@@ -3691,13 +3705,12 @@ function aktifDilSablonlariniAl(dil) {
       de: { langCode: "de-DE", micReady: "Bereit.", micListening: "🔴 Ich höre zu...", noCust: "Kein Kunde gewählt ➔", voiceBtnText: "Vorlesen" }
     };
 
-    /* GÜÇLÜ VE HATA VERMEYEN YEDEKLİ GOOGLE GEMINI MOTORU (ReferenceError Kökünden Çözüldü) */
+    /* HATA VERMEYEN YEDEKLİ GOOGLE GEMINI MOTORU */
     async function geminiApiCagir(payload) {
       if (!geminiApiKey) {
         throw new Error("Lütfen Patron Paneli'nden [🔑 Gemini API Key] butonuna basarak Google API anahtarınızı giriniz.");
       }
 
-      // Resmi, aktif ve küresel API modelleri hiyerarşisi
       const modelHedefleri = [
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`,
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${geminiApiKey}`,
@@ -3887,11 +3900,10 @@ function aktifDilSablonlariniAl(dil) {
       } catch (err) { alert("Mikrofon hatası: " + err.message); }
     }
 
-    /* GÜNCELLENMİŞ ÇOK DİLLİ VE TARİH BİLİNÇLİ NİYET MOTORU (RAPORDAKİ TÜM AÇIKLAR KAPATILDI) */
+    /* 14 GÜNLÜK TAKVİM MATRİSLİ EVRENSEL YAPAY ZEKA NİYET MOTORU (DENETİM RAPORU TÜM AÇIKLAR KAPATILDI) */
     async function lumioAiSokakDiliCoz(metin) {
       if (!metin || !metin.trim()) return;
 
-      // Denetim Raporu #8: API Key yoksa sahte randevu uydurma, ustayı uyar
       if (!geminiApiKey) {
         alert("Lütfen önce Patron Paneli'nden [🔑 Gemini API Key] butonuna basarak Google Gemini API anahtarınızı tanımlayınız.");
         return;
@@ -3900,11 +3912,11 @@ function aktifDilSablonlariniAl(dil) {
       const micStatus = document.getElementById('aiMicStatus');
       if (micStatus) micStatus.innerText = "🧠 Yapay zeka çözümlüyor...";
 
-      // Denetim Raporu #10 & #4: Haftanın gününü ve önümüzdeki 7 günün takvimini yapay zekaya veriyoruz
+      // Denetim Raporu #10 & #4: 14 günlük takvim matrisi (haftaya salı, cuma vb. ifadeler için)
       const gunAdlari = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
       const simdi = new Date();
       let takvimHaritasi = [];
-      for (let i = 0; i < 7; i++) {
+      for (let i = 0; i < 14; i++) {
         let d = new Date(); d.setDate(simdi.getDate() + i);
         let dStr = d.getDate().toString().padStart(2, '0') + '.' + (d.getMonth() + 1).toString().padStart(2, '0') + '.' + d.getFullYear();
         let gunAdi = gunAdlari[d.getDay()];
@@ -3917,16 +3929,16 @@ function aktifDilSablonlariniAl(dil) {
 Usta dünyanın herhangi bir dilinde (Türkçe, Kazakça, Rusça, Almanca, İngilizce vb.) dükkan jargonuyla konuştu.
 Cümleyi analiz et ve niyetini kusursuz çöz.
 
-CANLI TAKVİM MATRİSİ:
+14 GÜNLÜK CANLI TAKVİM MATRİSİ:
 [${takvimMetni}]
 
 İŞ KURALLARI:
 1. "niyet":
-   - "SORGU": Eğer usta ajandayı soruyorsa ("boş yer var mı?", "Cuma günü kim var?", "расписание на завтра?", "бос орын бар ма?"). Kesinlikle randevu veya müşteri açma!
+   - "SORGU": Eğer usta ajandayı soruyorsa ("Cuma günü kim var?", "haftaya Salı boş mu?", "расписание на завтра?"). Kesinlikle randevu veya müşteri açma!
    - "RANDEVU": Eğer bir müşteriye randevu veriliyorsa ("Hamide'ye 1'de dip boya çak", "Запиши Анну на 2 часа").
-   - "KASA": Eğer ödeme/fiş kaydı yapılıyorsa ("Asiye 500 nakit verdi", "Картой 1000", "Asiye kartla ödedi").
+   - "KASA": Eğer ödeme/fiş kaydı yapılıyorsa ("Asiye 500 nakit verdi", "Asiye kartla ödedi").
    - "IBAN": Eğer hesap veya iban paylaşımı isteniyorsa.
-2. "tarih": Canlı takvim matrisine bakarak ustanın bahsettiği günün tam GG.AA.YYYY tarihini ver. Örneğin bugün Salı ise ve usta 'Cuma' dediyse matristeki Cuma tarihini ata.
+2. "tarih": Canlı takvim matrisine bakarak ustanın bahsettiği günün tam GG.AA.YYYY tarihini ver.
 3. "saat": Kuaför jargonunda usta "1'de" veya "saat 1" dediğinde bu öğleden sonra 13:00 demektir. 2 -> 14:00'tür.
 4. "ucret": Eğer cümlede para miktarı geçmiyorsa null yap.
 5. Asla "Var Mı", "Yeni", "Randevu", "Usta", "Kim" kelimelerini müşteri adı yapma!
@@ -3954,7 +3966,7 @@ Cevabını YALNIZCA geçerli bir JSON nesnesi olarak ver, başka hiçbir yazı y
         const cozum = JSON.parse(raw.replace(/```json/g, '').replace(/```/g, '').trim());
         if (micStatus) micStatus.innerText = "Hazır. Konuşmak için dokunun.";
 
-        // NİYET 1: SORGULAMA (READ-ONLY) - Denetim Raporu #4 Çözüldü: Doğrudan doğru tarihi açar!
+        // NİYET 1: SORGULAMA (READ-ONLY) - Doğru tarihi açar
         if (cozum.niyet === "SORGU") {
           lumioAiModaliKapat();
           sekmeDegistir('agenda');
@@ -3981,7 +3993,7 @@ Cevabını YALNIZCA geçerli bir JSON nesnesi olarak ver, başka hiçbir yazı y
           return;
         }
 
-        // NİYET 2: IBAN PAYLAŞIMI - Denetim Raporu #6 Çözüldü: Boş isimle ilk kişiye körlemesine atmaz!
+        // NİYET 2: IBAN PAYLAŞIMI - Denetim Raporu #6: Boş isimle ilk kişiye atmaz
         if (cozum.niyet === "IBAN") {
           if (!cozum.musteriAdi || !cozum.musteriAdi.trim()) {
             alert("Kime IBAN gönderileceği anlaşılamadı. Lütfen müşteri adını belirterek tekrar söyleyin.");
@@ -4008,7 +4020,7 @@ Cevabını YALNIZCA geçerli bir JSON nesnesi olarak ver, başka hiçbir yazı y
           return;
         }
 
-        // NİYET 3: KASA GİRİŞİ - Denetim Raporu #5 & #7 Çözüldü: Tutar yoksa randevuya düşmez, onay alarak yazar!
+        // NİYET 3: KASA GİRİŞİ - Denetim Raporu #5 & #7: Tutar yoksa randevuya düşmez, onay alarak yazar
         if (cozum.niyet === "KASA") {
           let tutar = parseFloat(cozum.ucret);
           if (isNaN(tutar) || tutar <= 0) {
@@ -4164,7 +4176,7 @@ Cevabını YALNIZCA geçerli bir JSON nesnesi olarak ver, başka hiçbir yazı y
       lumioAiArayuzuDileGoreGuncelle();
     }
 
-    /* SALON MESLEKTAŞI AKILLI İSTİŞARE (DENETİM RAPORU #2 ÇÖZÜLDÜ: TAM HAFIZA AKTİF) */
+    /* SALON MESLEKTAŞI AKILLI İSTİŞARE (TAM HAFIZA & GELMEYENLER LİSTESİ DAHİL) */
     async function lumioAiSoruSor() {
       const inp = document.getElementById('aiAskInput');
       const soru = inp.value.trim();
@@ -4185,7 +4197,6 @@ Cevabını YALNIZCA geçerli bir JSON nesnesi olarak ver, başka hiçbir yazı y
         ? "Bugün hiç randevu yok, dükkan tamamen müsait." 
         : `Bugün toplam ${bugunRand.length} randevu var: ` + bugunRand.map(r => `${r.saat} ${turkceHitapIsimDuzenle(r.musteriAdi)} (${r.hizmet})`).join(", ");
 
-      // Denetim Raporu #2: Gelmeyen müşteri havuzu ve analizi modele geri yüklendi!
       let cagrilacaklarMetni = "";
       let adaylar = [];
       musteriler.forEach(m => {
@@ -4222,7 +4233,7 @@ Cevabını YALNIZCA geçerli bir JSON nesnesi olarak ver, başka hiçbir yazı y
 
       let sistemTalimati = `Sen kuaför tezgahında ustanın yanında duran, tecrübeli ve kıdemli bir colorist & salon meslektaşısın.
 DİL VE USLUP KURALLARI:
-1. Kesinlikle tiyatro replikleri (çay koydum, paspas vb.) yapmayacaksın.
+1. Kesinlikle tiyatro replikleri yapmayacaksın.
 2. ASLA yıldız (**), diyez (#) veya markdown liste işaretleri kullanma. Düz, net ve akıcı dükkan jargonuyla konuş.
 3. Kuaför kimyası jargonu kullan: "oryal", "20 volüm oksidan", "dip açma", "cila", "küllü kumral", "dorelik kırma", "pigmentasyon", "porozite".
 4. Usta 'kimi çağıralım' veya 'gelmeyenler kim' dediğinde gerçek gelmeyen müşteri listesini dikkate alarak net isimler ver.
