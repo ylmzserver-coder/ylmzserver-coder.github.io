@@ -3706,52 +3706,47 @@ function aktifDilSablonlariniAl(dil) {
     };
 
     /* HATA VERMEYEN YEDEKLİ GOOGLE GEMINI MOTORU */
-    async function geminiApiCagir(payload) {
-      if (!geminiApiKey) {
-        throw new Error("Lütfen Patron Paneli'nden [🔑 Gemini API Key] butonuna basarak Google API anahtarınızı giriniz.");
+    const modelHedefleri = [
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${geminiApiKey}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`,
+    `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`
+  ];
+
+  let sonHataMetni = "";
+
+  for (let i = 0; i < modelHedefleri.length; i++) {
+    const hedefUrl = modelHedefleri[i];
+    const abortCtrl = new AbortController();
+    const zamanAsimiId = setTimeout(() => abortCtrl.abort(), 25000);
+
+    try {
+      const res = await fetch(hedefUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: abortCtrl.signal
+      });
+
+      clearTimeout(zamanAsimiId);
+      const data = await res.json();
+
+      if (res.ok && data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+        return data.candidates[0].content.parts[0].text;
       }
 
-      const modelHedefleri = [
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`,
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${geminiApiKey}`,
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`,
-        `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`
-      ];
-
-      let sonHataMetni = "";
-
-      for (let i = 0; i < modelHedefleri.length; i++) {
-        const hedefUrl = modelHedefleri[i];
-        const abortCtrl = new AbortController();
-        const zamanAsimiId = setTimeout(() => abortCtrl.abort(), 25000);
-
-        try {
-          const res = await fetch(hedefUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-            signal: abortCtrl.signal
-          });
-
-          clearTimeout(zamanAsimiId);
-          const data = await res.json();
-
-          if (res.ok && data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
-            return data.candidates[0].content.parts[0].text;
-          }
-
-          if (data.error) {
-            sonHataMetni = data.error.message || "Model yanıt vermedi.";
-            continue;
-          }
-        } catch (hata) {
-          clearTimeout(zamanAsimiId);
-          sonHataMetni = (hata.name === 'AbortError') ? "Bağlantı zaman aşımına uğradı." : (hata.message || "Bilinmeyen hata");
-        }
+      if (data.error) {
+        sonHataMetni = data.error.message || "Model yanıt vermedi.";
+        continue;
       }
-
-      throw new Error(sonHataMetni || "Yapay zeka motoruna ulaşılamadı. Lütfen API anahtarınızı kontrol ediniz.");
+    } catch (hata) {
+      clearTimeout(zamanAsimiId);
+      sonHataMetni = (hata.name === 'AbortError') ? "Bağlantı zaman aşımına uğradı." : (hata.message || "Bilinmeyen hata");
     }
+  }
+
+  throw new Error(sonHataMetni || "Yapay zeka motoruna ulaşılamadı. Lütfen API anahtarınızı kontrol ediniz.");
+}
 
     function lumioAiModaliAc() {
       document.getElementById('modalLumioAi').classList.remove('hidden');
