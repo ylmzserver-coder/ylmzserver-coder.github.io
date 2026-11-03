@@ -4238,7 +4238,42 @@ BUGÜNKÜ CANLI VERİLER:
 - Günün Randevuları: ${randevuOzeti}
 - Geri Çağırma Analizi (Gelmeyen Müşteriler): ${cagrilacaklarMetni}
 - Koltuktaki Müşteri Hafızası: ${musteriHafizasi}`;
+/* KESİNTİSİZ VE GÜNCEL GEMINI 2.0 FLASH MOTORU */
+    async function geminiApiCagir(payload) {
+      if (!geminiApiKey) {
+        throw new Error("Lütfen Patron Paneli'nden [🔑 Gemini API Key] butonuna basarak Google API anahtarınızı giriniz.");
+      }
 
+      const hedefUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`;
+
+      const abortCtrl = new AbortController();
+      const zamanAsimiId = setTimeout(() => abortCtrl.abort(), 25000);
+
+      try {
+        const res = await fetch(hedefUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: abortCtrl.signal
+        });
+
+        clearTimeout(zamanAsimiId);
+        const data = await res.json();
+
+        if (res.ok && data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+          return data.candidates[0].content.parts[0].text;
+        }
+
+        if (data.error) {
+          throw new Error(data.error.message || "Google API hata döndürdü.");
+        }
+
+        throw new Error("Geçersiz API yanıtı.");
+      } catch (hata) {
+        clearTimeout(zamanAsimiId);
+        throw new Error(hata.name === 'AbortError' ? "Bağlantı zaman aşımına uğradı." : hata.message);
+      }
+    }
       try {
         const cevap = await geminiApiCagir({
           contents: [{ parts: [{ text: `${sistemTalimati}\n\nUstanın Sorusu: "${soru}"` }] }],
