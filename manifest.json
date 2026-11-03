@@ -2,7 +2,7 @@
   "name": "LUMIO",
   "short_name": "LUMIO",
   "description": "LUMIO Salon Intelligence",
-  "id": "lumio-global-v1",
+  "id": "lumio-terminal-v1",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
