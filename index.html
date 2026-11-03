@@ -3656,16 +3656,17 @@
     /* GOOGLE GEMINI ENTEGRASYONU (GOOGLE'IN TALEP ETTİĞİ 3.8 & 1.5 ÇİFTLİ ÇAĞRI) */
     async function geminiApiCagir(payload) {
       if (!geminiApiKey) {
-        throw new Error("Lütfen Patron Paneli'nden [🔑 Gemini API Key] butonuna basarak Google API anahtarınızı giriniz.");
+        throw new Error("Patron Paneli'nden [🔑 Gemini API Key] butonuna basarak Google API anahtarınızı giriniz.");
       }
 
-      // Ekranda gelen "Use models/gemini-3.8-flash" talimatı gereği öncelik 3.8 ardından 1.5
-      const modeller = ['gemini-3.8-flash', 'gemini-1.5-flash', 'gemini-2.0-flash'];
+      // 2.0-flash KAPATILDIĞI İÇİN ARTIK ASLA ÇAĞRILMAYACAK!
+      // Doğrudan resmi ve stabil 1.5-flash ve 1.5-pro denenir.
+      const modeller = ['gemini-1.5-flash', 'gemini-1.5-flash-latest', 'gemini-1.5-pro'];
       let sonHata = "";
 
       for (const model of modeller) {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 45000);
+        const timeoutId = setTimeout(() => controller.abort(), 35000);
 
         try {
           const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiApiKey}`;
@@ -3679,17 +3680,13 @@
           clearTimeout(timeoutId);
           const data = await res.json();
 
-          if (res.ok && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
+          if (res.ok && data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
             return data.candidates[0].content.parts[0].text;
           }
 
           if (data.error) {
             sonHata = data.error.message;
-            if (data.error.code === 404 || data.error.message.includes('not found') || data.error.message.includes('no longer available')) {
-              continue; // Diğer modele geç
-            } else {
-              throw new Error(data.error.message);
-            }
+            continue; // Diğer modele geç
           }
         } catch (e) {
           clearTimeout(timeoutId);
@@ -3699,7 +3696,6 @@
 
       throw new Error(sonHata || "Yapay zeka motoruna ulaşılamadı. Lütfen API anahtarınızı kontrol ediniz.");
     }
-
     function lumioAiModaliAc() {
       document.getElementById('modalLumioAi').classList.remove('hidden');
       modalGeriTusuKaydi('modalLumioAi');
@@ -3848,50 +3844,71 @@
     }
 
     /* OTONOM NİYET AYRIMI, "YENİ" İSİM TUZAĞI ÇÖZÜMÜ & "SAAT 1" = 13:00 DÜZELTMESİ */
+    /* OTONOM NİYET AYRIMI (SORGU, IBAN, KASA VE RANDEVU AYRIMI) */
     function lumioAiSokakDiliCoz(metin) {
       if (!metin) return;
       let raw = metin.toLocaleLowerCase('tr-TR').trim();
+      // Kesme işaretlerini ve ekleri temizle
+      let temizMetin = raw.replace(/['`’]/g, ' ');
 
       // =========================================================================
-      // NİYET 1: SORGULAMA (READ-ONLY) — ASLA YENİ RANDEVU AÇMAZ! (Protokol Madde 5.A)
+      // NİYET 1: SORGULAMA (READ-ONLY) — "VAR MI", "VARMI", "BOŞ MU", "BOSMU"
+      // ASLA RANDEVU VEYA MÜŞTERİ KARTI AÇMAZ! AJANDAYI SESLİ OKUR!
       // =========================================================================
-      const sorguKelimeleri = [
-        "randevularımı çıkar", "randevuları çıkar", "randevuları dök", "bugün kim var", 
-        "kimler gelecek", "programım ne", "ajandam", "dükkan yoğun mu", "kim gelecek"
+      const soruKelimeleri = [
+        "var mı", "varmı", "var mi", "varmi", "boş mu", "boşmu", "bos mu", "bosmu",
+        "dolu mu", "dolumu", "yer var mı", "yer varmı", "kim var", "kimler var",
+        "kim gelecek", "kimler gelecek", "program ne", "randevularımı çıkar",
+        "randevuları dök", "yoğun muyuz", "yoğun mu"
       ];
-      if (sorguKelimeleri.some(s => raw.includes(s))) {
+
+      let sorguMu = soruKelimeleri.some(k => temizMetin.includes(k));
+
+      if (sorguMu) {
         lumioAiModaliKapat();
         sekmeDegistir('agenda');
-        
-        const bugunStr = bugununTarihiStr();
-        const bugunRand = randevular.filter(r => akilliTarihDuzelt(r.tarih) === bugunStr && !r.blokMu);
-        
-        let sesMetni = "";
-        if (bugunRand.length === 0) {
-          sesMetni = "Ustam, bugün için ajandanızda kayıtlı hiçbir randevu bulunmuyor. Dükkan tamamen müsait.";
-        } else {
-          sesMetni = `Bugün toplam ${bugunRand.length} randevunuz var: ` + 
-            bugunRand.map(r => `Saat ${r.saat}'te ${turkceHitapIsimDuzenle(r.musteriAdi)}, ${r.hizmet}`).join(". ");
+
+        // Yarın mı soruluyor bugün mü?
+        let hedefTarihStr = bugununTarihiStr();
+        let gunEtiket = "Bugün";
+
+        if (temizMetin.includes("yarın") || temizMetin.includes("yarin")) {
+          let yarin = new Date();
+          yarin.setDate(yarin.getDate() + 1);
+          hedefTarihStr = yarin.getDate().toString().padStart(2, '0') + '.' + (yarin.getMonth() + 1).toString().padStart(2, '0') + '.' + yarin.getFullYear();
+          gunEtiket = "Yarın";
         }
-        
+
+        ajandaTarihSec(hedefTarihStr);
+        const hedefRandevular = randevular.filter(r => akilliTarihDuzelt(r.tarih) === hedefTarihStr && !r.blokMu);
+
+        let sesMetni = "";
+        if (hedefRandevular.length === 0) {
+          sesMetni = `Ustam, ${gunEtiket.toLowerCase()} ajandada hiçbir randevu görünmüyor, dükkan tamamen müsait.`;
+        } else {
+          sesMetni = `Ustam, ${gunEtiket.toLowerCase()} toplam ${hedefRandevular.length} randevunuz var: ` +
+            hedefRandevular.map(r => `Saat ${r.saat}'te ${turkceHitapIsimDuzenle(r.musteriAdi)}, ${r.hizmet}`).join(". ");
+        }
+
         if ('speechSynthesis' in window) {
           window.speechSynthesis.cancel();
           const utter = new SpeechSynthesisUtterance(sesMetni);
           utter.lang = "tr-TR";
+          utter.rate = 1.05;
           window.speechSynthesis.speak(utter);
         }
-        return;
+        return; // İşlemi bitir, randevu ekranına ASLA geçme!
       }
 
       // =========================================================================
-      // NİYET 2: WHATSAPP / IBAN / HESAP MESAJI EYLEMİ
+      // NİYET 2: WHATSAPP / IBAN ATMA
       // =========================================================================
-      if (raw.includes("iban") || (raw.includes("mesaj") && raw.includes("at"))) {
+      if (temizMetin.includes("iban") || (temizMetin.includes("mesaj") && temizMetin.includes("at"))) {
         let bulunanMusteri = null;
         for (let m of musteriler) {
           let mAd = turkceNormalize(m.ad);
           let parcalar = mAd.split(' ');
-          if (parcalar.some(p => p.length > 2 && raw.includes(p))) {
+          if (parcalar.some(p => p.length > 2 && temizMetin.includes(p))) {
             bulunanMusteri = m;
             break;
           }
@@ -3914,40 +3931,39 @@
           anindaWhatsAppAc(bulunanMusteri.tel, msg);
           return;
         } else {
-          alert("Müşteri veya telefon numarası bulunamadı. Lütfen rehberi kontrol edin.");
+          alert("Müşteri bulunamadı veya telefon numarası kayıtlı değil.");
           return;
         }
       }
 
       // =========================================================================
-      // NİYET 3: DOĞRUDAN KASA VE ÖDEME FİŞİ GİRİŞİ
+      // NİYET 3: HIZLI KASA GİRİŞİ (ÖRN: "ASİYE KARTLA 3000 ÖDEDİ")
       // =========================================================================
-      const odemeFiilleri = ["ödedi", "çekti", "verdi", "nakit", "kart", "kasa", "tahsil"];
-      const paraRakamMatch = raw.match(/\b\d+(\.\d+)?\b/);
-      if (odemeFiilleri.some(f => raw.includes(f)) && paraRakamMatch && !raw.includes("saat") && !raw.includes("randevu")) {
-        let ucret = parseFloat(paraRakamMatch[0]) || 0;
-        let tur = raw.includes("kart") ? "kart" : "nakit";
-        let islemAd = "Hızlı Fiş";
-        
-        let bulunanMusteriAd = "Hızlı Kasa İşlemi", bulunanMusteriId = "", bulunanTel = "";
+      const odemeKelimeleri = ["ödedi", "çekti", "verdi", "nakit", "kart", "tahsil"];
+      const rakamMatch = temizMetin.match(/\b\d+(\.\d+)?\b/);
+      if (odemeKelimeleri.some(k => temizMetin.includes(k)) && rakamMatch && !temizMetin.includes("saat") && !temizMetin.includes("randevu")) {
+        let ucret = parseFloat(rakamMatch[0]) || 0;
+        let tur = temizMetin.includes("kart") ? "kart" : "nakit";
+        let musteriAd = "Hızlı Kasa İşlemi", musteriId = "", tel = "";
+
         for (let m of musteriler) {
           let parcalar = turkceNormalize(m.ad).split(' ');
-          if (parcalar.some(p => p.length > 2 && raw.includes(p))) {
-            bulunanMusteriAd = turkceHitapIsimDuzenle(m.ad);
-            bulunanMusteriId = m.id;
-            bulunanTel = m.tel || "";
+          if (parcalar.some(p => p.length > 2 && temizMetin.includes(p))) {
+            musteriAd = turkceHitapIsimDuzenle(m.ad);
+            musteriId = m.id;
+            tel = m.tel || "";
             break;
           }
         }
 
         db.collection('ustalar').doc(aktifLisansKodu).collection('gecmis').add({
-          isHizliFis: (bulunanMusteriAd === "Hızlı Kasa İşlemi"),
-          musteriId: bulunanMusteriId,
-          tel: bulunanTel,
-          musteriAdi: bulunanMusteriAd,
+          isHizliFis: (musteriAd === "Hızlı Kasa İşlemi"),
+          musteriId: musteriId,
+          tel: tel,
+          musteriAdi: musteriAd,
           tarih: bugununTarihiStr(),
-          hizmet: islemAd.toUpperCase(),
-          formul: "Sesli Kasa Girişi",
+          hizmet: "HIZLI FİŞ",
+          formul: "Sesli Kasa",
           not: metin,
           odemeTuru: tur,
           usta: salonAyarlari.ustaAdi,
@@ -3956,22 +3972,19 @@
         }).then(() => {
           lumioAiModaliKapat();
           gunlukCiroGuncelle();
-          alert(`✅ Kasa Fişi Kaydedildi: ${bulunanMusteriAd} - ${ucret} TL (${tur.toUpperCase()})`);
+          alert(`✅ Kasa Fişi Eklendi: ${musteriAd} - ${ucret} TL (${tur.toUpperCase()})`);
         });
         return;
       }
 
       // =========================================================================
-      // NİYET 4: RANDEVU EYLEMİ, "YENİ" İSİM FİLTRESİ & SAAT 1 -> 13:00 DÜZELTMESİ
+      // NİYET 4: GERÇEK RANDEVU OLUŞTURMA (SAAT 1 -> 13:00 VE İSİM AYIKLAMA)
       // =========================================================================
       let now = new Date(), targetDate = new Date();
-      if (raw.includes("yarın") || raw.includes("tomorrow")) {
+      if (temizMetin.includes("yarın") || temizMetin.includes("yarin")) {
         targetDate.setDate(now.getDate() + 1);
       }
       let tarihStr = targetDate.getDate().toString().padStart(2, '0') + '.' + (targetDate.getMonth() + 1).toString().padStart(2, '0') + '.' + targetDate.getFullYear();
-
-      // Kesme işaretlerini temizle
-      let temizMetin = raw.replace(/['`’]/g, ' ');
 
       let saatStr = "14:00";
       let isSabah = temizMetin.includes("sabah") || temizMetin.includes("öğleden önce");
@@ -3983,8 +3996,7 @@
         if (h >= 1 && h <= 6 && !isSabah) h += 12;
         saatStr = h.toString().padStart(2, '0') + ':' + digitMatch[2];
       } else {
-        // Türkçede "saat 1'de" -> 13:00 dönüşüm tablosu
-        const kelimeSaatler = {
+        const saatHaritasi = {
           "1": 13, "bir": 13, "bire": 13, "birde": 13,
           "2": 14, "iki": 14, "ikiye": 14, "ikide": 14,
           "3": 15, "üç": 15, "üçe": 15, "üçte": 15,
@@ -4000,7 +4012,7 @@
           "13": 13, "14": 14, "15": 15, "16": 16, "17": 17, "18": 18, "19": 19, "20": 20
         };
 
-        for (let [k, num] of Object.entries(kelimeSaatler)) {
+        for (let [k, num] of Object.entries(saatHaritasi)) {
           let reg = new RegExp(`\\b${k}\\b`);
           if (reg.test(temizMetin)) {
             let finalH = num;
@@ -4012,26 +4024,27 @@
         }
       }
 
-      // "YENİ", "MÜŞTERİ" KELİMELERİNİ İSİM LİSTESİNDEN ÇIKARAN DURDURMA LİSTESİ
+      // ASLA İSİM OLARAK ALINMAYACAK KELİMELER LİSTESİ
       const durdurmaKelimeleri = [
-        "yeni", "müşteri", "kaydı", "yapacağız", "aç", "kaydet", "sabah", "akşam", 
-        "öğleden", "sonra", "hanım", "hanıma", "bey", "beye", "abla", "ablaya", 
-        "abi", "abime", "usta", "randevu", "çak", "yaz", "olsun", "gelecek", "saat", "günaydın", "yarın", "kesin"
+        "yeni", "müşteri", "kaydı", "yapacağız", "aç", "kaydet", "sabah", "akşam",
+        "öğleden", "sonra", "hanım", "hanıma", "bey", "beye", "abla", "ablaya",
+        "abi", "abime", "usta", "randevu", "çak", "yaz", "olsun", "gelecek",
+        "saat", "günaydın", "yarın", "kesin", "var", "mı", "mi", "mu", "mü", "varmı", "varmi"
       ];
+
       let kelimeler = temizMetin.split(/[\s,.]+/).filter(w => w.length > 1 && isNaN(w));
       let adayIsimler = kelimeler.filter(w => !durdurmaKelimeleri.includes(w));
 
-      let bulunanMusteri = "", bulunanTel = "", eslesenMusteriObj = null, rehberdeVarMi = true;
+      let bulunanMusteri = "", bulunanTel = "", rehberdeVarMi = true;
 
       if (musteriler && musteriler.length > 0) {
         for (let aday of adayIsimler) {
           let aNorm = turkceNormalize(aday);
           let eslesen = musteriler.find(m => turkceNormalize(m.ad).split(/\s+/).some(p => p.startsWith(aNorm) || aNorm.startsWith(p)));
           if (eslesen) {
-            bulunanMusteri = eslesen.ad; 
+            bulunanMusteri = eslesen.ad;
             bulunanTel = eslesen.tel || "";
-            eslesenMusteriObj = eslesen;
-            break; 
+            break;
           }
         }
       }
@@ -4042,25 +4055,10 @@
       }
       if (!bulunanMusteri) { bulunanMusteri = "Yeni Müşteri"; rehberdeVarMi = false; }
 
-      // Hizmet ve Süre Tespiti
-      let hizmetStr = "", sureDk = 60;
-      const liste = salonAyarlari.hizmetler || VARSAYILAN_BOLUM_HIZMETLERI.kuafor;
-
+      let hizmetStr = "DİP BOYA", sureDk = 60;
       if (temizMetin.includes("fön")) { hizmetStr = "FÖN"; sureDk = 30; }
-      else if (temizMetin.includes("boya") || temizMetin.includes("dip")) { hizmetStr = "DİP BOYA"; sureDk = 90; }
-      else if (temizMetin.includes("kesim") || temizMetin.includes("kestir")) { hizmetStr = "KESİM"; sureDk = 45; }
+      else if (temizMetin.includes("kesim")) { hizmetStr = "KESİM"; sureDk = 45; }
       else if (temizMetin.includes("röfle") || temizMetin.includes("balyaj")) { hizmetStr = "RÖFLE"; sureDk = 180; }
-      else {
-        for (let h of liste) {
-          if (temizMetin.includes(h.ad.toLocaleLowerCase('tr-TR'))) { hizmetStr = h.ad; sureDk = h.sure || 60; break; }
-        }
-      }
-
-      if (!hizmetStr && eslesenMusteriObj) {
-        let sonGecmis = gecmisIslemler.find(g => (!g.isHizliFis) && ((g.musteriId && g.musteriId === eslesenMusteriObj.id) || (eslesenMusteriObj.tel && g.tel === eslesenMusteriObj.tel)));
-        if (sonGecmis && sonGecmis.hizmet) { hizmetStr = sonGecmis.hizmet; sureDk = 60; }
-      }
-      if (!hizmetStr) hizmetStr = "DİP BOYA";
 
       aiParsedRandevu = {
         musteri: turkceHitapIsimDuzenle(bulunanMusteri), tel: bulunanTel, tarih: tarihStr, saat: saatStr, hizmet: hizmetStr, sure: sureDk, yeniKayitMi: !rehberdeVarMi
@@ -4071,24 +4069,15 @@
       document.getElementById('aiResSaat').innerText = aiParsedRandevu.saat;
       document.getElementById('aiResHizmet').innerText = `${aiParsedRandevu.hizmet} (${aiParsedRandevu.sure} Dk)`;
 
-      // YENİ MÜŞTERİ ETKİLEŞİMLİ DİYALOG PANELİNİ AÇMA
       const dialogBox = document.getElementById('aiNewCustDialogBox');
       const promptText = document.getElementById('aiNewCustPromptText');
       if (dialogBox) {
         if (!rehberdeVarMi) {
-          promptText.innerText = `'${aiParsedRandevu.musteri}' rehberde bulunamadı. Yeni müşteri kaydı açılsın mı?`;
+          promptText.innerText = `'${aiParsedRandevu.musteri}' rehberde yok. Yeni kayıt açılsın mı?`;
           dialogBox.classList.remove('hidden');
           document.getElementById('aiNewCustInlineForm').classList.add('hidden');
           document.getElementById('aiNewCustBtnGroup').classList.remove('hidden');
           document.getElementById('aiNewCustNameInp').value = (aiParsedRandevu.musteri === "Yeni Müşteri") ? "" : aiParsedRandevu.musteri;
-
-          // Sesli olarak da ustaya sorar:
-          if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const utter = new SpeechSynthesisUtterance("Kayıtlarımızda bu müşteri yok. Yeni müşteri kaydı açalım mı ustam?");
-            utter.lang = "tr-TR";
-            window.speechSynthesis.speak(utter);
-          }
         } else {
           dialogBox.classList.add('hidden');
         }
@@ -4096,7 +4085,7 @@
 
       document.getElementById('aiParsedCard').classList.remove('hidden');
     }
-
+     
     /* YENİ MÜŞTERİ DİYALOG ETKİLEŞİM FONKSİYONLARI */
     function lumioAiYeniMusteriFormuAc() {
       document.getElementById('aiNewCustBtnGroup').classList.add('hidden');
