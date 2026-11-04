@@ -12,15 +12,15 @@
   <meta name="theme-color" content="#090d16" id="metaThemeColor">
   <meta name="mobile-web-app-capable" content="yes">
 
-  <link rel="icon" type="image/png" href="logo.png">
-  <link rel="apple-touch-icon" href="logo.png">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
   <link rel="manifest" href="manifest.json">
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.addEventListener('message', (ev) => {
         if (ev.data && ev.data.type === 'ERTELE_ALARM') {
           setTimeout(() => {
-            navigator.serviceWorker.ready.then(r => r.showNotification('⏰ LUMIO', { body: 'Ertelenen randevu hatırlatması', icon: 'logo.png' })).catch(() => {});
+            navigator.serviceWorker.ready.then(r => r.showNotification('⏰ LUMIO', { body: 'Ertelenen randevu hatırlatması', icon: 'icon-192.png' })).catch(() => {});
           }, (ev.data.dakika || 10) * 60000);
         }
       });
@@ -65,6 +65,7 @@
       -webkit-tap-highlight-color: transparent;
       transition: background-color 0.2s ease, color 0.2s ease;
     }
+    #modalYasalSozlesme:not(.hidden) { display: flex; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     
@@ -173,50 +174,55 @@
     </button>
   </div>
 
-  <!-- LİSANS KURULUM & YASAL SÖZLEŞME MODALI -->
-  <div id="licenseSetupModal" class="hidden fixed inset-0 bg-slate-950/98 z-[9999999999] flex flex-col items-center justify-center p-6 text-center">
-    <div class="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center p-2 mb-4 shadow-xl">
-      <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow">
-        <circle cx="50" cy="50" r="46" fill="none" stroke="#f59e0b" stroke-width="3"/>
-        <path d="M45,20 C55,20 65,30 65,45 C65,55 58,62 52,70 C48,75 48,82 48,82 C48,82 46,74 44,68 C40,58 35,50 35,38 C35,28 40,20 45,20 Z" fill="#f59e0b"/>
-        <circle cx="68" cy="72" r="6" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-        <circle cx="78" cy="78" r="6" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-        <line x1="65" y1="68" x2="52" y2="48" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
-        <line x1="75" y1="74" x2="60" y2="45" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
-      </svg>
-    </div>
-    <h2 class="text-base font-black text-white mb-1" id="lblSetupTitle">LUMIO GİRİŞİ</h2>
-    <p class="text-[11px] text-slate-400 max-w-xs mb-4" id="lblSetupSub">Lütfen yöneticiniz tarafından tanımlanan cep telefonunuzu ve şifrenizi giriniz.</p>
-    
-    <div class="w-full max-w-xs space-y-2.5">
-      <div>
-        <label class="text-[10px] text-slate-400 block font-bold text-left mb-1" id="lblSetupPhone">CEP TELEFONUNUZ (E.164 Standart):</label>
-        <input type="tel" id="setupLicenseInput" placeholder="5354049392 veya 905354049392" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-center text-white font-bold text-sm focus:outline-none focus:border-amber-400">
-      </div>
-      <div>
-        <div class="flex justify-between items-center mb-1">
-          <label class="text-[10px] text-slate-400 block font-bold text-left" id="lblSetupPin">USTA ŞİFRENİZ:</label>
-          <button type="button" onclick="sifremiUnuttumWhatsApp()" class="text-[10px] text-amber-400 hover:text-amber-300 font-bold underline">Şifremi Unuttum?</button>
+  <!-- LİSANS KURULUM & YASAL SÖZLEŞME MODALI (GİRİŞ EKRANI) -->
+  <div id="licenseSetupModal" class="hidden" style="position:fixed;inset:0;z-index:2147483000;background:#050810;background-image:radial-gradient(ellipse at 50% -10%,rgba(245,158,11,.16),transparent 55%);overflow-y:auto;-webkit-overflow-scrolling:touch">
+    <div style="min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:max(env(safe-area-inset-top,0px),20px) 18px max(env(safe-area-inset-bottom,0px),20px)">
+      <div style="width:100%;max-width:380px">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:6px">
+          <select id="setupLang" onchange="diliDegistir(this.value);setupDilUygula()" class="bg-slate-900 text-amber-300 text-[11px] font-bold border border-slate-700 rounded-lg px-2 py-1 focus:outline-none">
+            <option value="tr">🇹🇷 TR</option><option value="en">🇬🇧 EN</option><option value="de">🇩🇪 DE</option><option value="ru">🇷🇺 RU</option>
+          </select>
         </div>
-        <input type="password" maxlength="6" id="setupPinInput" placeholder="••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-center text-amber-400 font-black tracking-widest text-lg focus:outline-none focus:border-amber-400">
-      </div>
+        <div style="text-align:center;margin-bottom:18px">
+          <div style="width:72px;height:72px;margin:0 auto 12px;border-radius:22px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);display:flex;align-items:center;justify-content:center;padding:10px;box-shadow:0 10px 30px rgba(245,158,11,.12)">
+            <img src="logo.png" alt="LUMIO" style="width:100%;height:100%;object-fit:contain">
+          </div>
+          <h2 id="lblSetupTitle" style="font-size:20px;font-weight:900;color:#fff;letter-spacing:.14em;margin:0">LUMIO</h2>
+          <p id="lblSetupSub" style="font-size:12px;color:#94a3b8;margin:6px 0 0;line-height:1.45">Telefon numaranız ve şifrenizle giriş yapın.</p>
+        </div>
 
-      <div class="pt-1 text-left flex items-start space-x-2">
-        <input type="checkbox" id="chkYasalOnay" class="w-4 h-4 mt-0.5 rounded border-slate-700 text-amber-500 focus:ring-0 cursor-pointer">
-        <label for="chkYasalOnay" class="text-[10px] text-slate-400 leading-tight cursor-pointer">
-          <a href="javascript:void(0)" onclick="yasalSozlesmeModaliAc()" class="text-amber-400 underline font-bold">Kullanıcı Sözleşmesi ve KVKK Aydınlatma Metni</a>'ni okudum, kabul ediyorum.
-        </label>
-      </div>
+        <div style="background:#0b1120;border:1px solid #1e293b;border-radius:20px;padding:16px;box-shadow:0 20px 50px rgba(0,0,0,.45)">
+          <label id="lblSetupPhone" for="setupLicenseInput" style="display:block;font-size:10px;font-weight:800;color:#94a3b8;letter-spacing:.06em;margin-bottom:5px">CEP TELEFONU</label>
+          <input type="tel" inputmode="tel" autocomplete="tel" id="setupLicenseInput" placeholder="5xx xxx xx xx  /  +90 5xx ..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white font-bold text-sm focus:outline-none focus:border-amber-400" oninput="setupBolgeOtoSec()">
 
-      <button onclick="lisansKoduKaydet()" class="w-full bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 font-black py-3 rounded-xl shadow active:scale-95 transition text-xs mt-1" id="btnSetupSubmit">
-        GİRİŞ YAP VE TERMİNALİ AÇ ✨
-      </button>
-      
-      <div id="setupContactArea" class="hidden pt-2.5 border-t border-slate-800 space-y-2">
-        <p class="text-[11px] text-red-400 font-semibold" id="setupErrorMsg">Tanımsız hesap veya hatalı şifre.</p>
-        <button onclick="yetkiliyeLisansSorWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 shadow">
-          <i class="fa-brands fa-whatsapp text-sm"></i><span id="btnAskLicense">Yetkili İle İletişime Geç / Lisans Al</span>
-        </button>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0 5px">
+            <label id="lblSetupPin" for="setupPinInput" style="font-size:10px;font-weight:800;color:#94a3b8;letter-spacing:.06em">ŞİFRE</label>
+            <button type="button" onclick="sifremiUnuttumWhatsApp()" id="btnForgotPin" class="text-[10px] text-amber-400 font-bold underline">Şifremi unuttum</button>
+          </div>
+          <input type="password" inputmode="numeric" autocomplete="current-password" maxlength="6" id="setupPinInput" placeholder="••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-center text-amber-400 font-black tracking-widest text-lg focus:outline-none focus:border-amber-400">
+
+          <div style="height:1px;background:#1e293b;margin:14px 0 12px"></div>
+
+          <label id="lblSetupRegion" for="setupBolge" style="display:block;font-size:10px;font-weight:800;color:#94a3b8;letter-spacing:.06em;margin-bottom:5px">ÜLKE / HUKUKİ BÖLGE</label>
+          <select id="setupBolge" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-200 text-xs font-bold focus:outline-none focus:border-amber-400"></select>
+
+          <label style="display:flex;gap:10px;align-items:flex-start;margin-top:12px;cursor:pointer">
+            <input type="checkbox" id="chkYasalOnay" style="width:18px;height:18px;margin-top:1px;flex-shrink:0;accent-color:#f59e0b">
+            <span id="lblYasalOnay" style="font-size:11px;color:#94a3b8;line-height:1.45"><a href="javascript:void(0)" onclick="event.preventDefault();yasalSozlesmeModaliAc()" style="color:#fbbf24;font-weight:800;text-decoration:underline">Kullanım Sözleşmesi, Gizlilik / Aydınlatma Metni</a> ve yapay zekâ bildirimini okudum, kabul ediyorum.</span>
+          </label>
+          <label style="display:flex;gap:10px;align-items:flex-start;margin-top:9px;cursor:pointer">
+            <input type="checkbox" id="chkAiRiza" style="width:18px;height:18px;margin-top:1px;flex-shrink:0;accent-color:#f59e0b">
+            <span id="lblAiRiza" style="font-size:11px;color:#94a3b8;line-height:1.45"><b style="color:#cbd5e1">(İsteğe bağlı)</b> Yapay zekâ özelliklerinde girdiğim metin ve fotoğrafların Google Gemini ile işlenmesine açık rıza veriyorum.</span>
+          </label>
+
+          <button onclick="lisansKoduKaydet()" id="btnSetupSubmit" style="width:100%;margin-top:16px;padding:14px;border-radius:14px;border:0;background:linear-gradient(90deg,#f59e0b,#fbbf24);color:#0b1120;font-weight:900;font-size:13px;letter-spacing:.03em;box-shadow:0 8px 24px rgba(245,158,11,.25)">GİRİŞ YAP</button>
+
+          <div id="setupContactArea" class="hidden" style="margin-top:12px;padding-top:12px;border-top:1px solid #1e293b">
+            <p id="setupErrorMsg" style="font-size:11px;color:#f87171;font-weight:700;margin:0 0 8px;line-height:1.4">Tanımsız hesap veya hatalı şifre.</p>
+            <button onclick="yetkiliyeLisansSorWhatsApp()" style="width:100%;background:#059669;color:#fff;font-weight:800;padding:11px;border-radius:12px;border:0;font-size:12px"><i class="fa-brands fa-whatsapp"></i> <span id="btnAskLicense">Yetkili ile iletişime geç / Lisans al</span></button>
+          </div>
+        </div>
+        <p style="text-align:center;font-size:9px;color:#475569;margin:14px 0 0">LUMIO · Salon Intelligence</p>
       </div>
     </div>
   </div>
@@ -236,12 +242,7 @@
   <header class="bg-slate-900 border-b border-slate-800 px-3.5 pb-2.5 safe-pt sticky top-0 z-40 flex items-center justify-between shadow-sm">
     <div class="flex items-center space-x-2.5 cursor-pointer" onclick="patronPaneliAc()">
       <div class="w-8 h-8 rounded-xl bg-slate-950 border border-slate-700 flex items-center justify-center overflow-hidden flex-shrink-0 p-1">
-        <svg viewBox="0 0 100 100" class="w-full h-full">
-          <circle cx="50" cy="50" r="46" fill="none" stroke="#f59e0b" stroke-width="4"/>
-          <path d="M46,22 C56,22 66,31 66,45 C66,56 58,63 52,71 C48,76 48,82 48,82 C48,82 46,75 44,69 C40,59 36,51 36,39 C36,29 41,22 46,22 Z" fill="#f59e0b"/>
-          <circle cx="68" cy="72" r="6" fill="none" stroke="#f59e0b" stroke-width="3"/>
-          <circle cx="78" cy="78" r="6" fill="none" stroke="#f59e0b" stroke-width="3"/>
-        </svg>
+        <img src="logo.png" alt="LUMIO" style="width:100%;height:100%;object-fit:contain">
       </div>
       <div>
         <div class="flex items-center space-x-1.5">
@@ -1363,28 +1364,16 @@
     </div>
   </div>
 
-  <!-- MODAL: HUKUKİ SÖZLEŞMELER (KVKK & LİSANS) -->
-  <div id="modalYasalSozlesme" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[9999999999] flex items-center justify-center p-3">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-4 space-y-3 shadow-2xl flex flex-col max-h-[90vh]">
-      <div class="flex justify-between items-center pb-2 border-b border-slate-800">
-        <h3 class="text-xs font-bold text-amber-400 flex items-center"><i class="fa-solid fa-scale-balanced mr-1.5"></i> LUMIO Hukuki Sözleşmeler & KVKK</h3>
-        <button onclick="yasalSozlesmeModaliKapat()" class="text-slate-400 hover:text-white text-base">✕</button>
+  <!-- MODAL: HUKUKİ SÖZLEŞMELER (BÖLGEYE GÖRE) -->
+  <div id="modalYasalSozlesme" class="hidden" style="position:fixed;inset:0;z-index:2147483600;background:rgba(2,6,23,.96);align-items:center;justify-content:center;padding:12px">
+    <div style="background:#0f172a;border:1px solid #1e293b;border-radius:20px;max-width:520px;width:100%;max-height:92vh;display:flex;flex-direction:column;padding:14px;box-shadow:0 25px 60px rgba(0,0,0,.6)">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid #1e293b">
+        <h3 class="text-xs font-bold text-amber-400"><i class="fa-solid fa-scale-balanced mr-1.5"></i> <span id="lblYasalBaslik">Hukuki Metinler</span></h3>
+        <button onclick="yasalSozlesmeModaliKapat()" class="text-slate-400 text-xl px-2">✕</button>
       </div>
-      <div class="flex-1 overflow-y-auto space-y-2 text-[10px] text-slate-300 pr-1 scroll-touch leading-relaxed">
-        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1">
-          <h4 class="font-bold text-amber-400 text-[11px]">1. KULLANICI LİSANS SÖZLEŞMESİ (EULA)</h4>
-          <p>LUMIO Terminal teknik otomasyon sağlayıcıdır (Veri İşleyen). Müşteri verilerinden ve gönderilen iletilerden doğrudan Salon Sahibi / Usta (Veri Sorumlusu) sorumludur.</p>
-        </div>
-        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1">
-          <h4 class="font-bold text-amber-400 text-[11px]">2. YAPAY ZEKA VE KİMYASAL İŞLEM REDDİ</h4>
-          <p>LUMIO Master AI danışma amaçlıdır. Kimyasal işlem ve alerji sorumluluğu tamamen belgeli uzmana aittir.</p>
-        </div>
-        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1">
-          <h4 class="font-bold text-amber-400 text-[11px]">3. KVKK AÇIK RIZASI</h4>
-          <p>Veriler Firebase altyapısında şifreli tutulur. Trikoloji ve soru analizlerinde veriler Google AI altyapısına güvenle aktarılır.</p>
-        </div>
-      </div>
-      <button onclick="yasalSozlesmeModaliKapat()" class="w-full bg-amber-500 text-slate-950 font-black py-2.5 rounded-xl text-xs shadow active:scale-95">Okudum, Anladım 👍</button>
+      <select id="yasalBolgeSelect" onchange="yasalIcerikCiz(this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-200 text-xs font-bold my-2.5 focus:outline-none"></select>
+      <div id="yasalIcerik" class="scroll-touch" style="flex:1;overflow-y:auto;padding-right:2px"></div>
+      <button onclick="yasalSozlesmeModaliKapat()" id="btnYasalKapat" class="w-full bg-amber-500 text-slate-950 font-black py-3 rounded-xl text-xs mt-3 active:scale-95">Kapat</button>
     </div>
   </div>
 
@@ -1419,7 +1408,8 @@
       </div>
     </div>
   </div>
-<script src="ai-client.js"></script>
+<script src="legal.js"></script>
+  <script src="ai-client.js"></script>
 <script>
     /* İNTERNET DURUMU VE BİLDİRİM KONTROLÜ */
     function internetDurumunuGuncelle() {
@@ -2231,7 +2221,7 @@ function aktifDilSablonlariniAl(dil) {
           let msg = `Saat ${r.saat} için ${turkceHitapIsimDuzenle(r.musteriAdi)} (${r.hizmet}) randevunuza ${fark} dakika kaldı!`;
           alarmSesiCal();
           if (navigator.vibrate) navigator.vibrate([400, 200, 400]);
-          if ('Notification' in window && Notification.permission === 'granted') { try { new Notification("⏰ LUMIO", { body: msg, icon: "logo.png" }); } catch (e) { if (navigator.serviceWorker) navigator.serviceWorker.ready.then(function (reg) { reg.showNotification("⏰ LUMIO", { body: msg, icon: "logo.png" }); }).catch(function () {}); } }
+          if ('Notification' in window && Notification.permission === 'granted') { try { new Notification("⏰ LUMIO", { body: msg, icon: "icon-192.png" }); } catch (e) { if (navigator.serviceWorker) navigator.serviceWorker.ready.then(function (reg) { reg.showNotification("⏰ LUMIO", { body: msg, icon: "icon-192.png" }); }).catch(function () {}); } }
           else {
             document.getElementById('txtAlarmMesaji').innerText = msg;
             document.getElementById('modalRandevuAlarmi').classList.remove('hidden');
@@ -2731,8 +2721,55 @@ function aktifDilSablonlariniAl(dil) {
       }).catch(err => alert("Hata: " + err.message));
     }
 
-    function yasalSozlesmeModaliAc() { document.getElementById('modalYasalSozlesme').classList.remove('hidden'); modalGeriTusuKaydi('modalYasalSozlesme'); }
+    function yasalBolgeListesiDoldur(selId, secili) {
+      const s = document.getElementById(selId); if (!s) return;
+      s.innerHTML = LEGAL.bolgeler.map(b => `<option value="${b.kod}">${esc(b.ad)}</option>`).join('');
+      s.value = secili || 'GLOBAL';
+    }
+    function yasalIcerikCiz(bolge) {
+      const k = document.getElementById('yasalIcerik');
+      if (k) { k.innerHTML = LEGAL.render(bolge); k.scrollTop = 0; }
+    }
+    function yasalSozlesmeModaliAc() {
+      const secili = (document.getElementById('setupBolge') || {}).value || localStorage.getItem('lumio_yasal_bolge') || 'GLOBAL';
+      yasalBolgeListesiDoldur('yasalBolgeSelect', secili);
+      yasalIcerikCiz(secili);
+      document.getElementById('modalYasalSozlesme').classList.remove('hidden');
+      modalGeriTusuKaydi('modalYasalSozlesme');
+    }
     function yasalSozlesmeModaliKapat() { document.getElementById('modalYasalSozlesme').classList.add('hidden'); }
+
+    /* GİRİŞ EKRANI YARDIMCILARI */
+    function setupBolgeOtoSec() {
+      const v = document.getElementById('setupLicenseInput').value;
+      const sel = document.getElementById('setupBolge'); if (!sel) return;
+      if (sel.dataset.elle === '1') return;
+      const t = LEGAL.bolgeTahmin(v); if (t) sel.value = t;
+    }
+    function setupDilUygula() {
+      const T = {
+        tr: { sub: 'Telefon numaranız ve şifrenizle giriş yapın.', tel: 'CEP TELEFONU', pin: 'ŞİFRE', reg: 'ÜLKE / HUKUKİ BÖLGE', btn: 'GİRİŞ YAP', ask: 'Yetkili ile iletişime geç / Lisans al', fp: 'Şifremi unuttum', yb: 'Hukuki Metinler',
+              yo: '<a href="javascript:void(0)" onclick="event.preventDefault();yasalSozlesmeModaliAc()" style="color:#fbbf24;font-weight:800;text-decoration:underline">Kullanım Sözleşmesi, Gizlilik / Aydınlatma Metni</a> ve yapay zekâ bildirimini okudum, kabul ediyorum.',
+              ai: '<b style="color:#cbd5e1">(İsteğe bağlı)</b> Yapay zekâ özelliklerinde girdiğim metin ve fotoğrafların Google Gemini ile işlenmesine açık rıza veriyorum.' },
+        en: { sub: 'Sign in with your phone number and password.', tel: 'MOBILE PHONE', pin: 'PASSWORD', reg: 'COUNTRY / LEGAL REGION', btn: 'SIGN IN', ask: 'Contact support / Get a license', fp: 'Forgot password', yb: 'Legal documents',
+              yo: 'I have read and accept the <a href="javascript:void(0)" onclick="event.preventDefault();yasalSozlesmeModaliAc()" style="color:#fbbf24;font-weight:800;text-decoration:underline">Terms of Service, Privacy Notice</a> and the AI notice.',
+              ai: '<b style="color:#cbd5e1">(Optional)</b> I consent to the text and photos I enter in AI features being processed by Google Gemini.' }
+      };
+      T.de = T.en; T.ru = T.en;
+      const L = T[aktifDil] || T.en;
+      const set = (id, v, html) => { const e = document.getElementById(id); if (e) { if (html) e.innerHTML = v; else e.textContent = v; } };
+      set('lblSetupSub', L.sub); set('lblSetupPhone', L.tel); set('lblSetupPin', L.pin); set('lblSetupRegion', L.reg);
+      set('btnAskLicense', L.ask); set('btnForgotPin', L.fp); set('lblYasalBaslik', L.yb);
+      set('btnYasalKapat', aktifDil === 'tr' ? 'Kapat' : 'Close'); set('lblYasalOnay', L.yo, true); set('lblAiRiza', L.ai, true);
+      const b = document.getElementById('btnSetupSubmit'); if (b && !b.disabled) b.textContent = L.btn;
+    }
+    function setupEkraniHazirla() {
+      yasalBolgeListesiDoldur('setupBolge', localStorage.getItem('lumio_yasal_bolge') || 'TR');
+      const sel = document.getElementById('setupBolge');
+      if (sel && !sel.dataset.bagli) { sel.dataset.bagli = '1'; sel.addEventListener('change', () => { sel.dataset.elle = '1'; }); }
+      const dl = document.getElementById('setupLang'); if (dl) dl.value = aktifDil;
+      setupDilUygula();
+    }
 
     function musteriSilOnayli() {
       if (!aktifMusteri) return;
@@ -2761,16 +2798,19 @@ function aktifDilSablonlariniAl(dil) {
       document.body.appendChild(link); link.click(); document.body.removeChild(link);
       alert(`✅ Müşteri rehberi telefonunuza indirildi (${musteriler.length} Müşteri).`);
     }
-/* GİRİŞTE YASAL SÖZLEŞME ONAYI VE DİJİTAL İSPAT BELGESİ (HMK MD. 199) */
+/* GİRİŞTE YASAL SÖZLEŞME ONAYI VE DİJİTAL İSPAT BELGESİ */
     function lisansKoduKaydet() {
       const val = document.getElementById('setupLicenseInput').value.trim();
       const pinVal = document.getElementById('setupPinInput').value.trim();
       const chkYasal = document.getElementById('chkYasalOnay');
+      const aiRiza = !!(document.getElementById('chkAiRiza') || {}).checked;
+      const bolge = (document.getElementById('setupBolge') || {}).value || 'GLOBAL';
+      const TR = aktifDil === 'tr';
 
-      if (!val) { alert("Lütfen telefon numaranızı girin."); return; }
-      if (!pinVal || pinVal.length < 4) { alert("Lütfen usta şifrenizi girin."); return; }
+      if (!val) { alert(TR ? "Lütfen telefon numaranızı girin." : "Please enter your phone number."); return; }
+      if (!pinVal || pinVal.length < 4) { alert(TR ? "Lütfen şifrenizi girin." : "Please enter your password."); return; }
       if (chkYasal && !chkYasal.checked) {
-        alert("Lütfen devam etmeden önce Kullanıcı Sözleşmesi ve KVKK Aydınlatma Metni'ni onaylayınız.");
+        alert(TR ? "Devam etmek için Kullanım Sözleşmesi ve Gizlilik / Aydınlatma Metni'ni onaylamanız gerekir." : "Please accept the Terms of Service and Privacy Notice to continue.");
         return;
       }
 
@@ -2779,49 +2819,50 @@ function aktifDilSablonlariniAl(dil) {
       if (temizKod.length === 10) temizKod = '90' + temizKod;
 
       const btn = document.getElementById('btnSetupSubmit');
-      btn.innerText = "Doğrulanıyor..."; btn.disabled = true;
+      btn.textContent = TR ? "Doğrulanıyor..." : "Verifying..."; btn.disabled = true;
+      const butonuSifirla = () => { btn.disabled = false; setupDilUygula(); };
 
       db.collection('sistem').doc('lisanslar').collection('aktifler').doc(temizKod).get().then(doc => {
-        btn.innerText = "GİRİŞ YAP VE TERMİNALİ AÇ ✨"; btn.disabled = false;
-        if (!doc.exists) { 
-          document.getElementById('setupContactArea').classList.remove('hidden'); 
-          document.getElementById('setupErrorMsg').innerText = "❌ Tanımsız Hesap! Bu telefon numarasına ait bir lisans bulunamadı."; 
-          return; 
-        }
+        butonuSifirla();
+        const hata = (m) => { document.getElementById('setupContactArea').classList.remove('hidden'); document.getElementById('setupErrorMsg').textContent = m; };
+        if (!doc.exists) { hata(TR ? "❌ Tanımsız hesap. Bu telefon numarasına ait bir lisans bulunamadı." : "❌ Unknown account. No license found for this phone number."); return; }
 
         const data = doc.data();
         let simdiMs = Date.now(), bitisMs = data.bitisMs || (simdiMs + 864000000);
-        if (data.pin && data.pin.toString() !== pinVal.toString()) { 
-          document.getElementById('setupContactArea').classList.remove('hidden'); 
-          document.getElementById('setupErrorMsg').innerText = "❌ Hatalı Şifre! Lütfen yöneticinizin verdiği şifreyi girin."; 
-          return; 
-        }
-        if (data.durum !== 'AKTIF' || simdiMs > bitisMs) { 
-          document.getElementById('setupContactArea').classList.remove('hidden'); 
-          document.getElementById('setupErrorMsg').innerText = "🔒 Bu lisans askıya alınmıştır veya kullanım süresi dolmuştur."; 
-          return; 
-        }
+        if (data.pin && data.pin.toString() !== pinVal.toString()) { hata(TR ? "❌ Hatalı şifre." : "❌ Wrong password."); return; }
+        if (data.durum !== 'AKTIF' || simdiMs > bitisMs) { hata(TR ? "🔒 Bu lisans askıya alınmış veya süresi dolmuş." : "🔒 This license is suspended or expired."); return; }
 
-        const auditLog = {
-          sozlesmeKodu: "LUMIO-SOZLESME-GLOBAL-V1",
-          onaylandi: true,
-          onayTarihi: bugununTarihiStr(),
-          onaySaati: new Date().toLocaleTimeString('tr-TR'),
-          zamanMs: simdiMs,
-          cihazBilgisi: navigator.userAgent || "Bilinmeyen Cihaz",
-          kabulEdilenMaddeler: ["Kullanici_Lisans_Sozlesmesi_EULA", "KVKK_Aydinlatma_Metni", "Yapay_Zeka_Gorsel_Acik_Riza"]
-        };
+        const duz = LEGAL.duzMetin(bolge);
+        LEGAL.hash(duz).then(ozet => {
+          const auditLog = {
+            sozlesmeKodu: 'LUMIO-' + bolge + '-' + LEGAL.surum,
+            surum: LEGAL.surum,
+            bolge: bolge,
+            metinOzeti: ozet,
+            hukukcuOnayli: !!LEGAL.hukukcuOnayli,
+            onaylandi: true,
+            aiRizasi: aiRiza,
+            arayuzDili: aktifDil,
+            onayTarihi: bugununTarihiStr(),
+            zamanMs: simdiMs,
+            sunucuZamani: firebase.firestore.FieldValue.serverTimestamp(),
+            cihazBilgisi: navigator.userAgent || "Bilinmeyen Cihaz"
+          };
+          db.collection('sistem').doc('lisanslar').collection('aktifler').doc(temizKod)
+            .set({ yasalOnay: auditLog }, { merge: true }).catch(e => console.warn('Onay kaydı yazılamadı:', e));
+        });
 
-        db.collection('sistem').doc('lisanslar').collection('aktifler').doc(temizKod).set({ yasalOnay: auditLog }, { merge: true });
         aktifLisansKodu = temizKod;
         localStorage.setItem('hair_lisans_kodu', aktifLisansKodu);
-        localStorage.setItem('lumio_sozlesme_onayli_' + aktifLisansKodu, 'EVET');
+        localStorage.setItem('lumio_sozlesme_onayli_' + aktifLisansKodu, LEGAL.surum);
+        localStorage.setItem('lumio_ai_riza_' + aktifLisansKodu, aiRiza ? '1' : '0');
+        localStorage.setItem('lumio_yasal_bolge', bolge);
         document.getElementById('licenseSetupModal').classList.add('hidden');
         bulutVerileriniBaslat();
-        alert(`Hoş geldiniz Sayın ${data.ad || 'Usta'}! LUMIO terminaliniz açıldı.`);
-      }).catch(err => { 
-        btn.innerText = "GİRİŞ YAP VE TERMİNALİ AÇ ✨"; btn.disabled = false; 
-        alert("Bağlantı hatası: " + err.message); 
+        alert(TR ? `Hoş geldiniz ${data.ad || ''}! LUMIO açıldı.` : `Welcome ${data.ad || ''}! LUMIO is ready.`);
+      }).catch(err => {
+        butonuSifirla();
+        alert((TR ? "Bağlantı hatası: " : "Connection error: ") + err.message);
       });
     }
 
@@ -2831,10 +2872,11 @@ function aktifDilSablonlariniAl(dil) {
 
     /* GÜVENLİ VE DÖNGÜSÜZ BULUT DİNLEYİCİSİ (10/90 HANE KORUMALI) */
     function bulutVerileriniBaslat() {
-      if (!aktifLisansKodu) { document.getElementById('licenseSetupModal').classList.remove('hidden'); return; }
+      if (!aktifLisansKodu) { setupEkraniHazirla(); document.getElementById('licenseSetupModal').classList.remove('hidden'); return; }
 
       let sozlesmeOnay = localStorage.getItem('lumio_sozlesme_onayli_' + aktifLisansKodu);
-      if (!sozlesmeOnay) {
+      if (sozlesmeOnay !== LEGAL.surum) {
+        setupEkraniHazirla();
         document.getElementById('licenseSetupModal').classList.remove('hidden');
         document.getElementById('setupLicenseInput').value = aktifLisansKodu.startsWith('90') ? aktifLisansKodu.substring(2) : aktifLisansKodu;
         return;

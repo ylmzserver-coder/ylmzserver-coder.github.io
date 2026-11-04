@@ -1,11 +1,13 @@
-/* LUMIO AI Terminal - Service Worker & Banka Tipi Bildirim Motoru (V11) */
-const CACHE_NAME = 'lumio-ai-cache-v11';
+/* LUMIO AI Terminal - Service Worker & Banka Tipi Bildirim Motoru (V13) */
+const CACHE_NAME = 'lumio-ai-cache-v13';
 const OFFLINE_URLS = [
   './',
   './index.html',
   './ai-client.js',
   './manifest.json',
-  './logo.png'
+  './icon-192.png',
+  './logo.png',
+  './legal.js'
 ];
 
 // 1. KURULUM
@@ -76,8 +78,8 @@ self.addEventListener('push', (event) => {
   let data = {
     title: '⏰ LUMIO: Randevu Vakti Yaklaştı!',
     body: 'Birazdan başlayacak randevunuz bulunuyor.',
-    icon: 'logo.png',
-    badge: 'logo.png'
+    icon: 'icon-192.png',
+    badge: 'icon-192.png'
   };
 
   if (event.data) {
@@ -90,8 +92,8 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: data.body,
-    icon: data.icon || 'logo.png',
-    badge: data.badge || 'logo.png',
+    icon: data.icon || 'icon-192.png',
+    badge: data.badge || 'icon-192.png',
     vibrate: [400, 200, 400, 200, 400],
     tag: 'lumio-randevu-alarm',
     renotify: true,

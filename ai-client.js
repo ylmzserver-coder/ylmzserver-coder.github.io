@@ -1,7 +1,17 @@
 /* LUMIO - AI istemci katmanı. Eski geminiApiCagir(payload) yerine geçer; anahtar tarayıcıda TUTULMAZ. */
 const AI_ENDPOINT = '/.netlify/functions/gemini';
 
+function aiRizaVarMi() {
+  try {
+    if (typeof aktifLisansKodu === 'undefined' || !aktifLisansKodu) return true;
+    return localStorage.getItem('lumio_ai_riza_' + aktifLisansKodu) === '1';
+  } catch (_) { return true; }
+}
+
 async function geminiApiCagir(payload) {
+  if (!aiRizaVarMi()) {
+    throw new Error('Yapay zeka için açık rıza verilmedi. Ayarlardan veya yeniden girişte rıza kutusunu işaretleyin. / AI consent was not given.');
+  }
   const c = new AbortController();
   const t = setTimeout(() => c.abort(), 45000);
   try {
