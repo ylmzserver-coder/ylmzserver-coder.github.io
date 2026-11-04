@@ -1,7 +1,7 @@
-// LUMIO - Gemini proxy (Netlify Function). Anahtar SADECE sunucuda (GEMINI_API_KEY).
+// LUMIO - Gemini proxy (Netlify Function). Anahtar SADECE sunucuda (GEMINI_API_KEY ortam değişkeni).
 const BASE = 'https://generativelanguage.googleapis.com/v1beta';
 const ADAY_MODELLER = ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-2.0-flash'];
-let secilenModel = null;
+let secilenModel = null;      // sıcak sunucuda önbellek
 let modelListeZamani = 0;
 
 const CORS = {
@@ -19,6 +19,7 @@ async function zamanAsimliFetch(url, opts, ms = 25000) {
   finally { clearTimeout(t); }
 }
 
+// Google'ın o an gerçekten sunduğu flash modellerini bul (model adları sık değişiyor)
 async function kullanilabilirModeller(key) {
   const liste = [];
   if (secilenModel) liste.push(secilenModel);
@@ -33,33 +34,22 @@ async function kullanilabilirModeller(key) {
         .filter(n => /flash/.test(n) && !/(image|tts|live|thinking|exp|preview|embed)/.test(n))
         .forEach(n => { if (!liste.includes(n)) liste.push(n); });
       modelListeZamani = Date.now();
-    } catch (e) { /* Hata durumunda aday modellerle devam */ }
+    } catch (e) { /* liste alınamazsa aday modellerle devam */ }
   }
   return liste.slice(0, 6);
 }
-
-// 40 Yıllık Kıdemli Usta ve Colorist Karakter Talimatı
-const USTA_SYSTEM_INSTRUCTION = {
-  parts: [{
-    text: "Sen LUMIO Terminal'in arkasında duran, 40 yıllık tecrübeye sahip kıdemli bir salon patronu ve master colorist ustasın. Karşındaki kişi senin meslektaşın (kuaför, tırnak uzmanı, güzellik uzmanı veya salon patronu). Asla robotik veya yapay zeka jargonu kullanma. Doğrudan dükkan diliyle, samimi, saygılı ve usta lisanıyla konuş ('Ustam', 'Kardeşim'). Kuaförlük kimyasını (oryal, oksidan, cila, porozite vb.) ezbere bilirsin. Asla yıldız (**), diyez (#) veya markdown işaretleri kullanma. Düz ve net Türkçe ile cevap ver."
-  }]
-};
 
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return { statusCode: 204, headers: CORS, body: '' };
   if (event.httpMethod !== 'POST') return yanit(405, { hata: 'Sadece POST' });
 
   const key = process.env.GEMINI_API_KEY;
-  if (!key) return yanit(500, { hata: 'Sunucuda GEMINI_API_KEY tanımlı değil.' });
+  if (!key) return yanit(500, { hata: 'Sunucuda GEMINI_API_KEY tanımlı değil (Netlify > Site settings > Environment variables).' });
 
   let govde;
   try { govde = JSON.parse(event.body || '{}'); } catch { return yanit(400, { hata: 'Geçersiz JSON' }); }
   if (!govde.payload || !Array.isArray(govde.payload.contents)) return yanit(400, { hata: 'payload.contents gerekli' });
-
-  // Usta karakterini her isteğe sistem talimatı olarak enjekte ediyoruz
-  if (!govde.payload.system_instruction) {
-    govde.payload.system_instruction = USTA_SYSTEM_INSTRUCTION;
-  }
+  if ((event.body || '').length > 4_000_000) return yanit(413, { hata: 'İstek çok büyük' });
 
   const modeller = await kullanilabilirModeller(key);
   let sonHata = 'Bilinmeyen hata';
@@ -75,6 +65,7 @@ exports.handler = async (event) => {
       if (r.ok && metin) { secilenModel = model; return yanit(200, { metin, model }); }
       sonHata = d?.error?.message || (d?.promptFeedback ? 'İçerik güvenlik filtresine takıldı' : `HTTP ${r.status}`);
       if (r.status === 400 || r.status === 403 || r.status === 429) {
+        // anahtar/kota/istek hatası: başka model denemek çözmez
         if (r.status !== 400 || !/model/i.test(sonHata)) return yanit(r.status, { hata: sonHata });
       }
       if (r.status === 404) secilenModel = null;
