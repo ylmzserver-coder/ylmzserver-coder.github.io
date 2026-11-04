@@ -17,6 +17,13 @@
   <link rel="manifest" href="manifest.json">
   <script>
     if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('message', (ev) => {
+        if (ev.data && ev.data.type === 'ERTELE_ALARM') {
+          setTimeout(() => {
+            navigator.serviceWorker.ready.then(r => r.showNotification('⏰ LUMIO', { body: 'Ertelenen randevu hatırlatması', icon: 'logo.png' })).catch(() => {});
+          }, (ev.data.dakika || 10) * 60000);
+        }
+      });
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js').then(reg => {
           console.log('LUMIO PWA Servis Motoru Aktif:', reg.scope);
@@ -1412,6 +1419,7 @@
       </div>
     </div>
   </div>
+<script src="ai-client.js"></script>
 <script>
     /* İNTERNET DURUMU VE BİLDİRİM KONTROLÜ */
     function internetDurumunuGuncelle() {
@@ -1947,7 +1955,7 @@ function aktifDilSablonlariniAl(dil) {
 
     function hizmetGuncelle(idx, alan, val) {
       if (!salonAyarlari.hizmetler[idx]) return;
-      salonAyarlari.hizmetler[idx][alan] = (alan === 'sure' || alan === 'ucret') ? (parseInt(val) || 0) : val;
+      salonAyarlari.hizmetler[idx][alan] = (alan === 'sure') ? (parseInt(val) || 0) : (alan === 'ucret' ? fiyatParse(val) : val);
     }
 
     function yeniHizmetSatiriEkle() {
@@ -2208,7 +2216,7 @@ function aktifDilSablonlariniAl(dil) {
       });
     }
 
-    /* KİLİTLİ EKRANDA ÇALAN SİSTEM ALARMI (ANDROID SAFE TRY/CATCH İLE) */
+    /* KİLİTLİ EKRANDA ÇALAN SİSTEM ALARMI */
     function ustaRandevuAlarmKontrol() {
       const alarmDk = parseInt(salonAyarlari.alarmSuresi) || 0;
       if (alarmDk === 0) return;
@@ -2223,21 +2231,8 @@ function aktifDilSablonlariniAl(dil) {
           let msg = `Saat ${r.saat} için ${turkceHitapIsimDuzenle(r.musteriAdi)} (${r.hizmet}) randevunuza ${fark} dakika kaldı!`;
           alarmSesiCal();
           if (navigator.vibrate) navigator.vibrate([400, 200, 400]);
-          try {
-            if ('Notification' in window && Notification.permission === 'granted') {
-              if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-                navigator.serviceWorker.ready.then(reg => {
-                  reg.showNotification("⏰ LUMIO", { body: msg, icon: "logo.png" });
-                });
-              } else {
-                new Notification("⏰ LUMIO", { body: msg, icon: "logo.png" });
-              }
-            } else {
-              document.getElementById('txtAlarmMesaji').innerText = msg;
-              document.getElementById('modalRandevuAlarmi').classList.remove('hidden');
-              modalGeriTusuKaydi('modalRandevuAlarmi');
-            }
-          } catch(err) {
+          if ('Notification' in window && Notification.permission === 'granted') { try { new Notification("⏰ LUMIO", { body: msg, icon: "logo.png" }); } catch (e) { if (navigator.serviceWorker) navigator.serviceWorker.ready.then(function (reg) { reg.showNotification("⏰ LUMIO", { body: msg, icon: "logo.png" }); }).catch(function () {}); } }
+          else {
             document.getElementById('txtAlarmMesaji').innerText = msg;
             document.getElementById('modalRandevuAlarmi').classList.remove('hidden');
             modalGeriTusuKaydi('modalRandevuAlarmi');
@@ -2335,14 +2330,13 @@ function aktifDilSablonlariniAl(dil) {
     function toplamHesapla() {
       let total = 0;
       document.querySelectorAll('.service-price').forEach(inp => {
-        let v = inp.value.toString().trim().replace(',', '.');
-        total += parseFloat(v) || 0;
+        total += fiyatParse(inp.value);
       });
       const d = SOZLUK[aktifDil] || SOZLUK.tr;
       document.getElementById('totalAmountText').innerText = total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) + ' ' + d.curr;
     }
 
-    /* ZİYARETİ KAYDET (İLK KAYIT TARİHİ VE SON ZİYARET GÜVENCELİ) */
+    /* ZİYARETİ KAYDET (CANLI NAKİT/KART SEÇİMLİ & İLK KAYIT TARİHİ KORUMALI) */
     function ziyaretiKaydet() {
       let hamAd = document.getElementById('custSearch').value.trim();
       const tamTel = tamTelefonAl('custCountryCode', 'custPhone');
@@ -2357,7 +2351,6 @@ function aktifDilSablonlariniAl(dil) {
       const sonraki = akilliTarihDuzelt(document.getElementById('visitNext').value);
       let musteriDocId = (aktifMusteri && aktifMusteri.id) ? aktifMusteri.id : (tamTel ? ('tel_' + tamTel) : ('m_' + Date.now()));
 
-      // Denetim Raporu Düzeltmesi: sonZiyaret alanına gelecek tarih değil, gerçekleşen işlem tarihi (tarih) yazılır.
       let musteriPayload = {
         ad: duzenliAd, 
         tel: tamTel, 
@@ -2376,7 +2369,7 @@ function aktifDilSablonlariniAl(dil) {
       rows.forEach(r => {
         let fVal = r.querySelector('.service-formula') ? r.querySelector('.service-formula').value.trim() : "";
         let nVal = r.querySelector('.service-notes') ? r.querySelector('.service-notes').value.trim() : "";
-        let uVal = r.querySelector('.service-price') ? parseFloat(r.querySelector('.service-price').value.replace(',', '.')) || 0 : 0;
+        let uVal = r.querySelector('.service-price') ? fiyatParse(r.querySelector('.service-price').value) : 0;
         
         db.collection('ustalar').doc(aktifLisansKodu).collection('gecmis').add({
           musteriId: musteriDocId, 
@@ -2481,7 +2474,7 @@ function aktifDilSablonlariniAl(dil) {
       sekmeDegistir('terminal');
     }
 
-    /* CANLI BİLDİRİM MERKEZİ (DÜZELTİLMİŞ m.sonraki HATASI) */
+    /* CANLI BİLDİRİM MERKEZİ (3 KURAL MOTORU) */
     function canliBildirimMerkeziniGuncelle() {
       const d = SOZLUK[aktifDil] || SOZLUK.tr, bugun = new Date();
       const gunAy = bugun.getDate().toString().padStart(2, '0') + '.' + (bugun.getMonth() + 1).toString().padStart(2, '0');
@@ -2506,7 +2499,7 @@ function aktifDilSablonlariniAl(dil) {
           </div>`).join('');
       } else if (bdayB) bdayB.classList.add('hidden');
 
-      // KURAL 2: 3 GÜN KURALI (m.sonraok DÜZELTİLDİ -> m.sonraki)
+      // KURAL 2: 3 GÜN KURALI
       const remindB = document.getElementById('bannerHatırlatma'), remindL = document.getElementById('bannerRemindList'), hatirlat = [];
       musteriler.forEach(m => {
         if (!m.sonraki) return;
@@ -2875,7 +2868,7 @@ function aktifDilSablonlariniAl(dil) {
         }
       });
 
-      // USTA HÜCRESİ DUAL-LOOKUP
+      // USTA HÜCRESİ DUAL-LOOKUP (DÖNGÜSÜZ VE VERİ KAYIPSIZ)
       let ustaHucresiKodu = aktifLisansKodu;
       db.collection('ustalar').doc(ustaHucresiKodu).collection('musteriler').limit(1).get().then(testSnap => {
         if (testSnap.empty && ustaHucresiKodu.startsWith('90')) {
@@ -2887,11 +2880,11 @@ function aktifDilSablonlariniAl(dil) {
               localStorage.setItem('hair_lisans_kodu', altKod);
             }
             baglaAltKoleksiyonlar(ustaHucresiKodu);
-          });
+          }).catch(() => baglaAltKoleksiyonlar(ustaHucresiKodu));
         } else {
           baglaAltKoleksiyonlar(ustaHucresiKodu);
         }
-      });
+      }).catch(() => baglaAltKoleksiyonlar(ustaHucresiKodu));
 
       function baglaAltKoleksiyonlar(kod) {
         unsubscribeMusteriler = db.collection('ustalar').doc(kod).collection('musteriler').onSnapshot((snapshot) => {
@@ -3429,7 +3422,7 @@ function aktifDilSablonlariniAl(dil) {
 
     function sihirbazKapat() { 
       document.getElementById('modalRandevuOlustur').classList.add('hidden'); 
-      duzenlenenRandevuId = null; 
+      duzenlenenRandevuId = null; // Denetim Raporu #4: Randevu ID kilidini temizle
     }
 
     function sihirbazAdimGoster(adim) {
@@ -3572,7 +3565,7 @@ function aktifDilSablonlariniAl(dil) {
         }
         sihirbazKapat(); 
         document.getElementById('cakismaModal').classList.add('hidden'); 
-        duzenlenenRandevuId = null;
+        duzenlenenRandevuId = null; // Denetim Raporu #4: Randevu ID'sini başarıyla sıfırla
         document.getElementById('bildirimOzetMetin').innerHTML = `<b>${shData.musteri}</b><br>📅 ${hedefTarih} • Saat: <b>${shData.saat}</b><br>💇 ${shData.hizmet} (${shData.sure} Dk)`;
         document.getElementById('bildirimAksiyonModal').classList.remove('hidden');
         modalGeriTusuKaydi('bildirimAksiyonModal');
@@ -3690,7 +3683,7 @@ function aktifDilSablonlariniAl(dil) {
     let aiSonAlgilananMetin = "";
     let aiParsedRandevu = null;
     let aiSeciliFotoDataUrl = "";
-    let geminiApiKey = localStorage.getItem('lumio_gemini_api_key') || "";
+    
 
     let patronUrunListesi = JSON.parse(localStorage.getItem('lumio_patron_urunler')) || [
       { id: "u1", ad: "LUMIO Bond-Plex No:3 Yoğun Onarıcı Maske", kategori: "hasarli", sorun: "Açıcı yanığı, elastikiyet kaybı, porozite", kullanim: "Haftada 2 kez nemli saça 10 dk uygulanır.", platform: "Trendyol", link: "https://ty.gl/lumio-bond-plex" },
@@ -3705,50 +3698,7 @@ function aktifDilSablonlariniAl(dil) {
       de: { langCode: "de-DE", micReady: "Bereit.", micListening: "🔴 Ich höre zu...", noCust: "Kein Kunde gewählt ➔", voiceBtnText: "Vorlesen" }
     };
 
-    /* HATA VERMEYEN YEDEKLİ GOOGLE GEMINI MOTORU */
-    const modelHedefleri = [
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`,
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${geminiApiKey}`,
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`,
-    `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`
-  ];
-
-  let sonHataMetni = "";
-
-  for (let i = 0; i < modelHedefleri.length; i++) {
-    const hedefUrl = modelHedefleri[i];
-    const abortCtrl = new AbortController();
-    const zamanAsimiId = setTimeout(() => abortCtrl.abort(), 25000);
-
-    try {
-      const res = await fetch(hedefUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        signal: abortCtrl.signal
-      });
-
-      clearTimeout(zamanAsimiId);
-      const data = await res.json();
-
-      if (res.ok && data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
-        return data.candidates[0].content.parts[0].text;
-      }
-
-      if (data.error) {
-        sonHataMetni = data.error.message || "Model yanıt vermedi.";
-        continue;
-      }
-    } catch (hata) {
-      clearTimeout(zamanAsimiId);
-      sonHataMetni = (hata.name === 'AbortError') ? "Bağlantı zaman aşımına uğradı." : (hata.message || "Bilinmeyen hata");
-    }
-  }
-
-  throw new Error(sonHataMetni || "Yapay zeka motoruna ulaşılamadı. Lütfen API anahtarınızı kontrol ediniz.");
-}
-
-    function lumioAiModaliAc() {
+        function lumioAiModaliAc() {
       document.getElementById('modalLumioAi').classList.remove('hidden');
       modalGeriTusuKaydi('modalLumioAi');
       lumioAiSekme('ses');
@@ -3895,23 +3845,19 @@ function aktifDilSablonlariniAl(dil) {
       } catch (err) { alert("Mikrofon hatası: " + err.message); }
     }
 
-    /* 14 GÜNLÜK TAKVİM MATRİSLİ EVRENSEL YAPAY ZEKA NİYET MOTORU (DENETİM RAPORU TÜM AÇIKLAR KAPATILDI) */
+    /* GÜNCELLENMİŞ ÇOK DİLLİ VE TARİH BİLİNÇLİ NİYET MOTORU (RAPORDAKİ TÜM AÇIKLAR KAPATILDI) */
     async function lumioAiSokakDiliCoz(metin) {
       if (!metin || !metin.trim()) return;
 
-      if (!geminiApiKey) {
-        alert("Lütfen önce Patron Paneli'nden [🔑 Gemini API Key] butonuna basarak Google Gemini API anahtarınızı tanımlayınız.");
-        return;
-      }
-
+      // Denetim Raporu #8: API Key yoksa sahte randevu uydurma, ustayı uyar
       const micStatus = document.getElementById('aiMicStatus');
       if (micStatus) micStatus.innerText = "🧠 Yapay zeka çözümlüyor...";
 
-      // Denetim Raporu #10 & #4: 14 günlük takvim matrisi (haftaya salı, cuma vb. ifadeler için)
+      // Denetim Raporu #10 & #4: Haftanın gününü ve önümüzdeki 7 günün takvimini yapay zekaya veriyoruz
       const gunAdlari = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
       const simdi = new Date();
       let takvimHaritasi = [];
-      for (let i = 0; i < 14; i++) {
+      for (let i = 0; i < 7; i++) {
         let d = new Date(); d.setDate(simdi.getDate() + i);
         let dStr = d.getDate().toString().padStart(2, '0') + '.' + (d.getMonth() + 1).toString().padStart(2, '0') + '.' + d.getFullYear();
         let gunAdi = gunAdlari[d.getDay()];
@@ -3924,16 +3870,16 @@ function aktifDilSablonlariniAl(dil) {
 Usta dünyanın herhangi bir dilinde (Türkçe, Kazakça, Rusça, Almanca, İngilizce vb.) dükkan jargonuyla konuştu.
 Cümleyi analiz et ve niyetini kusursuz çöz.
 
-14 GÜNLÜK CANLI TAKVİM MATRİSİ:
+CANLI TAKVİM MATRİSİ:
 [${takvimMetni}]
 
 İŞ KURALLARI:
 1. "niyet":
-   - "SORGU": Eğer usta ajandayı soruyorsa ("Cuma günü kim var?", "haftaya Salı boş mu?", "расписание на завтра?"). Kesinlikle randevu veya müşteri açma!
+   - "SORGU": Eğer usta ajandayı soruyorsa ("boş yer var mı?", "Cuma günü kim var?", "расписание на завтра?", "бос орын бар ма?"). Kesinlikle randevu veya müşteri açma!
    - "RANDEVU": Eğer bir müşteriye randevu veriliyorsa ("Hamide'ye 1'de dip boya çak", "Запиши Анну на 2 часа").
-   - "KASA": Eğer ödeme/fiş kaydı yapılıyorsa ("Asiye 500 nakit verdi", "Asiye kartla ödedi").
+   - "KASA": Eğer ödeme/fiş kaydı yapılıyorsa ("Asiye 500 nakit verdi", "Картой 1000", "Asiye kartla ödedi").
    - "IBAN": Eğer hesap veya iban paylaşımı isteniyorsa.
-2. "tarih": Canlı takvim matrisine bakarak ustanın bahsettiği günün tam GG.AA.YYYY tarihini ver.
+2. "tarih": Canlı takvim matrisine bakarak ustanın bahsettiği günün tam GG.AA.YYYY tarihini ver. Örneğin bugün Salı ise ve usta 'Cuma' dediyse matristeki Cuma tarihini ata.
 3. "saat": Kuaför jargonunda usta "1'de" veya "saat 1" dediğinde bu öğleden sonra 13:00 demektir. 2 -> 14:00'tür.
 4. "ucret": Eğer cümlede para miktarı geçmiyorsa null yap.
 5. Asla "Var Mı", "Yeni", "Randevu", "Usta", "Kim" kelimelerini müşteri adı yapma!
@@ -3958,10 +3904,12 @@ Cevabını YALNIZCA geçerli bir JSON nesnesi olarak ver, başka hiçbir yazı y
           generationConfig: { temperature: 0.1, responseMimeType: "application/json" }
         });
 
-        const cozum = JSON.parse(raw.replace(/```json/g, '').replace(/```/g, '').trim());
+        const cozum = aiJsonAyikla(raw);
+        const dgr = aiRandevuDogrula(cozum, bugununTarihiStr());
+        cozum.tarih = dgr.tarih; cozum.saat = dgr.saat; cozum.sure = dgr.sure;
         if (micStatus) micStatus.innerText = "Hazır. Konuşmak için dokunun.";
 
-        // NİYET 1: SORGULAMA (READ-ONLY) - Doğru tarihi açar
+        // NİYET 1: SORGULAMA (READ-ONLY) - Denetim Raporu #4 Çözüldü: Doğrudan doğru tarihi açar!
         if (cozum.niyet === "SORGU") {
           lumioAiModaliKapat();
           sekmeDegistir('agenda');
@@ -3988,7 +3936,7 @@ Cevabını YALNIZCA geçerli bir JSON nesnesi olarak ver, başka hiçbir yazı y
           return;
         }
 
-        // NİYET 2: IBAN PAYLAŞIMI - Denetim Raporu #6: Boş isimle ilk kişiye atmaz
+        // NİYET 2: IBAN PAYLAŞIMI - Denetim Raporu #6 Çözüldü: Boş isimle ilk kişiye körlemesine atmaz!
         if (cozum.niyet === "IBAN") {
           if (!cozum.musteriAdi || !cozum.musteriAdi.trim()) {
             alert("Kime IBAN gönderileceği anlaşılamadı. Lütfen müşteri adını belirterek tekrar söyleyin.");
@@ -4015,7 +3963,7 @@ Cevabını YALNIZCA geçerli bir JSON nesnesi olarak ver, başka hiçbir yazı y
           return;
         }
 
-        // NİYET 3: KASA GİRİŞİ - Denetim Raporu #5 & #7: Tutar yoksa randevuya düşmez, onay alarak yazar
+        // NİYET 3: KASA GİRİŞİ - Denetim Raporu #5 & #7 Çözüldü: Tutar yoksa randevuya düşmez, onay alarak yazar!
         if (cozum.niyet === "KASA") {
           let tutar = parseFloat(cozum.ucret);
           if (isNaN(tutar) || tutar <= 0) {
@@ -4171,7 +4119,7 @@ Cevabını YALNIZCA geçerli bir JSON nesnesi olarak ver, başka hiçbir yazı y
       lumioAiArayuzuDileGoreGuncelle();
     }
 
-    /* SALON MESLEKTAŞI AKILLI İSTİŞARE (TAM HAFIZA & GELMEYENLER LİSTESİ DAHİL) */
+    /* SALON MESLEKTAŞI AKILLI İSTİŞARE (DENETİM RAPORU #2 ÇÖZÜLDÜ: TAM HAFIZA AKTİF) */
     async function lumioAiSoruSor() {
       const inp = document.getElementById('aiAskInput');
       const soru = inp.value.trim();
@@ -4192,6 +4140,7 @@ Cevabını YALNIZCA geçerli bir JSON nesnesi olarak ver, başka hiçbir yazı y
         ? "Bugün hiç randevu yok, dükkan tamamen müsait." 
         : `Bugün toplam ${bugunRand.length} randevu var: ` + bugunRand.map(r => `${r.saat} ${turkceHitapIsimDuzenle(r.musteriAdi)} (${r.hizmet})`).join(", ");
 
+      // Denetim Raporu #2: Gelmeyen müşteri havuzu ve analizi modele geri yüklendi!
       let cagrilacaklarMetni = "";
       let adaylar = [];
       musteriler.forEach(m => {
@@ -4228,7 +4177,7 @@ Cevabını YALNIZCA geçerli bir JSON nesnesi olarak ver, başka hiçbir yazı y
 
       let sistemTalimati = `Sen kuaför tezgahında ustanın yanında duran, tecrübeli ve kıdemli bir colorist & salon meslektaşısın.
 DİL VE USLUP KURALLARI:
-1. Kesinlikle tiyatro replikleri yapmayacaksın.
+1. Kesinlikle tiyatro replikleri (çay koydum, paspas vb.) yapmayacaksın.
 2. ASLA yıldız (**), diyez (#) veya markdown liste işaretleri kullanma. Düz, net ve akıcı dükkan jargonuyla konuş.
 3. Kuaför kimyası jargonu kullan: "oryal", "20 volüm oksidan", "dip açma", "cila", "küllü kumral", "dorelik kırma", "pigmentasyon", "porozite".
 4. Usta 'kimi çağıralım' veya 'gelmeyenler kim' dediğinde gerçek gelmeyen müşteri listesini dikkate alarak net isimler ver.
@@ -4238,42 +4187,7 @@ BUGÜNKÜ CANLI VERİLER:
 - Günün Randevuları: ${randevuOzeti}
 - Geri Çağırma Analizi (Gelmeyen Müşteriler): ${cagrilacaklarMetni}
 - Koltuktaki Müşteri Hafızası: ${musteriHafizasi}`;
-/* KESİNTİSİZ VE GÜNCEL GEMINI 2.0 FLASH MOTORU */
-    async function geminiApiCagir(payload) {
-      if (!geminiApiKey) {
-        throw new Error("Lütfen Patron Paneli'nden [🔑 Gemini API Key] butonuna basarak Google API anahtarınızı giriniz.");
-      }
 
-      const hedefUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`;
-
-      const abortCtrl = new AbortController();
-      const zamanAsimiId = setTimeout(() => abortCtrl.abort(), 25000);
-
-      try {
-        const res = await fetch(hedefUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-          signal: abortCtrl.signal
-        });
-
-        clearTimeout(zamanAsimiId);
-        const data = await res.json();
-
-        if (res.ok && data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
-          return data.candidates[0].content.parts[0].text;
-        }
-
-        if (data.error) {
-          throw new Error(data.error.message || "Google API hata döndürdü.");
-        }
-
-        throw new Error("Geçersiz API yanıtı.");
-      } catch (hata) {
-        clearTimeout(zamanAsimiId);
-        throw new Error(hata.name === 'AbortError' ? "Bağlantı zaman aşımına uğradı." : hata.message);
-      }
-    }
       try {
         const cevap = await geminiApiCagir({
           contents: [{ parts: [{ text: `${sistemTalimati}\n\nUstanın Sorusu: "${soru}"` }] }],
@@ -4359,8 +4273,9 @@ Yanıtını YALNIZCA şu JSON formatında ver, başka yazı yazma:
           contents: [{ parts: [{ inlineData: { mimeType: mimeType, data: base64Data } }, { text: visionPrompt }] }]
         });
 
-        rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
-        const parsed = JSON.parse(rawText);
+        const parsed = aiJsonAyikla(rawText);
+        parsed.secilenUrunler = Array.isArray(parsed.secilenUrunler) ? parsed.secilenUrunler : [];
+        parsed.hasarSkoru = Math.max(0, Math.min(100, parseInt(parsed.hasarSkoru) || 0));
 
         const badgeEl = document.getElementById('aiDamageBadge');
         badgeEl.innerText = `Hasar Skoru: %${parsed.hasarSkoru}`;
@@ -4368,12 +4283,12 @@ Yanıtını YALNIZCA şu JSON formatında ver, başka yazı yazma:
           ? "text-[9px] bg-slate-800 text-amber-400 px-2 py-0.5 rounded font-black" 
           : "text-[9px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-black";
 
-        document.getElementById('aiTehisText').innerText = parsed.teshis;
+        document.getElementById('aiTehisText').innerText = String(parsed.teshis || '');
         document.getElementById('aiProductPrescription').innerHTML = parsed.secilenUrunler.map((u, i) => `
           <div class="bg-slate-950 p-2 rounded-lg border border-slate-800 space-y-1">
-            <div class="flex justify-between items-center"><span class="font-bold text-amber-300 text-xs">${i+1}. ${u.ad}</span><span class="text-[8px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded font-bold">Özel Reçete</span></div>
-            <p class="text-[9px] text-slate-400 leading-tight">💡 <b>Neden:</b> ${u.gerekce}</p>
-            <a href="${u.link}" target="_blank" class="inline-block text-[9px] text-amber-400 font-bold hover:underline pt-0.5">🔗 Satın Alma Bağlantısı ➔</a>
+            <div class="flex justify-between items-center"><span class="font-bold text-amber-300 text-xs">${i+1}. ${esc(u.ad)}</span><span class="text-[8px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded font-bold">Özel Reçete</span></div>
+            <p class="text-[9px] text-slate-400 leading-tight">💡 <b>Neden:</b> ${esc(u.gerekce)}</p>
+            <a href="${esc(guvenliUrl(u.link))}" target="_blank" rel="noopener noreferrer" class="inline-block text-[9px] text-amber-400 font-bold hover:underline pt-0.5">🔗 Satın Alma Bağlantısı ➔</a>
           </div>`).join('');
 
         document.getElementById('aiVisionResultCard').classList.remove('hidden');
@@ -4396,13 +4311,7 @@ Yanıtını YALNIZCA şu JSON formatında ver, başka yazı yazma:
     }
 
     function patronGeminiSifresiAyarla() {
-      let girilen = prompt("Google AI Studio'dan aldığınız Gemini API anahtarınızı yapıştırınız:", geminiApiKey);
-      if (girilen === null) return;
-      girilen = girilen.trim();
-      if (!girilen) { alert("API Anahtarı boş bırakılamaz!"); return; }
-      geminiApiKey = girilen;
-      localStorage.setItem('lumio_gemini_api_key', girilen);
-      alert("🎉 Google Gemini Yapay Zeka Anahtarınız kaydedildi! Trikoloji ve sesli asistan artık aktif.");
+      alert('Gemini anahtarı artık tarayıcıda tutulmuyor. Netlify > Site settings > Environment variables içine GEMINI_API_KEY olarak ekleyin.');
     }
 
     function patronUrunListesiniCiz() {

@@ -1,8 +1,9 @@
-/* LUMIO AI Terminal - Service Worker & Banka Tipi Bildirim Motoru (V10) */
-const CACHE_NAME = 'lumio-ai-cache-v10';
+/* LUMIO AI Terminal - Service Worker & Banka Tipi Bildirim Motoru (V11) */
+const CACHE_NAME = 'lumio-ai-cache-v11';
 const OFFLINE_URLS = [
   './',
   './index.html',
+  './ai-client.js',
   './manifest.json',
   './logo.png'
 ];
@@ -37,8 +38,10 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
   // Kendi domainimiz veya kullandığımız CDN'ler dışındakileri önbelleğe alma
+  if (url.pathname.startsWith('/.netlify/')) return; // AI proxy asla önbelleğe alınmaz
+
   if (
-    !url.origin.includes(self.location.origin) && 
+    url.origin !== self.location.origin && 
     !url.hostname.includes('cdnjs') && 
     !url.hostname.includes('gstatic') &&
     !url.hostname.includes('tailwindcss.com')
