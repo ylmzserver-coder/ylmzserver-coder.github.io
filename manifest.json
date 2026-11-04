@@ -1,32 +1,25 @@
 {
-  "name": "LUMIO",
+  "name": "LUMIO Salon Terminal",
   "short_name": "LUMIO",
-  "description": "LUMIO Salon Intelligence",
-  "id": "lumio-terminal-v1",
-  "start_url": "./index.html",
-  "scope": "./",
+  "description": "LUMIO Salon Intelligence & Terminal",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#090d16",
   "theme_color": "#090d16",
   "icons": [
     {
-      "src": "logo.png",
+      "src": "/logo.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "logo.png",
+      "src": "/logo.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "logo.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     }
   ]
 }
