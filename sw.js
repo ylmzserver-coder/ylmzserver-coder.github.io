@@ -1,5 +1,4 @@
-/* LUMIO AI Terminal - Service Worker & Banka Tipi Bildirim Motoru (V11) */
-const CACHE_NAME = 'lumio-ai-cache-v11';
+const CACHE_NAME = 'lumio-ai-cache-v12';
 const OFFLINE_URLS = [
   './',
   './index.html',
@@ -8,7 +7,6 @@ const OFFLINE_URLS = [
   './logo.png'
 ];
 
-// 1. KURULUM
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -19,7 +17,6 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// 2. AKTİF ETME (Eski bozuk önbellekleri temizler ve yeni kodu anında devreye alır)
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -32,13 +29,10 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. ÇEVRİMDIŞI ÇALIŞMA (Tailwind, FontAwesome ve Google CDN Destekli)
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
-
-  // Kendi domainimiz veya kullandığımız CDN'ler dışındakileri önbelleğe alma
-  if (url.pathname.startsWith('/.netlify/')) return; // AI proxy asla önbelleğe alınmaz
+  if (url.pathname.startsWith('/.netlify/')) return;
 
   if (
     url.origin !== self.location.origin && 
@@ -71,7 +65,6 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// 4. BANKA TİPİ KİLİT EKRANI PUSH BİLDİRİMİ
 self.addEventListener('push', (event) => {
   let data = {
     title: '⏰ LUMIO: Randevu Vakti Yaklaştı!',
@@ -81,11 +74,8 @@ self.addEventListener('push', (event) => {
   };
 
   if (event.data) {
-    try {
-      data = Object.assign(data, event.data.json());
-    } catch (e) {
-      data.body = event.data.text();
-    }
+    try { data = Object.assign(data, event.data.json()); } 
+    catch (e) { data.body = event.data.text(); }
   }
 
   const options = {
@@ -102,15 +92,11 @@ self.addEventListener('push', (event) => {
     ]
   };
 
-  event.waitUntil(
-    self.registration.showNotification(data.title, options)
-  );
+  event.waitUntil(self.registration.showNotification(data.title, options));
 });
 
-// 5. BİLDİRİM TIKLANDIĞINDA
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-
   if (event.action === 'ertele') {
     event.waitUntil(
       self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
@@ -129,9 +115,7 @@ self.addEventListener('notificationclick', (event) => {
             return client.focus();
           }
         }
-        if (self.clients.openWindow) {
-          return self.clients.openWindow('./index.html');
-        }
+        if (self.clients.openWindow) return self.clients.openWindow('./index.html');
       })
     );
   }
