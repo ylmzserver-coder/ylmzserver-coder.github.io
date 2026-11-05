@@ -2681,6 +2681,7 @@ function aktifDilSablonlariniAl(dil) {
           </div>`).join('');
       } else if (lostB) lostB.classList.add('hidden');
 
+      sonHatirlatmaVerisi = { doganlar, hatirlat, kayip };
       const total = doganlar.length + hatirlat.length + kayip.length;
       const bTot = document.getElementById('badgeTotalReminders'), eMsg = document.getElementById('emptyRemindersMsg');
       if (bTot) { bTot.innerText = total; bTot.classList.toggle('hidden', total === 0); }
@@ -4004,6 +4005,41 @@ function aktifDilSablonlariniAl(dil) {
        LUMIO MASTER AI: GLOBAL MODEL, KESİNTİSİZ GEMINI VE OTONOM MOTOR
        ========================================================================== */
     let aiRecognition = null;
+    /* Uzun dinleme: mikrofona bir kez dokun, konuş, bitirince tekrar dokun. Nefes/duraklamada kapanmaz. */
+    var aiMikOturum = null, sonHatirlatmaVerisi = null;
+    function uzunDinleBaslat(lang, onText, onBitis, onDurum) {
+      const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const o = { rec: null, dur: false, iptal: false, onceki: '', son: '' };
+      const baslat = () => {
+        const rec = new Speech(); o.rec = rec; rec.lang = lang; rec.continuous = true; rec.interimResults = true;
+        rec.onresult = e => { o.son = Array.from(e.results).map(r => r[0].transcript).join(' ').trim(); onText((o.onceki + ' ' + o.son).trim()); };
+        rec.onerror = e => { if (e.error === 'not-allowed' || e.error === 'service-not-allowed') { o.dur = true; if (onDurum) onDurum('izin'); } };
+        rec.onend = () => {
+          o.onceki = (o.onceki + ' ' + o.son).trim(); o.son = '';
+          if (!o.dur && !o.iptal) { try { baslat(); return; } catch (_) { o.dur = true; } }
+          if (!o.iptal) onBitis(o.onceki);
+        };
+        rec.start();
+      };
+      o.durdur = () => { o.dur = true; try { o.rec.stop(); } catch (_) { onBitis(o.onceki); } };
+      o.iptalEt = () => { o.iptal = true; o.dur = true; try { o.rec.stop(); } catch (_) {} };
+      o.zaman = setTimeout(() => { if (!o.dur && !o.iptal) o.durdur(); }, 120000);   // en çok 2 dakika
+      baslat(); return o;
+    }
+    function mikOturumuIptalEt() { if (aiMikOturum) { aiMikOturum.iptalEt(); aiMikOturum = null; } aiDinliyorMu = false; aiIstisareDinliyorMu = false; }
+
+    function hatirlatmaCevabiHtml() {
+      canliBildirimMerkeziniGuncelle();
+      const v = sonHatirlatmaVerisi || { doganlar: [], hatirlat: [], kayip: [] };
+      const btn = 'class="bg-amber-500 text-slate-950 font-black px-2 py-1 rounded-lg text-[11px]"';
+      const satir = (m, bilgi, msjFn) => `<div class="flex items-center justify-between gap-2 py-1.5"><div class="min-w-0"><b>${H(m.ad)}</b><div class="text-[11px] opacity-70">${esc(bilgi)}</div></div><div class="flex gap-1 flex-shrink-0"><button type="button" ${btn} onclick="lumioAiModaliKapat();sihirbazBaslatMusteriyle(${jsq(m.ad)}, ${jsq(m.tel || '')})">📅</button>${m.tel ? `<button type="button" ${btn} onclick="${msjFn}">💬</button>` : ''}</div></div>`;
+      let h = '';
+      if (v.doganlar.length) h += `<div class="font-black mt-1">🎂 Bugün doğum günü (${v.doganlar.length})</div>` + v.doganlar.map(m => satir(m, m.tel || '', `dogumGunuMesajiGonder(${jsq(m.ad)}, ${jsq(m.tel || '')})`)).join('');
+      if (v.hatirlat.length) h += `<div class="font-black mt-2">⏰ Yaklaşan randevu / takip (${v.hatirlat.length})</div>` + v.hatirlat.map(m => satir(m, m.planTarih + (m.kalanGun === 0 ? ' · bugün' : m.kalanGun === 1 ? ' · yarın' : ' · ' + m.kalanGun + ' gün'), `takipMesajiGonder(${jsq(m.ad)}, ${jsq(m.tel || '')}, ${jsq(m.planTarih)})`)).join('');
+      if (v.kayip.length) h += `<div class="font-black mt-2">💤 Uzun süredir gelmeyen (${v.kayip.length})</div>` + v.kayip.slice(0, 5).map(m => satir(m, 'Son: ' + m.sonIslemTarihi + ' · ' + m.gGun + ' gün', `kayipMusteriGeriCagirMesaji(${jsq(m.ad)}, ${jsq(m.tel || '')})`)).join('') + (v.kayip.length > 5 ? `<div class="text-[11px] opacity-70 pt-1">… ve ${v.kayip.length - 5} kişi daha (Hatırlatmalar sekmesinde)</div>` : '');
+      return h ? `Hatırlatmalarda müşteri var ustam:${h}` : 'Şu an hatırlatmada kimse yok ustam.';
+    }
+
     let aiDinliyorMu = false;
     let aiIstisareDinliyorMu = false;
     let aiSonAlgilananMetin = "";
@@ -4032,8 +4068,7 @@ function aktifDilSablonlariniAl(dil) {
     }
 
     function lumioAiModaliKapat() {
-      if (aiDinliyorMu && aiRecognition) { aiRecognition.stop(); aiDinliyorMu = false; }
-      if (aiIstisareDinliyorMu && aiRecognition) { aiRecognition.stop(); aiIstisareDinliyorMu = false; }
+      mikOturumuIptalEt();
       document.getElementById('modalLumioAi').classList.add('hidden');
     }
 
@@ -4075,100 +4110,37 @@ function aktifDilSablonlariniAl(dil) {
     function lumioAiBasKonusToggle() {
       const btn = document.getElementById('aiMicBtn'), status = document.getElementById('aiMicStatus');
       const d = AI_DIL_AYARLARI[aktifDil] || AI_DIL_AYARLARI.tr;
-      const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!Speech) { alert("Tarayıcınız ses tanımayı desteklemiyor. Lütfen Chrome veya Safari kullanınız."); return; }
-
-      if (aiDinliyorMu) {
-        if (aiRecognition) aiRecognition.stop();
-        aiDinliyorMu = false;
-        btn.classList.remove('from-amber-600', 'to-amber-500', 'animate-pulse');
-        btn.classList.add('from-amber-500', 'to-amber-300');
-        status.innerText = "İşleniyor...";
-        return;
-      }
-
+      if (!(window.SpeechRecognition || window.webkitSpeechRecognition)) { alert("Tarayıcınız ses tanımayı desteklemiyor. Lütfen Chrome veya Safari kullanınız."); return; }
+      const kapat = () => { aiDinliyorMu = false; btn.classList.remove('from-amber-600', 'to-amber-500', 'animate-pulse'); btn.classList.add('from-amber-500', 'to-amber-300'); };
+      if (aiDinliyorMu && aiMikOturum) { status.innerText = "İşleniyor..."; aiMikOturum.durdur(); return; }
       try {
-        aiRecognition = new Speech();
-        aiRecognition.lang = d.langCode;
-        aiRecognition.continuous = false;
-        aiRecognition.interimResults = false;
-
-        aiRecognition.onstart = function () {
-          aiDinliyorMu = true;
-          btn.classList.remove('from-amber-500', 'to-amber-300');
-          btn.classList.add('from-amber-600', 'to-amber-500', 'animate-pulse');
-          status.innerText = d.micListening;
-          document.getElementById('aiTranscriptCard').classList.remove('hidden');
-          document.getElementById('aiTranscriptText').innerText = "...";
-        };
-
-        aiRecognition.onresult = function (e) {
-          const t = e.results[0][0].transcript;
-          aiSonAlgilananMetin = t;
-          document.getElementById('aiTranscriptText').innerText = `"${t}"`;
-          lumioAiSokakDiliCoz(t);
-        };
-
-        aiRecognition.onerror = function () {
-          status.innerText = "Ses algılanamadı.";
-          aiDinliyorMu = false;
-          btn.classList.remove('from-amber-600', 'to-amber-500', 'animate-pulse');
-          btn.classList.add('from-amber-500', 'to-amber-300');
-        };
-
-        aiRecognition.onend = function () {
-          aiDinliyorMu = false;
-          btn.classList.remove('from-amber-600', 'to-amber-500', 'animate-pulse');
-          btn.classList.add('from-amber-500', 'to-amber-300');
-          status.innerText = d.micReady;
-        };
-
-        aiRecognition.start();
-      } catch (err) { alert("Mikrofon hatası: " + err.message); }
+        aiDinliyorMu = true;
+        btn.classList.remove('from-amber-500', 'to-amber-300'); btn.classList.add('from-amber-600', 'to-amber-500', 'animate-pulse');
+        status.innerText = d.micListening + ' (bitirince tekrar dokunun)';
+        document.getElementById('aiTranscriptCard').classList.remove('hidden');
+        document.getElementById('aiTranscriptText').innerText = "...";
+        aiMikOturum = uzunDinleBaslat(d.langCode,
+          t => { document.getElementById('aiTranscriptText').innerText = `"${t}"`; },
+          t => { kapat(); aiMikOturum = null; status.innerText = d.micReady; if (t.trim()) { aiSonAlgilananMetin = t; lumioAiSokakDiliCoz(t); } },
+          dur => { if (dur === 'izin') alert("Mikrofon izni verilmedi."); });
+      } catch (err) { kapat(); alert("Mikrofon hatası: " + err.message); }
     }
 
     function lumioAiIstisareBasKonusToggle() {
       const micBtn = document.getElementById('btnAiIstisareMic'), inp = document.getElementById('aiAskInput');
       const d = AI_DIL_AYARLARI[aktifDil] || AI_DIL_AYARLARI.tr;
-      const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!Speech) { alert("Tarayıcınız ses tanımayı desteklemiyor."); return; }
-
-      if (aiIstisareDinliyorMu) {
-        if (aiRecognition) aiRecognition.stop();
-        aiIstisareDinliyorMu = false;
-        micBtn.className = "w-8 h-8 rounded-xl bg-amber-500/15 text-amber-400 border border-slate-700 flex items-center justify-center text-xs flex-shrink-0";
-        return;
-      }
-
+      if (!(window.SpeechRecognition || window.webkitSpeechRecognition)) { alert("Tarayıcınız ses tanımayı desteklemiyor."); return; }
+      const kapali = "w-8 h-8 rounded-xl bg-amber-500/15 text-amber-400 border border-slate-700 flex items-center justify-center text-xs flex-shrink-0";
+      const acik = "w-8 h-8 rounded-xl bg-amber-500 text-slate-950 animate-pulse flex items-center justify-center text-xs flex-shrink-0";
+      if (aiIstisareDinliyorMu && aiMikOturum) { aiMikOturum.durdur(); return; }
+      const eskiPh = inp.placeholder;
       try {
-        aiRecognition = new Speech();
-        aiRecognition.lang = d.langCode;
-        aiRecognition.continuous = false;
-        aiRecognition.interimResults = false;
-
-        aiRecognition.onstart = function () {
-          aiIstisareDinliyorMu = true;
-          micBtn.className = "w-8 h-8 rounded-xl bg-amber-500 text-slate-950 animate-pulse flex items-center justify-center text-xs flex-shrink-0";
-          inp.placeholder = "Dinliyorum ustam...";
-        };
-
-        aiRecognition.onresult = function (e) {
-          inp.value = e.results[0][0].transcript;
-          lumioAiSoruSor();
-        };
-
-        aiRecognition.onerror = function () {
-          aiIstisareDinliyorMu = false;
-          micBtn.className = "w-8 h-8 rounded-xl bg-amber-500/15 text-amber-400 border border-slate-700 flex items-center justify-center text-xs flex-shrink-0";
-        };
-
-        aiRecognition.onend = function () {
-          aiIstisareDinliyorMu = false;
-          micBtn.className = "w-8 h-8 rounded-xl bg-amber-500/15 text-amber-400 border border-slate-700 flex items-center justify-center text-xs flex-shrink-0";
-        };
-
-        aiRecognition.start();
-      } catch (err) { alert("Mikrofon hatası: " + err.message); }
+        aiIstisareDinliyorMu = true; micBtn.className = acik; inp.placeholder = "Dinliyorum ustam... bitirince mikrofona tekrar dokunun";
+        aiMikOturum = uzunDinleBaslat(d.langCode,
+          t => { inp.value = t; },
+          t => { aiIstisareDinliyorMu = false; micBtn.className = kapali; inp.placeholder = eskiPh; aiMikOturum = null; if (t.trim()) { inp.value = t; lumioAiSoruSor(); } },
+          dur => { if (dur === 'izin') alert("Mikrofon izni verilmedi."); });
+      } catch (err) { aiIstisareDinliyorMu = false; micBtn.className = kapali; alert("Mikrofon hatası: " + err.message); }
     }
 
     /* GÜNCELLENMİŞ ÇOK DİLLİ VE TARİH BİLİNÇLİ NİYET MOTORU (RAPORDAKİ TÜM AÇIKLAR KAPATILDI) */
@@ -4461,6 +4433,10 @@ Cevabını YALNIZCA geçerli bir JSON nesnesi olarak ver, başka hiçbir yazı y
       const riskCard = document.getElementById('aiRiskAlertCard');
       const adviceCard = document.getElementById('aiAdviceCard');
       const adviceText = document.getElementById('aiAdviceText');
+      if (soru.length < 90 && /hat[ıi]rlat|bildirim|do[ğg]um g[üu]n|gelmeyen|kay[ıi]p m[üu][şs]teri|kimi (ara|çağır|cagir)/.test(soru.toLocaleLowerCase('tr'))) {
+        riskCard.classList.add('hidden'); adviceCard.classList.remove('hidden');
+        adviceText.innerHTML = hatirlatmaCevabiHtml(); inp.value = ""; return;   // yapay zekaya gitmeden anında
+      }
 
       riskCard.classList.add('hidden');
       adviceCard.classList.remove('hidden');
@@ -4508,6 +4484,9 @@ Cevabını YALNIZCA geçerli bir JSON nesnesi olarak ver, başka hiçbir yazı y
         }
       }
 
+      canliBildirimMerkeziniGuncelle();
+      const hv = sonHatirlatmaVerisi || { doganlar: [], hatirlat: [], kayip: [] };
+      const hatirlatmaOzeti = `Doğum günü: ${hv.doganlar.map(m => turkceHitapIsimDuzenle(m.ad)).join(', ') || 'yok'}. Yaklaşan randevu/takip: ${hv.hatirlat.map(m => turkceHitapIsimDuzenle(m.ad) + ' (' + m.planTarih + ')').join(', ') || 'yok'}. Uzun süredir gelmeyen: ${hv.kayip.slice(0, 8).map(m => turkceHitapIsimDuzenle(m.ad) + ' (' + m.gGun + ' gün)').join(', ') || 'yok'}.`;
       let sistemTalimati = `Sen kuaför tezgahında ustanın yanında duran, tecrübeli ve kıdemli bir colorist & salon meslektaşısın.
 DİL VE USLUP KURALLARI:
 1. Kesinlikle tiyatro replikleri (çay koydum, paspas vb.) yapmayacaksın.
@@ -4515,16 +4494,18 @@ DİL VE USLUP KURALLARI:
 3. Kuaför kimyası jargonu kullan: "oryal", "20 volüm oksidan", "dip açma", "cila", "küllü kumral", "dorelik kırma", "pigmentasyon", "porozite".
 4. Usta 'kimi çağıralım' veya 'gelmeyenler kim' dediğinde gerçek gelmeyen müşteri listesini dikkate alarak net isimler ver.
 5. Doğrudan usta saygısıyla çözümü ve formülü söyle.
+6. Cevabı kısa tut: en fazla 6-8 cümle, giriş cümlesi ve tekrar yapma.
 
 BUGÜNKÜ CANLI VERİLER:
 - Günün Randevuları: ${randevuOzeti}
 - Geri Çağırma Analizi (Gelmeyen Müşteriler): ${cagrilacaklarMetni}
-- Koltuktaki Müşteri Hafızası: ${musteriHafizasi}`;
+- Koltuktaki Müşteri Hafızası: ${musteriHafizasi}
+- Hatırlatmalar: ${hatirlatmaOzeti}`;
 
       try {
         const cevap = await geminiApiCagir({
           contents: [{ parts: [{ text: `${sistemTalimati}\n\nUstanın Sorusu: "${soru}"` }] }],
-          generationConfig: { maxOutputTokens: 3000, temperature: 0.25 }
+          generationConfig: { maxOutputTokens: 1500, temperature: 0.25 }
         });
 
         let temiz = cevap.replace(/[*#_`]/g, '').trim();
