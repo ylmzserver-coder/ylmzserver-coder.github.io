@@ -1,7 +1,4 @@
-/* ==========================================================================
-   LUMIO - Service Worker & Banka Tipi Bildirim Motoru (V16)
-   Sürüm: 2026-11-06.1
-   ========================================================================== */
+/* LUMIO AI Terminal - Service Worker & Banka Tipi Bildirim Motoru (V15) */
 const CACHE_NAME = 'lumio-ai-cache-v16';
 const OFFLINE_URLS = [
   './',
@@ -25,7 +22,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// 2. AKTİF ETME (Eski önbellekleri temizler)
+// 2. AKTİF ETME (Eski bozuk önbellekleri temizler ve yeni kodu anında devreye alır)
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -38,17 +35,12 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. ÇEVRİMDIŞI ÇALIŞMA DESTEĞİ
+// 3. ÇEVRİMDIŞI ÇALIŞMA (Tailwind, FontAwesome ve Google CDN Destekli)
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
 
-  // Firestore ve Google API istekleri önbelleğe alınmaz (canlı olmalı)
-  if (url.hostname.includes('firestore.googleapis.com') || url.hostname.includes('generativelanguage.googleapis.com')) {
-    return;
-  }
-
-  // CDN ve statik varlık kontrolü
+  // Kendi domainimiz veya kullandığımız CDN'ler dışındakileri önbelleğe alma
   if (
     url.origin !== self.location.origin && 
     !url.hostname.includes('cdnjs') && 
@@ -65,7 +57,7 @@ self.addEventListener('fetch', (event) => {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME)
             .then((cache) => cache.put(event.request, responseToCache))
-            .catch(() => {});
+            .catch((err) => console.warn('Önbellek yazma korundu:', err));
         }
         return networkResponse;
       })
@@ -80,7 +72,7 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// 4. KİLİT EKRANI PUSH BİLDİRİMİ
+// 4. BANKA TİPİ KİLİT EKRANI PUSH BİLDİRİMİ
 self.addEventListener('push', (event) => {
   let data = {
     title: '⏰ LUMIO: Randevu Vakti Yaklaştı!',
@@ -116,7 +108,7 @@ self.addEventListener('push', (event) => {
   );
 });
 
-// 5. BİLDİRİME TIKLANDIĞINDA
+// 5. BİLDİRİM TIKLANDIĞINDA
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
