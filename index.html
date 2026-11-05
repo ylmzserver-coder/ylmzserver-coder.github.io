@@ -3042,6 +3042,15 @@
     }
     /* İLK ÇALIŞTIRICI */
     yeniIslemTemizle();
+
+/* ACİL TEST TETİKLEYİCİSİ */
+    if (!aktifLisansKodu) {
+      aktifLisansKodu = "905354049392"; // Firebase'deki senin gerçek numaran
+      localStorage.setItem('hair_lisans_kodu', aktifLisansKodu);
+    }
+    setTimeout(() => {
+      bulutVerileriniBaslat();
+    }, 500);
     (function () {
       const un = mainAuth.onAuthStateChanged((user) => { 
         un(); 
