@@ -3,7 +3,7 @@
    1) AI_WORKER_URL doluysa -> Cloudflare Worker (anahtar sunucuda, önerilen)
    2) Site netlify.app ise  -> Netlify fonksiyonu (anahtar sunucuda)
    3) Aksi halde (örn. GitHub Pages) -> doğrudan Gemini; anahtar bu cihazda saklanır (localStorage). */
-const AI_WORKER_URL = '';
+const AI_WORKER_URL = 'https://lumio-ai.ylmzserver.workers.dev';
 
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta';
 const GEMINI_ADAY_MODELLER = ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-2.0-flash'];
