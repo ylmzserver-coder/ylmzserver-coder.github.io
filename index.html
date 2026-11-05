@@ -16,6 +16,31 @@
   <link rel="apple-touch-icon" href="icon-192.png">
   <link rel="manifest" href="manifest.json">
   <script>
+    /* SÜRÜM + EKRANDA HATA GÖSTERİCİ (sorun tespiti için) */
+    window.LUMIO_SURUM = '2026-11-05.1';
+    (function () {
+      function goster(m) {
+        try {
+          var b = document.getElementById('lumioHataBandi');
+          if (!b) {
+            b = document.createElement('div'); b.id = 'lumioHataBandi';
+            b.style.cssText = 'position:fixed;left:8px;right:8px;top:8px;z-index:2147483647;background:#7f1d1d;color:#fff;border-radius:12px;padding:9px 34px 9px 12px;font:700 11px/1.4 sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.5);pointer-events:auto';
+            b.innerHTML = '<span></span><button type="button" style="position:absolute;right:8px;top:5px;background:none;border:0;color:#fff;font-size:16px" onclick="this.parentNode.remove()">✕</button>';
+            (document.body || document.documentElement).appendChild(b);
+          }
+          b.firstChild.textContent = '⚠️ v' + window.LUMIO_SURUM + ' · ' + m;
+        } catch (e) {}
+      }
+      window.addEventListener('error', function (e) {
+        if (e && e.message && /tailwind/i.test(e.message)) return;
+        var d = (e.filename || '').split('/').pop();
+        if (e.target && e.target !== window && (e.target.src || e.target.href)) { goster('Dosya yüklenemedi: ' + String(e.target.src || e.target.href).split('/').pop()); return; }
+        goster((e.message || 'Hata') + (d ? ' (' + d + ':' + e.lineno + ')' : ''));
+      }, true);
+      window.addEventListener('unhandledrejection', function (e) {
+        var r = e.reason; goster('Hata: ' + ((r && (r.code || r.message)) || r));
+      });
+    })();
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.addEventListener('message', (ev) => {
         if (ev.data && ev.data.type === 'ERTELE_ALARM') {
@@ -41,6 +66,7 @@
   <!-- Firebase Compat v9 -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
   <script>
     tailwind.config = {
@@ -199,7 +225,7 @@
             <label id="lblSetupPin" for="setupPinInput" style="font-size:10px;font-weight:800;color:#94a3b8;letter-spacing:.06em">ŞİFRE</label>
             <button type="button" onclick="sifremiUnuttumWhatsApp()" id="btnForgotPin" class="text-[10px] text-amber-400 font-bold underline">Şifremi unuttum</button>
           </div>
-          <input type="password" inputmode="numeric" autocomplete="current-password" maxlength="6" id="setupPinInput" placeholder="••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-center text-amber-400 font-black tracking-widest text-lg focus:outline-none focus:border-amber-400">
+          <input type="password" autocomplete="current-password" maxlength="40" id="setupPinInput" placeholder="••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-center text-amber-400 font-black tracking-widest text-lg focus:outline-none focus:border-amber-400">
 
           <div style="height:1px;background:#1e293b;margin:14px 0 12px"></div>
 
@@ -222,7 +248,7 @@
             <button onclick="yetkiliyeLisansSorWhatsApp()" style="width:100%;background:#059669;color:#fff;font-weight:800;padding:11px;border-radius:12px;border:0;font-size:12px"><i class="fa-brands fa-whatsapp"></i> <span id="btnAskLicense">Yetkili ile iletişime geç / Lisans al</span></button>
           </div>
         </div>
-        <p style="text-align:center;font-size:9px;color:#475569;margin:14px 0 0">LUMIO · Salon Intelligence</p>
+        <p style="text-align:center;font-size:9px;color:#475569;margin:14px 0 0">LUMIO · Salon Intelligence · <a href="javascript:void(0)" onclick="patronPaneliAc()" style="color:#64748b;text-decoration:underline">Yönetici</a></p>
       </div>
     </div>
   </div>
@@ -586,16 +612,23 @@
             <div class="grid grid-cols-2 gap-2">
               <div>
                 <label class="text-[9px] text-slate-400 block font-bold mb-0.5" id="lblPwdOld">ESKİ ŞİFRE:</label>
-                <input type="password" maxlength="6" id="setEskiSifre" placeholder="••••••" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-mono text-center focus:outline-none">
+                <input type="password" maxlength="40" id="setEskiSifre" placeholder="••••••" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-mono text-center focus:outline-none">
               </div>
               <div>
-                <label class="text-[9px] text-slate-400 block font-bold mb-0.5" id="lblPwdNew">YENİ ŞİFRE (6 HANE):</label>
-                <input type="password" maxlength="6" id="setYeniSifre" placeholder="••••••" class="w-full bg-slate-900 border border-amber-500/40 rounded-lg p-2 text-amber-300 font-mono text-center focus:outline-none">
+                <label class="text-[9px] text-slate-400 block font-bold mb-0.5" id="lblPwdNew">YENİ ŞİFRE (EN AZ 6 KARAKTER):</label>
+                <input type="password" maxlength="40" id="setYeniSifre" placeholder="••••••" class="w-full bg-slate-900 border border-amber-500/40 rounded-lg p-2 text-amber-300 font-mono text-center focus:outline-none">
               </div>
             </div>
             <button onclick="ustaKendiSifresiniGuncelle()" class="w-full bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold py-2 rounded-lg border border-slate-700 text-xs shadow transition active:scale-95" id="btnPwdUpdate">
               Şifremi Güncelle
             </button>
+          </div>
+
+          <!-- OTURUM -->
+          <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+            <span class="text-amber-400 block text-[10px] font-bold uppercase tracking-wider">👤 OTURUM</span>
+            <p class="text-[10px] text-slate-400 leading-snug">Ortak bir cihazda çalışıyorsanız işiniz bitince çıkış yapın.</p>
+            <button onclick="ustaCikisYap()" class="w-full bg-slate-800 hover:bg-slate-700 text-red-300 font-bold py-2 rounded-lg border border-slate-700 text-xs shadow transition active:scale-95">Çıkış Yap</button>
           </div>
 
           <!-- UZMANLIK ALANI -->
@@ -1315,7 +1348,7 @@
   </div>
 
   <!-- PATRON MODAL (CRM & PWA KURULUM REHBERİ) -->
-  <div id="patronModal" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[9999999999] flex items-center justify-center p-3">
+  <div id="patronModal" style="z-index:2147483647" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-3">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-4 space-y-3 shadow-2xl max-h-[90vh] overflow-y-auto scroll-touch">
       <div class="flex justify-between items-center pb-2 border-b border-slate-800">
         <h3 class="text-xs font-black text-amber-400">Patron Yönetim Merkezi (CRM)</h3>
@@ -1327,11 +1360,16 @@
         <button onclick="patronYasalTutanaklariGor()" class="p-2 bg-slate-950 hover:bg-slate-800 text-slate-300 rounded-xl border border-slate-800 text-[10px] font-bold text-center">📄 HMK md. 199 Delil</button>
       </div>
 
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="patronHesapGecisi()" class="p-2 bg-slate-950 hover:bg-slate-800 text-emerald-300 rounded-xl border border-slate-800 text-[10px] font-black text-center">🔄 Eski Lisansları Geçir</button>
+        <button onclick="adminCikis()" class="p-2 bg-slate-950 hover:bg-slate-800 text-red-300 rounded-xl border border-slate-800 text-[10px] font-bold text-center">🚪 Yönetici Çıkışı</button>
+      </div>
+
       <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2 text-xs">
         <span class="text-[10px] font-bold text-amber-400 block border-b border-slate-800 pb-1">➕ YENİ USTA LİSANSI</span>
         <input type="text" id="patronNewName" placeholder="Usta Adı Soyadı" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-bold text-xs focus:outline-none">
         <input type="tel" id="patronNewPhone" placeholder="5354049392 veya 905354049392" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-bold text-xs focus:outline-none">
-        <input type="text" maxlength="6" id="patronNewPin" placeholder="PIN: 123456" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-amber-300 font-mono font-black text-center text-xs focus:outline-none">
+        <input type="text" maxlength="40" id="patronNewPin" placeholder="Şifre (en az 6 karakter)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-amber-300 font-mono font-black text-center text-xs focus:outline-none">
         <select id="patronPackageSelect" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-bold text-xs focus:outline-none">
           <option value="30">1 Aylık (+30 Gün)</option>
           <option value="90" selected>3 Aylık (+90 Gün)</option>
@@ -1357,10 +1395,30 @@
 
       <div class="pt-2 border-t border-slate-800 text-xs space-y-1.5">
         <div class="flex space-x-1.5">
-          <input type="text" id="patronNewPinInput" placeholder="Yeni Patron Şifresi..." class="flex-1 bg-slate-950 border border-slate-700 rounded-lg p-2 text-white font-bold text-center text-xs focus:outline-none">
+          <input type="text" id="patronNewPinInput" placeholder="Yeni yönetici şifresi (en az 10 karakter)..." class="flex-1 bg-slate-950 border border-slate-700 rounded-lg p-2 text-white font-bold text-center text-xs focus:outline-none">
           <button onclick="patronSifreGuncelle()" class="bg-slate-800 text-amber-300 font-bold px-3 py-2 rounded-lg border border-slate-700 text-xs" id="btnSavePatronPin">Kaydet</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL: YÖNETİCİ GİRİŞİ -->
+  <div id="modalAdminGiris" style="z-index:2147483647" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-5 space-y-3 shadow-2xl">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+        <h3 class="text-xs font-black text-amber-400">🔐 Yönetici Girişi</h3>
+        <button onclick="adminGirisKapat()" class="text-slate-400 hover:text-white text-lg px-1">✕</button>
+      </div>
+      <div>
+        <label class="text-[10px] text-slate-400 font-bold block mb-1">YÖNETİCİ E-POSTA</label>
+        <input type="email" id="adminEposta" autocomplete="username" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-amber-400">
+      </div>
+      <div>
+        <label class="text-[10px] text-slate-400 font-bold block mb-1">ŞİFRE</label>
+        <input type="password" id="adminSifre" autocomplete="current-password" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-amber-400" onkeydown="if(event.key==='Enter')adminGirisYap()">
+      </div>
+      <p id="adminGirisHata" class="hidden text-[11px] text-red-400 font-bold"></p>
+      <button id="btnAdminGiris" onclick="adminGirisYap()" class="w-full bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 font-black py-3 rounded-xl text-xs active:scale-95">GİRİŞ YAP</button>
     </div>
   </div>
 
@@ -1484,7 +1542,62 @@
       measurementId: "G-YVXWM0Z08X"
     };
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    let db = firebase.firestore();          // aktif veri bağlantısı (salon sahibi oturumu; "Gözat" modunda yönetici bağlantısı)
+    const mainDb = db;
+    const mainAuth = firebase.auth();       // salon sahibi oturumu
+
+    /* GİRİŞ KİMLİĞİ: telefon -> sahte e-posta, şifre -> sabit önekli parola (Firebase en az 6 karakter ister) */
+    function authEposta(tel) { return 'p' + String(tel).replace(/\D/g, '') + '@lumio.app'; }
+    function authParola(pin) { return 'lumio:' + String(pin); }
+    function telefonuNormallestir(v) {
+      let t = String(v || '').replace(/\D/g, '');
+      if (t.startsWith('0')) t = t.substring(1);
+      if (t.length === 10) t = '90' + t;
+      return t;
+    }
+    function authHataMetni(err) {
+      const c = (err && err.code) || '';
+      const TR = (typeof aktifDil === 'undefined') || aktifDil === 'tr';
+      if (/invalid-credential|wrong-password|user-not-found|invalid-login/.test(c)) return TR ? '❌ Telefon numarası veya şifre hatalı.' : '❌ Wrong phone number or password.';
+      if (c === 'auth/too-many-requests') return TR ? '⏳ Çok fazla deneme yapıldı. Lütfen biraz bekleyip tekrar deneyin.' : '⏳ Too many attempts. Please wait and try again.';
+      if (c === 'auth/network-request-failed') return TR ? '📡 İnternet bağlantısı kurulamadı.' : '📡 No internet connection.';
+      if (c === 'auth/user-disabled') return TR ? '🔒 Bu hesap devre dışı bırakılmış.' : '🔒 This account has been disabled.';
+      if (c === 'permission-denied') return TR ? '🔒 Bu hesap için geçerli bir lisans bulunamadı veya süresi dolmuş.' : '🔒 No valid license for this account, or it has expired.';
+      return (TR ? 'Giriş hatası: ' : 'Sign-in error: ') + ((err && (err.code || err.message)) || err);
+    }
+
+    /* YÖNETİCİ (PATRON) AYRI OTURUM: salon oturumundan bağımsız ikinci Firebase uygulaması */
+    let adminApp = null, adminAuth = null, adb = null, creatorApp = null;
+    function adminAltyapi() {
+      if (!adminApp) {
+        adminApp = firebase.initializeApp(firebaseConfig, 'admin');
+        adminAuth = adminApp.auth();
+        adb = adminApp.firestore();
+      }
+    }
+    function adminOturumHazir() {
+      adminAltyapi();
+      return new Promise(res => { const un = adminAuth.onAuthStateChanged(u => { un(); res(u); }); });
+    }
+    function creatorAuth() {
+      if (!creatorApp) creatorApp = firebase.initializeApp(firebaseConfig, 'creator');
+      return creatorApp.auth();
+    }
+    /* Bir telefon için giriş hesabı oluşturur (veya aynı şifreyle zaten varsa uid'sini alır) */
+    async function authHesapUidAl(tel, pin) {
+      const a = creatorAuth(), e = authEposta(tel), p = authParola(pin);
+      try {
+        const c = await a.createUserWithEmailAndPassword(e, p);
+        await a.signOut();
+        return c.user.uid;
+      } catch (err) {
+        if (err.code === 'auth/email-already-in-use') {
+          try { const c2 = await a.signInWithEmailAndPassword(e, p); await a.signOut(); return c2.user.uid; }
+          catch (e2) { throw err; }
+        }
+        throw err;
+      }
+    }
 
     const VARSAYILAN_BOLUM_HIZMETLERI = {
       kuafor: [
@@ -1541,7 +1654,7 @@
         sFormulaPh: "Gramaj, boya veya ürün formülü...", sNotesPh: "Özel notlar...", curr: "TL",
         zoomBtn: "Büyüt", zoomModalTitle: "Detaylı Formül / Not Görüntüleyici",
         licenseKeyTitle: "LİSANS KODUNUZ", deptTitle: "UZMANLIK ALANINIZ / BÖLÜMÜNÜZ",
-        pwdChangeTitle: "🔒 GİRİŞ ŞİFRENİZİ DEĞİŞTİRİN", pwdOld: "ESKİ ŞİFRE:", pwdNew: "YENİ ŞİFRE (6 HANE):", pwdBtn: "Şifremi Güncelle",
+        pwdChangeTitle: "🔒 GİRİŞ ŞİFRENİZİ DEĞİŞTİRİN", pwdOld: "ESKİ ŞİFRE:", pwdNew: "YENİ ŞİFRE (EN AZ 6 KARAKTER):", pwdBtn: "Şifremi Güncelle",
         lostDaysTitle: "⏰ KAYIP MÜŞTERİ UYARI SÜRESİ", lostDaysUnit: "Gün",
         serviceListTitle: "HİZMET LİSTENİZ (Sihirbazda Çıkacak Butonlar)", addNewService: "+ Yeni Hizmet",
         alarmTitle: "USTA RANDEVU ALARMI", backupTitle: "Müşteri Rehberimi Yedekle",
@@ -2801,7 +2914,7 @@ function aktifDilSablonlariniAl(dil) {
 /* GİRİŞTE YASAL SÖZLEŞME ONAYI VE DİJİTAL İSPAT BELGESİ */
     function lisansKoduKaydet() {
       const val = document.getElementById('setupLicenseInput').value.trim();
-      const pinVal = document.getElementById('setupPinInput').value.trim();
+      const pinVal = document.getElementById('setupPinInput').value;
       const chkYasal = document.getElementById('chkYasalOnay');
       const aiRiza = !!(document.getElementById('chkAiRiza') || {}).checked;
       const bolge = (document.getElementById('setupBolge') || {}).value || 'GLOBAL';
@@ -2814,56 +2927,42 @@ function aktifDilSablonlariniAl(dil) {
         return;
       }
 
-      let temizKod = val.replace(/\D/g, '');
-      if (temizKod.startsWith('0')) temizKod = temizKod.substring(1);
-      if (temizKod.length === 10) temizKod = '90' + temizKod;
-
+      const temizKod = telefonuNormallestir(val);
       const btn = document.getElementById('btnSetupSubmit');
       btn.textContent = TR ? "Doğrulanıyor..." : "Verifying..."; btn.disabled = true;
       const butonuSifirla = () => { btn.disabled = false; setupDilUygula(); };
+      const hata = (m) => { butonuSifirla(); document.getElementById('setupContactArea').classList.remove('hidden'); document.getElementById('setupErrorMsg').textContent = m; };
+      const lisansRef = mainDb.collection('sistem').doc('lisanslar').collection('aktifler').doc(temizKod);
 
-      db.collection('sistem').doc('lisanslar').collection('aktifler').doc(temizKod).get().then(doc => {
+      mainAuth.signInWithEmailAndPassword(authEposta(temizKod), authParola(pinVal)).then(cred => {
+        return lisansRef.get().then(doc => ({ cred, doc }));
+      }).then(({ cred, doc }) => {
+        if (!doc.exists) { mainAuth.signOut(); hata(TR ? "❌ Bu telefon numarasına ait bir lisans bulunamadı." : "❌ No license found for this phone number."); return; }
+        const data = doc.data(), simdiMs = Date.now();
+        if (data.durum !== 'AKTIF' || simdiMs > (data.bitisMs || 0)) { mainAuth.signOut(); hata(TR ? "🔒 Bu lisans askıya alınmış veya süresi dolmuş." : "🔒 This license is suspended or expired."); return; }
         butonuSifirla();
-        const hata = (m) => { document.getElementById('setupContactArea').classList.remove('hidden'); document.getElementById('setupErrorMsg').textContent = m; };
-        if (!doc.exists) { hata(TR ? "❌ Tanımsız hesap. Bu telefon numarasına ait bir lisans bulunamadı." : "❌ Unknown account. No license found for this phone number."); return; }
-
-        const data = doc.data();
-        let simdiMs = Date.now(), bitisMs = data.bitisMs || (simdiMs + 864000000);
-        if (data.pin && data.pin.toString() !== pinVal.toString()) { hata(TR ? "❌ Hatalı şifre." : "❌ Wrong password."); return; }
-        if (data.durum !== 'AKTIF' || simdiMs > bitisMs) { hata(TR ? "🔒 Bu lisans askıya alınmış veya süresi dolmuş." : "🔒 This license is suspended or expired."); return; }
 
         const duz = LEGAL.duzMetin(bolge);
         LEGAL.hash(duz).then(ozet => {
           const auditLog = {
-            sozlesmeKodu: 'LUMIO-' + bolge + '-' + LEGAL.surum,
-            surum: LEGAL.surum,
-            bolge: bolge,
-            metinOzeti: ozet,
-            hukukcuOnayli: !!LEGAL.hukukcuOnayli,
-            onaylandi: true,
-            aiRizasi: aiRiza,
-            arayuzDili: aktifDil,
-            onayTarihi: bugununTarihiStr(),
-            zamanMs: simdiMs,
-            sunucuZamani: firebase.firestore.FieldValue.serverTimestamp(),
-            cihazBilgisi: navigator.userAgent || "Bilinmeyen Cihaz"
+            sozlesmeKodu: 'LUMIO-' + bolge + '-' + LEGAL.surum, surum: LEGAL.surum, bolge: bolge, metinOzeti: ozet,
+            hukukcuOnayli: !!LEGAL.hukukcuOnayli, onaylandi: true, aiRizasi: aiRiza, arayuzDili: aktifDil,
+            onayTarihi: bugununTarihiStr(), onaySaati: new Date().toLocaleTimeString('tr-TR'), zamanMs: simdiMs,
+            sunucuZamani: firebase.firestore.FieldValue.serverTimestamp(), cihazBilgisi: navigator.userAgent || "Bilinmeyen Cihaz"
           };
-          db.collection('sistem').doc('lisanslar').collection('aktifler').doc(temizKod)
-            .set({ yasalOnay: auditLog }, { merge: true }).catch(e => console.warn('Onay kaydı yazılamadı:', e));
+          lisansRef.set({ yasalOnay: auditLog }, { merge: true }).catch(e => console.warn('Onay kaydı yazılamadı:', e));
         });
 
         aktifLisansKodu = temizKod;
         localStorage.setItem('hair_lisans_kodu', aktifLisansKodu);
-        localStorage.setItem('lumio_sozlesme_onayli_' + aktifLisansKodu, LEGAL.surum);
-        localStorage.setItem('lumio_ai_riza_' + aktifLisansKodu, aiRiza ? '1' : '0');
+        localStorage.setItem('lumio_sozlesme_onayli_' + kodAnahtar(aktifLisansKodu), LEGAL.surum);
+        localStorage.setItem('lumio_ai_riza_' + kodAnahtar(aktifLisansKodu), aiRiza ? '1' : '0');
         localStorage.setItem('lumio_yasal_bolge', bolge);
+        document.getElementById('setupPinInput').value = '';
         document.getElementById('licenseSetupModal').classList.add('hidden');
         bulutVerileriniBaslat();
         alert(TR ? `Hoş geldiniz ${data.ad || ''}! LUMIO açıldı.` : `Welcome ${data.ad || ''}! LUMIO is ready.`);
-      }).catch(err => {
-        butonuSifirla();
-        alert((TR ? "Bağlantı hatası: " : "Connection error: ") + err.message);
-      });
+      }).catch(err => hata(authHataMetni(err)));
     }
 
     function yetkiliyeLisansSorWhatsApp() {
@@ -2872,10 +2971,17 @@ function aktifDilSablonlariniAl(dil) {
 
     /* GÜVENLİ VE DÖNGÜSÜZ BULUT DİNLEYİCİSİ (10/90 HANE KORUMALI) */
     function bulutVerileriniBaslat() {
+      const gozatModu = (db !== mainDb);
+      if (!gozatModu && !mainAuth.currentUser) {
+        setupEkraniHazirla();
+        if (aktifLisansKodu) document.getElementById('setupLicenseInput').value = aktifLisansKodu.startsWith('90') ? aktifLisansKodu.substring(2) : aktifLisansKodu;
+        document.getElementById('licenseSetupModal').classList.remove('hidden');
+        return;
+      }
       if (!aktifLisansKodu) { setupEkraniHazirla(); document.getElementById('licenseSetupModal').classList.remove('hidden'); return; }
 
-      let sozlesmeOnay = localStorage.getItem('lumio_sozlesme_onayli_' + aktifLisansKodu);
-      if (sozlesmeOnay !== LEGAL.surum) {
+      let sozlesmeOnay = localStorage.getItem('lumio_sozlesme_onayli_' + kodAnahtar(aktifLisansKodu));
+      if (!gozatModu && sozlesmeOnay !== LEGAL.surum) {
         setupEkraniHazirla();
         document.getElementById('licenseSetupModal').classList.remove('hidden');
         document.getElementById('setupLicenseInput').value = aktifLisansKodu.startsWith('90') ? aktifLisansKodu.substring(2) : aktifLisansKodu;
@@ -2910,23 +3016,23 @@ function aktifDilSablonlariniAl(dil) {
         }
       });
 
-      // USTA HÜCRESİ DUAL-LOOKUP (DÖNGÜSÜZ VE VERİ KAYIPSIZ)
-      let ustaHucresiKodu = aktifLisansKodu;
-      db.collection('ustalar').doc(ustaHucresiKodu).collection('musteriler').limit(1).get().then(testSnap => {
-        if (testSnap.empty && ustaHucresiKodu.startsWith('90')) {
-          const altKod = ustaHucresiKodu.substring(2);
-          db.collection('ustalar').doc(altKod).collection('musteriler').limit(1).get().then(altSnap => {
-            if (!altSnap.empty) {
-              ustaHucresiKodu = altKod;
-              aktifLisansKodu = altKod;
-              localStorage.setItem('hair_lisans_kodu', altKod);
-            }
-            baglaAltKoleksiyonlar(ustaHucresiKodu);
-          }).catch(() => baglaAltKoleksiyonlar(ustaHucresiKodu));
-        } else {
-          baglaAltKoleksiyonlar(ustaHucresiKodu);
-        }
-      }).catch(() => baglaAltKoleksiyonlar(ustaHucresiKodu));
+      // USTA HÜCRESİ DUAL-LOOKUP: 90'lı ve 10 haneli kodların ikisini de dener, verisi olanı seçer
+      const son10 = kodAnahtar(aktifLisansKodu);
+      const adaylar = [aktifLisansKodu];
+      [son10, '90' + son10].forEach(k => { if (k && adaylar.indexOf(k) < 0) adaylar.push(k); });
+      const veriVarMi = (kod) => Promise.all([
+        db.collection('ustalar').doc(kod).collection('musteriler').limit(1).get(),
+        db.collection('ustalar').doc(kod).collection('gecmis').limit(1).get()
+      ]).then(r => (!r[0].empty || !r[1].empty));
+      Promise.all(adaylar.map(k => veriVarMi(k).catch(err => { veriHatasiGoster(err, 'Kayıt araması'); return false; })))
+        .then(sonuc => {
+          const i = sonuc.indexOf(true);
+          const secilen = i > -1 ? adaylar[i] : aktifLisansKodu;
+          if (secilen !== aktifLisansKodu) { aktifLisansKodu = secilen; localStorage.setItem('hair_lisans_kodu', secilen); }
+          if (i === -1) veriBilgiGoster('Bu hesapta (' + secilen + ') kayıtlı müşteri veya geçmiş bulunamadı. Doğru telefon numarasıyla girdiğinizden emin olun.');
+          baglaAltKoleksiyonlar(secilen);
+        })
+        .catch(err => { veriHatasiGoster(err, 'Kayıt araması'); baglaAltKoleksiyonlar(aktifLisansKodu); });
 
       function baglaAltKoleksiyonlar(kod) {
         unsubscribeMusteriler = db.collection('ustalar').doc(kod).collection('musteriler').onSnapshot((snapshot) => {
@@ -2935,7 +3041,7 @@ function aktifDilSablonlariniAl(dil) {
           if (aktifMusteri) { let g = musteriler.find(m => m.id === aktifMusteri.id); if (g) aktifMusteri = g; }
           canliBildirimMerkeziniGuncelle();
           musteriRehberiSayaciGuncelle();
-        });
+        }, (err) => veriHatasiGoster(err, 'Müşteriler'));
 
         unsubscribeAyarlar = db.collection('ustalar').doc(kod).collection('ayarlar').doc('profil').onSnapshot(doc => {
           if (doc.exists) {
@@ -2967,65 +3073,142 @@ function aktifDilSablonlariniAl(dil) {
           snapshot.forEach(d => randevular.push({ id: d.id, ...d.data() }));
           ajandaSaatleriniCiz();
           gunlukCiroGuncelle();
-        });
+        }, (err) => veriHatasiGoster(err, 'Randevular'));
       }
     }
 
+    /* VERİ HATASI / BİLGİ BANDI */
+    function veriBandiYaz(metin, renk) {
+      let b = document.getElementById('veriBandi');
+      if (!b) {
+        b = document.createElement('div'); b.id = 'veriBandi';
+        b.style.cssText = 'position:fixed;left:10px;right:10px;bottom:max(env(safe-area-inset-bottom,0px),12px);z-index:2147482000;border-radius:14px;padding:11px 38px 11px 13px;font-size:12px;font-weight:700;line-height:1.4;box-shadow:0 10px 30px rgba(0,0,0,.5);max-width:560px;margin:0 auto';
+        b.innerHTML = '<span id="veriBandiMetin"></span><button type="button" onclick="this.parentNode.style.display=\'none\'" style="position:absolute;right:10px;top:8px;background:none;border:0;color:inherit;font-size:16px">✕</button>';
+        document.body.appendChild(b);
+      }
+      b.style.background = renk === 'hata' ? '#7f1d1d' : '#78350f';
+      b.style.color = '#fff'; b.style.display = 'block';
+      document.getElementById('veriBandiMetin').textContent = metin;
+    }
+    function veriHatasiGoster(err, nerede) {
+      const kod = (err && err.code) ? err.code : 'bilinmiyor';
+      let ipucu = '';
+      if (kod === 'permission-denied') ipucu = ' Erişim reddedildi: lisansınızın süresi dolmuş/askıda olabilir ya da giriş yapmanız gerekiyor. Sorun sürerse yöneticiye bildirin.';
+      else if (kod === 'unavailable') ipucu = ' İnternet/Firestore bağlantısı kurulamadı.';
+      else if (kod === 'failed-precondition') ipucu = ' Firestore dizin (index) veya kalıcılık hatası.';
+      console.error('[LUMIO]', nerede, err);
+      veriBandiYaz('⚠️ ' + (nerede || 'Veri') + ' okunamadı (' + kod + ').' + ipucu, 'hata');
+    }
+    function veriBilgiGoster(metin) { veriBandiYaz('ℹ️ ' + metin, 'bilgi'); }
+
     /* PATRON CRM & GÖZAT MODU FONKSİYONLARI */
-    function patronPaneliAc() {
-      let kayitliPin = localStorage.getItem('hair_patron_pin') || "SEEOFSİ";
-      let girilen = prompt("Yönetici Güvenlik PIN Kodunu Giriniz:");
-      if (!girilen) return;
-      if (girilen.trim().toLocaleUpperCase('tr-TR') === kayitliPin.toLocaleUpperCase('tr-TR') || girilen.trim().toUpperCase() === "SEEOFSI") {
-        document.getElementById('patronModal').classList.remove('hidden'); 
-        modalGeriTusuKaydi('patronModal');
-        patronVerileriniYukle();
-      } else { alert("❌ Hatalı Güvenlik PIN Kodu!"); }
+    async function patronPaneliAc() {
+      let u = null;
+      try { u = await adminOturumHazir(); } catch (e) { console.error(e); }
+      if (u) { patronPaneliAcGercek(); return; }
+      adminGirisModalAc();
+    }
+    function patronPaneliAcGercek() {
+      document.getElementById('patronModal').classList.remove('hidden');
+      modalGeriTusuKaydi('patronModal');
+      patronVerileriniYukle();
+    }
+    function adminGirisModalAc() {
+      const h = document.getElementById('adminGirisHata'); if (h) h.classList.add('hidden');
+      document.getElementById('adminSifre').value = '';
+      document.getElementById('modalAdminGiris').classList.remove('hidden');
+      modalGeriTusuKaydi('modalAdminGiris');
+    }
+    function adminGirisKapat() { document.getElementById('modalAdminGiris').classList.add('hidden'); }
+    function adminGirisYap() {
+      adminAltyapi();
+      const e = document.getElementById('adminEposta').value.trim(), s = document.getElementById('adminSifre').value;
+      const hata = document.getElementById('adminGirisHata'), btn = document.getElementById('btnAdminGiris');
+      if (!e || !s) { hata.textContent = 'E-posta ve şifre gerekli.'; hata.classList.remove('hidden'); return; }
+      btn.disabled = true; btn.textContent = 'Doğrulanıyor...';
+      adminAuth.signInWithEmailAndPassword(e, s).then(() => {
+        btn.disabled = false; btn.textContent = 'GİRİŞ YAP';
+        document.getElementById('adminSifre').value = '';
+        adminGirisKapat(); patronPaneliAcGercek();
+      }).catch(err => {
+        btn.disabled = false; btn.textContent = 'GİRİŞ YAP';
+        hata.textContent = authHataMetni(err); hata.classList.remove('hidden');
+      });
+    }
+    function adminCikis() {
+      if (!confirm('Yönetici oturumu kapatılsın mı?')) return;
+      adminAltyapi();
+      if (db === adb) patronAsliDukkanaDon();
+      adminAuth.signOut().then(() => { patronPaneliKapat(); alert('Yönetici oturumu kapatıldı.'); });
     }
     function patronPaneliKapat() { document.getElementById('patronModal').classList.add('hidden'); }
 
     function patronSifreGuncelle() {
-      let yeniPin = document.getElementById('patronNewPinInput').value.trim();
-      if (!yeniPin || yeniPin.length < 3) { alert("En az 3 karakterli şifre girin."); return; }
-      localStorage.setItem('hair_patron_pin', yeniPin);
-      document.getElementById('patronNewPinInput').value = "";
-      alert("✅ Patron şifresi güncellendi: " + yeniPin);
+      adminAltyapi();
+      const u = adminAuth.currentUser;
+      const yeni = document.getElementById('patronNewPinInput').value.trim();
+      if (!u) { alert('Önce yönetici girişi yapın.'); return; }
+      if (yeni.length < 10) { alert('Yönetici şifresi en az 10 karakter olmalı.'); return; }
+      u.updatePassword(yeni).then(() => {
+        document.getElementById('patronNewPinInput').value = '';
+        alert('✅ Yönetici şifresi güncellendi.');
+      }).catch(err => alert(err.code === 'auth/requires-recent-login' ? 'Güvenlik için yönetici oturumunu kapatıp yeniden girin, sonra tekrar deneyin.' : 'Hata: ' + (err.code || err.message)));
     }
 
-    function patronUstaPinGuncelle(docId, ustaAdi) {
-      let yeniPin = prompt(`Sayın ${ustaAdi} için yeni 4-6 haneli şifre giriniz:`);
-      if (!yeniPin || yeniPin.trim().length < 4) { alert("Geçersiz şifre."); return; }
-      db.collection('sistem').doc('lisanslar').collection('aktifler').doc(docId).update({ pin: yeniPin.trim() }).then(() => {
-        alert(`✅ Şifre güncellendi: ${yeniPin.trim()}`); patronVerileriniYukle();
-      }).catch(err => alert("Hata: " + err.message));
+    async function patronUstaPinGuncelle(docId, ustaAdi) {
+      adminAltyapi();
+      const tel = docId.length === 10 ? '90' + docId : docId;
+      const yeni = (prompt(`Sayın ${ustaAdi} için YENİ şifre (en az 6 karakter):`) || '').trim();
+      if (!yeni) return;
+      if (yeni.length < 6) { alert('Şifre en az 6 karakter olmalı.'); return; }
+      try {
+        const uid = await authHesapUidAl(tel, yeni);
+        await adb.collection('sistem').doc('lisanslar').collection('aktifler').doc(docId).update({ uid: uid });
+        alert(`✅ Hesap hazır.\nYeni şifre: ${yeni}\nKullanıcıya iletin.`);
+        patronVerileriniYukle();
+      } catch (err) {
+        if (err.code === 'auth/email-already-in-use') {
+          alert('Bu telefon için bir giriş hesabı zaten var ve şifresi farklı.\n\nŞifreyi sıfırlamak için:\n1) Firebase konsolu > Authentication > Users\n2) ' + authEposta(tel) + ' kullanıcısını silin\n3) Bu 🔑 düğmesine tekrar basıp yeni şifreyi girin.');
+        } else alert('Hata: ' + (err.code || err.message));
+      }
     }
 
-    function patronYeniLisansKaydet() {
+    async function patronYeniLisansKaydet() {
+      adminAltyapi();
       let ad = document.getElementById('patronNewName').value.trim();
-      let tel = document.getElementById('patronNewPhone').value.trim().replace(/\D/g, '');
+      let tel = telefonuNormallestir(document.getElementById('patronNewPhone').value);
       let pin = document.getElementById('patronNewPin').value.trim();
       let paketGun = parseInt(document.getElementById('patronPackageSelect').value) || 90;
 
-      if (!ad || !tel || tel.length < 7 || !pin || pin.length < 4) { alert("Lütfen bilgileri eksiksiz doldurun."); return; }
-      if (tel.startsWith('0')) tel = tel.substring(1);
-      if (tel.length === 10) tel = '90' + tel;
+      if (!ad || !tel || tel.length < 7 || !pin) { alert('Lütfen bilgileri eksiksiz doldurun.'); return; }
+      if (pin.length < 6) { alert('Şifre en az 6 karakter olmalı.'); return; }
 
-      let simdiMs = Date.now(), bitisMs = simdiMs + (paketGun * 86400000);
-      let bitisStr = new Date(bitisMs).toLocaleDateString('tr-TR');
-      const btn = document.getElementById('btnPatronCreateLicense'); btn.innerText = "Kaydediliyor..."; btn.disabled = true;
+      const simdiMs = Date.now(), bitisMs = simdiMs + (paketGun * 86400000);
+      const bitisStr = new Date(bitisMs).toLocaleDateString('tr-TR');
+      const btn = document.getElementById('btnPatronCreateLicense'); btn.innerText = 'Kaydediliyor...'; btn.disabled = true;
+      const sifirla = () => { btn.innerText = 'LİSANSI OLUŞTUR ✨'; btn.disabled = false; };
 
-      db.collection('sistem').doc('lisanslar').collection('aktifler').doc(tel).set({
-        ad: turkceHitapIsimDuzenle(ad), tel: tel, pin: pin, durum: 'AKTIF', paketGun: paketGun, bitisMs: bitisMs, bitisTarih: bitisStr, kayitMs: simdiMs, kayitTarih: bugununTarihiStr()
-      }).then(() => {
-        btn.innerText = "LİSANSI OLUŞTUR ✨"; btn.disabled = false;
-        document.getElementById('patronNewName').value = ""; document.getElementById('patronNewPhone').value = ""; document.getElementById('patronNewPin').value = "";
-        alert(`🎉 Lisans tanımlandı!\n\nUsta: ${turkceHitapIsimDuzenle(ad)}\nTel: ${tel}\nŞifre: ${pin}\nBitiş: ${bitisStr}`);
+      try {
+        const uid = await authHesapUidAl(tel, pin);
+        await adb.collection('sistem').doc('lisanslar').collection('aktifler').doc(tel).set({
+          ad: turkceHitapIsimDuzenle(ad), tel: tel, uid: uid, durum: 'AKTIF', paketGun: paketGun, bitisMs: bitisMs, bitisTarih: bitisStr, kayitMs: simdiMs, kayitTarih: bugununTarihiStr()
+        });
+        sifirla();
+        document.getElementById('patronNewName').value = ''; document.getElementById('patronNewPhone').value = ''; document.getElementById('patronNewPin').value = '';
+        const ozet = `Usta: ${turkceHitapIsimDuzenle(ad)}\nTel: ${tel}\nŞifre: ${pin}\nBitiş: ${bitisStr}`;
         patronVerileriniYukle();
-      }).catch(err => { btn.innerText = "LİSANSI OLUŞTUR ✨"; btn.disabled = false; alert("Hata: " + err.message); });
+        if (confirm('🎉 Lisans tanımlandı!\n\n' + ozet + '\n\nGiriş bilgileri WhatsApp ile gönderilsin mi?')) patronKurulumMesajiGonder(tel, ad, pin, String(paketGun));
+      } catch (err) {
+        sifirla();
+        if (err.code === 'auth/email-already-in-use') {
+          alert('Bu telefon için bir giriş hesabı zaten var ve şifresi farklı.\n\nÇözüm: Firebase konsolu > Authentication > Users bölümünde\n' + authEposta(tel) + '\nkullanıcısını silip tekrar deneyin.');
+        } else alert('Hata: ' + (err.code || err.message));
+      }
     }
 
     function patronVerileriniYukle() {
-      db.collection('sistem').doc('lisanslar').collection('aktifler').orderBy('bitisMs', 'asc').get().then(snapshot => {
+      adminAltyapi();
+      adb.collection('sistem').doc('lisanslar').collection('aktifler').orderBy('bitisMs', 'asc').get().then(snapshot => {
         patronKayitliUstalar = [];
         snapshot.forEach(doc => patronKayitliUstalar.push({ id: doc.id, ...doc.data() }));
 
@@ -3037,22 +3220,24 @@ function aktifDilSablonlariniAl(dil) {
         const mContainer = document.getElementById('patronMasterListContainer');
         if (mContainer) {
           mContainer.innerHTML = patronKayitliUstalar.map(u => {
-            let kalan = Math.ceil((u.bitisMs - simdiMs) / 86400000);
+            let kalan = Math.ceil(((u.bitisMs || 0) - simdiMs) / 86400000);
             if (kalan <= 7) sureBitenler.push({ ...u, kalanGun: kalan });
             let aktif = (u.durum === 'AKTIF') && kalan > 0;
+            const hesap = u.uid ? '' : '<span class="text-red-400 font-bold"> · ⚠️ hesap yok (Geçir)</span>';
             return `
-              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 flex justify-between items-center text-[11px]">
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] space-y-1.5">
                 <div>
-                  <span class="font-bold text-white block">${u.ad || 'İsimsiz Usta'}</span>
-                  <span class="text-[10px] text-slate-400 font-mono">${u.tel} (PIN: ${u.pin || '123456'})</span>
-                  <div class="text-[9px] text-amber-300">Bitiş: ${u.bitisTarih || '-'} (${kalan > 0 ? kalan + ' Gün' : 'Bitti'})</div>
+                  <span class="font-bold text-white block">${esc(u.ad || 'İsimsiz Usta')}</span>
+                  <span class="text-[10px] text-slate-400 font-mono">${esc(u.tel)}</span>${hesap}
+                  <div class="text-[9px] text-amber-300">Bitiş: ${esc(u.bitisTarih || '-')} (${kalan > 0 ? kalan + ' Gün' : 'Bitti'})</div>
                 </div>
-                <div class="flex items-center space-x-1">
-                  <button onclick="patronUstaPinGuncelle('${u.id}', '${u.ad}')" class="px-2 py-1 bg-amber-500 text-slate-950 rounded-lg text-[10px] font-black">🔑</button>
-                  <button onclick="patronKurulumMesajiGonder('${u.tel}', '${u.ad}', '${u.pin}', '${u.paketGun || 90}')" class="px-2 py-1 bg-slate-800 text-amber-300 rounded-lg text-[10px] font-bold border border-slate-700"><i class="fa-brands fa-whatsapp text-emerald-400"></i> Bilgi</button>
-                  <button onclick="patronDukkaninaGir('${u.tel}', '${u.ad}')" class="px-2 py-1 bg-slate-800 text-slate-300 rounded-lg text-[10px]">Gözat</button>
-                  <button onclick="patronUstaDurumToggle('${u.id}', '${u.durum}')" class="px-2 py-1 rounded-lg text-[10px] font-bold ${aktif ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-400'}">${aktif ? 'AKTİF' : 'PASİF'}</button>
-                  <button onclick="patronUstaSil('${u.id}', '${u.ad}')" class="px-2 py-1 bg-slate-800 text-slate-400 hover:text-red-400 rounded-lg text-xs"><i class="fa-solid fa-trash"></i></button>
+                <div class="flex flex-wrap items-center gap-1" data-id="${esc(u.id)}" data-ad="${esc(u.ad || '')}" data-tel="${esc(u.tel || '')}" data-durum="${esc(u.durum || '')}" data-paket="${esc(u.paketGun || 90)}">
+                  <button onclick="patronUstaPinGuncelle(this.parentNode.dataset.id, this.parentNode.dataset.ad)" class="px-2 py-1 bg-amber-500 text-slate-950 rounded-lg text-[10px] font-black" title="Yeni şifre">🔑</button>
+                  <button onclick="patronUstaSureUzat(this.parentNode.dataset.id)" class="px-2 py-1 bg-emerald-600 text-white rounded-lg text-[10px] font-black" title="Süre uzat">➕ Gün</button>
+                  <button onclick="patronKurulumMesajiGonder(this.parentNode.dataset.tel, this.parentNode.dataset.ad, '', this.parentNode.dataset.paket)" class="px-2 py-1 bg-slate-800 text-amber-300 rounded-lg text-[10px] font-bold border border-slate-700"><i class="fa-brands fa-whatsapp"></i></button>
+                  <button onclick="patronDukkaninaGir(this.parentNode.dataset.tel, this.parentNode.dataset.ad)" class="px-2 py-1 bg-slate-800 text-slate-300 rounded-lg text-[10px]">Gözat</button>
+                  <button onclick="patronUstaDurumToggle(this.parentNode.dataset.id, this.parentNode.dataset.durum)" class="px-2 py-1 rounded-lg text-[10px] font-bold ${aktif ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-400'}">${aktif ? 'Aktif' : 'Pasif'}</button>
+                  <button onclick="patronUstaSil(this.parentNode.dataset.id, this.parentNode.dataset.ad)" class="px-2 py-1 bg-slate-800 text-slate-400 hover:text-red-400 rounded-lg text-xs"><i class="fa-solid fa-trash"></i></button>
                 </div>
               </div>`;
           }).join('');
@@ -3065,20 +3250,67 @@ function aktifDilSablonlariniAl(dil) {
           if (expList) {
             expList.innerHTML = sureBitenler.map(sb => `
               <div class="bg-slate-900 p-1.5 rounded-lg border border-slate-800 flex justify-between items-center text-[11px]">
-                <div><span class="font-bold text-white">${sb.ad}</span><span class="text-[10px] text-amber-400 block">${sb.kalanGun <= 0 ? 'Süre Doldu' : sb.kalanGun + ' Gün Kaldı'}</span></div>
-                <button onclick="patronKibarOdemeMesajiGonder('${sb.tel}', '${sb.ad}', '${sb.kalanGun}')" class="bg-amber-500 text-slate-950 font-black px-2 py-1 rounded text-[10px]"><i class="fa-brands fa-whatsapp"></i> Ödeme İste</button>
+                <div><span class="font-bold text-white">${esc(sb.ad)}</span><span class="text-[10px] text-amber-400 block">${sb.kalanGun <= 0 ? 'Süre Doldu' : sb.kalanGun + ' Gün Kaldı'}</span></div>
+                <button data-tel="${esc(sb.tel)}" data-ad="${esc(sb.ad)}" data-kalan="${esc(sb.kalanGun)}" onclick="patronKibarOdemeMesajiGonder(this.dataset.tel, this.dataset.ad, this.dataset.kalan)" class="bg-amber-500 text-slate-950 font-black px-2 py-1 rounded text-[10px]"><i class="fa-brands fa-whatsapp"></i></button>
               </div>`).join('');
           }
         } else if (expArea) expArea.classList.add('hidden');
         if (typeof patronUrunListesiniCiz === 'function') patronUrunListesiniCiz();
-      });
+      }).catch(err => alert('Lisans listesi alınamadı: ' + (err.code || err.message)));
+    }
+
+    function patronUstaSureUzat(docId) {
+      adminAltyapi();
+      const g = parseInt(prompt('Kaç gün eklensin? (örn: 30, 90, 365)', '30'), 10);
+      if (!g || g < 1) return;
+      const ref = adb.collection('sistem').doc('lisanslar').collection('aktifler').doc(docId);
+      ref.get().then(d => {
+        if (!d.exists) { alert('Lisans bulunamadı.'); return; }
+        const taban = Math.max(Date.now(), d.data().bitisMs || 0);
+        const yeni = taban + g * 86400000;
+        return ref.update({ bitisMs: yeni, bitisTarih: new Date(yeni).toLocaleDateString('tr-TR'), durum: 'AKTIF' })
+          .then(() => { alert('✅ Süre uzatıldı. Yeni bitiş: ' + new Date(yeni).toLocaleDateString('tr-TR')); patronVerileriniYukle(); });
+      }).catch(err => alert('Hata: ' + (err.code || err.message)));
+    }
+
+    /* ESKİ LİSANSLARI FIREBASE AUTH HESAPLARINA GEÇİRİR (bir kez çalıştırılır) */
+    async function patronHesapGecisi() {
+      adminAltyapi();
+      if (!adminAuth.currentUser) { alert('Önce yönetici girişi yapın.'); return; }
+      if (!confirm('Henüz giriş hesabı olmayan lisanslar için hesap oluşturulacak ve eski şifreler veritabanından SİLİNECEK. Devam edilsin mi?')) return;
+      let snap;
+      try { snap = await adb.collection('sistem').doc('lisanslar').collection('aktifler').get(); }
+      catch (e) { alert('Lisanslar okunamadı: ' + (e.code || e.message)); return; }
+      let ok = 0, atla = 0; const rapor = [];
+      for (const d of snap.docs) {
+        const v = d.data();
+        if (v.uid) { atla++; continue; }
+        if (!v.pin) { rapor.push(d.id + ': eski şifre yok (🔑 ile yeni şifre verin)'); continue; }
+        const kod = d.id.length === 10 ? '90' + d.id : d.id;
+        try {
+          const uid = await authHesapUidAl(kod, String(v.pin));
+          const guncel = Object.assign({}, v, { uid: uid, tel: kod, hesapGecisMs: Date.now() });
+          delete guncel.pin;
+          if (!guncel.durum) guncel.durum = 'AKTIF';
+          if (!guncel.bitisMs) { guncel.bitisMs = Date.now() + 30 * 86400000; guncel.bitisTarih = new Date(guncel.bitisMs).toLocaleDateString('tr-TR'); rapor.push(kod + ': süre kaydı yoktu, 30 gün verildi'); }
+          const kol = adb.collection('sistem').doc('lisanslar').collection('aktifler');
+          await kol.doc(kod).set(guncel);
+          if (kod !== d.id) await kol.doc(d.id).delete();
+          ok++;
+        } catch (e) {
+          rapor.push(kod + ': ' + (e.code === 'auth/email-already-in-use' ? 'hesap zaten var, şifresi farklı (konsoldan silip tekrar deneyin)' : (e.code || e.message)));
+        }
+      }
+      alert(`Geçiş tamamlandı.\nYeni hesap: ${ok}\nZaten hazır: ${atla}` + (rapor.length ? '\n\nDikkat:\n' + rapor.join('\n') : ''));
+      patronVerileriniYukle();
     }
 
     function patronUstaSil(docId, ad) {
-      if (!confirm(`'${ad}' lisansı tamamen silinsin mi?`)) return;
-      db.collection('sistem').doc('lisanslar').collection('aktifler').doc(docId).delete().then(() => {
-        alert("Usta silindi."); patronVerileriniYukle();
-      });
+      adminAltyapi();
+      if (!confirm(`'${ad}' lisansı silinsin mi? (Salon verileri silinmez; giriş hesabını Firebase konsolundan ayrıca silebilirsiniz.)`)) return;
+      adb.collection('sistem').doc('lisanslar').collection('aktifler').doc(docId).delete().then(() => {
+        alert('Usta silindi.'); patronVerileriniYukle();
+      }).catch(err => alert('Hata: ' + (err.code || err.message)));
     }
 
     /* PWA ONBOARDING WHATSAPP MESAJI (IPHONE & ANDROID ADIMLARI DAHİL) */
@@ -3095,7 +3327,7 @@ function aktifDilSablonlariniAl(dil) {
 `📲 GİRİŞ BİLGİLERİNİZ:\n` +
 `🌐 Terminal Adresi: ${domain}\n` +
 `📞 Kullanıcı Numaranız: ${tel}\n` +
-`🔑 Giriş Şifreniz: ${pin}\n` +
+`🔑 Giriş Şifreniz: ${pin ? pin : '(size ayrıca iletilmiştir)'}\n` +
 `📅 Lisans Süreniz: ${sureMetni}\n\n` +
 `🔒 GÜVENLİK NOTU:\n` +
 `Lütfen usta giriş şifrenizi kimseyle paylaşmayınız.\n\n` +
@@ -3117,19 +3349,24 @@ function aktifDilSablonlariniAl(dil) {
     }
 
     function patronUstaDurumToggle(docId, eskiDurum) {
+      adminAltyapi();
       const yeni = (eskiDurum === 'AKTIF') ? 'PASIF' : 'AKTIF';
-      db.collection('sistem').doc('lisanslar').collection('aktifler').doc(docId).update({ durum: yeni }).then(() => patronVerileriniYukle());
+      adb.collection('sistem').doc('lisanslar').collection('aktifler').doc(docId).update({ durum: yeni }).then(() => patronVerileriniYukle())
+        .catch(err => alert('Hata: ' + (err.code || err.message)));
     }
 
     function patronDukkaninaGir(tel, ustaAdi) {
+      adminAltyapi();
       if (!confirm(`'${tel}' (${ustaAdi}) dükkanına geçiş yapılsın mı?`)) return;
       if (!asliPatronLisansKodu) { asliPatronLisansKodu = aktifLisansKodu; localStorage.setItem('hair_asli_patron_lisans', asliPatronLisansKodu); }
+      db = adb;   // gözat modunda veriler yönetici oturumuyla okunur
       aktifLisansKodu = tel; localStorage.setItem('hair_lisans_kodu', aktifLisansKodu);
       patronPaneliKapat(); bulutVerileriniBaslat(); patronGozatKontrol(ustaAdi || tel);
     }
 
     function patronAsliDukkanaDon() {
       let asil = localStorage.getItem('hair_asli_patron_lisans');
+      db = mainDb;
       if (!asil) return;
       aktifLisansKodu = asil; localStorage.setItem('hair_lisans_kodu', aktifLisansKodu);
       localStorage.removeItem('hair_asli_patron_lisans'); asliPatronLisansKodu = "";
@@ -3159,7 +3396,7 @@ function aktifDilSablonlariniAl(dil) {
       document.getElementById('modalYasalTutanak').classList.remove('hidden');
       modalGeriTusuKaydi('modalYasalTutanak');
 
-      db.collection('sistem').doc('lisanslar').collection('aktifler').get().then(snap => {
+      adminAltyapi(); adb.collection('sistem').doc('lisanslar').collection('aktifler').get().then(snap => {
         let html = `<div class="font-bold text-amber-400 text-xs border-b border-slate-800 pb-2 mb-2">⚖️ RESMİ DİJİTAL ONAY TUTANAKLARI (HMK MD. 199)</div>`;
         let cnt = 0;
         snap.forEach(doc => {
@@ -3168,10 +3405,10 @@ function aktifDilSablonlariniAl(dil) {
             cnt++;
             html += `
               <div class="bg-slate-900 p-2 rounded-lg border border-slate-800 space-y-1 mb-2">
-                <div class="text-white font-bold text-xs">${u.ad || 'Usta'} (${u.tel})</div>
-                <div class="text-amber-400 text-[10px]">✅ ONAY: ${yo.sozlesmeKodu}</div>
-                <div class="text-slate-400 text-[10px]">📅 ${yo.onayTarihi} - ${yo.onaySaati}</div>
-                <div class="text-slate-500 text-[9px] break-all leading-tight">📱 ${yo.cihazBilgisi}</div>
+                <div class="text-white font-bold text-xs">${esc(u.ad || 'Usta')} (${esc(u.tel)})</div>
+                <div class="text-amber-400 text-[10px]">✅ ONAY: ${esc(yo.sozlesmeKodu)}</div>
+                <div class="text-slate-400 text-[10px]">📅 ${esc(yo.onayTarihi)} ${esc(yo.onaySaati || '')}</div>
+                <div class="text-slate-500 text-[9px] break-all leading-tight">📱 ${esc(yo.cihazBilgisi)}</div>
               </div>`;
           }
         });
@@ -3202,11 +3439,11 @@ function aktifDilSablonlariniAl(dil) {
         let aktif = (u.durum === 'AKTIF') && kalan > 0;
         return `
           <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
-            <div><span class="font-bold text-white block">${u.ad || 'Usta'}</span><span class="text-[10px] text-slate-400 font-mono">${u.tel} (PIN: ${u.pin || '123456'})</span></div>
-            <div class="flex items-center space-x-1">
-              <button onclick="patronUstaPinGuncelle('${u.id}', '${u.ad}')" class="px-2 py-1 bg-amber-500 text-slate-950 rounded-lg text-[10px] font-black">🔑</button>
-              <button onclick="patronDukkaninaGir('${u.tel}', '${u.ad}')" class="px-2 py-1 bg-slate-800 text-slate-300 rounded-lg text-[10px]">Gözat</button>
-              <button onclick="patronUstaDurumToggle('${u.id}', '${u.durum}')" class="px-2 py-1 rounded-lg text-[10px] ${aktif ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-400'}">${aktif ? 'AKTİF' : 'PASİF'}</button>
+            <div><span class="font-bold text-white block">${esc(u.ad || 'Usta')}</span><span class="text-[10px] text-slate-400 font-mono">${esc(u.tel)}</span></div>
+            <div class="flex items-center space-x-1" data-id="${esc(u.id)}" data-ad="${esc(u.ad || '')}" data-tel="${esc(u.tel || '')}" data-durum="${esc(u.durum || '')}">
+              <button onclick="patronUstaPinGuncelle(this.parentNode.dataset.id, this.parentNode.dataset.ad)" class="px-2 py-1 bg-amber-500 text-slate-950 rounded-lg text-[10px] font-black">🔑</button>
+              <button onclick="patronDukkaninaGir(this.parentNode.dataset.tel, this.parentNode.dataset.ad)" class="px-2 py-1 bg-slate-800 text-slate-300 rounded-lg text-[10px]">Gözat</button>
+              <button onclick="patronUstaDurumToggle(this.parentNode.dataset.id, this.parentNode.dataset.durum)" class="px-2 py-1 rounded-lg text-[10px] ${aktif ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-400'}">${aktif ? 'AKTİF' : 'PASİF'}</button>
             </div>
           </div>`;
       }).join('');
@@ -3697,20 +3934,32 @@ function aktifDilSablonlariniAl(dil) {
     }
 
     function ustaKendiSifresiniGuncelle() {
-      const eski = document.getElementById('setEskiSifre').value.trim(), yeni = document.getElementById('setYeniSifre').value.trim();
-      if (!eski || eski.length < 4 || !yeni || yeni.length < 4) { alert("Şifreler en az 4 haneli olmalıdır."); return; }
-      let sorgu = (aktifLisansKodu.length === 10 && !aktifLisansKodu.startsWith('90')) ? ('90' + aktifLisansKodu) : aktifLisansKodu;
-      const btn = document.getElementById('btnPwdUpdate'); btn.innerText = "Doğrulanıyor..."; btn.disabled = true;
+      const eski = document.getElementById('setEskiSifre').value, yeni = document.getElementById('setYeniSifre').value;
+      const user = mainAuth.currentUser;
+      if (!user) { alert('Oturum bulunamadı. Lütfen yeniden giriş yapın.'); return; }
+      if (!eski || eski.length < 4) { alert('Eski şifrenizi girin.'); return; }
+      if (!yeni || yeni.length < 6) { alert('Yeni şifre en az 6 karakter olmalıdır.'); return; }
+      const btn = document.getElementById('btnPwdUpdate'); btn.innerText = 'Doğrulanıyor...'; btn.disabled = true;
+      const sifirla = () => { btn.innerText = 'Şifremi Güncelle'; btn.disabled = false; };
+      const cred = firebase.auth.EmailAuthProvider.credential(user.email, authParola(eski));
+      user.reauthenticateWithCredential(cred).then(() => user.updatePassword(authParola(yeni))).then(() => {
+        sifirla();
+        document.getElementById('setEskiSifre').value = ''; document.getElementById('setYeniSifre').value = '';
+        alert('🎉 Şifreniz güncellendi.');
+      }).catch(err => {
+        sifirla();
+        alert(/invalid-credential|wrong-password/.test(err.code || '') ? '❌ Eski şifre hatalı!' : authHataMetni(err));
+      });
+    }
 
-      db.collection('sistem').doc('lisanslar').collection('aktifler').doc(sorgu).get().then(doc => {
-        btn.innerText = "Şifremi Güncelle"; btn.disabled = false;
-        if (!doc.exists) { alert("Lisans bulunamadı."); return; }
-        if (doc.data().pin && doc.data().pin.toString() !== eski.toString()) { alert("❌ Eski şifre hatalı!"); return; }
-        db.collection('sistem').doc('lisanslar').collection('aktifler').doc(sorgu).update({ pin: yeni }).then(() => {
-          document.getElementById('setEskiSifre').value = ""; document.getElementById('setYeniSifre').value = "";
-          alert("🎉 Şifreniz başarıyla güncellendi: " + yeni);
-        });
-      }).catch(err => { btn.innerText = "Şifremi Güncelle"; btn.disabled = false; alert("Hata: " + err.message); });
+    function ustaCikisYap() {
+      if (!confirm('Çıkış yapılsın mı?')) return;
+      [unsubscribeLisans, unsubscribeMusteriler, unsubscribeGecmis, unsubscribeRandevular, unsubscribeAyarlar].forEach(f => { try { if (f) f(); } catch (e) {} });
+      mainAuth.signOut().finally(() => {
+        localStorage.removeItem('hair_lisans_kodu');
+        localStorage.removeItem('hair_asli_patron_lisans');
+        location.reload();
+      });
     }
 
     function sifremiUnuttumWhatsApp() {
@@ -4353,7 +4602,8 @@ Yanıtını YALNIZCA şu JSON formatında ver, başka yazı yazma:
     }
 
     function patronGeminiSifresiAyarla() {
-      alert('Gemini anahtarı artık tarayıcıda tutulmuyor. Netlify > Site settings > Environment variables içine GEMINI_API_KEY olarak ekleyin.');
+      if (typeof aiModu === 'function' && aiModu() !== 'dogrudan') { alert('Bu sitede yapay zeka anahtarı sunucuda tutuluyor (Cloudflare/Netlify ayarlarından yönetilir).'); return; }
+      aiAnahtarDegistir();
     }
 
     function patronUrunListesiniCiz() {
@@ -4396,8 +4646,16 @@ Yanıtını YALNIZCA şu JSON formatında ver, başka yazı yazma:
 
     /* İLK BAŞLATMA VE ÇEKİRDEK ÇALIŞTIRICI */
     yeniIslemTemizle();
-    bulutVerileriniBaslat();
-    patronGozatKontrol();
+    /* Gözat modu sayfa yenilenince sona erer: kendi dükkanına dön */
+    if (localStorage.getItem('hair_asli_patron_lisans')) {
+      aktifLisansKodu = localStorage.getItem('hair_asli_patron_lisans');
+      localStorage.setItem('hair_lisans_kodu', aktifLisansKodu);
+      localStorage.removeItem('hair_asli_patron_lisans'); asliPatronLisansKodu = "";
+    }
+    /* Oturum kontrolü: Firebase oturumu yüklendikten sonra bir kez başlat */
+    (function () {
+      const un = mainAuth.onAuthStateChanged(() => { un(); bulutVerileriniBaslat(); patronGozatKontrol(); });
+    })();
   </script>
 </body>
 </html>
