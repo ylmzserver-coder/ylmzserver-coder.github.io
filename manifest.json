@@ -1,14 +1,14 @@
 {
-  "name": "LUMIO",
+  "name": "LUMIO Salon Intelligence",
   "short_name": "LUMIO",
-  "description": "LUMIO Salon Intelligence",
+  "description": "LUMIO Profesyonel Salon ve Randevu Yönetim Terminali",
   "id": "lumio-global-v1",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#090d16",
-  "theme_color": "#090d16",
+  "background_color": "#050810",
+  "theme_color": "#050810",
   "icons": [
     {
       "src": "icon-192.png",

@@ -1,11 +1,15 @@
-/* LUMIO AI Terminal - Service Worker & Banka Tipi Bildirim Motoru (V15) */
-const CACHE_NAME = 'lumio-ai-cache-v15';
+/* ==========================================================================
+   LUMIO - Service Worker & Banka Tipi Bildirim Motoru (V16)
+   Sürüm: 2026-11-06.1
+   ========================================================================== */
+const CACHE_NAME = 'lumio-ai-cache-v16';
 const OFFLINE_URLS = [
   './',
   './index.html',
   './ai-client.js',
   './manifest.json',
   './icon-192.png',
+  './icon-512.png',
   './logo.png',
   './legal.js'
 ];
@@ -21,7 +25,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// 2. AKTİF ETME (Eski bozuk önbellekleri temizler ve yeni kodu anında devreye alır)
+// 2. AKTİF ETME (Eski önbellekleri temizler)
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -34,14 +38,17 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. ÇEVRİMDIŞI ÇALIŞMA (Tailwind, FontAwesome ve Google CDN Destekli)
+// 3. ÇEVRİMDIŞI ÇALIŞMA DESTEĞİ
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
 
-  // Kendi domainimiz veya kullandığımız CDN'ler dışındakileri önbelleğe alma
-  if (url.pathname.startsWith('/.netlify/')) return; // AI proxy asla önbelleğe alınmaz
+  // Firestore ve Google API istekleri önbelleğe alınmaz (canlı olmalı)
+  if (url.hostname.includes('firestore.googleapis.com') || url.hostname.includes('generativelanguage.googleapis.com')) {
+    return;
+  }
 
+  // CDN ve statik varlık kontrolü
   if (
     url.origin !== self.location.origin && 
     !url.hostname.includes('cdnjs') && 
@@ -58,7 +65,7 @@ self.addEventListener('fetch', (event) => {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME)
             .then((cache) => cache.put(event.request, responseToCache))
-            .catch((err) => console.warn('Önbellek yazma korundu:', err));
+            .catch(() => {});
         }
         return networkResponse;
       })
@@ -73,7 +80,7 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// 4. BANKA TİPİ KİLİT EKRANI PUSH BİLDİRİMİ
+// 4. KİLİT EKRANI PUSH BİLDİRİMİ
 self.addEventListener('push', (event) => {
   let data = {
     title: '⏰ LUMIO: Randevu Vakti Yaklaştı!',
@@ -109,7 +116,7 @@ self.addEventListener('push', (event) => {
   );
 });
 
-// 5. BİLDİRİM TIKLANDIĞINDA
+// 5. BİLDİRİME TIKLANDIĞINDA
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
