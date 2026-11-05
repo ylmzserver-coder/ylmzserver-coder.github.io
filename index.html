@@ -2962,7 +2962,84 @@
     function sifremiUnuttumWhatsApp() {
       anindaWhatsAppAc("905354049392", "Merhaba LUMIO Destek, usta giriş şifremi unuttum.");
     }
+/* ÇİFT YÖNLÜ KESİNTİSİZ VERİ KÖPRÜSÜ (HEM ESKİ KÖKÜ HEM YENİ HÜCREYİ OKUR) */
+    function bulutVerileriniBaslat() {
+      if (unsubscribeLisans) unsubscribeLisans();
+      if (unsubscribeMusteriler) unsubscribeMusteriler();
+      if (unsubscribeGecmis) unsubscribeGecmis();
+      if (unsubscribeRandevular) unsubscribeRandevular();
+      if (unsubscribeAyarlar) unsubscribeAyarlar();
 
+      ayarlariUygula();
+      ajandaTarihSeridiOlustur();
+      ajandaSaatleriniCiz();
+
+      let kod = aktifLisansKodu || "905354049392";
+
+      // 1. AYARLARI OKU
+      unsubscribeAyarlar = db.collection('ustalar').doc(kod).collection('ayarlar').doc('profil').onSnapshot(doc => {
+        if (doc.exists) {
+          salonAyarlari = { ...salonAyarlari, ...doc.data() };
+          if (salonAyarlari.ustaYuzde !== undefined) ustaYuzdeOrani = parseInt(salonAyarlari.ustaYuzde) || 50;
+          if (salonAyarlari.posOrani !== undefined) kasaPosOrani = parseInt(salonAyarlari.posOrani) || 20;
+          ayarlariUygula();
+        }
+      });
+
+      // 2. MÜŞTERİLERİ OKU (Önce ustalar altından dener, boşsa ana kökteki eski müşterileri getirir!)
+      db.collection('ustalar').doc(kod).collection('musteriler').onSnapshot(snap => {
+        if (!snap.empty) {
+          musteriler = [];
+          snap.forEach(d => musteriler.push({ id: d.id, ...d.data() }));
+          canliBildirimMerkeziniGuncelle();
+          musteriRehberiSayaciGuncelle();
+        } else {
+          // Eski ana kökteki müşterileri bağla!
+          db.collection('musteriler').onSnapshot(rootSnap => {
+            musteriler = [];
+            rootSnap.forEach(d => musteriler.push({ id: d.id, ...d.data() }));
+            canliBildirimMerkeziniGuncelle();
+            musteriRehberiSayaciGuncelle();
+          });
+        }
+      });
+
+      // 3. GEÇMİŞİ OKU (Önce ustadan, boşsa ana kökten)
+      db.collection('ustalar').doc(kod).collection('gecmis').orderBy('zaman', 'desc').onSnapshot(snap => {
+        if (!snap.empty) {
+          gecmisIslemler = [];
+          snap.forEach(d => gecmisIslemler.push({ id: d.id, ...d.data() }));
+          if (aktifMusteri) gecmisListesiniGuncelle();
+          gunlukCiroGuncelle();
+        } else {
+          // Eski ana kökteki geçmişi bağla!
+          db.collection('gecmis').onSnapshot(rootSnap => {
+            gecmisIslemler = [];
+            rootSnap.forEach(d => gecmisIslemler.push({ id: d.id, ...d.data() }));
+            if (aktifMusteri) gecmisListesiniGuncelle();
+            gunlukCiroGuncelle();
+          });
+        }
+      });
+
+      // 4. RANDEVULARI OKU (Önce ustadan, boşsa ana kökten)
+      db.collection('ustalar').doc(kod).collection('randevular').onSnapshot(snap => {
+        if (!snap.empty) {
+          randevular = [];
+          snap.forEach(d => randevular.push({ id: d.id, ...d.data() }));
+          ajandaSaatleriniCiz();
+          gunlukCiroGuncelle();
+        } else {
+          // Eski ana kökteki randevuları bağla!
+          db.collection('randevular').onSnapshot(rootSnap => {
+            randevular = [];
+            rootSnap.forEach(d => randevular.push({ id: d.id, ...d.data() }));
+            ajandaSaatleriniCiz();
+            gunlukCiroGuncelle();
+          });
+        }
+      });
+    }
     /* İLK ÇALIŞTIRICI */
     yeniIslemTemizle();
     (function () {
