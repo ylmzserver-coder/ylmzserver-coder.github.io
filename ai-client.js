@@ -75,7 +75,7 @@ async function geminiDogrudan(payload) {
   let key = aiAnahtarOku() || aiAnahtarSor();
   if (!key) throw new Error('Yapay zeka için Gemini API anahtarı gerekli. İşlemi tekrar başlatıp anahtarı girin.');
   const modeller = await geminiModelListesi(key);
-  let ilkHata = '', sonHata = 'Bilinmeyen hata';
+  let ilkHata = '', sonHata = 'Bilinmeyen hata'; const tekrar = {};
   for (const model of modeller) {
     try {
       const r = await zamanAsimliFetch(GEMINI_BASE + '/models/' + model + ':generateContent', {
@@ -88,6 +88,8 @@ async function geminiDogrudan(payload) {
       const t = metin ? metin.map(p => p.text || '').join('') : '';
       if (r.ok && t) { try { localStorage.setItem('lumio_gemini_model', model); } catch (_) {} return t; }
       sonHata = (d.error && d.error.message) || (d.promptFeedback ? 'İçerik güvenlik filtresine takıldı' : 'HTTP ' + r.status);
+      const yogun = r.status === 503 || /high demand|overloaded|unavailable|try again later/i.test(sonHata);
+      if (yogun && !tekrar[model]) { tekrar[model] = 1; await new Promise(z => setTimeout(z, 1800)); modeller.splice(modeller.indexOf(model) + 1, 0, model); continue; }
       const kapali = r.status === 404 || /no longer available|not found|is not supported/i.test(sonHata);
       if (r.status === 403 || (r.status === 400 && /api key/i.test(sonHata))) {
         try { localStorage.removeItem('lumio_gemini_key'); } catch (_) {}
@@ -102,7 +104,8 @@ async function geminiDogrudan(payload) {
       if (!ilkHata) ilkHata = sonHata;
     }
   }
-  throw new Error('Yapay zeka yanıt vermedi: ' + (ilkHata || sonHata));
+  const son = ilkHata || sonHata;
+  throw new Error(/high demand|overloaded|unavailable|try again later|503/i.test(son) ? 'Yapay zekâ şu an çok yoğun. Birkaç saniye sonra tekrar deneyin.' : 'Yapay zeka yanıt vermedi: ' + son);
 }
 
 async function geminiSunucu(url, payload) {

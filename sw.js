@@ -1,5 +1,5 @@
 /* LUMIO AI Terminal - Service Worker & Banka Tipi Bildirim Motoru (V15) */
-const CACHE_NAME = 'lumio-ai-cache-v17';
+const CACHE_NAME = 'lumio-ai-cache-v18';
 const OFFLINE_URLS = [
   './',
   './index.html',
@@ -7,6 +7,7 @@ const OFFLINE_URLS = [
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
+  './icon-maskable-192.png',
   './logo.png',
   './legal.js'
 ];

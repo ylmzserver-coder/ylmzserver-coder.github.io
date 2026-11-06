@@ -28,7 +28,7 @@
   <link rel="manifest" href="manifest.json">
   <script>
     /* SÜRÜM + EKRANDA HATA GÖSTERİCİ (sorun tespiti için) */
-    window.LUMIO_SURUM = '2026-11-05.2';
+    window.LUMIO_SURUM = '2026-11-06.1';
     (function () {
       function goster(m) {
         try {
@@ -1285,9 +1285,10 @@
             <button id="btnAiIstisareMic" type="button" onclick="lumioAiIstisareBasKonusToggle()" class="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-400 border border-slate-800 flex items-center justify-center text-xs flex-shrink-0">
               <i class="fa-solid fa-microphone"></i>
             </button>
-            <input type="text" id="aiAskInput" placeholder="Kimi çağıralım veya 7.34 kızıllık yapar mı?" class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-medium focus:outline-none">
+            <button type="button" onclick="document.getElementById('aiIstFotoInput').click()" class="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-400 border border-slate-800 flex items-center justify-center text-xs flex-shrink-0"><i class="fa-solid fa-camera"></i></button><input type="file" id="aiIstFotoInput" accept="image/*" multiple class="hidden" onchange="aiIstFotoEkle(this)"><input type="text" id="aiAskInput" placeholder="Kimi çağıralım veya 7.34 kızıllık yapar mı?" class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-medium focus:outline-none">
             <button onclick="lumioAiSoruSor()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-3.5 py-2 rounded-xl text-xs shadow active:scale-95 transition">Sor</button>
           </div>
+          <div id="aiIstFotoSerit" class="flex gap-1.5 overflow-x-auto pt-1"></div>
         </div>
 
         <div id="aiAdviceCard" class="hidden ai-sub-card bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2 text-xs">
@@ -1350,7 +1351,7 @@
 
       <div class="grid grid-cols-2 gap-2">
         <button onclick="patronGeminiSifresiAyarla()" class="p-2 bg-slate-950 hover:bg-slate-800 text-amber-400 rounded-xl border border-slate-800 text-[10px] font-black text-center">🔑 Gemini API Key</button>
-        <button onclick="patronYasalTutanaklariGor()" class="p-2 bg-slate-950 hover:bg-slate-800 text-slate-300 rounded-xl border border-slate-800 text-[10px] font-bold text-center">📄 HMK md. 199 Delil</button>
+        <button onclick="patronYasalTutanaklariGor()" class="p-2 bg-slate-950 hover:bg-slate-800 text-slate-300 rounded-xl border border-slate-800 text-[10px] font-bold text-center">📄 Onay Kayıtları</button>
       </div>
 
       <div class="grid grid-cols-2 gap-2">
@@ -1383,7 +1384,8 @@
           <span class="text-slate-300 font-bold text-[10px]"><i class="fa-solid fa-users mr-1 text-amber-400"></i> KAYITLI USTALAR</span>
           <span id="patronTotalMastersCount" class="text-[10px] bg-amber-500/15 text-amber-400 px-2 py-0.5 rounded font-black">0 Usta ➔</span>
         </div>
-        <div id="patronMasterListContainer" class="space-y-1 max-h-40 overflow-y-auto scroll-touch pr-1"></div>
+        <input id="patronListeAra" type="search" oninput="patronListeFiltrele(this.value)" placeholder="🔎 Usta adı veya numara ara..." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-2 text-xs text-white mb-1.5 focus:outline-none focus:border-amber-500">
+          <div id="patronMasterListContainer" class="space-y-1 max-h-40 overflow-y-auto scroll-touch pr-1"></div>
       </div>
 
       <div class="pt-2 border-t border-slate-800 text-xs space-y-1.5">
@@ -1568,9 +1570,11 @@
         adb = adminApp.firestore();
       }
     }
-    function adminOturumHazir() {
+    async function adminOturumHazir() {
       adminAltyapi();
-      return new Promise(res => { const un = adminAuth.onAuthStateChanged(u => { un(); res(u); }); });
+      const u = await new Promise(res => { const un = adminAuth.onAuthStateChanged(x => { un(); res(x); }); });
+      if (u) { if (adminZamanAsimiMi()) { try { await adminAuth.signOut(); } catch (_) {} return null; } adminAktiviteIsle(); }
+      return u;
     }
     function creatorAuth() {
       if (!creatorApp) creatorApp = firebase.initializeApp(firebaseConfig, 'creator');
@@ -1992,6 +1996,8 @@ function aktifDilSablonlariniAl(dil) {
     }
 
     function diliArayuzeUygula() {
+      ['langSelect', 'setupLang'].forEach(id => { const e = document.getElementById(id); if (e && aktifDil) e.value = aktifDil; });
+      if (typeof telButonEtiketleriniGuncelle === 'function') telButonEtiketleriniGuncelle();
       const d = SOZLUK[aktifDil] || SOZLUK.tr;
       const setT = (id, txt) => { const el = document.getElementById(id); if (el) el.innerText = txt; };
       setT('navTxtTerminal', d.terminal); setT('navTxtAgenda', d.agenda); setT('navTxtHistory', d.history);
@@ -2996,6 +3002,7 @@ function aktifDilSablonlariniAl(dil) {
     /* GÜVENLİ VE DÖNGÜSÜZ BULUT DİNLEYİCİSİ (10/90 HANE KORUMALI) */
     function bulutVerileriniBaslat() {
       const gozatModu = (db !== mainDb);
+      urunleriBulutanYukle(db);
       if (!gozatModu && !mainAuth.currentUser) {
         setupEkraniHazirla();
         if (aktifLisansKodu) document.getElementById('setupLicenseInput').value = aktifLisansKodu.startsWith('90') ? aktifLisansKodu.substring(2) : aktifLisansKodu;
@@ -3234,9 +3241,10 @@ function aktifDilSablonlariniAl(dil) {
 
     function patronVerileriniYukle() {
       adminAltyapi();
-      adb.collection('sistem').doc('lisanslar').collection('aktifler').orderBy('bitisMs', 'asc').get().then(snapshot => {
+      adb.collection('sistem').doc('lisanslar').collection('aktifler').get().then(snapshot => {
         patronKayitliUstalar = [];
         snapshot.forEach(doc => patronKayitliUstalar.push({ id: doc.id, ...doc.data() }));
+        patronKayitliUstalar.sort((a, b) => (a.bitisMs || 0) - (b.bitisMs || 0));
 
         const masterTxt = `${patronKayitliUstalar.length} Usta`;
         if (document.getElementById('patronTotalMastersCount')) document.getElementById('patronTotalMastersCount').innerText = `${masterTxt} ➔`;
@@ -3429,7 +3437,7 @@ function aktifDilSablonlariniAl(dil) {
       modalGeriTusuKaydi('modalYasalTutanak');
 
       adminAltyapi(); adb.collection('sistem').doc('lisanslar').collection('aktifler').get().then(snap => {
-        let html = `<div class="font-bold text-amber-400 text-xs border-b border-slate-800 pb-2 mb-2">⚖️ RESMİ DİJİTAL ONAY TUTANAKLARI (HMK MD. 199)</div>`;
+        let html = `<div class="font-bold text-amber-400 text-xs border-b border-slate-800 pb-2 mb-2">⚖️ DİJİTAL ONAY KAYITLARI</div>`;
         let cnt = 0;
         snap.forEach(doc => {
           let u = doc.data(), yo = u.yasalOnay;
@@ -4012,7 +4020,11 @@ function aktifDilSablonlariniAl(dil) {
       const o = { rec: null, dur: false, iptal: false, onceki: '', son: '' };
       const baslat = () => {
         const rec = new Speech(); o.rec = rec; rec.lang = lang; rec.continuous = true; rec.interimResults = true;
-        rec.onresult = e => { o.son = Array.from(e.results).map(r => r[0].transcript).join(' ').trim(); onText((o.onceki + ' ' + o.son).trim()); };
+        rec.onresult = e => {
+          const parca = []; Array.from(e.results).forEach(r => { const t = r[0].transcript.trim(); if (!t) return; const sn = parca[parca.length - 1];
+            if (sn && (t.startsWith(sn) || sn.startsWith(t) || t.indexOf(sn) === 0)) parca[parca.length - 1] = t.length >= sn.length ? t : sn; else parca.push(t); });
+          o.son = parca.join(' ').trim(); onText((o.onceki + ' ' + o.son).trim());
+        };
         rec.onerror = e => { if (e.error === 'not-allowed' || e.error === 'service-not-allowed') { o.dur = true; if (onDurum) onDurum('izin'); } };
         rec.onend = () => {
           o.onceki = (o.onceki + ' ' + o.son).trim(); o.son = '';
@@ -4026,7 +4038,7 @@ function aktifDilSablonlariniAl(dil) {
       o.zaman = setTimeout(() => { if (!o.dur && !o.iptal) o.durdur(); }, 120000);   // en çok 2 dakika
       baslat(); return o;
     }
-    function mikOturumuIptalEt() { if (aiMikOturum) { aiMikOturum.iptalEt(); aiMikOturum = null; } aiDinliyorMu = false; aiIstisareDinliyorMu = false; }
+    function mikOturumuIptalEt() { if (aiMikOturum) { aiMikOturum.iptalEt(); aiMikOturum = null; } aiDinliyorMu = false; aiIstisareDinliyorMu = false; aiIstFotolar = []; if (typeof aiIstFotoCiz === 'function') aiIstFotoCiz(); }
 
     function hatirlatmaCevabiHtml() {
       canliBildirimMerkeziniGuncelle();
@@ -4427,13 +4439,14 @@ Cevabını YALNIZCA geçerli bir JSON nesnesi olarak ver, başka hiçbir yazı y
     /* SALON MESLEKTAŞI AKILLI İSTİŞARE (DENETİM RAPORU #2 ÇÖZÜLDÜ: TAM HAFIZA AKTİF) */
     async function lumioAiSoruSor() {
       const inp = document.getElementById('aiAskInput');
-      const soru = inp.value.trim();
-      if (!soru) return;
+      let soru = inp.value.trim();
+      if (!soru && !aiIstFotolar.length) return;
+      if (!soru) soru = 'Fotoğrafları incele: ne görüyorsun, ne önerirsin?';
 
       const riskCard = document.getElementById('aiRiskAlertCard');
       const adviceCard = document.getElementById('aiAdviceCard');
       const adviceText = document.getElementById('aiAdviceText');
-      if (soru.length < 90 && /hat[ıi]rlat|bildirim|do[ğg]um g[üu]n|gelmeyen|kay[ıi]p m[üu][şs]teri|kimi (ara|çağır|cagir)/.test(soru.toLocaleLowerCase('tr'))) {
+      if (!aiIstFotolar.length && soru.length < 90 && /hat[ıi]rlat|bildirim|do[ğg]um g[üu]n|gelmeyen|kay[ıi]p m[üu][şs]teri|kimi (ara|çağır|cagir)/.test(soru.toLocaleLowerCase('tr'))) {
         riskCard.classList.add('hidden'); adviceCard.classList.remove('hidden');
         adviceText.innerHTML = hatirlatmaCevabiHtml(); inp.value = ""; return;   // yapay zekaya gitmeden anında
       }
@@ -4487,11 +4500,11 @@ Cevabını YALNIZCA geçerli bir JSON nesnesi olarak ver, başka hiçbir yazı y
       canliBildirimMerkeziniGuncelle();
       const hv = sonHatirlatmaVerisi || { doganlar: [], hatirlat: [], kayip: [] };
       const hatirlatmaOzeti = `Doğum günü: ${hv.doganlar.map(m => turkceHitapIsimDuzenle(m.ad)).join(', ') || 'yok'}. Yaklaşan randevu/takip: ${hv.hatirlat.map(m => turkceHitapIsimDuzenle(m.ad) + ' (' + m.planTarih + ')').join(', ') || 'yok'}. Uzun süredir gelmeyen: ${hv.kayip.slice(0, 8).map(m => turkceHitapIsimDuzenle(m.ad) + ' (' + m.gGun + ' gün)').join(', ') || 'yok'}.`;
-      let sistemTalimati = `Sen kuaför tezgahında ustanın yanında duran, tecrübeli ve kıdemli bir colorist & salon meslektaşısın.
+      let sistemTalimati = `${meslekKisiligi()}
 DİL VE USLUP KURALLARI:
 1. Kesinlikle tiyatro replikleri (çay koydum, paspas vb.) yapmayacaksın.
 2. ASLA yıldız (**), diyez (#) veya markdown liste işaretleri kullanma. Düz, net ve akıcı dükkan jargonuyla konuş.
-3. Kuaför kimyası jargonu kullan: "oryal", "20 volüm oksidan", "dip açma", "cila", "küllü kumral", "dorelik kırma", "pigmentasyon", "porozite".
+3. Mesleğinin gerçek jargonunu kullan (kuaförde oryal, dip açma, cila, porozite gibi; diğer branşlarda o branşın terimleri).
 4. Usta 'kimi çağıralım' veya 'gelmeyenler kim' dediğinde gerçek gelmeyen müşteri listesini dikkate alarak net isimler ver.
 5. Doğrudan usta saygısıyla çözümü ve formülü söyle.
 6. Cevabı kısa tut: en fazla 6-8 cümle, giriş cümlesi ve tekrar yapma.
@@ -4504,7 +4517,7 @@ BUGÜNKÜ CANLI VERİLER:
 
       try {
         const cevap = await geminiApiCagir({
-          contents: [{ parts: [{ text: `${sistemTalimati}\n\nUstanın Sorusu: "${soru}"` }] }],
+          contents: [{ parts: [{ text: `${sistemTalimati}\n\nUstanın Sorusu: "${soru}"` }].concat(aiIstFotolar.map(u => ({ inlineData: { mimeType: 'image/jpeg', data: u.split(',')[1] } }))) }],
           generationConfig: { maxOutputTokens: 1500, temperature: 0.25 }
         });
 
@@ -4629,43 +4642,8 @@ Yanıtını YALNIZCA şu JSON formatında ver, başka yazı yazma:
       aiAnahtarDegistir();
     }
 
-    function patronUrunListesiniCiz() {
-      let alan = document.getElementById('patronUrunYonetimAlani'); if (alan) alan.remove();
-      const patronModalKutu = document.querySelector('#patronModal .space-y-3'); if (!patronModalKutu) return;
-      alan = document.createElement('div');
-      alan.id = 'patronUrunYonetimAlani';
-      alan.className = "bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-2 text-xs";
-      alan.innerHTML = `
-        <div class="flex justify-between items-center border-b border-slate-800 pb-1">
-          <span class="text-amber-400 font-bold flex items-center text-[10px]"><i class="fa-solid fa-boxes-stacked mr-1"></i> ÜRÜN & PAZARYERİ LİNKLERİ</span>
-          <button onclick="patronYeniUrunEklePrompt()" class="text-[9px] bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded">+ Ürün Ekle</button>
-        </div>
-        <div id="patronUrunlerContainer" class="space-y-1 max-h-36 overflow-y-auto scroll-touch"></div>`;
-      patronModalKutu.appendChild(alan);
 
-      const c = document.getElementById('patronUrunlerContainer'); if (!c) return;
-      c.innerHTML = patronUrunListesi.map((u, idx) => `
-        <div class="bg-slate-900 p-1.5 rounded-lg border border-slate-800 flex justify-between items-start text-[10px] gap-2">
-          <div class="flex-1 min-w-0"><div class="font-bold text-white truncate">${esc(u.ad)}</div><div class="text-[8px] text-amber-400">${esc(u.platform)} • <span class="text-slate-400 font-mono truncate">${esc(u.link)}</span></div></div>
-          <button onclick="patronUrunSil(${idx})" class="text-slate-500 hover:text-red-400 p-1 text-xs">✕</button>
-        </div>`).join('');
-    }
 
-    function patronYeniUrunEklePrompt() {
-      let ad = prompt("Ürün Adı:"), platform = prompt("Mağaza (Trendyol vb.):", "Trendyol"), link = prompt("Satın Alma Linki:");
-      if (!ad || !link) return;
-      let kullanim = prompt("Kullanım & Gerekçe:", "Haftada 2 kez uygulanır."), kat = prompt("Kategori (dogal/boyali/hasarli):", "hasarli");
-      patronUrunListesi.push({ id: "u_" + Date.now(), ad: ad.trim(), platform: platform || "Mağaza", link: link.trim(), kullanim: kullanim || "Bakım.", kategori: kat || "hasarli" });
-      localStorage.setItem('lumio_patron_urunler', JSON.stringify(patronUrunListesi));
-      alert("✅ Yeni ürün eklendi!"); patronUrunListesiniCiz();
-    }
-
-    function patronUrunSil(idx) {
-      if (!confirm("Ürün silinsin mi?")) return;
-      patronUrunListesi.splice(idx, 1);
-      localStorage.setItem('lumio_patron_urunler', JSON.stringify(patronUrunListesi));
-      patronUrunListesiniCiz();
-    }
 
     /* ==========================================================================
        GÜVENLİK YARDIMCILARI, İSİM/UNVAN KURALLARI VE KURULUM SİHİRBAZI
@@ -4734,6 +4712,7 @@ Yanıtını YALNIZCA şu JSON formatında ver, başka yazı yazma:
     let kurData = null, kurulumGosterildi = false;
 
     function kurulumKontrol(doc, gozat) {
+      if (!gozat) setTimeout(() => { const km = document.getElementById('modalKurulum'); if (!km || km.classList.contains('hidden')) taslakGeriYukle(); else taslakHazir = true; }, 900);
       if (gozat || kurulumGosterildi) return;
       kurulumGosterildi = true;
       const v = doc.exists ? doc.data() : {};
@@ -4814,6 +4793,213 @@ Yanıtını YALNIZCA şu JSON formatında ver, başka yazı yazma:
         ayarlariUygula(); gunlukCiroGuncelle(); sihirbazHizmetButonlariniCiz();
       }).catch(err => alert('Hata: ' + (err.message || err)));
     }
+
+    /* ==========================================================================
+       TASLAK KAYDI, REHBER/PANO, İSTİŞARE FOTOĞRAFI, ÜRÜN YÖNETİMİ, YÖNETİCİ OTURUMU
+       ========================================================================== */
+    var aiIstFotolar = [], aiIstFotoUyarildi = false, urunDuzenIdx = -1, taslakHazir = false;
+    const PH = {
+      tr: { rehber: '📇 Rehberden seç', pano: '📋 Panodan yapıştır', noNum: 'Panoda geçerli bir telefon numarası bulunamadı.', noClip: 'Panoya erişilemedi. Numarayı elle yapıştırın.', noCon: 'Rehbere erişilemedi.', foto: 'Fotoğraf yapay zekâ servisine (Google) gönderilir, uygulamada kaydedilmez. Müşterinin izni olmalı. Devam edilsin mi?', max: 'En fazla 3 fotoğraf eklenebilir.' },
+      en: { rehber: '📇 Pick from contacts', pano: '📋 Paste from clipboard', noNum: 'No valid phone number found in the clipboard.', noClip: 'Could not read the clipboard. Paste the number manually.', noCon: 'Could not open contacts.', foto: 'The photo is sent to the AI service (Google) and is not stored in the app. The client must agree. Continue?', max: 'You can add up to 3 photos.' },
+      de: { rehber: '📇 Aus Kontakten wählen', pano: '📋 Aus Zwischenablage einfügen', noNum: 'Keine gültige Telefonnummer in der Zwischenablage.', noClip: 'Zwischenablage nicht lesbar. Nummer manuell einfügen.', noCon: 'Kontakte nicht verfügbar.', foto: 'Das Foto wird an den KI-Dienst (Google) gesendet und nicht in der App gespeichert. Der Kunde muss zustimmen. Fortfahren?', max: 'Maximal 3 Fotos.' },
+      ru: { rehber: '📇 Выбрать из контактов', pano: '📋 Вставить из буфера', noNum: 'В буфере нет корректного номера.', noClip: 'Нет доступа к буферу. Вставьте номер вручную.', noCon: 'Нет доступа к контактам.', foto: 'Фото отправляется в ИИ-сервис (Google) и не хранится в приложении. Нужно согласие клиента. Продолжить?', max: 'Не более 3 фото.' }
+    };
+    function phTxt() { return PH[aktifDil] || PH.en; }
+
+    /* ---- Telefon: rehberden seç / panodan yapıştır ---- */
+    const ULKE_KODLARI = ['998','996','994','995','993','992','380','375','372','371','370','359','358','357','356','355','353','352','351','971','966','962','961','964','212','213','216','49','44','43','41','40','39','36','34','33','32','31','30','98','90','86','82','81','91','92','20','7','1'];
+    function telBol(ham, mevcutCc) {
+      const duz = String(ham || '').trim(); let d = duz.replace(/\D/g, '');
+      if (!d) return null;
+      if (d.startsWith('00')) d = d.slice(2);
+      if (duz.startsWith('+') || d.length >= 12) {
+        const k = ULKE_KODLARI.slice().sort((a, b) => b.length - a.length).find(c => d.startsWith(c) && d.length - c.length >= 6);
+        if (k) return { cc: '+' + k, num: d.slice(k.length) };
+      }
+      if (d.startsWith('0') && d.length >= 10) d = d.slice(1);
+      if (d.length < 6) return null;
+      return { cc: mevcutCc || '+90', num: d };
+    }
+    function telAlanlarinaYaz(telId, ccId, adId, ham, ad) {
+      const cc = ccId ? document.getElementById(ccId) : null, tel = document.getElementById(telId);
+      const r = telBol(ham, cc && cc.value); if (!r || !tel) return false;
+      if (cc) { cc.value = r.cc; tel.value = r.num; } else tel.value = (r.cc === '+90' ? '' : r.cc.replace('+', '')) + r.num;
+      tel.dispatchEvent(new Event('input', { bubbles: true }));
+      if (adId && ad) { const a = document.getElementById(adId); if (a && !a.value.trim()) { a.value = String(ad); a.dispatchEvent(new Event('input', { bubbles: true })); } }
+      return true;
+    }
+    async function rehberdenSec(telId, ccId, adId) {
+      try {
+        const r = await navigator.contacts.select(['name', 'tel'], { multiple: false });
+        if (!r || !r.length) return;
+        if (!telAlanlarinaYaz(telId, ccId, adId, (r[0].tel || [])[0], (r[0].name || [])[0])) alert(phTxt().noNum);
+      } catch (e) { alert(phTxt().noCon); }
+    }
+    async function panodanYapistir(telId, ccId) {
+      try { const t = await navigator.clipboard.readText(); if (!telAlanlarinaYaz(telId, ccId, null, t)) alert(phTxt().noNum); }
+      catch (e) { alert(phTxt().noClip); }
+    }
+    function telButonlariniKur() {
+      [['shTelInput', 'shCountryCode', 'shMusteriInput'], ['custPhone', 'custCountryCode', 'custSearch'], ['patronNewPhone', null, 'patronNewName']].forEach(([t, c, a]) => {
+        const el = document.getElementById(t); if (!el || document.getElementById('telBtn_' + t)) return;
+        const host = c ? el.parentElement : el;
+        const kisi = ('contacts' in navigator) && ('ContactsManager' in window);
+        host.insertAdjacentHTML('afterend', `<div id="telBtn_${t}" class="flex gap-1.5 mt-1.5">${kisi ? `<button type="button" data-ph="rehber" onclick="rehberdenSec(${jsq(t)}, ${jsq(c || '')}, ${jsq(a)})" class="flex-1 bg-amber-500/15 text-amber-400 border border-amber-500/30 rounded-lg py-1.5 text-[11px] font-bold"></button>` : ''}<button type="button" data-ph="pano" onclick="panodanYapistir(${jsq(t)}, ${jsq(c || '')})" class="flex-1 bg-amber-500/15 text-amber-400 border border-amber-500/30 rounded-lg py-1.5 text-[11px] font-bold"></button></div>`);
+      });
+      telButonEtiketleriniGuncelle();
+    }
+    function telButonEtiketleriniGuncelle() { const L = phTxt(); document.querySelectorAll('[data-ph]').forEach(b => { b.textContent = L[b.dataset.ph]; }); }
+
+    /* ---- Taslak: başka uygulamaya geçip dönünce kaldığın yerden devam ---- */
+    const TASLAK_ANAHTAR = 'lumio_taslak_v1', TASLAK_OMUR = 12 * 3600 * 1000;
+    function taslakTopla() {
+      const g = id => { const e = document.getElementById(id); return e ? e.value : ''; };
+      const t = { ms: Date.now(), kod: aktifLisansKodu || '' };
+      const wm = document.getElementById('modalRandevuOlustur');
+      if (wm && !wm.classList.contains('hidden')) t.sh = { adim: shAdim, data: shData, tarih: g('shTarihInput'), musteri: g('shMusteriInput'), cc: g('shCountryCode'), tel: g('shTelInput') };
+      const f = { ad: g('custSearch'), cc: g('custCountryCode'), tel: g('custPhone'), dogum: g('custBirth'), tarih: g('visitDate'), sonraki: g('visitNext') };
+      if (f.ad || f.tel) t.terminal = f;
+      const pm = document.getElementById('patronModal');
+      if (pm && !pm.classList.contains('hidden') && (g('patronNewName') || g('patronNewPhone'))) t.admin = { ad: g('patronNewName'), tel: g('patronNewPhone') };   // şifre taslağa yazılmaz
+      return t;
+    }
+    function taslakKaydet() {
+      if (!taslakHazir) return;
+      try { const t = taslakTopla(); if (t.sh || t.terminal || t.admin) localStorage.setItem(TASLAK_ANAHTAR, JSON.stringify(t)); else localStorage.removeItem(TASLAK_ANAHTAR); } catch (_) {}
+    }
+    function taslakGeriYukle() {
+      if (taslakHazir) return;
+      let t = null; try { t = JSON.parse(localStorage.getItem(TASLAK_ANAHTAR) || 'null'); } catch (_) {}
+      taslakHazir = true;
+      if (!t || Date.now() - t.ms > TASLAK_OMUR || t.kod !== (aktifLisansKodu || '')) { try { localStorage.removeItem(TASLAK_ANAHTAR); } catch (_) {} return; }
+      const set = (id, v) => { const e = document.getElementById(id); if (e && v != null) e.value = v; };
+      try {
+        if (t.terminal) { set('custSearch', t.terminal.ad); set('custCountryCode', t.terminal.cc); set('custPhone', t.terminal.tel); set('custBirth', t.terminal.dogum); set('visitDate', t.terminal.tarih); set('visitNext', t.terminal.sonraki); }
+        if (t.admin) { set('patronNewName', t.admin.ad); set('patronNewPhone', t.admin.tel); }
+        if (t.sh) {
+          sihirbazBaslat(); Object.assign(shData, t.sh.data || {});
+          set('shTarihInput', t.sh.tarih); set('shMusteriInput', t.sh.musteri); set('shCountryCode', t.sh.cc); set('shTelInput', t.sh.tel);
+          shAdim = t.sh.adim || 1; sihirbazAdimGoster(shAdim);
+        }
+      } catch (_) {}
+    }
+    (function () {
+      let z = null; const planla = () => { clearTimeout(z); z = setTimeout(taslakKaydet, 600); };
+      document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') taslakKaydet(); });
+      window.addEventListener('pagehide', taslakKaydet);
+      document.addEventListener('input', planla, true);
+    })();
+
+    /* ---- Usta istişare: çoklu fotoğraf (en çok 3) ---- */
+    function aiIstFotoEkle(input) {
+      const L = phTxt(), bos = 3 - aiIstFotolar.length;
+      if (!input.files || !input.files.length) return;
+      if (bos <= 0) { alert(L.max); input.value = ''; return; }
+      if (!aiIstFotoUyarildi) { if (!confirm(L.foto)) { input.value = ''; return; } aiIstFotoUyarildi = true; }
+      Array.from(input.files).slice(0, bos).forEach(file => {
+        const rd = new FileReader();
+        rd.onload = e => {
+          const img = new Image();
+          img.onload = () => {
+            const c = document.createElement('canvas'); let w = img.width, h = img.height; const m = 1000;
+            if (w > h) { if (w > m) { h *= m / w; w = m; } } else if (h > m) { w *= m / h; h = m; }
+            c.width = w; c.height = h; c.getContext('2d').drawImage(img, 0, 0, w, h);
+            if (aiIstFotolar.length < 3) aiIstFotolar.push(c.toDataURL('image/jpeg', 0.8));
+            aiIstFotoCiz();
+          };
+          img.src = e.target.result;
+        };
+        rd.readAsDataURL(file);
+      });
+      input.value = '';
+    }
+    function aiIstFotoSil(i) { aiIstFotolar.splice(i, 1); aiIstFotoCiz(); }
+    function aiIstFotoCiz() {
+      const s = document.getElementById('aiIstFotoSerit'); if (!s) return;
+      s.innerHTML = aiIstFotolar.map((u, i) => `<div class="relative flex-shrink-0"><img src="${u}" alt="" class="w-14 h-14 object-cover rounded-lg border border-slate-700"><button type="button" onclick="aiIstFotoSil(${i})" class="absolute -top-1 -right-1 bg-slate-900 text-white border border-slate-600 rounded-full w-4 h-4 text-[9px] leading-none">✕</button></div>`).join('')
+        + (aiIstFotolar.length ? `<span class="text-[9px] text-amber-300/80 self-center pl-1">${aiIstFotolar.length}/3</span>` : '');
+    }
+    function meslekKisiligi() {
+      const b = salonAyarlari.bolum || 'kuafor';
+      const kim = { kuafor: 'kuaför ve colorist', berber: 'berber', makyaj: 'makyaj ve cilt bakımı uzmanı', tirnak: 'protez tırnak ve manikür ustası', agda: 'ağda ve lazer epilasyon uzmanı' }[b] || (unvanAl() + ' alanında uzman');
+      const dil = { tr: 'Türkçe', en: 'English', de: 'Deutsch', ru: 'Русский' }[aktifDil] || 'Türkçe';
+      return `Sen ustanın yanında duran, 49 yıldır bu işi yapan, çok tecrübeli bir ${kim} meslektaşısın. Sokak ve salon jargonuyla, kısa ve net, "ustam" diye hitap ederek konuşursun. Fotoğraf varsa önce ne gördüğünü söyle. Kesin teşhis koyma; kimyasal işlem (açma, boya, perma, cilt ürünü) öncesi tutam veya alerji testini hatırlat. Cevabı ${dil} dilinde yaz.`;
+    }
+
+    /* ---- Yönetici: ürün yönetimi (ekle / düzenle / sil, buluta kayıtlı) ---- */
+    function urunlerKaydet() {
+      try { localStorage.setItem('lumio_patron_urunler', JSON.stringify(patronUrunListesi)); } catch (_) {}
+      if (adb && adminAuth && adminAuth.currentUser) adb.collection('sistem').doc('urunler').set({ liste: patronUrunListesi, guncelleme: firebase.firestore.FieldValue.serverTimestamp() }).catch(e => alert('Ürünler buluta kaydedilemedi: ' + (e.code || e.message)));
+    }
+    function urunleriBulutanYukle(veritabani, sonra) {
+      try {
+        veritabani.collection('sistem').doc('urunler').get().then(d => {
+          if (d.exists && Array.isArray(d.data().liste) && d.data().liste.length) {
+            patronUrunListesi = d.data().liste.filter(u => u && u.ad && /^https?:\/\//i.test(String(u.link || '')));
+            try { localStorage.setItem('lumio_patron_urunler', JSON.stringify(patronUrunListesi)); } catch (_) {}
+          }
+          if (sonra) sonra();
+        }).catch(() => { if (sonra) sonra(); });
+      } catch (_) {}
+    }
+    function patronUrunSatirlariniCiz() {
+      const c = document.getElementById('patronUrunListe'); if (!c) return;
+      c.innerHTML = patronUrunListesi.map((u, i) => `<div class="flex items-center justify-between gap-2 bg-slate-950 border border-slate-800 rounded-lg p-2"><div class="min-w-0"><div class="text-xs font-bold text-white truncate">${esc(u.ad)}</div><div class="text-[10px] text-slate-400 truncate">${esc(u.platform || '')} · <a href="${esc(guvenliUrl(u.link))}" target="_blank" rel="noopener noreferrer" class="text-amber-400 underline">${esc(u.kategori || 'link')} ↗</a></div></div><div class="flex gap-1 flex-shrink-0"><button type="button" onclick="patronUrunFormAc(${i})" class="px-2 py-1 bg-slate-800 text-amber-300 rounded text-xs">✎</button><button type="button" onclick="patronUrunSil(${i})" class="px-2 py-1 bg-slate-800 text-red-400 rounded text-xs">✕</button></div></div>`).join('') || '<div class="text-[11px] text-slate-500">—</div>';
+    }
+    function patronUrunListesiniCiz() {
+      const kok = document.querySelector('#patronModal .space-y-3') || document.getElementById('patronModal'); if (!kok) return;
+      let k = document.getElementById('patronUrunKutu');
+      if (!k) {
+        kok.insertAdjacentHTML('beforeend', `<div id="patronUrunKutu" class="bg-slate-900 border border-slate-800 rounded-xl p-3 space-y-2"><div class="flex justify-between items-center"><span class="text-xs font-black text-amber-400">🛍️ ÜRÜNLER (yapay zekâ reçetesi)</span><button type="button" onclick="patronUrunFormAc(-1)" class="px-2 py-1 bg-amber-500 text-slate-950 rounded text-[11px] font-black">+ Yeni</button></div><div id="patronUrunListe" class="space-y-1.5 max-h-56 overflow-y-auto"></div><div id="patronUrunForm" class="hidden space-y-1.5 border-t border-slate-800 pt-2">
+          <input id="puAd" oninput="urunTaslakKaydet()" placeholder="Ürün adı" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2 py-2 text-xs text-white">
+          <input id="puPlatform" oninput="urunTaslakKaydet()" placeholder="Platform (Trendyol, Amazon...)" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2 py-2 text-xs text-white">
+          <input id="puLink" oninput="urunTaslakKaydet()" placeholder="https://..." inputmode="url" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2 py-2 text-xs text-white">
+          <input id="puKat" oninput="urunTaslakKaydet()" placeholder="Kategori (örn. bakım, şampuan)" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2 py-2 text-xs text-white">
+          <input id="puKullanim" oninput="urunTaslakKaydet()" placeholder="Kullanım şekli" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2 py-2 text-xs text-white">
+          <input id="puSorun" oninput="urunTaslakKaydet()" placeholder="Hangi sorunu çözer? (örn. kuru saç)" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2 py-2 text-xs text-white">
+          <div class="flex gap-2"><button type="button" onclick="patronUrunFormKaydet()" class="flex-1 bg-amber-500 text-slate-950 font-black rounded-lg py-2 text-xs">Kaydet</button><button type="button" onclick="patronUrunFormKapat()" class="px-3 bg-slate-800 text-slate-300 rounded-lg py-2 text-xs">Vazgeç</button></div></div></div>`);
+        patronUrunSatirlariniCiz();
+        adminAltyapi(); urunleriBulutanYukle(adb, patronUrunSatirlariniCiz);
+      } else patronUrunSatirlariniCiz();
+    }
+    const PU_ALANLAR = ['puAd', 'puPlatform', 'puLink', 'puKat', 'puKullanim', 'puSorun'];
+    function urunTaslakKaydet() { try { localStorage.setItem('lumio_taslak_urun', JSON.stringify({ i: urunDuzenIdx, v: PU_ALANLAR.map(id => document.getElementById(id).value) })); } catch (_) {} }
+    function patronUrunFormAc(idx) {
+      urunDuzenIdx = idx; const u = patronUrunListesi[idx] || {};
+      let v = [u.ad || '', u.platform || '', u.link || '', u.kategori || '', u.kullanim || '', u.sorun || ''];
+      if (idx < 0) { try { const t = JSON.parse(localStorage.getItem('lumio_taslak_urun') || 'null'); if (t && t.i === -1) v = t.v; } catch (_) {} }
+      PU_ALANLAR.forEach((id, n) => { document.getElementById(id).value = v[n] || ''; });
+      document.getElementById('patronUrunForm').classList.remove('hidden');
+    }
+    function patronUrunFormKapat() { document.getElementById('patronUrunForm').classList.add('hidden'); try { localStorage.removeItem('lumio_taslak_urun'); } catch (_) {} urunDuzenIdx = -1; }
+    function patronUrunFormKaydet() {
+      const v = PU_ALANLAR.map(id => document.getElementById(id).value.trim());
+      if (!v[0]) { alert('Ürün adı gerekli.'); return; }
+      if (!/^https?:\/\/\S+$/i.test(v[2])) { alert('Bağlantı https:// ile başlayan geçerli bir adres olmalı.'); return; }
+      const o = { id: (patronUrunListesi[urunDuzenIdx] || {}).id || ('u' + Date.now()), ad: v[0], platform: v[1], link: v[2], kategori: v[3], kullanim: v[4], sorun: v[5] };
+      if (urunDuzenIdx >= 0) patronUrunListesi[urunDuzenIdx] = o; else patronUrunListesi.push(o);
+      urunlerKaydet(); patronUrunFormKapat(); patronUrunSatirlariniCiz();
+    }
+    function patronUrunSil(i) { if (!confirm('"' + (patronUrunListesi[i] || {}).ad + '" silinsin mi?')) return; patronUrunListesi.splice(i, 1); urunlerKaydet(); patronUrunSatirlariniCiz(); }
+
+    /* ---- Yönetici: 1 saat işlem yapılmazsa otomatik çıkış; usta listesi filtresi ---- */
+    function adminAktiviteIsle() { try { localStorage.setItem('lumio_admin_son', String(Date.now())); } catch (_) {} }
+    function adminZamanAsimiMi() { let s = 0; try { s = parseInt(localStorage.getItem('lumio_admin_son') || '0', 10); } catch (_) {} return s && (Date.now() - s > 3600000); }
+    async function adminOtomatikCikis() {
+      try { if (db !== mainDb) patronAsliDukkanaDon(); } catch (_) {}
+      try { await adminAuth.signOut(); } catch (_) {}
+      const pm = document.getElementById('patronModal'); if (pm) pm.classList.add('hidden');
+    }
+    (function () {
+      const isle = () => { try { if (adminAuth && adminAuth.currentUser) adminAktiviteIsle(); } catch (_) {} };
+      document.addEventListener('click', isle, { passive: true }); document.addEventListener('touchstart', isle, { passive: true });
+      setInterval(() => { try { if (adminAuth && adminAuth.currentUser && adminZamanAsimiMi()) adminOtomatikCikis(); } catch (_) {} }, 60000);
+    })();
+    function patronListeFiltrele(q) {
+      const n = turkceNormalize(q || '');
+      document.querySelectorAll('#patronMasterListContainer > div').forEach(el => { el.style.display = (!n || turkceNormalize(el.textContent).includes(n)) ? '' : 'none'; });
+    }
+    telButonlariniKur();
 
     /* İLK BAŞLATMA VE ÇEKİRDEK ÇALIŞTIRICI */
     yeniIslemTemizle();
