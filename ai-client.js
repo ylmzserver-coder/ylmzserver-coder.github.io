@@ -2,7 +2,7 @@
    Çalışma modları (otomatik seçilir):
    1) AI_WORKER_URL doluysa -> Cloudflare Worker (anahtar sunucuda, önerilen)
    2) Aksi halde -> doğrudan Gemini; anahtar bu cihazda saklanır (localStorage). GEÇİCİ, satış için uygun DEĞİL. */
-const AI_WORKER_URL = '';
+const AI_WORKER_URL = 'https://lumio-ai.ylmzserver.workers.dev';
 
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta';
 const GEMINI_ADAY_MODELLER = ['gemini-flash-latest'];   // yalnızca model listesi alınamazsa yedek
