@@ -86,7 +86,7 @@ async function geminiDogrudan(payload) {
       const d = await r.json();
       const metin = (((d.candidates || [])[0] || {}).content || {}).parts;
       const t = metin ? metin.map(p => p.text || '').join('') : '';
-      if (r.ok && t) { try { localStorage.setItem('lumio_gemini_model', model); } catch (_) {} return t; }
+      if (r.ok && t) { try { localStorage.setItem('lumio_gemini_model', model); } catch (_) {} window.aiSonBitis = ((d.candidates || [])[0] || {}).finishReason || ''; return t; }
       sonHata = (d.error && d.error.message) || (d.promptFeedback ? 'İçerik güvenlik filtresine takıldı' : 'HTTP ' + r.status);
       const yogun = r.status === 503 || /high demand|overloaded|unavailable|try again later/i.test(sonHata);
       if (yogun && !tekrar[model]) { tekrar[model] = 1; await new Promise(z => setTimeout(z, 1800)); modeller.splice(modeller.indexOf(model) + 1, 0, model); continue; }
@@ -95,7 +95,7 @@ async function geminiDogrudan(payload) {
         try { localStorage.removeItem('lumio_gemini_key'); } catch (_) {}
         throw new Error('Gemini anahtarı geçersiz veya yetkisiz; silindi. Yeniden deneyip doğru anahtarı girin. (' + sonHata + ')');
       }
-      if (r.status === 429) throw new Error('Gemini kotası doldu, biraz sonra tekrar deneyin. (' + sonHata + ')');
+      if (r.status === 429) { if (!ilkHata) ilkHata = 'KOTA'; continue; }
       if (kapali) { try { if (localStorage.getItem('lumio_gemini_model') === model) localStorage.removeItem('lumio_gemini_model'); localStorage.setItem('lumio_gemini_liste_zaman', '0'); } catch (_) {} }
       else if (!ilkHata) ilkHata = sonHata;   // gerçek sorunu (kapalı model değil) hatırla
     } catch (e) {
@@ -105,6 +105,7 @@ async function geminiDogrudan(payload) {
     }
   }
   const son = ilkHata || sonHata;
+  if (son === 'KOTA' || /quota|rate.?limit|exceeded/i.test(son)) throw new Error('Yapay zekâ günlük kullanım sınırına ulaştı. Daha sonra tekrar deneyin.');
   throw new Error(/high demand|overloaded|unavailable|try again later|503/i.test(son) ? 'Yapay zekâ şu an çok yoğun. Birkaç saniye sonra tekrar deneyin.' : 'Yapay zeka yanıt vermedi: ' + son);
 }
 
@@ -115,6 +116,7 @@ async function geminiSunucu(url, payload) {
   let d = {}; try { d = await r.json(); } catch (_) {}
   if (r.status === 404 || r.status === 405) throw new Error('Yapay zeka sunucusu bu adreste kurulu değil.');
   if (!r.ok || !d.metin) throw new Error(d.hata || ('Yapay zeka yanıt vermedi (HTTP ' + r.status + ')'));
+  window.aiSonBitis = d.bitis || '';
   return d.metin;
 }
 

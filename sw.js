@@ -1,5 +1,5 @@
 /* LUMIO AI Terminal - Service Worker & Banka Tipi Bildirim Motoru (V15) */
-const CACHE_NAME = 'lumio-ai-cache-v18';
+const CACHE_NAME = 'lumio-ai-cache-v20';
 const OFFLINE_URLS = [
   './',
   './index.html',
@@ -73,68 +73,34 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// 4. BANKA TİPİ KİLİT EKRANI PUSH BİLDİRİMİ
+// 4. PUSH BİLDİRİMİ (uygulama kapalıyken de gelir)
 self.addEventListener('push', (event) => {
-  let data = {
-    title: '⏰ LUMIO: Randevu Vakti Yaklaştı!',
-    body: 'Birazdan başlayacak randevunuz bulunuyor.',
-    icon: 'icon-192.png',
-    badge: 'icon-192.png'
-  };
-
+  let d = { baslik: 'LUMIO', metin: '', tur: 'genel', tag: 'lumio' };
   if (event.data) {
-    try {
-      data = Object.assign(data, event.data.json());
-    } catch (e) {
-      data.body = event.data.text();
-    }
+    try { d = Object.assign(d, event.data.json()); } catch (e) { d.metin = event.data.text(); }
   }
-
-  const options = {
-    body: data.body,
-    icon: data.icon || 'icon-192.png',
-    badge: data.badge || 'icon-192.png',
-    vibrate: [400, 200, 400, 200, 400],
-    tag: 'lumio-randevu-alarm',
+  event.waitUntil(self.registration.showNotification(d.baslik || 'LUMIO', {
+    body: d.metin || '',
+    icon: 'icon-192.png',
+    badge: 'icon-192.png',
+    tag: d.tag || ('lumio-' + d.tur),
     renotify: true,
-    requireInteraction: true,
-    actions: [
-      { action: 'tamam', title: 'Aç 👍' },
-      { action: 'ertele', title: '10 Dk Ertele ⏱️' }
-    ]
-  };
-
-  event.waitUntil(
-    self.registration.showNotification(data.title, options)
-  );
+    requireInteraction: d.tur === 'alarm' || d.tur === 'hatirlat',
+    vibrate: [300, 150, 300],
+    data: { tur: d.tur }
+  }));
 });
 
-// 5. BİLDİRİM TIKLANDIĞINDA
+// 5. BİLDİRİME DOKUNULUNCA: uygulamayı aç/odakla ve ilgili ekrana yönlendir
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-
-  if (event.action === 'ertele') {
-    event.waitUntil(
-      self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-        if (clientList.length > 0) {
-          clientList[0].postMessage({ type: 'ERTELE_ALARM', dakika: 10 });
-          return clientList[0].focus();
-        }
-      })
-    );
-  } else {
-    event.waitUntil(
-      self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-        for (const client of clientList) {
-          const clientUrl = new URL(client.url);
-          if ((clientUrl.pathname.endsWith('index.html') || clientUrl.pathname.endsWith('/')) && 'focus' in client) {
-            return client.focus();
-          }
-        }
-        if (self.clients.openWindow) {
-          return self.clients.openWindow('./index.html');
-        }
-      })
-    );
-  }
+  const tur = (event.notification.data && event.notification.data.tur) || 'genel';
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        if ('focus' in client) { client.postMessage({ type: 'BILDIRIM_TIKLA', tur }); return client.focus(); }
+      }
+      if (self.clients.openWindow) return self.clients.openWindow('./index.html#bildirim=' + tur);
+    })
+  );
 });
